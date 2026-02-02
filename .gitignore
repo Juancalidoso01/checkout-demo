@@ -1,0 +1,10 @@
+# Node / Python / IDE
+node_modules/
+__pycache__/
+*.pyc
+.env
+.vscode/
+.DS_Store
+
+# logs
+server.log

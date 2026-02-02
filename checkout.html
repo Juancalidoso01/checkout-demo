@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Demo Checkout - Botón</title>
+  <meta name="description" content="Demo de botón de checkout con manejo de estados y accesibilidad">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <section class="card" aria-labelledby="headline">
+      <h1 id="headline">Pagar pedido</h1>
+      <p class="lead">Precio total:</p>
+
+      <div class="price-box" aria-hidden="false">
+        <div class="amount" id="price">USD 19.99</div>
+        <div class="small">Total a pagar</div>
+      </div>
+      <!-- Hero illustration (modern look) -->
+      <div class="card-hero">
+        <img src="assets/hero-illustration.svg" alt="Ilustración de pago">
+        <div class="hero-text">
+          <h2>Pago seguro y rápido</h2>
+          <p class="muted">Elige tu método preferido. Este demo no realiza cargos reales.</p>
+        </div>
+      </div>
+
+      <!-- Logos interactivos de métodos de pago (solo visual) -->
+      <div class="payment-logos" aria-hidden="true">
+        <!-- Removed Yappy and PayPal simplistic rect icons per request -->
+        <!-- Removed remaining simplistic GPay and Apple Pay icons per request -->
+      </div>
+      <!-- Demo mode: permite cualquier dato para pruebas -->
+      <div class="demo-toggle">
+        <label><input type="checkbox" id="demoMode" checked> Modo demo: aceptar cualquier dato</label>
+      </div>
+
+        <!-- PuntoPago APP registration (demo control) -->
+        <div id="ppRegistration" class="pp-registration">
+          <div class="muted">Estado PuntoPago APP:</div>
+          <div id="ppStatus" class="muted">No registrado</div>
+          <button id="ppRegisterBtn" class="btn" type="button">Simular registro</button>
+        </div>
+
+      <!-- entry selection removed per request -->
+
+      <form id="checkoutForm" novalidate>
+        <!-- Información del pedido -->
+        <div class="row">
+          <div class="muted">Pedido: ENSA prepago</div>
+        </div>
+
+        <!-- Selección de método de pago -->
+        <fieldset>
+          <legend class="muted">Selecciona el método de pago</legend>
+          <div class="row col radio-list">
+            <label>
+              <input type="radio" name="payMethod" value="card">
+              <span class="pm-icon" aria-hidden="true">
+                <!-- Combined card icon: Visa + Mastercard hints -->
+                <svg viewBox="0 0 72 30" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <rect x="1" y="1" width="70" height="28" rx="3" stroke="#0b6cff" stroke-width="1.6" fill="#fff" />
+                  <g transform="translate(6,5)">
+                    <rect x="0" y="0" width="22" height="6" rx="1" fill="#0b6cff" />
+                    <g transform="translate(26,0)">
+                      <circle cx="6" cy="6" r="6" fill="#ffd166" />
+                      <circle cx="14" cy="6" r="6" fill="#ef476f" />
+                    </g>
+                  </g>
+                </svg>
+              </span>
+              Tarjeta — Visa / Mastercard
+            </label>
+
+            <label>
+              <input type="radio" name="payMethod" value="clave">
+              <span class="pm-icon" aria-hidden="true">
+                <!-- clave card icon -->
+                <svg viewBox="0 0 48 30" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <rect x="1" y="1" width="46" height="28" rx="3" stroke="#0b6cff" stroke-width="1.6" fill="#fff8ea" />
+                  <text x="8" y="18" font-size="9" font-family="Arial, Helvetica, sans-serif" fill="#0b6cff">CLAVE</text>
+                </svg>
+              </span>
+              Clave (tarjeta Panamá)
+            </label>
+
+            <label>
+              <input type="radio" name="payMethod" value="yappy">
+              <span class="pm-icon" aria-hidden="true">
+                <!-- phone / QR placeholder -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <rect x="6" y="3" width="12" height="18" rx="2" stroke="#0b6cff" stroke-width="1.4" fill="#eaf4ff" />
+                  <rect x="9" y="7" width="6" height="2" rx="1" fill="#0b6cff" />
+                </svg>
+              </span>
+              Yappy
+            </label>
+
+            <label>
+              <input type="radio" name="payMethod" value="paypal">
+              <span class="pm-icon" aria-hidden="true">
+                <!-- wallet / P icon -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <rect x="2" y="6" width="20" height="12" rx="2" stroke="#0b6cff" stroke-width="1.4" fill="#eaf4ff" />
+                  <path d="M6 10h6a1 1 0 0 1 1 1v2" stroke="#0b6cff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+              PayPal
+            </label>
+
+            <label>
+              <input type="radio" name="payMethod" value="gpay">
+              <span class="pm-icon" aria-hidden="true">
+                <!-- stylized G -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#0b6cff" stroke-width="1.4" fill="#fff" />
+                  <path d="M9.5 12h5" stroke="#0b6cff" stroke-width="1.6" stroke-linecap="round" />
+                  <path d="M12 9.5v5" stroke="#0b6cff" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </span>
+              Google Pay
+            </label>
+
+            <label>
+              <input type="radio" name="payMethod" value="apple">
+              <span class="pm-icon" aria-hidden="true">
+                <!-- simple apple silhouette -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <path d="M15.2 7.5c-.4-1-.9-1.8-1.7-2.3-.7-.4-1.6-.5-2.5-.2-.2.1-.4.1-.6.1-.5 0-1-.2-1.5-.4-.2-.1-.4-.2-.6-.2-.3 0-.6.1-.8.3-.4.3-.6.8-.6 1.3 0 .2 0 .4.1.6.2.9.8 1.7 1.6 2.2.6.4 1.3.7 2 .8.1 0 .3.1.4.1.6 0 1.2-.2 1.7-.5.3-.2.6-.4.8-.6.1-.1.2-.2.3-.3z" stroke="#0b6cff" stroke-width="0.8" fill="#eaf4ff" />
+                  <path d="M17 13.8c-.2 1.5-.8 2.6-1.8 3.5-1.1 1-2.4 1.3-3.3 1.3-.7 0-1.6-.2-2.5-.6-1-.5-2-1.3-2.8-2.4C5 14.7 4.7 13 5 11.6c.3-1.4 1.1-2.6 2.2-3.6.9-.8 1.9-1.2 2.7-1.2.6 0 1.4.2 2.3.6.6.3 1.2.4 1.7.4.3 0 .6 0 .9-.1.2 0 .4 0 .6.1 0 0 .1.1.1.3 0 .2-.1.5-.2.7-.2.4-.6 1-1.3 1.7-.5.5-1.1 1-1.3 1.4-.3.6-.4 1.2-.4 1.9 0 .2 0 .5.1.8.1.6.3 1.2.6 1.7.4.7.9 1.2 1.6 1.8.4.3.8.5 1.1.7z" stroke="#0b6cff" stroke-width="0.7" fill="#eaf4ff" />
+                </svg>
+              </span>
+              Apple Pay
+            </label>
+          </div>
+          <div id="selectionHint" class="muted small-note" aria-live="polite"></div>
+        </fieldset>
+
+        <!-- Contenedores específicos por método -->
+          <div id="methodContainers" class="method-containers">
+          <!-- Tarjeta -->
+          <div id="cardContainer" hidden>
+            <div class="card-field">
+              <label for="cardName" class="muted">Nombre en la tarjeta</label>
+              <input id="cardName" name="cardName" type="text" placeholder="Nombre Apellido" autocomplete="cc-name" required>
+            </div>
+            <div class="card-field">
+              <label for="cardNumber" class="muted">Número de tarjeta</label>
+              <input id="cardNumber" name="cardNumber" inputmode="numeric" type="text" maxlength="19" placeholder="4242 4242 4242 4242" autocomplete="cc-number" required>
+            </div>
+            <div class="row card-row-gap">
+              <div class="flex-1">
+                <label for="cardExp" class="muted">MM/AA</label>
+                <input id="cardExp" name="cardExp" type="text" placeholder="04/26" maxlength="5" autocomplete="cc-exp" required class="small-input-width">
+              </div>
+              <div class="w-120">
+                <label for="cardCvc" class="muted">CVC</label>
+                <input id="cardCvc" name="cardCvc" type="text" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc" required class="fixed-width-120">
+              </div>
+            </div>
+          </div>
+
+          <!-- Yappy -->
+          <div id="yappyContainer" hidden>
+            <p class="muted">Se abrirá el flujo de Yappy. Ingresa tu celular o escanea el QR en la app.</p>
+            <div class="small-note">
+              <label for="yappyPhone" class="muted">Teléfono asociado</label>
+              <input id="yappyPhone" type="tel" placeholder="+593 9XX XXX XXX">
+            </div>
+          </div>
+
+          <!-- PayPal -->
+          <div id="paypalContainer" hidden>
+            <p class="muted">Serás redirigido a PayPal para completar el pago (demo simulado).</p>
+          </div>
+
+          <!-- Google Pay -->
+          <div id="gpayContainer" hidden>
+            <p class="muted">Pagar con Google Pay (demo). Si tu dispositivo lo soporta, se simulará.</p>
+          </div>
+
+          <!-- Apple Pay -->
+          <div id="appleContainer" hidden>
+            <p class="muted">Pagar con Apple Pay (demo). En Safari/Apple devices se simulará.</p>
+          </div>
+
+          <!-- Clave -->
+          <div id="claveContainer" hidden>
+            <p class="muted">Ingresa tu número de documento y la clave para autorizar el pago.</p>
+            <div class="small-note">
+              <label for="docNumber" class="muted">Documento</label>
+              <input id="docNumber" type="text" placeholder="Cédula / ID">
+            </div>
+            <div class="small-note">
+              <label for="claveInput" class="muted">Clave</label>
+              <input id="claveInput" type="password" placeholder="******">
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-panel" id="simPanel">
+          <div class="sim-steps" id="simSteps">
+            <div class="sim-step" data-step="validating"><span class="dot"></span> Validando</div>
+            <div class="sim-step" data-step="processing"><span class="dot"></span> Procesando</div>
+            <div class="sim-step" data-step="final"><span class="dot"></span> Resultado</div>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <div id="message" class="msg" role="status" aria-live="polite"></div>
+          <div id="busyStatus" class="sr-only" aria-live="assertive"></div>
+          <div class="footer-actions">
+            <button id="checkoutBtn" class="btn" type="button" aria-label="Pagar ahora por USD 19.99"><span id="btnLabel">Pagar ahora</span></button>
+          </div>
+        </div>
+        <!-- Hidden submit to satisfy accessibility/linter and allow Enter key to submit -->
+        <button type="submit" class="sr-only">Enviar</button>
+      </form>
+
+  <p class="muted demo-note">Esto es una demo local. Reemplaza la lógica en <code>processPayment()</code> para integrar con tu API o proveedor de pagos.</p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      // Global error handlers to surface JS errors to the UI for debugging
+      window.addEventListener('error', function (ev) {
+        try {
+          console.error('Global error', ev.error || ev.message || ev);
+          const dbg = document.getElementById('debugOverlay');
+          if (dbg) {
+            const el = document.createElement('div'); el.style.marginTop='8px'; el.style.color='#ffdddd'; el.textContent = 'ERROR: ' + (ev.error && ev.error.message ? ev.error.message : (ev.message || String(ev))); dbg.appendChild(el);
+          }
+          // avoid alert in non-debug mode
+        } catch(e){ console.error('Error handler failed', e); }
+      });
+      window.addEventListener('unhandledrejection', function(ev){
+        try {
+          console.error('UnhandledRejection', ev.reason);
+          const dbg=document.getElementById('debugOverlay');
+          if(dbg){ const el=document.createElement('div'); el.style.marginTop='8px'; el.style.color='#ffd9d9'; el.textContent='UNHANDLED_REJECTION: '+(ev.reason && ev.reason.message?ev.reason.message:JSON.stringify(ev.reason)); dbg.appendChild(el);} 
+        } catch(e){console.error(e);} 
+      });
+  // Elementos
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      const btnLabel = document.getElementById('btnLabel');
+      const message = document.getElementById('message');
+      const busyStatus = document.getElementById('busyStatus');
+  const payMethodRadios = document.querySelectorAll('input[name="payMethod"]');
+      const containers = {
+        card: document.getElementById('cardContainer'),
+        yappy: document.getElementById('yappyContainer'),
+        paypal: document.getElementById('paypalContainer'),
+        gpay: document.getElementById('gpayContainer'),
+        apple: document.getElementById('appleContainer'),
+        clave: document.getElementById('claveContainer'),
+      };
+
+      // Inputs
+      const cardName = document.getElementById('cardName');
+      const cardNumber = document.getElementById('cardNumber');
+      const cardExp = document.getElementById('cardExp');
+      const cardCvc = document.getElementById('cardCvc');
+      const yappyPhone = document.getElementById('yappyPhone');
+      const docNumber = document.getElementById('docNumber');
+      const claveInput = document.getElementById('claveInput');
+
+  let isProcessing = false;
+  const demoModeCheckbox = document.getElementById('demoMode');
+
+      // Utility: remove any stray overlay-backdrop that might block clicks
+      function removeStrayOverlays() {
+        const nodes = Array.from(document.querySelectorAll('.overlay-backdrop'));
+        nodes.forEach(n => {
+          // keep recurrenceModal/deliveryModal only if they have role dialog? we remove all to be safe for demo
+          try { n.parentNode && n.parentNode.removeChild(n); console.warn('Removed stray overlay-backdrop'); } catch(e){}
+        });
+      }
+      // Run once at start to ensure no blocking overlays
+      removeStrayOverlays();
+
+
+      // Mostrar/ocultar contenedores solo cuando el usuario seleccione un método
+      const selectionHint = document.getElementById('selectionHint');
+      function updateMethodUI() {
+        const sel = document.querySelector('input[name="payMethod"]:checked');
+        if (!sel) {
+          // no hay selección: ocultar todos los contenedores
+          Object.keys(containers).forEach(k => { const el = containers[k]; if (el) { el.hidden = true; el.style.display = 'none'; }});
+          checkoutBtn.disabled = true;
+          selectionHint.textContent = 'Selecciona un método de pago para continuar.';
+          return;
+        }
+  const selected = sel.value;
+  console.debug('updateMethodUI: selected radio=', selected);
+        // normalize: any card_* -> card container
+  const selectedKey = selected && selected.indexOf('card') === 0 ? 'card' : selected;
+  console.debug('updateMethodUI: selectedKey=', selectedKey);
+        Object.keys(containers).forEach(k => {
+          const el = containers[k];
+          if (!el) return;
+          if (k === selectedKey) { el.hidden = false; el.removeAttribute('hidden'); el.style.display = ''; }
+          else { el.hidden = true; el.setAttribute('hidden',''); el.style.display = 'none'; }
+        });
+        // actualizar el aria-label del botón con el método
+        checkoutBtn.disabled = false;
+        checkoutBtn.setAttribute('aria-label', `Pagar ahora por ${document.getElementById('price').textContent} usando ${selected}`);
+        selectionHint.textContent = '';
+        clearMessage();
+      }
+
+      // explicit listeners for card radios (redundant but ensures UI update)
+      try {
+        document.querySelectorAll('input[name="payMethod"][value^="card"]').forEach(r => {
+          r.addEventListener('change', ()=>{
+            if (containers.card) { containers.card.hidden = false; containers.card.style.display = ''; }
+            console.debug('card radio changed, showing card container');
+            updateMethodUI();
+          });
+        });
+      } catch (e) { console.warn('No card radios found for explicit listeners'); }
+      // also ensure clicking labels triggers update (some environments may not fire change reliably)
+      try {
+        document.querySelectorAll('.radio-list label').forEach(lbl => {
+          lbl.addEventListener('click', (ev) => { setTimeout(updateMethodUI, 10); });
+        });
+      } catch (e) { /* ignore */ }
+
+      // Fallback: listen directly on radios
+      payMethodRadios.forEach(r => r.addEventListener('change', updateMethodUI));
+      // Add event delegation on the form to catch changes reliably
+      const checkoutForm = document.getElementById('checkoutForm');
+      if (checkoutForm) {
+        checkoutForm.addEventListener('change', (e) => { if (e.target && e.target.name === 'payMethod') updateMethodUI(); });
+      }
+      // Inicialmente ocultar todo si no hay selección
+      updateMethodUI();
+
+      // PuntoPago app registration simulation
+      const ppRegisterBtn = document.getElementById('ppRegisterBtn');
+      const ppStatus = document.getElementById('ppStatus');
+      let ppRegistered = false;
+      function updatePPStatus() {
+        ppStatus.textContent = ppRegistered ? 'Registrado' : 'No registrado';
+        ppStatus.style.color = ppRegistered ? 'var(--blue-600)' : 'var(--muted)';
+        // enable/disable paypal/gpay/apple radios
+        const disallowed = ['paypal','gpay','apple'];
+        disallowed.forEach(v => {
+          const r = document.querySelector(`input[name="payMethod"][value="${v}"]`);
+          if (r) {
+            r.disabled = !ppRegistered;
+            const label = r.closest('label');
+            if (label) label.style.opacity = r.disabled ? '0.55' : '1';
+          }
+        });
+        // if current selection is disabled, switch to a card option (visa fallback)
+        const sel = document.querySelector('input[name="payMethod"]:checked');
+        if (sel && sel.disabled) {
+          const cardRadio = document.querySelector('input[name="payMethod"][value="card"]');
+          if (cardRadio) cardRadio.checked = true;
+          updateMethodUI();
+        }
+      }
+
+      ppRegisterBtn.addEventListener('click', ()=>{
+        ppRegistered = !ppRegistered;
+        ppRegisterBtn.textContent = ppRegistered ? 'Simular cerrar sesión' : 'Simular registro';
+        updatePPStatus();
+      });
+      updatePPStatus();
+
+      // Validaciones básicas por método
+      function validateCard() {
+        if (demoModeCheckbox && demoModeCheckbox.checked) return null; // demo: acepta cualquier dato
+        if (!cardName.value.trim()) return 'Ingresa el nombre que aparece en la tarjeta.';
+        const num = cardNumber.value.replace(/\s+/g, '');
+        if (!/^[0-9]{13,19}$/.test(num)) return 'Número de tarjeta inválido.';
+        if (!luhnCheck(num)) return 'Número de tarjeta no pasó la validación.';
+        if (!/^\d{2}\/\d{2}$/.test(cardExp.value)) return 'Fecha de expiración inválida (MM/AA).';
+        if (!/^[0-9]{3,4}$/.test(cardCvc.value)) return 'CVC inválido.';
+        return null;
+      }
+
+      function validateYappy() {
+        if (demoModeCheckbox && demoModeCheckbox.checked) return null;
+        if (!yappyPhone.value.trim()) return 'Ingresa el teléfono asociado a Yappy.';
+        return null;
+      }
+
+      function validateClave() {
+        if (demoModeCheckbox && demoModeCheckbox.checked) return null;
+        if (!docNumber.value.trim()) return 'Ingresa tu documento.';
+        if (!claveInput.value.trim()) return 'Ingresa tu clave.';
+        return null;
+      }
+
+      // Luhn algorithm for card validation
+      function luhnCheck(num) {
+        let sum = 0; let alt = false;
+        for (let i = num.length - 1; i >= 0; i--) {
+          let n = parseInt(num.charAt(i), 10);
+          if (alt) { n *= 2; if (n > 9) n -= 9; }
+          sum += n; alt = !alt;
+        }
+        return sum % 10 === 0;
+      }
+
+      // Simular diferentes flows por método
+      async function processPaymentDemo(method, payload) {
+        // Simular latencia
+        await delay(900 + Math.random() * 900);
+        // Probabilidades simplificadas por método
+        const probs = {
+          card: 0.85,
+          yappy: 0.9,
+          paypal: 0.95,
+          gpay: 0.9,
+          apple: 0.9,
+          clave: 0.8,
+        };
+        const p = probs[method] ?? 0.85;
+        const ok = Math.random() < p;
+
+        if (!ok) {
+          const err = new Error('Pago rechazado (simulado) para ' + method);
+          err.code = 'PAYMENT_FAILED';
+          throw err;
+        }
+
+        // Simular datos de respuesta
+        return { success: true, id: method + '_txn_' + Date.now(), method, payload };
+      }
+
+      function delay(ms) { return new Promise(res => setTimeout(res, ms)); }
+
+      function setProcessing(on) {
+        isProcessing = on;
+        checkoutBtn.disabled = on;
+        if (on) {
+          btnLabel.innerHTML = '';
+          const spinner = document.createElement('span');
+          spinner.className = 'spinner';
+          spinner.setAttribute('aria-hidden', 'true');
+          btnLabel.appendChild(spinner);
+          const text = document.createElement('span');
+          text.style.marginLeft = '8px';
+          text.textContent = 'Procesando…';
+          btnLabel.appendChild(text);
+          busyStatus.textContent = 'Procesando pago…';
+        } else {
+          btnLabel.textContent = 'Pagar ahora';
+          busyStatus.textContent = '';
+        }
+        // reset sim steps when toggling off
+        if (!on) updateSimSteps('idle');
+      }
+
+      function showMessage({ type, text }) {
+        message.className = 'msg show ' + (type === 'success' ? 'success' : 'error');
+        message.textContent = text;
+      }
+
+      function clearMessage() { message.className = 'msg'; message.textContent = ''; }
+
+      async function handleCheckoutClick() {
+        if (isProcessing) return;
+  clearMessage();
+  const selRadio = document.querySelector('input[name="payMethod"]:checked');
+  if (!selRadio) {
+    showMessage({ type: 'error', text: 'Selecciona un método de pago antes de continuar.' });
+    return;
+  }
+  let method = selRadio.value;
+  console.debug('handleCheckoutClick: raw selected method=', method);
+  // normalize card types
+  if (method && method.startsWith('card')) method = 'card';
+  console.debug('handleCheckoutClick: normalized method=', method);
+        // Prevent using certain methods unless registered in PuntoPago APP
+        if ((method === 'paypal' || method === 'gpay' || method === 'apple') && !ppRegistered) {
+          showMessage({ type: 'error', text: 'Para usar ' + (method === 'paypal' ? 'PayPal' : method === 'gpay' ? 'Google Pay' : 'Apple Pay') + ' debes estar registrado en la PuntoPago APP. Pulsa "Simular registro" para probar.' });
+          // focus the registration button for convenience
+          if (ppRegisterBtn) ppRegisterBtn.focus();
+          return;
+        }
+
+        // Validaciones por método
+        let validationError = null;
+          if (method === 'card') validationError = validateCard();
+        if (method === 'yappy') validationError = validateYappy();
+        if (method === 'clave') validationError = validateClave();
+
+        if (validationError) { showMessage({ type: 'error', text: validationError }); return; }
+
+        setProcessing(true);
+        try {
+          // iniciar sim steps
+          updateSimSteps('validating');
+          await delay(700);
+
+          // En flujos que redirigen (paypal, gpay, apple) simulamos redirección
+          if (method === 'paypal') {
+            updateSimSteps('processing');
+            await delay(900);
+            const res = await processPaymentDemo('paypal');
+            updateSimSteps('final', true);
+            showMessage({ type: 'success', text: 'Pago completado con PayPal. ID: ' + res.id });
+            openRecurrenceWindow(res);
+            return;
+          }
+
+          if (method === 'gpay' || method === 'apple') {
+            updateSimSteps('processing');
+            await delay(800);
+            const res = await processPaymentDemo(method);
+            updateSimSteps('final', true);
+            showMessage({ type: 'success', text: `Pago completado con ${method === 'gpay' ? 'Google Pay' : 'Apple Pay'}. ID: ${res.id}` });
+            openRecurrenceWindow(res);
+            return;
+          }
+
+          // Para los demás métodos realizamos la simulación normal
+          updateSimSteps('processing');
+          const payload = {}
+          if (method === 'card') {
+            payload.cardName = cardName.value.trim();
+            payload.cardNumber = cardNumber.value.replace(/\s+/g,'');
+            payload.cardExp = cardExp.value;
+          }
+          if (method === 'yappy') payload.phone = yappyPhone.value.trim();
+          if (method === 'clave') payload.document = docNumber.value.trim();
+
+          const result = await processPaymentDemo(method, payload);
+          updateSimSteps('final', true);
+          showMessage({ type: 'success', text: `Pago realizado correctamente (${result.method}). ID: ${result.id}` });
+          openRecurrenceWindow(result);
+        } catch (err) {
+          updateSimSteps('final', false);
+          console.error('Error en pago:', err);
+          const reason = err && err.message ? err.message : 'Error desconocido';
+          showMessage({ type: 'error', text: 'Pago falló: ' + reason });
+        } finally {
+          await delay(800);
+          setProcessing(false);
+        }
+      }
+
+      // sim steps helpers
+      function updateSimSteps(stage, success) {
+        const steps = document.querySelectorAll('.sim-step');
+        steps.forEach(s => s.classList.remove('active','success','error'));
+        if (stage === 'idle') return;
+        if (stage === 'validating') {
+          const el = document.querySelector('.sim-step[data-step="validating"]');
+          if (el) el.classList.add('active');
+        }
+        if (stage === 'processing') {
+          const el = document.querySelector('.sim-step[data-step="processing"]');
+          if (el) el.classList.add('active');
+        }
+        if (stage === 'final') {
+          const el = document.querySelector('.sim-step[data-step="final"]');
+          if (el) el.classList.add(success ? 'success' : 'error');
+        }
+      }
+
+      checkoutBtn.addEventListener('click', handleCheckoutClick);
+      // foco práctico
+      checkoutBtn.focus();
+
+      window._demoCheckout = { updateMethodUI, validateCard };
+      // expose handler for debugging and possible inline invocation
+      window.handleCheckoutClick = handleCheckoutClick;
+
+      // Debug overlay (help track why UI doesn't progress) — visible locally
+      (function createDebugOverlay(){
+        try {
+          const dbg = document.createElement('div');
+          dbg.id = 'debugOverlay';
+          dbg.style.position = 'fixed';
+          dbg.style.left = '12px';
+          dbg.style.bottom = '12px';
+          dbg.style.zIndex = 2000;
+          dbg.style.background = 'rgba(3,10,27,0.85)';
+          dbg.style.color = '#fff';
+          dbg.style.padding = '8px 10px';
+          dbg.style.borderRadius = '8px';
+          dbg.style.fontSize = '12px';
+          dbg.style.boxShadow = '0 8px 24px rgba(2,6,23,0.35)';
+          dbg.innerHTML = `<div class="dbg-title">DEBUG</div><div id="dbgSel">sel: -</div><div id="dbgCard">card.hidden: -</div><div class="dbg-actions"><button id="dbgRefresh" class="btn secondary dbg-btn">Refrescar</button><button id="dbgRun" class="btn dbg-btn">Simular pagar</button><button id="dbgClearOverlays" class="btn secondary dbg-btn">Cerrar overlays</button></div>`;
+          document.body.appendChild(dbg);
+          const dbgSel = dbg.querySelector('#dbgSel');
+          const dbgCard = dbg.querySelector('#dbgCard');
+          const refresh = dbg.querySelector('#dbgRefresh');
+          const run = dbg.querySelector('#dbgRun');
+          const clr = dbg.querySelector('#dbgClearOverlays');
+          function refreshState(){
+            const sel = document.querySelector('input[name="payMethod"]:checked');
+            dbgSel.textContent = 'sel: ' + (sel ? sel.value : '(none)');
+            const cardEl = containers.card;
+            dbgCard.textContent = 'card.hidden: ' + (cardEl ? !!cardEl.hidden : 'nocard');
+          }
+          refresh.addEventListener('click', refreshState);
+          run.addEventListener('click', ()=>{ try { handleCheckoutClick(); } catch(e){ console.error('run debug failed', e); alert('Error en run: '+e.message); } });
+          clr.addEventListener('click', ()=>{ removeStrayOverlays(); alert('Overlays eliminados'); });
+          setInterval(refreshState, 700);
+        } catch(e){ console.warn('No se pudo crear debug overlay', e); }
+      })();
+
+      // Inline modal for recurrence choice (replaces popup)
+      let _lastPaymentResultId = null;
+      function openRecurrenceWindow(paymentResult) {
+        if (paymentResult && paymentResult.id) _lastPaymentResultId = paymentResult.id;
+        // remove existing modal if present
+        const existing = document.getElementById('recurrenceModal');
+        if (existing) existing.parentNode.removeChild(existing);
+
+        const modal = document.createElement('div');
+        modal.id = 'recurrenceModal';
+        modal.className = 'overlay-backdrop active';
+        modal.innerHTML = `
+          <div class="overlay-note recurrence-card" role="dialog" aria-modal="true" aria-labelledby="recurrenceTitle">
+            <h3 id="recurrenceTitle" class="mb-8 blue-600">Configurar cobro recurrente</h3>
+            <p class="muted mb-8">Puedes autorizar cobros mensuales o permitir que PuntoPago cobre cuando el operador facture.</p>
+            <form id="recurrenceForm">
+              <fieldset class="mb-8">
+                <label class="mb-8 block"><input type="radio" name="recurrence" value="monthly" checked> <strong>Cobro mensual</strong> — elegir día del mes</label>
+                <div id="monthlyPicker" class="ml-10 mb-8"><label class="muted">Día del mes: <input id="dayOfMonth" type="number" min="1" max="28" value="1" class="small-input-width"></label></div>
+                <label class="mb-8 block"><input type="radio" name="recurrence" value="on_invoice"> <strong>Autorizar en factura</strong> — PuntoPago podrá cobrar cuando el operador facture</label>
+                <div id="onInvoiceAuth" class="ml-10 muted hidden">
+                  <label><input type="checkbox" id="authOnInvoice"> Autorizo a PuntoPago a cobrar en mi nombre cuando el operador facture.</label>
+                </div>
+              </fieldset>
+              <div class="justify-end mt-12">
+                <button type="button" class="btn secondary" id="recCancel">Cancelar</button>
+                <button type="button" class="btn" id="recConfirm">Confirmar</button>
+              </div>
+            </form>
+          </div>`;
+
+        document.body.appendChild(modal);
+
+        // behavior: toggle day picker / auth checkbox
+        const recForm = modal.querySelector('#recurrenceForm');
+        const monthlyPicker = modal.querySelector('#monthlyPicker');
+        const onInvoiceAuth = modal.querySelector('#onInvoiceAuth');
+        recForm.addEventListener('change', (e)=>{
+          const sel = recForm.querySelector('input[name="recurrence"]:checked').value;
+          if (sel === 'monthly') { monthlyPicker.style.display = 'block'; onInvoiceAuth.style.display = 'none'; }
+          else { monthlyPicker.style.display = 'none'; onInvoiceAuth.style.display = 'block'; }
+        });
+
+        modal.querySelector('#recCancel').addEventListener('click', ()=>{ closeRecurrenceModal(); });
+        modal.querySelector('#recConfirm').addEventListener('click', ()=>{
+          const sel = recForm.querySelector('input[name="recurrence"]:checked').value;
+          const day = modal.querySelector('#dayOfMonth') ? modal.querySelector('#dayOfMonth').value : null;
+          const authorized = modal.querySelector('#authOnInvoice') ? modal.querySelector('#authOnInvoice').checked : false;
+          // provide feedback and close
+          closeRecurrenceModal();
+          if (sel === 'monthly') {
+            showMessage({ type: 'success', text: `Has autorizado cobros mensuales (día ${day}).` });
+          } else {
+            showMessage({ type: 'success', text: 'Has autorizado a PuntoPago cobrar cuando el operador facture.' + (authorized ? ' (autorización registrada)' : '') });
+          }
+          // proceed to delivery modal
+          openDeliveryModal(_lastPaymentResultId || ('txn_' + Date.now()), sel, day);
+        });
+
+        // allow closing by clicking backdrop
+        modal.addEventListener('click', (ev)=>{ if (ev.target === modal) closeRecurrenceModal(); });
+
+        function closeRecurrenceModal(){
+          const m = document.getElementById('recurrenceModal');
+          if (!m) return; m.classList.remove('active'); setTimeout(()=>{ if (m.parentNode) m.parentNode.removeChild(m); }, 220);
+        }
+      }
+
+      // Listener para recibir la selección desde la ventana hija
+      window.addEventListener('message', (ev) => {
+        if (!ev.data || ev.data.type !== 'recurrence_choice') return;
+        const { choice, day } = ev.data;
+        // remove overlay if present
+        const ov = document.getElementById('recurrenceOverlay');
+        if (ov) {
+          ov.classList.remove('active');
+          setTimeout(()=>{ if (ov.parentNode) ov.parentNode.removeChild(ov); }, 300);
+        }
+        if (choice === 'monthly') {
+          showMessage({ type: 'success', text: `Has autorizado cobros mensuales (día ${day}).` });
+        } else if (choice === 'on_invoice') {
+          const authorizedMonthly = ev.data.authorizedMonthly ? ' y autorizaste cobros mensuales' : '';
+          showMessage({ type: 'success', text: 'Has autorizado a PuntoPago cobrar cuando el operador facture.' + authorizedMonthly });
+        }
+        // Aquí podrías enviar la preferencia al backend via fetch
+        console.log('Recurrence choice received:', choice, day);
+        // Abrir modal de entrega del comprobante
+        openDeliveryModal(_lastPaymentResultId || ('txn_' + Date.now()), choice, day);
+      });
+
+      // Modal para seleccionar canal de entrega del comprobante (mejorado)
+      function openDeliveryModal(paymentId, choice, day) {
+        // eliminar si existe
+        const existing = document.getElementById('deliveryModal');
+        if (existing) existing.parentNode.removeChild(existing);
+
+        const modal = document.createElement('div');
+        modal.id = 'deliveryModal';
+        modal.className = 'overlay-backdrop active';
+        modal.innerHTML = `
+          <div class="overlay-note" role="dialog" aria-modal="true" aria-labelledby="deliveryTitle">
+            <h3 id="deliveryTitle" class="mb-8 blue-600">¿Cómo quieres recibir el comprobante?</h3>
+            <p class="muted mb-8">Elige uno de los canales disponibles y completa la información.</p>
+            <div class="channel-grid" aria-hidden="false">
+              <button class="channel-btn" data-method="whatsapp" aria-label="Enviar por WhatsApp">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M21 12.1a9 9 0 10-2.6 6.1L22 22l-2.1-0.6A9 9 0 0021 12.1z" stroke="#25D366" stroke-width="1.2" fill="#E6FFF4"/><path d="M17.5 13.5c-.3-.2-1.7-.9-2-.9s-.5-.1-.7.2-.8.9-.9 1.1-.3.3-.6.1c-.5-.3-1-1-1.4-1.6-.3-.5 0-.7.1-.9.1-.2.2-.4.3-.6.1-.2 0-.4-.1-.6s-.7-1.7-1-2.3c-.3-.6-.6-.5-.9-.5s-.6 0-.9 0c-.3 0-.7.1-1 .5s-1 1.1-1 2.6 1 3 1.1 3.2c.1.2 1.9 2.9 4.6 3.9 2.7 1 2.7.7 3.2.7.5 0 1.6-.7 1.8-1.3.2-.6.2-1.2.1-1.3s-.3-.2-.6-.4z" fill="#25D366"/></svg>
+                <div>WhatsApp</div>
+              </button>
+              <button class="channel-btn" data-method="telegram" aria-label="Enviar por Telegram">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M22 3L2 11.5l5 1.9 1.8 5L22 3z" fill="#E6F3FF" stroke="#0088CC" stroke-width="1.2"/><path d="M7.5 12.3l10.2-6.2-6.6 8.1-3.6-1.9z" fill="#0088CC"/></svg>
+                <div>Telegram</div>
+              </button>
+              <button class="channel-btn" data-method="sms" aria-label="Enviar por SMS">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2" fill="#FFF8E6" stroke="#FFB020" stroke-width="1.2"/><path d="M7 9h10M7 13h6" stroke="#FFB020" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <div>SMS</div>
+              </button>
+              <button class="channel-btn" data-method="email" aria-label="Enviar por correo">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2" fill="#F3F8FF" stroke="#0B6CFF" stroke-width="1.2"/><path d="M3 8l9 6 9-6" stroke="#0B6CFF" stroke-width="1.2"/></svg>
+                <div>Correo</div>
+              </button>
+              <button class="channel-btn" data-method="ppapp" aria-label="Enviar a PuntoPago APP">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#EAF4FF" stroke="#0B6CFF" stroke-width="1.2"/><path d="M8 12h8M8 15h5" stroke="#0B6CFF" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <div>PuntoPago APP</div>
+              </button>
+            </div>
+            <div id="deliveryDetails" class="delivery-details"></div>
+            <div class="justify-end mt-12">
+              <button id="closeDelivery" class="btn secondary ml-8">Cerrar</button>
+            </div>
+          </div>`;
+
+        document.body.appendChild(modal);
+
+        const details = modal.querySelector('#deliveryDetails');
+        modal.querySelector('#closeDelivery').addEventListener('click', ()=>{ closeDeliveryModal(); });
+
+        // handler for delivery buttons
+        modal.querySelectorAll('.channel-btn').forEach(btn => {
+          btn.addEventListener('click', ()=>{
+            const method = btn.getAttribute('data-method');
+            showDeliveryInput(method, details, paymentId);
+          });
+        });
+      }
+
+      function closeDeliveryModal(){
+        const m = document.getElementById('deliveryModal');
+        if (!m) return; m.parentNode.removeChild(m);
+      }
+
+      // show delivery input and then a confirmation card with share options
+      function showDeliveryInput(method, container, paymentId){
+        container.innerHTML = '';
+        const wrap = document.createElement('div');
+        wrap.className = 'delivery-input-wrap';
+        let inner = '';
+        if (method === 'whatsapp' || method === 'sms') {
+          inner = `<label class="muted">Número de teléfono</label><input id="deliveryInput" placeholder="+593 9XXXXXXXX" type="tel">`;
+        } else if (method === 'telegram') {
+          inner = `<label class="muted">Usuario de Telegram</label><input id="deliveryInput" placeholder="@usuario">`;
+        } else if (method === 'email') {
+          inner = `<label class="muted">Correo electrónico</label><input id="deliveryInput" type="email" placeholder="tu@correo.com">`;
+        } else if (method === 'ppapp') {
+          inner = `<div class="muted">Usa la app PuntoPago e ingresa tu ID o número vinculado</div><input id="deliveryInput" placeholder="ID / Teléfono">`;
+        }
+  wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery">Cancelar</button><button class="btn" id="sendDelivery">Enviar comprobante</button></div>`;
+        container.appendChild(wrap);
+
+        wrap.querySelector('#cancelDelivery').addEventListener('click', ()=>{ container.innerHTML = ''; });
+        wrap.querySelector('#sendDelivery').addEventListener('click', async ()=>{
+          const input = wrap.querySelector('#deliveryInput');
+          const val = input ? input.value.trim() : '';
+          if (!val) { input.focus(); input.style.borderColor = 'var(--error)'; return; }
+          // Simular envío
+          wrap.innerHTML = '<div class="muted">Enviando comprobante&hellip;</div>';
+          await delay(900);
+          // mostrar tarjeta de confirmación con opciones para compartir
+          container.innerHTML = '';
+          const confirmCard = document.createElement('div');
+          confirmCard.className = 'confirm-card';
+          const amount = document.getElementById('price').textContent;
+          confirmCard.innerHTML = `
+            <div class="confirm-hed"><strong>Pago confirmado</strong><div class="muted">ID: ${paymentId}</div></div>
+            <div class="confirm-body">Gracias por tu pago de <strong>${amount}</strong>. Se envió el comprobante vía <strong>${method.toUpperCase()}</strong> a <span class="mono">${val}</span>.</div>
+            <div class="confirm-actions">
+              <button class="btn" id="shareBtn">Compartir</button>
+              <button class="btn secondary" id="doneBtn">Listo</button>
+            </div>
+            <div class="share-hint muted mt-8">Desde tu teléfono puedes usar el botón "Compartir" para enviar el comprobante por otra app.</div>
+          `;
+          container.appendChild(confirmCard);
+
+          const shareBtn = confirmCard.querySelector('#shareBtn');
+          const doneBtn = confirmCard.querySelector('#doneBtn');
+
+          shareBtn.addEventListener('click', async ()=>{
+            // intenta usar Web Share API si está disponible
+            const shareData = { title: 'Comprobante de pago', text: `Pago ${amount} - ID: ${paymentId}`, url: location.href };
+            if (navigator.share) {
+              try { await navigator.share(shareData); } catch (e) { alert('Compartir cancelado o no disponible.'); }
+            } else {
+              // fallback: mostrar enlaces para copiar o compartir manualmente
+              const fallback = document.createElement('div');
+              fallback.className = 'muted';
+              fallback.innerHTML = 'Tu navegador no soporta compartir. Copia este texto:' +
+                `<div class="mono-box">Pago ${amount} - ID: ${paymentId}</div>`;
+              confirmCard.appendChild(fallback);
+            }
+          });
+
+          doneBtn.addEventListener('click', ()=>{ closeDeliveryModal(); showMessage({ type:'success', text: 'Comprobante enviado. Gracias por tu pago.' }); });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
