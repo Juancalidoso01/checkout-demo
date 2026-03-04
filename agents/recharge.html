@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portal de Recargas</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .wrap{max-width:720px;margin:28px auto;padding:18px}
+    .methods{display:flex;gap:10px;flex-wrap:wrap}
+    .method{padding:12px;border-radius:10px;background:#fff;border:1px solid #eef4ff;cursor:pointer}
+    .btn{background:var(--blue-600);color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Portal de Recargas</h1>
+    <p class="muted">Selecciona cómo deseas recargar tu saldo.</p>
+
+    <div style="margin-top:12px">
+      <label>Monto seleccionado:</label>
+      <div id="amount" style="font-weight:700;font-size:1.3rem">$0.00</div>
+    </div>
+
+    <h3 style="margin-top:18px">Métodos</h3>
+    <div class="methods" id="methods">
+      <div class="method" data-method="card">Tarjeta</div>
+      <div class="method" data-method="yappy">Yappy</div>
+      <div class="method" data-method="paypal">PayPal</div>
+      <div class="method" data-method="gpay">Google Pay</div>
+      <div class="method" data-method="apple">Apple Pay</div>
+    </div>
+
+    <div style="margin-top:18px">
+      <button id="btn-pay" class="btn">Pagar y recargar</button>
+      <a href="/agents/" style="margin-left:12px">Cancelar</a>
+    </div>
+  </main>
+
+  <script>
+    // read amount from sessionStorage (set by agents/index.html before redirect)
+    const AMOUNT_KEY = 'pp_agent_sandbox_topup_amount';
+    const STORAGE_KEY = 'pp_agent_sandbox_v1';
+    function fmt(v){ return '$' + Number(v).toFixed(2) }
+    const sel = sessionStorage.getItem(AMOUNT_KEY) || '0';
+    document.getElementById('amount').textContent = fmt(sel);
+
+    let chosen = null;
+    document.getElementById('methods').addEventListener('click', e => {
+      const m = e.target.closest('[data-method]');
+      if(!m) return;
+      chosen = m.getAttribute('data-method');
+      // visual
+      document.querySelectorAll('.method').forEach(x=>x.style.outline='none');
+      m.style.outline='3px solid rgba(11,108,255,0.12)';
+    });
+
+    document.getElementById('btn-pay').addEventListener('click', ()=>{
+      if(!chosen){ alert('Elige un método de pago'); return; }
+      const amount = Number(sel);
+      if(!amount || amount <= 0){ alert('Monto inválido'); return; }
+      // simulate payment success and update sandbox state in localStorage
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[] };
+        state.balance = Number((Number(state.balance) + amount).toFixed(2));
+        state.txs = state.txs || [];
+        state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga via ${chosen}`, amount });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        // cleanup
+        sessionStorage.removeItem(AMOUNT_KEY);
+        // redirect back to agents
+        alert('Recarga simulada con éxito');
+        location.href = '/checkout-demo/agents/' .replace('/checkout-demo','') || '/agents/';
+      }catch(err){
+        alert('Error interactuando con el estado del sandbox: '+err.message)
+      }
+    });
+  </script>
+</body>
+</html>
