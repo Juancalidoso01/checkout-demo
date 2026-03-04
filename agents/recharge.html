@@ -632,10 +632,17 @@
     // Ensure the phone input is visible when focused on mobile: scroll into view then offset a bit
     (function(){
       const inputs = ['client-phone','cashin-amount','ach-ref','ach-amount'];
-      const OFFSET = 12; // extra px to bring field above keyboard/header
+      function getOffset(){
+        try {
+          const nav = document.querySelector('nav');
+          const navH = nav ? nav.getBoundingClientRect().height : 56;
+          return Math.ceil(navH / 3); // heuristic: a third of nav height
+        } catch(e){ return 12; }
+      }
       function ensureVisible(el){
         try {
           el.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'});
+          const OFFSET = getOffset();
           setTimeout(()=>{ window.scrollBy({ top: -OFFSET, left:0, behavior:'smooth' }); }, 260);
         } catch(e){ console.warn('ensureVisible failed', e); }
       }
