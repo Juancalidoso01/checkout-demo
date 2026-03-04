@@ -639,15 +639,25 @@
 
       function computeOffset(navH, heightDelta){
         // More aggressive heuristic: favor the largest sensible value
-        const fromNav = Math.ceil((navH || 56) * 0.45);
-        const fromDelta = Math.ceil((heightDelta || 0) * 0.7);
-        const MIN = 90; // ensure a comfortable minimum offset on small screens
+        const fromNav = Math.ceil((navH || 56) * 0.6); // increase weight on nav
+        const fromDelta = Math.ceil((heightDelta || 0) * 0.85); // increase weight on visible keyboard size
+        const MIN = 120; // stronger minimum offset for stubborn iPhones
         return Math.max(fromNav, fromDelta, MIN);
+      }
+
+      function hideNavIfNeeded(){
+        try {
+          const nav = document.querySelector('nav');
+          if (!nav) return;
+          if (window.innerWidth <= 820) nav.classList.add('nav-hidden');
+        } catch(e){}
+      }
+
+      function showNav(){ try { const nav = document.querySelector('nav'); if(nav) nav.classList.remove('nav-hidden'); } catch(e){}
       }
 
       function ensureVisible(el){
         try {
-          // measure nav and viewport
           const nav = document.querySelector('nav');
           const navH = nav ? nav.getBoundingClientRect().height : 56;
           const vv = window.visualViewport;
@@ -655,29 +665,41 @@
           const heightDelta = Math.max(0, baselineVH - currentVH);
           const OFFSET = computeOffset(navH, heightDelta);
 
-          // initial attempt: bring the element near the bottom so it sits above keyboard
-          el.scrollIntoView({behavior:'smooth', block:'end', inline:'nearest'});
+          // apply large scroll-margin-top so scrollIntoView respects enough space
+          el.style.scrollMarginTop = OFFSET + 'px';
 
-          // perform multiple gentle upward adjustments because iOS often requires repeated nudges
-          setTimeout(()=>{ try { window.scrollBy({ top: -Math.round(OFFSET * 0.9), left:0, behavior:'smooth' }); } catch(e){} }, 80);
-          setTimeout(()=>{ try { window.scrollBy({ top: -Math.round(OFFSET * 0.5), left:0, behavior:'smooth' }); } catch(e){} }, 220);
-          setTimeout(()=>{ try { window.scrollBy({ top: -OFFSET, left:0, behavior:'smooth' }); } catch(e){} }, 420);
+          // If the viewport shrank significantly, assume keyboard opened and hide nav to gain space
+          if (heightDelta > 60) hideNavIfNeeded();
 
-          // Second pass: if visualViewport is available check again and adjust
-          if (vv){
-            const after = () => {
-              const newVH = vv.height || window.innerHeight;
-              const newDelta = Math.max(0, baselineVH - newVH);
-              const newOffset = computeOffset(navH, newDelta);
-              try { window.scrollBy({ top: -newOffset, left:0, behavior:'smooth' }); } catch(e){}
-            };
-            setTimeout(after, 650);
+          // compute absolute target using current document scroll + element position
+          const rect = el.getBoundingClientRect();
+          const absoluteTop = window.scrollY + rect.top;
+          const target = Math.max(0, Math.round(absoluteTop - OFFSET));
+
+          // Try direct scrollTo (more deterministic than multiple scrollBy in some browsers)
+          window.scrollTo({ top: target, left: 0, behavior: 'smooth' });
+
+          // Additional retries: some mobile browsers need later adjustments after keyboard animates
+          setTimeout(()=>{ try { window.scrollTo({ top: target, left: 0, behavior: 'smooth' }); } catch(e){} }, 180);
+          setTimeout(()=>{ try { window.scrollTo({ top: target, left: 0, behavior: 'smooth' }); } catch(e){} }, 420);
+
+          // final safety nudge using visualViewport if available
+          if (vv) {
+            setTimeout(()=>{
+              try {
+                const newVH = vv.height || window.innerHeight;
+                const newDelta = Math.max(0, baselineVH - newVH);
+                const newOffset = computeOffset(navH, newDelta);
+                const newTarget = Math.max(0, Math.round(absoluteTop - newOffset));
+                window.scrollTo({ top: newTarget, left:0, behavior:'smooth' });
+              } catch(e){}
+            }, 760);
           }
         } catch(e){ console.warn('ensureVisible failed', e); }
       }
 
       // Update baseline when viewport increases (keyboard dismissed) or orientation changes
-      function refreshBaseline(){ try { baselineVH = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight; } catch(e){} }
+      function refreshBaseline(){ try { baselineVH = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight; showNav(); } catch(e){} }
       window.addEventListener('resize', refreshBaseline, { passive: true });
       window.addEventListener('orientationchange', () => setTimeout(refreshBaseline, 220));
 
@@ -686,6 +708,9 @@
         if (!el) return;
         el.addEventListener('focus', ()=> ensureVisible(el), { passive: true });
         el.addEventListener('touchstart', function(){ setTimeout(()=>{ try{ el.focus(); }catch(e){} }, 50); }, { passive: true });
+        el.addEventListener('blur', ()=>{
+          try { el.style.scrollMarginTop = ''; setTimeout(showNav, 180); } catch(e){}
+        });
       });
     })();
   </script>
