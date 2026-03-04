@@ -15,6 +15,12 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0f172a;-webkit-font-smoothing:antialiased}
 
+/* Improve touch scrolling on iOS/Safari */
+html, body { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+
+/* Make images fully responsive and avoid fractional layout issues when scrolling */
+img{max-width:100%;height:auto;display:block;-webkit-user-drag:none}
+
 .demo-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
 
 .card{width:100%;max-width:540px;padding:16px;border-radius:var(--radius);background:var(--card);
@@ -88,7 +94,7 @@ legend.muted{font-size:0.95rem;color:var(--muted);margin-bottom:8px}
 
 /* overlay / modal for recurrence and delivery */
 .overlay-backdrop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1200;opacity:0;pointer-events:none;backdrop-filter:blur(3px);transition:opacity .18s ease,transform .18s ease}
-.overlay-backdrop{ -webkit-backdrop-filter: blur(3px); }
+.overlay-backdrop{ -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
 .overlay-backdrop.active{opacity:1;pointer-events:auto}
 .overlay-note{background:linear-gradient(180deg,#fff,#fbfeff);padding:16px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.12);max-width:520px;width:calc(100% - 40px);color:var(--text);text-align:left}
 .overlay-note h3{margin:0 0 6px 0;font-size:1.05rem;color:var(--blue-600)}
@@ -173,6 +179,7 @@ legend.muted{font-size:0.95rem;color:var(--muted);margin-bottom:8px}
 .full-width{width:100%}
 .outline-selected{outline:3px solid rgba(11,108,255,0.12)}
 .scrollbox{max-height:280px;overflow:auto}
+.scrollbox, .overlay-note { -webkit-overflow-scrolling: touch; }
 .spaced{margin-top:12px}
 .flex-0-320{flex:0 0 320px}
 .flex-1-420{flex:1 1 420px}
@@ -221,6 +228,9 @@ form#checkoutForm{display:block;flex-direction:column;padding-bottom:6px}
 .card-hero h2{margin:0;font-size:0.98rem;color:var(--blue-600)}
 .card-hero p{margin:2px 0 0 0;color:var(--muted);font-size:0.9rem}
 .card-hero img:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(5,91,181,0.12)}
+
+/* Force GPU compositing for header/nav to avoid flicker/paint issues on iOS when scrolling */
+nav{ -webkit-transform: translateZ(0); transform: translateZ(0); will-change: transform; }
 
 /* Payment logos row */
 .payment-logos{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 10px}
