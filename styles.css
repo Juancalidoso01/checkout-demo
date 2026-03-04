@@ -239,6 +239,9 @@ form#checkoutForm{display:block;flex-direction:column;padding-bottom:6px}
 /* Force GPU compositing for header/nav to avoid flicker/paint issues on iOS when scrolling */
 nav{ -webkit-transform: translateZ(0); transform: translateZ(0); will-change: transform; }
 
+/* reduce repaints by hiding backface for heavy elements */
+.card, .card-hero, .overlay-note { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
 /* Payment logos row */
 .payment-logos{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 10px}
 .payment-logos .logo{display:flex;align-items:center;gap:8px;padding:6px;border-radius:8px;background:rgba(11,107,255,0.03);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s}
@@ -265,6 +268,14 @@ nav{ -webkit-transform: translateZ(0); transform: translateZ(0); will-change: tr
   .payment-logos .logo img{width:34px;height:20px}
   .radio-list label{padding:6px}
   .price-box .amount{font-size:1.16rem}
+}
+
+/* On small screens make header fixed to avoid layout jumps; add top padding to demo container to prevent overlap */
+@media (max-width:820px){
+  nav{ position:fixed; left:0; right:0; top:0; z-index:60; }
+  .demo-container{ padding-top:72px; }
+  /* simplify background to reduce repaint pressure on iOS */
+  html, body { background: #f3f4f6; }
 }
 
 /* compact for small-height viewports to avoid vertical scrolling */
