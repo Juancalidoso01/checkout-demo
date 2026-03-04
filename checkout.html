@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
     <title>Demo Checkout - Botón</title>
     <meta name="description" content="Demo de botón de checkout con manejo de estados y accesibilidad">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -175,7 +176,7 @@
             </div>
             <div class="card-field">
               <label for="cardNumber" class="muted">Número de tarjeta</label>
-              <input id="cardNumber" name="cardNumber" inputmode="numeric" type="text" maxlength="19" placeholder="4242 4242 4242 4242" autocomplete="cc-number" required>
+              <input id="cardNumber" name="cardNumber" inputmode="numeric" pattern="[0-9 ]*" type="text" maxlength="19" placeholder="4242 4242 4242 4242" autocomplete="cc-number" required>
             </div>
             <div class="row card-row-gap">
               <div class="flex-1">
@@ -184,7 +185,7 @@
               </div>
               <div class="w-120">
                 <label for="cardCvc" class="muted">CVC</label>
-                <input id="cardCvc" name="cardCvc" type="text" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc" required class="fixed-width-120">
+                <input id="cardCvc" name="cardCvc" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="123" autocomplete="cc-csc" required class="fixed-width-120">
               </div>
             </div>
           </div>
@@ -194,7 +195,7 @@
             <p class="muted">Se abrirá el flujo de Yappy. Ingresa tu celular o escanea el QR en la app.</p>
             <div class="small-note">
               <label for="yappyPhone" class="muted">Teléfono asociado</label>
-              <input id="yappyPhone" type="tel" placeholder="+593 9XX XXX XXX">
+              <input id="yappyPhone" type="tel" inputmode="tel" pattern="[0-9+ ]*" placeholder="+593 9XXXXXXXX" autocomplete="tel" aria-label="Teléfono Yappy">
             </div>
           </div>
 
@@ -218,11 +219,11 @@
             <p class="muted">Ingresa tu número de documento y la clave para autorizar el pago.</p>
             <div class="small-note">
               <label for="docNumber" class="muted">Documento</label>
-              <input id="docNumber" type="text" placeholder="Cédula / ID">
+              <input id="docNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Cédula / ID" autocomplete="off">
             </div>
             <div class="small-note">
               <label for="claveInput" class="muted">Clave</label>
-              <input id="claveInput" type="password" placeholder="******">
+                <input id="claveInput" type="password" placeholder="******" autocomplete="current-password">
             </div>
           </div>
         </div>
@@ -659,7 +660,7 @@
         } catch(e){ console.warn('initAgentBalance failed', e); }
       }
       function showReturnButton(){ if(backAgentBtn) backAgentBtn.classList.remove('hidden'); }
-      if(backAgentBtn) backAgentBtn.addEventListener('click', ()=>{ const agentsUrl=new URL('agents/',location.href); agentsUrl.searchParams.set('fromCheckout','1'); location.href=agentsUrl.href; });
+  if(backAgentBtn) backAgentBtn.addEventListener('click', ()=>{ const agentsUrl=new URL('agents/recharge.html',location.href); agentsUrl.searchParams.set('fromCheckout','1'); location.href=agentsUrl.href; });
       initAgentBalanceInHeader();
 
       // Debug overlay (help track why UI doesn't progress) — visible locally
