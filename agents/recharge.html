@@ -59,7 +59,17 @@
       if(!chosen){ alert('Elige un método de pago'); return; }
       const amount = Number(sel);
       if(!amount || amount <= 0){ alert('Monto inválido'); return; }
-      // simulate payment success and update sandbox state in localStorage
+      // If method is card, redirect to checkout with amount prefilled
+      if(chosen === 'card'){
+        // pass flow=agent so checkout can optionally show origin
+        const url = new URL('/checkout.html', location.origin);
+        url.searchParams.set('amount', amount);
+        url.searchParams.set('flow', 'agent');
+        // navigate to site root checkout (works on GitHub Pages)
+        location.href = url.pathname + url.search;
+        return;
+      }
+      // For other methods simulate payment and update sandbox state
       try{
         const raw = localStorage.getItem(STORAGE_KEY);
         const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[] };
@@ -71,7 +81,7 @@
         sessionStorage.removeItem(AMOUNT_KEY);
         // redirect back to agents
         alert('Recarga simulada con éxito');
-        location.href = '/checkout-demo/agents/' .replace('/checkout-demo','') || '/agents/';
+        location.href = '/agents/';
       }catch(err){
         alert('Error interactuando con el estado del sandbox: '+err.message)
       }

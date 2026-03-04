@@ -224,6 +224,18 @@
 
   <script>
     (function () {
+      // Prefill price from query param if provided (e.g. ?amount=12.5)
+      try {
+        const params = new URLSearchParams(location.search);
+        const a = params.get('amount');
+        if (a) {
+          const n = Number(a);
+          if (!Number.isNaN(n)) {
+            document.getElementById('price').textContent = 'USD ' + n.toFixed(2);
+          }
+        }
+      } catch (e) { /* ignore */ }
+
       // Global error handlers to surface JS errors to the UI for debugging
       window.addEventListener('error', function (ev) {
         try {
