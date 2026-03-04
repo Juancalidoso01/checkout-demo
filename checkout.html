@@ -239,6 +239,7 @@
           <div id="message" class="msg" role="status" aria-live="polite"></div>
           <div id="busyStatus" class="sr-only" aria-live="assertive"></div>
           <div class="footer-actions">
+            <button id="backAgentBtn" class="btn secondary hidden mr-2" type="button">Volver al agente</button>
             <button id="checkoutBtn" class="btn" type="button" aria-label="Pagar ahora por USD 19.99"><span id="btnLabel">Pagar ahora</span></button>
           </div>
         </div>
@@ -571,6 +572,8 @@
             showMessage({ type: 'success', text: 'Pago completado con PayPal. ID: ' + res.id });
             // If originating from agent flow, record recharge and return
             if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), 'paypal', res.id)) return;
+            // show back button for convenience
+            showReturnButton();
             openRecurrenceWindow(res);
             return;
           }
@@ -582,6 +585,7 @@
             updateSimSteps('final', true);
             showMessage({ type: 'success', text: `Pago completado con ${method === 'gpay' ? 'Google Pay' : 'Apple Pay'}. ID: ${res.id}` });
             if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, res.id)) return;
+            showReturnButton();
             openRecurrenceWindow(res);
             return;
           }
@@ -602,6 +606,7 @@
           showMessage({ type: 'success', text: `Pago realizado correctamente (${result.method}). ID: ${result.id}` });
           // If coming from agent flow, register the recharge and redirect
           if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, result.id)) return;
+          showReturnButton();
           openRecurrenceWindow(result);
         } catch (err) {
           updateSimSteps('final', false);
@@ -640,6 +645,22 @@
       window._demoCheckout = { updateMethodUI, validateCard };
       // expose handler for debugging and possible inline invocation
       window.handleCheckoutClick = handleCheckoutClick;
+
+      // Back to agent button wiring and balance init
+      const backAgentBtn = document.getElementById('backAgentBtn');
+      function initAgentBalanceInHeader(){
+        try {
+          const raw = localStorage.getItem('pp_agent_sandbox_v1');
+          if(!raw) return;
+          const st = JSON.parse(raw);
+          if(st && typeof st.balance !== 'undefined'){
+            const el = document.getElementById('balance-display'); if(el) el.innerText = '$'+Number(st.balance).toFixed(2);
+          }
+        } catch(e){ console.warn('initAgentBalance failed', e); }
+      }
+      function showReturnButton(){ if(backAgentBtn) backAgentBtn.classList.remove('hidden'); }
+      if(backAgentBtn) backAgentBtn.addEventListener('click', ()=>{ const agentsUrl=new URL('agents/',location.href); agentsUrl.searchParams.set('fromCheckout','1'); location.href=agentsUrl.href; });
+      initAgentBalanceInHeader();
 
       // Debug overlay (help track why UI doesn't progress) — visible locally
       (function createDebugOverlay(){
