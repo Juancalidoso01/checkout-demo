@@ -43,6 +43,9 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    /* Safe area adjustments for devices with notch (iPhone) */
+    main.demo-container { padding-top: calc(env(safe-area-inset-top, 0px) + 1rem); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem); }
+    nav { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -416,6 +419,18 @@
           }
         }
       });
+      // after toggling sections, ensure on mobile the selected section is visible
+      try {
+        const el = document.getElementById(`section-${section}`);
+        if (el && typeof el.scrollIntoView === 'function') {
+          // smooth scroll with nearest block to avoid overscrolling headers
+          el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        }
+        // if cashin selected, focus the phone input so iOS brings it into view
+        if (section === 'cashin') {
+          setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
+        }
+      } catch(e){ console.warn('showSection scroll failed', e); }
     }
 
     // Navegación de pasos en Cash In
