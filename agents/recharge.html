@@ -440,32 +440,21 @@
       }
     }
 
-    // Procesar la transacción de Cash In (ahora registra en sandbox y actualiza historial)
+    // Procesar la transacción de Cash In: redirigir a checkout para que procese el pago
     function processCashIn() {
       const amount = parseFloat(document.getElementById('cashin-amount').value);
-            
-      if (amount > state.balance) {
-        alert("Su saldo operativo es insuficiente para realizar este depósito.");
-        return;
+      if (!amount || isNaN(amount) || amount <= 0) { alert('Ingresa un monto válido'); return; }
+      if (amount > state.balance) { alert('Su saldo operativo es insuficiente para realizar este depósito.'); return; }
+
+      try {
+        const url = new URL('../checkout.html', location.href);
+        url.searchParams.set('amount', amount);
+        url.searchParams.set('flow', 'kiosk');
+        // navigate to checkout where the payment will be completed; checkout will register the recharge
+        location.href = url.href;
+      } catch (err) {
+        alert('Error preparando la redirección: ' + err.message);
       }
-
-      document.getElementById('loader').classList.remove('hidden');
-
-      setTimeout(() => {
-        // Actualizar balances locales
-        state.balance = Number((state.balance - amount).toFixed(2));
-        state.cash = Number((state.cash + amount).toFixed(2));
-        const gain = Number((amount * 0.01).toFixed(2));
-        state.gain = Number((state.gain + gain).toFixed(2));
-        saveState(state);
-
-        render();
-                
-        document.getElementById('loader').classList.add('hidden');
-        recordTx('Recarga', 'Cash In', amount);
-        recordTx('Ganancia', 'Comisión Cash In', gain);
-        nextStep(3);
-      }, 1200);
     }
 
     // Notificar un nuevo ACH
