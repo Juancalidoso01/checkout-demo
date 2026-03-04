@@ -321,23 +321,49 @@
       </div>
     </div>
     <script>
-      // Mock dataset and async lookup (simulate network latency)
-      const _mockCustomers = [
-        { cid: '8-123-4567', name: 'María González', portfolio: [{ svcId: 'agua-001', name: 'Agua Potable', balance: 18.75 }, { svcId: 'luz-222', name: 'Electricidad', balance: 42.50 }] },
-        { cid: 'P1234567', name: 'John Doe', portfolio: [{ svcId: 'tv-88', name: 'TV Cable', balance: 12.00 }] },
-        { cid: '001234567', name: 'Empresa XYZ', portfolio: [{ svcId: 'trans-55', name: 'Transporte', balance: 0.00 }, { svcId: 'prepago-7', name: 'Prepago', balance: 5.50 }] }
+      // Service names (from attachment) — used to generate random portfolios
+      const SERVICE_NAMES = [
+        'Mi eventos','Soonticket','Epasa','Encuentra 24','Club fedpa','Do it center','Luz verde panama','Music Shop','Rodelag','Amazon',
+        'Cable Onda','Claro - Pospago','Claro - Recargas Móviles','Claro - TV','Claro Com','Digicel - Recargas','Digicel - Servicio Pospago','Mas móvil - Recargas movil','Mas móvil - Servicio residencial','Movistar - TIGO - Pospago',
+        'Movistar - TIGO - Recargas móviles','Trans ocean network','Sky Tv','Teletón 20 - 30','Banco Delta','Credicorp bank','Microserfin','Universidad del Itsmo','Adelantos','Yapaya',
+        'Crediya','Suma Financiera','CFE','Credits','Jamar','Coopeduc','Panacredit','Solve','Prestamos 911','Financiera Ancon','Crediviva','Plus creed','Venemetro','Titan','Grupo Aros','Corporacion el SOL','Prestaya','Financiera continente','Creditos Mundiales','Solucard','Telechip','Teleprepago','Recargas Internacionales a mas de 10 países','Ncic','Hosanna Visión','Belcorp','Funda cáncer','Avon','Semm','Ducruet','Nacional de seguros','Seguros Fedpa',
+        'Netflix','Nintendo eshop','Play Station Now','Wipet2go','Xbox Game Pass','Divina misericordia','Metro Card','Naturgy','Naturgy Prepago','Aseo Capital','Edemet','EMAS','Ensa Pospago','Ensa Prepago','Redplus','Fácil rent a car','Metro','Metrobus','Panapass','Rapipass','Tarjeta mastercard metro','Taxi Online','Taxi prepago','Uber','Uber eats','Google play','Itunes','Play Station Store','Mine Craft','Steam','Fornite','Roblox','Pugb','Fornite','Codere','Betcris','Zinli','Hipodromo','Starplay','Ben- Banco nacional','Wally - Banesco','BAC - Tarjeta de credito','BAC - Deposito a cuenta','Kali wallet','Tafi','Loteria Nacional Beneficiencia','Trans ocean network','Arabela','Paycash'
       ];
 
-      function lookupCustomerSync(id){
-        const q = (id||'').trim(); if(!q) return [];
-        return _mockCustomers.filter(c => c.cid.indexOf(q) !== -1 || c.name.toLowerCase().indexOf(q.toLowerCase()) !== -1 || c.portfolio.some(p=>p.svcId.indexOf(q)!==-1));
+      // Helper to pick N unique random services
+      function pickRandomServices(n){
+        const out = [];
+        const pool = SERVICE_NAMES.slice();
+        while(out.length < n && pool.length){
+          const idx = Math.floor(Math.random()*pool.length);
+          out.push(pool.splice(idx,1)[0]);
+        }
+        return out;
       }
 
+      // Asynchronous lookup that randomly fails on the first attempt for a query,
+      // then on retry returns a random customer with a random portfolio of services.
       function lookupCustomerAsync(id){
-        return new Promise((resolve) => {
-          // simulate variable latency
-          const delay = 450 + Math.floor(Math.random()*700);
-          setTimeout(()=> resolve(lookupCustomerSync(id)), delay);
+        const q = (id||'').trim();
+        return new Promise((resolve, reject) => {
+          if(!q) return resolve([]);
+          const key = 'pp_lookup_try_' + q;
+          const tries = Number(sessionStorage.getItem(key) || '0');
+          const delay = 350 + Math.floor(Math.random()*700);
+          setTimeout(()=>{
+            const nextTries = tries + 1;
+            sessionStorage.setItem(key, String(nextTries));
+            // If first try, randomly fail once (50% chance)
+            if (nextTries === 1 && Math.random() < 0.5){
+              return reject(new Error('Búsqueda fallida (simulada). Intenta nuevamente.'));
+            }
+            // Otherwise return a fake customer with random subset of services
+            const svcCount = 6 + Math.floor(Math.random()*10); // 6..15 services
+            const picked = pickRandomServices(svcCount);
+            const portfolio = picked.map((name, i) => ({ svcId: 'svc-' + Math.floor(Math.random()*1000000), name, balance: Number((Math.random()*60).toFixed(2)) }));
+            const customer = { cid: q, name: 'Cliente ' + q, portfolio };
+            return resolve([customer]);
+          }, delay);
         });
       }
 
