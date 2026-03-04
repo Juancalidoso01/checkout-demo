@@ -92,6 +92,13 @@ legend.muted{font-size:0.95rem;color:var(--muted);margin-bottom:8px}
 /* small screens */
 @media (max-width:420px){.card{padding:16px}.btn{width:100%;justify-content:center}}
 
+/* Prevent iOS Safari auto-zoom on input focus: ensure inputs are at least 16px on smaller viewports */
+html, body { -webkit-text-size-adjust: 100%; }
+@media (max-width:820px){
+  input[type=text], input[type=tel], input[type=password], input[type=email], input[type=number], textarea, select { font-size:16px; line-height:1.2; }
+  input::placeholder, textarea::placeholder { font-size:15px; }
+}
+
 /* overlay / modal for recurrence and delivery */
 .overlay-backdrop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1200;opacity:0;pointer-events:none;backdrop-filter:blur(3px);transition:opacity .18s ease,transform .18s ease}
 .overlay-backdrop{ -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
