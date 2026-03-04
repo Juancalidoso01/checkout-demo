@@ -62,11 +62,11 @@
       // If method is card, redirect to checkout with amount prefilled
       if(chosen === 'card'){
         // pass flow=agent so checkout can optionally show origin
-        const url = new URL('/checkout.html', location.origin);
+  const url = new URL('../checkout.html', location.href);
         url.searchParams.set('amount', amount);
         url.searchParams.set('flow', 'agent');
         // navigate to site root checkout (works on GitHub Pages)
-        location.href = url.pathname + url.search;
+  location.href = url.href;
         return;
       }
       // For other methods simulate payment and update sandbox state

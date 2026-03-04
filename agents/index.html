@@ -159,8 +159,8 @@
       if(!v || v < min){ alert(`El monto mínimo es $${min}`); return; }
       if(v > max){ alert(`El monto máximo es $${max}`); return; }
       // store temporarily and redirect
-      sessionStorage.setItem('pp_agent_sandbox_topup_amount', String(v));
-      location.href = '/agents/recharge.html';
+  sessionStorage.setItem('pp_agent_sandbox_topup_amount', String(v));
+  location.href = './recharge.html';
     });
 
     render();
