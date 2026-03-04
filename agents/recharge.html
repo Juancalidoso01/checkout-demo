@@ -100,6 +100,11 @@
           <p class="text-gray-500">Recibe efectivo del cliente para acreditar saldo inmediato.</p>
         </div>
 
+      <!-- Toast de confirmación desde Checkout -->
+      <div id="checkoutToast" class="fixed top-6 right-6 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+        <div class="flex items-center space-x-3"><div class="font-bold">Recarga aplicada</div><button id="checkoutToastClose" type="button" class="ml-4 text-white opacity-90">✕</button></div>
+      </div>
+
         <div class="p-8">
           <!-- Indicador de Pasos -->
           <div class="flex justify-between mb-10 relative">
@@ -125,7 +130,7 @@
               </div>
             </div>
             <div class="flex justify-end">
-              <button onclick="nextStep(2)" class="btn-primary text-white px-10 py-3 rounded-lg font-bold shadow-lg">Continuar</button>
+              <button type="button" onclick="nextStep(2)" class="btn-primary text-white px-10 py-3 rounded-lg font-bold shadow-lg">Continuar</button>
             </div>
           </div>
 
@@ -147,8 +152,8 @@
               </div>
             </div>
             <div class="flex space-x-4">
-              <button onclick="nextStep(1)" class="w-1/3 border-2 border-gray-200 text-gray-500 py-4 rounded-xl font-bold hover:bg-gray-50 transition">CORREGIR</button>
-              <button onclick="processCashIn()" class="w-2/3 btn-primary text-white py-4 rounded-xl font-bold shadow-xl">CONFIRMAR Y PROCESAR</button>
+              <button type="button" onclick="nextStep(1)" class="w-1/3 border-2 border-gray-200 text-gray-500 py-4 rounded-xl font-bold hover:bg-gray-50 transition">CORREGIR</button>
+              <button type="button" onclick="processCashIn()" class="w-2/3 btn-primary text-white py-4 rounded-xl font-bold shadow-xl">CONFIRMAR Y PROCESAR</button>
             </div>
           </div>
 
@@ -159,7 +164,7 @@
             </div>
             <h3 class="text-3xl font-bold text-gray-800 mb-2">¡Depósito Exitoso!</h3>
             <p class="text-gray-500">El saldo se ha acreditado instantáneamente.</p>
-            <button onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
+                        <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
           </div>
         </div>
       </div>
@@ -304,6 +309,22 @@
       <p class="text-gray-400 mt-2">Aquí podrá realizar el cobro de facturas (Luz, Agua, Telefonía).</p>
     </div>
   </main>
+    <script>
+      // Show a toast if we arrived from checkout with ?fromCheckout=1
+      (function(){
+        try {
+          const params = new URLSearchParams(location.search);
+          if (params.get('fromCheckout') === '1'){
+            const toast = document.getElementById('checkoutToast');
+            const btn = document.getElementById('checkoutToastClose');
+            if(toast) toast.classList.remove('hidden');
+            if(btn) btn.addEventListener('click', ()=>{ toast.classList.add('hidden'); params.delete('fromCheckout'); history.replaceState(null,'', location.pathname + (params.toString() ? '?'+params.toString() : '')); });
+            // auto-hide after 4s
+            setTimeout(()=>{ if(toast) toast.classList.add('hidden'); params.delete('fromCheckout'); history.replaceState(null,'', location.pathname + (params.toString() ? '?'+params.toString() : '')); }, 4000);
+          }
+        } catch(e){ console.warn('toast check failed', e); }
+      })();
+    </script>
 
   <!-- Overlay de Carga -->
   <div id="loader" class="fixed inset-0 bg-black/60 hidden flex flex-col items-center justify-center z-50 text-white">
