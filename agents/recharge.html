@@ -568,5 +568,42 @@
     // initial render
     render();
   </script>
+
+  <script>
+    // Ensure the demo container has top padding equal to nav height when nav is fixed (mobile)
+    (function(){
+      const nav = document.querySelector('nav');
+      const container = document.querySelector('.demo-container');
+      if (!nav || !container) return;
+
+      function applyNavPadding(){
+        try {
+          const style = window.getComputedStyle(nav);
+          // treat nav as fixed if CSS sets it, or if viewport is small
+          const isFixed = style.position === 'fixed' || window.innerWidth <= 820;
+          if (isFixed){
+            const h = Math.ceil(nav.getBoundingClientRect().height || 0);
+            // add small gap so content isn't flush against nav
+            container.style.paddingTop = (h + 12) + 'px';
+          } else {
+            container.style.paddingTop = '';
+          }
+        } catch(e){ console.warn('applyNavPadding failed', e); }
+      }
+
+      // initial
+      applyNavPadding();
+
+      // ResizeObserver for nav size changes
+      if (window.ResizeObserver){
+        const ro = new ResizeObserver(applyNavPadding);
+        ro.observe(nav);
+      }
+
+      // window handlers
+      window.addEventListener('resize', applyNavPadding, { passive: true });
+      window.addEventListener('orientationchange', () => setTimeout(applyNavPadding, 160));
+    })();
+  </script>
 </body>
 </html>

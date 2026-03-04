@@ -663,6 +663,25 @@
   if(backAgentBtn) backAgentBtn.addEventListener('click', ()=>{ const agentsUrl=new URL('agents/recharge.html',location.href); agentsUrl.searchParams.set('fromCheckout','1'); location.href=agentsUrl.href; });
       initAgentBalanceInHeader();
 
+      // Dynamic nav padding to avoid header overlap on small screens
+      (function(){
+        const nav = document.querySelector('nav');
+        const container = document.querySelector('.demo-container');
+        if (!nav || !container) return;
+        function applyNavPadding(){
+          try {
+            const style = window.getComputedStyle(nav);
+            const isFixed = style.position === 'fixed' || window.innerWidth <= 820;
+            if (isFixed){ const h = Math.ceil(nav.getBoundingClientRect().height || 0); container.style.paddingTop = (h + 12) + 'px'; }
+            else { container.style.paddingTop = ''; }
+          } catch(e){ console.warn('applyNavPadding failed', e); }
+        }
+        applyNavPadding();
+        if (window.ResizeObserver){ const ro = new ResizeObserver(applyNavPadding); ro.observe(nav); }
+        window.addEventListener('resize', applyNavPadding, { passive: true });
+        window.addEventListener('orientationchange', ()=> setTimeout(applyNavPadding, 160));
+      })();
+
       // Debug overlay (help track why UI doesn't progress) — visible locally
       (function createDebugOverlay(){
         try {
