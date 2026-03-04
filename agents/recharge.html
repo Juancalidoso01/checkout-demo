@@ -1,88 +1,444 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Portal de Recargas</title>
-  <link rel="stylesheet" href="/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punto Pago - Portal de Agentes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .wrap{max-width:720px;margin:28px auto;padding:18px}
-    .methods{display:flex;gap:10px;flex-wrap:wrap}
-    .method{padding:12px;border-radius:10px;background:#fff;border:1px solid #eef4ff;cursor:pointer}
-    .btn{background:var(--blue-600);color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    :root {
+      --punto-pago-blue: #0047bb;
+      --punto-pago-cyan: #00adef;
+      --punto-pago-dark: #1a1a1a;
+    }
+    body {
+      background-color: #f3f4f6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .bg-punto-pago { background-color: var(--punto-pago-blue); }
+    .text-punto-pago { color: var(--punto-pago-blue); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--punto-pago-blue), var(--punto-pago-cyan));
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .tab-active {
+      border-bottom: 4px solid var(--punto-pago-blue);
+      color: var(--punto-pago-blue);
+    }
+    .tab-inactive {
+      border-bottom: 4px solid transparent;
+      color: #9ca3af;
+    }
+    /* Animación suave para transiciones de secciones */
+    .section-fade {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
-<body>
-  <main class="wrap">
-    <h1>Portal de Recargas</h1>
-    <p class="muted">Selecciona cómo deseas recargar tu saldo.</p>
+<body class="min-h-screen flex flex-col">
 
-    <div class="spaced">
-      <label for="amount-input">Monto a recargar</label>
-  <input id="amount-input" type="number" min="1" max="1000" step="0.01" placeholder="0.00" class="agent-input">
-      <div class="muted">Rango permitido: 1 - 1000</div>
+  <!-- Header / Navbar -->
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="bg-white p-1 rounded-md">
+          <i class="fas fa-wallet text-blue-600 text-xl"></i>
+        </div>
+        <span class="text-xl font-bold tracking-tight uppercase">Punto Pago Agentes</span>
+      </div>
+      <div class="flex items-center space-x-6">
+        <div class="text-right hidden md:block">
+          <p class="text-xs opacity-80 font-semibold uppercase">Saldo Disponible</p>
+          <p class="text-lg font-bold" id="balance-display">$1,250.45</p>
+        </div>
+        <!-- Alerta visual de ACH en proceso -->
+        <div id="ach-transit-badge" class="hidden flex items-center bg-orange-500 text-white text-[10px] px-2 py-1 rounded-full animate-pulse font-bold">
+          <i class="fas fa-clock mr-1"></i> ACH PENDIENTE
+        </div>
+        <div class="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:bg-white/30 transition">
+          <i class="fas fa-store"></i>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mx-auto py-8 px-4 flex-grow">
+    <!-- Navegación de Funciones Principales -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <button onclick="showSection('pagos')" id="tab-pagos" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
+        <i class="fas fa-file-invoice-dollar text-2xl mb-2 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Pago de Servicios</p>
+      </button>
+      <button onclick="showSection('cashin')" id="tab-cashin" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group">
+        <i class="fas fa-money-bill-wave text-2xl mb-2 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Cash In</p>
+      </button>
+      <button onclick="showSection('fondear')" id="tab-fondear" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
+        <i class="fas fa-university text-2xl mb-2 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Notificar ACH</p>
+      </button>
+      <button class="p-4 bg-white rounded-xl shadow opacity-60 cursor-not-allowed text-center">
+        <i class="fas fa-history text-2xl text-gray-400 mb-2"></i>
+        <p class="font-bold text-gray-400">Reportes</p>
+      </button>
     </div>
 
-  <h3 class="spaced">Métodos</h3>
-  <div class="methods" id="methods">
-      <div class="method" data-method="card">Tarjeta</div>
-      <div class="method" data-method="yappy">Yappy</div>
-      <div class="method" data-method="paypal">PayPal</div>
-      <div class="method" data-method="gpay">Google Pay</div>
-      <div class="method" data-method="apple">Apple Pay</div>
+    <!-- SECCIÓN: CASH IN (Flujo de Depósito) -->
+    <div id="section-cashin" class="max-w-4xl mx-auto section-fade">
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-b-4 border-blue-600">
+        <div class="bg-gray-50 border-b p-6">
+          <h2 class="text-2xl font-bold text-gray-800">Carga de Billetera (Cash In)</h2>
+          <p class="text-gray-500">Recibe efectivo del cliente para acreditar saldo inmediato.</p>
+        </div>
+
+        <div class="p-8">
+          <!-- Indicador de Pasos -->
+          <div class="flex justify-between mb-10 relative">
+            <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 z-0"></div>
+            <div id="step-dot-1" class="z-10 bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-md">1</div>
+            <div id="step-dot-2" class="z-10 bg-gray-200 text-gray-500 w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
+            <div id="step-dot-3" class="z-10 bg-gray-200 text-gray-500 w-10 h-10 rounded-full flex items-center justify-center font-bold">3</div>
+          </div>
+
+          <!-- Paso 1: Datos -->
+          <div id="step-1" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Número de Celular</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-3 text-gray-400 font-bold">+507</span>
+                  <input type="text" id="client-phone" placeholder="6000-0000" class="w-full pl-14 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none" maxlength="8">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Monto USD</label>
+                <input type="number" id="cashin-amount" placeholder="0.00" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-xl outline-none">
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <button onclick="nextStep(2)" class="btn-primary text-white px-10 py-3 rounded-lg font-bold shadow-lg">Continuar</button>
+            </div>
+          </div>
+
+          <!-- Paso 2: Confirmación -->
+          <div id="step-2" class="hidden space-y-6">
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen del Depósito</h3>
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-600">Cuenta de Destino:</span>
+                <span class="font-bold text-gray-800" id="summary-phone">6000-0000</span>
+              </div>
+              <div class="flex justify-between mb-4">
+                <span class="text-gray-600">Titular estimado:</span>
+                <span class="font-bold text-gray-800 uppercase">Juan Pérez</span>
+              </div>
+              <div class="flex justify-between border-t border-blue-200 pt-4 items-center">
+                <span class="font-bold text-lg text-gray-800">Total a recibir en EFECTIVO:</span>
+                <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
+              </div>
+            </div>
+            <div class="flex space-x-4">
+              <button onclick="nextStep(1)" class="w-1/3 border-2 border-gray-200 text-gray-500 py-4 rounded-xl font-bold hover:bg-gray-50 transition">CORREGIR</button>
+              <button onclick="processCashIn()" class="w-2/3 btn-primary text-white py-4 rounded-xl font-bold shadow-xl">CONFIRMAR Y PROCESAR</button>
+            </div>
+          </div>
+
+          <!-- Paso 3: Éxito -->
+          <div id="step-3" class="hidden text-center py-6 section-fade">
+            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="fas fa-check text-4xl"></i>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-800 mb-2">¡Depósito Exitoso!</h3>
+            <p class="text-gray-500">El saldo se ha acreditado instantáneamente.</p>
+            <button onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
+          </div>
+        </div>
+      </div>
+            
+      <!-- Panel de Caja del Agente -->
+      <div class="mt-8 grid md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-400">
+          <h3 class="font-bold text-gray-700 flex items-center mb-2 uppercase text-xs">
+            <i class="fas fa-cash-register text-orange-400 mr-2"></i> Mi Efectivo en Caja
+          </h3>
+          <p class="text-3xl font-bold text-gray-800" id="cash-count">$342.10</p>
+          <p class="text-xs text-gray-400 mt-1">Suma del efectivo físico recibido por Cash In.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-500">
+          <h3 class="font-bold text-gray-700 flex items-center mb-2 uppercase text-xs">
+            <i class="fas fa-hand-holding-usd text-green-500 mr-2"></i> Ganancia Neta Hoy
+          </h3>
+          <p class="text-3xl font-bold text-gray-800">$12.45</p>
+          <p class="text-xs text-gray-400 mt-1">Comisiones generadas por sus servicios.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="spaced">
-      <button id="btn-pay" class="agent-btn" type="button">Pagar y recargar</button>
-      <a href="/agents/" class="link-inline">Cancelar</a>
+    <!-- SECCIÓN: NOTIFICAR ACH (Reporte de Recarga) -->
+    <div id="section-fondear" class="hidden max-w-4xl mx-auto section-fade">
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-blue-600">
+        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800">Alertar Pago por ACH</h2>
+            <p class="text-gray-500 text-sm">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
+          </div>
+          <i class="fas fa-university text-3xl text-blue-200"></i>
+        </div>
+
+        <div class="p-8 space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Tu Banco (Emisor)</label>
+              <select id="ach-bank" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition bg-white">
+                <option value="">Seleccione banco</option>
+                <option value="general">Banco General</option>
+                <option value="banistmo">Banistmo</option>
+                <option value="bac">BAC Credomatic</option>
+                <option value="otros">Otros bancos</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Número de Referencia</label>
+              <input type="text" id="ach-ref" placeholder="Ej: 0012345" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Monto de la Transferencia</label>
+              <div class="relative">
+                <span class="absolute left-3 top-3 text-gray-400 font-bold">$</span>
+                <input type="number" id="ach-amount" placeholder="0.00" class="w-full pl-8 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold outline-none">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Cargar Comprobante</label>
+              <label class="flex items-center justify-center w-full h-12 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                <div class="flex items-center space-x-2">
+                  <i class="fas fa-camera text-gray-400"></i>
+                  <span class="text-xs text-gray-500">Subir foto o PDF</span>
+                </div>
+                <input type="file" class="hidden" />
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 flex space-x-3">
+            <i class="fas fa-info-circle text-orange-500 mt-1"></i>
+            <p class="text-xs text-orange-700 leading-relaxed">
+              <strong>Aviso:</strong> Las transferencias ACH de otros bancos pueden demorar en ser procesadas por el sistema bancario. Al alertar aquí, nuestro equipo financiero verificará su depósito prioritariamente.
+            </p>
+          </div>
+
+          <button onclick="submitACH()" class="w-full bg-gray-800 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg flex items-center justify-center space-x-2">
+            <i class="fas fa-paper-plane"></i>
+            <span>NOTIFICAR TRANSFERENCIA</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabla de historial de notificaciones -->
+      <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider border-b pb-2">Estado de recargas enviadas</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead>
+              <tr class="text-gray-400 uppercase text-[10px]">
+                <th class="pb-4">Fecha</th>
+                <th class="pb-4">Referencia</th>
+                <th class="pb-4 text-center">Monto</th>
+                <th class="pb-4 text-right">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="ach-history">
+              <tr class="border-b last:border-0 hover:bg-gray-50 transition">
+                <td class="py-4 text-gray-500 font-medium">04 Mar, 09:30 AM</td>
+                <td class="py-4 font-bold text-gray-700">ACH-88219</td>
+                <td class="py-4 text-center font-bold text-gray-800">$250.00</td>
+                <td class="py-4 text-right">
+                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold">RECARGADO</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: PAGOS (PLACEHOLDER) -->
+    <div id="section-pagos" class="hidden text-center py-24 bg-white rounded-2xl shadow-xl section-fade border-b-4 border-gray-300">
+      <i class="fas fa-receipt text-6xl text-gray-200 mb-4"></i>
+      <h2 class="text-2xl font-bold text-gray-400">Modulo de Pago de Servicios</h2>
+      <p class="text-gray-400 mt-2">Aquí podrá realizar el cobro de facturas (Luz, Agua, Telefonía).</p>
     </div>
   </main>
 
+  <!-- Overlay de Carga -->
+  <div id="loader" class="fixed inset-0 bg-black/60 hidden flex flex-col items-center justify-center z-50 text-white">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-400 mb-4"></div>
+    <p class="font-bold text-xl tracking-wide">Comunicando con el Servidor...</p>
+  </div>
+
+  <!-- Modal de Alerta Enviada (ACH) -->
+  <div id="ach-success-modal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-[60] p-4">
+    <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl section-fade">
+      <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="fas fa-paper-plane text-3xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">Alerta ACH Recibida</h3>
+      <p class="text-gray-500 text-sm">Nuestro equipo validará la transferencia. El distintivo naranja en tu barra superior indica que tienes un proceso pendiente.</p>
+      <button onclick="closeACHModal()" class="mt-8 w-full btn-primary text-white py-4 rounded-xl font-bold shadow-lg">CONTINUAR OPERANDO</button>
+    </div>
+  </div>
+
   <script>
-    // Optional: prefill amount if agents/index.html stored it in sessionStorage
-    const AMOUNT_KEY = 'pp_agent_sandbox_topup_amount';
-    const prefill = sessionStorage.getItem(AMOUNT_KEY);
-    const input = document.getElementById('amount-input');
-    if(prefill){
-      input.value = Number(prefill);
+    let currentBalance = 1250.45;
+    let currentCash = 342.10;
+
+    // Función para cambiar entre secciones
+    function showSection(section) {
+      const sections = ['cashin', 'fondear', 'pagos'];
+      sections.forEach(s => {
+        const element = document.getElementById(`section-${s}`);
+        const tab = document.getElementById(`tab-${s}`);
+                
+        if (s === section) {
+          element.classList.remove('hidden');
+          tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group";
+          tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 text-blue-600 transition`;
+        } else {
+          element.classList.add('hidden');
+          if (tab) {
+            tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group";
+            tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 transition`;
+          }
+        }
+      });
     }
 
-    let chosen = null;
-    document.getElementById('methods').addEventListener('click', e => {
-      const m = e.target.closest('[data-method]');
-      if(!m) return;
-      chosen = m.getAttribute('data-method');
-      // visual
-      document.querySelectorAll('.method').forEach(x=>x.classList.remove('selected'));
-      m.classList.add('selected');
-    });
+    // Navegación de pasos en Cash In
+    function nextStep(step) {
+      const phone = document.getElementById('client-phone').value;
+      const amount = document.getElementById('cashin-amount').value;
 
-    document.getElementById('btn-pay').addEventListener('click', ()=>{
-      const amount = Number(input.value);
-      if(!amount || isNaN(amount)){
-        alert('Ingresa un monto válido');
-        input.focus();
+      if (step === 2) {
+        if (phone.length < 8) {
+          alert("Ingrese un número de celular válido (8 dígitos).");
+          return;
+        }
+        if (!amount || parseFloat(amount) <= 0) {
+          alert("Ingrese un monto válido para el depósito.");
+          return;
+        }
+                
+        // Actualizar resumen de confirmación
+        document.getElementById('summary-phone').innerText = `+507 ${phone}`;
+        document.getElementById('summary-total').innerText = `$${parseFloat(amount).toFixed(2)}`;
+      }
+
+      document.getElementById('step-1').classList.toggle('hidden', step !== 1);
+      document.getElementById('step-2').classList.toggle('hidden', step !== 2);
+      document.getElementById('step-3').classList.toggle('hidden', step !== 3);
+            
+      updateStepIndicator(step);
+    }
+
+    // Actualizar visualmente los puntos de progreso
+    function updateStepIndicator(step) {
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById(`step-dot-${i}`);
+        if (i < step) {
+          dot.className = "z-10 bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-sm transition-all duration-500";
+          dot.innerHTML = '<i class="fas fa-check"></i>';
+        } else if (i === step) {
+          dot.className = "z-10 bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg scale-110 transition-all duration-300";
+          dot.innerText = i;
+        } else {
+          dot.className = "z-10 bg-gray-200 text-gray-500 w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all";
+          dot.innerText = i;
+        }
+      }
+    }
+
+    // Procesar la transacción de Cash In
+    function processCashIn() {
+      const amount = parseFloat(document.getElementById('cashin-amount').value);
+            
+      if (amount > currentBalance) {
+        alert("Su saldo operativo es insuficiente para realizar este depósito.");
         return;
       }
-      if(amount < 1 || amount > 1000){
-        alert('El monto debe estar entre 1 y 1000');
-        input.focus();
+
+      document.getElementById('loader').classList.remove('hidden');
+
+      setTimeout(() => {
+        // Actualizar balances locales
+        currentBalance -= amount;
+        currentCash += amount;
+                
+        document.getElementById('balance-display').innerText = `$${currentBalance.toFixed(2)}`;
+        document.getElementById('cash-count').innerText = `$${currentCash.toFixed(2)}`;
+                
+        document.getElementById('loader').classList.add('hidden');
+        nextStep(3);
+      }, 2000);
+    }
+
+    // Notificar un nuevo ACH
+    function submitACH() {
+      const ref = document.getElementById('ach-ref').value;
+      const amount = document.getElementById('ach-amount').value;
+      const bank = document.getElementById('ach-bank').value;
+
+      if (!ref || !amount || !bank) {
+        alert("Complete todos los campos de la transferencia para notificar el pago.");
         return;
       }
-      if(!chosen){ alert('Elige un método de pago'); return; }
 
-      // Redirect to checkout to complete the payment; set flow=kiosk so checkout knows origin
-      try {
-        const url = new URL('../checkout.html', location.href);
-        url.searchParams.set('amount', amount);
-        url.searchParams.set('flow', 'kiosk');
-        url.searchParams.set('method', chosen);
-        // navigate to checkout (relative URL will resolve correctly on GH Pages)
-        location.href = url.href;
-      } catch (err) {
-        alert('Error preparando redirección: '+err.message);
-      }
-    });
+      document.getElementById('loader').classList.remove('hidden');
+            
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('ach-success-modal').classList.remove('hidden');
+        document.getElementById('ach-transit-badge').classList.remove('hidden');
+                
+        // Agregar fila al historial
+        const history = document.getElementById('ach-history');
+        const row = `
+          <tr class="border-b last:border-0 hover:bg-gray-50 transition">
+            <td class="py-4 text-gray-400 font-medium italic text-[11px]">En revisión ahora</td>
+            <td class="py-4 font-bold text-gray-700">${ref}</td>
+            <td class="py-4 text-center font-bold text-gray-800">$${parseFloat(amount).toFixed(2)}</td>
+            <td class="py-4 text-right">
+              <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Validando</span>
+            </td>
+          </tr>
+        `;
+        history.insertAdjacentHTML('afterbegin', row);
+                
+        // Limpiar campos
+        document.getElementById('ach-ref').value = "";
+        document.getElementById('ach-amount').value = "";
+        document.getElementById('ach-bank').value = "";
+      }, 1800);
+    }
+
+    function closeACHModal() {
+      document.getElementById('ach-success-modal').classList.add('hidden');
+      showSection('cashin');
+    }
+
+    function resetFlow() {
+      document.getElementById('client-phone').value = "";
+      document.getElementById('cashin-amount').value = "";
+      nextStep(1);
+    }
   </script>
 </body>
 </html>
