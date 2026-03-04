@@ -432,13 +432,19 @@
           try {
             const nav = document.querySelector('nav');
             const navH = nav ? nav.getBoundingClientRect().height : 0;
-            const safeTop = Number(window.getComputedStyle(document.documentElement).getPropertyValue('--safe-top') || 0) || 0;
-            const safeBottom = Number(window.getComputedStyle(document.documentElement).getPropertyValue('--safe-bottom') || 0) || 0;
-            const avail = window.innerHeight - navH - safeTop - safeBottom - 24; // margin
+            const avail = window.innerHeight - navH - 24; // margin
             const cashEl = document.getElementById('section-cashin');
             if (window.innerWidth <= 820 && cashEl) {
-              cashEl.style.minHeight = (avail > 300 ? avail : 300) + 'px';
+              const minH = (avail > 300 ? avail : 300);
+              cashEl.style.minHeight = minH + 'px';
               cashEl.classList.add('section-center');
+              // check content height: if content is taller than available height, enable compact mode
+              const content = cashEl.querySelector('.bg-white');
+              if (content) {
+                const contentH = content.getBoundingClientRect().height;
+                if (contentH > avail) { cashEl.classList.add('compact'); }
+                else { cashEl.classList.remove('compact'); }
+              }
             }
           } catch(e){ console.warn('center calc failed', e); }
           setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
