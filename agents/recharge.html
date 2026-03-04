@@ -301,12 +301,78 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: PAGOS (PLACEHOLDER) -->
-    <div id="section-pagos" class="hidden text-center py-24 bg-white rounded-2xl shadow-xl section-fade border-b-4 border-gray-300">
-      <i class="fas fa-receipt text-6xl text-gray-200 mb-4"></i>
-      <h2 class="text-2xl font-bold text-gray-400">Modulo de Pago de Servicios</h2>
-      <p class="text-gray-400 mt-2">Aquí podrá realizar el cobro de facturas (Luz, Agua, Telefonía).</p>
+    <!-- SECCIÓN: PAGOS -->
+    <div id="section-pagos" class="hidden bg-white rounded-2xl shadow-xl section-fade border-b-4 border-gray-300 max-w-4xl mx-auto p-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">Pago de servicios</h2>
+      <p class="text-gray-500 mb-4">Busca al cliente por cédula, pasaporte o número de servicio para ver su portafolio y saldos.</p>
+
+      <div class="grid md:grid-cols-3 gap-4 mb-4">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-bold text-gray-700 mb-2">Cédula / Pasaporte / Nº de servicio</label>
+          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div class="flex items-end">
+          <button id="customer-search-btn" type="button" class="btn-primary w-full py-3 rounded-lg text-white">Buscar Cliente</button>
+        </div>
+      </div>
+
+      <div id="customer-results" class="space-y-4">
+        <!-- Results injected here -->
+      </div>
     </div>
+    <script>
+      // Mock customer lookup: in a real app this would call your backend
+      function lookupCustomer(id){
+        // normalize
+        const q = (id||'').trim();
+        if(!q) return [];
+        // fake dataset
+        const mock = [
+          { cid: '8-123-4567', name: 'María González', portfolio: [{ svcId: 'agua-001', name: 'Agua Potable', balance: 18.75 }, { svcId: 'luz-222', name: 'Electricidad', balance: 42.50 }] },
+          { cid: 'P1234567', name: 'John Doe', portfolio: [{ svcId: 'tv-88', name: 'TV Cable', balance: 12.00 }] },
+          { cid: '001234567', name: 'Empresa XYZ', portfolio: [{ svcId: 'trans-55', name: 'Transporte', balance: 0.00 }, { svcId: 'prepago-7', name: 'Prepago', balance: 5.50 }] }
+        ];
+        // simple contains match on cid or name
+        return mock.filter(c => c.cid.indexOf(q) !== -1 || c.name.toLowerCase().indexOf(q.toLowerCase()) !== -1 || c.portfolio.some(p=>p.svcId.indexOf(q)!==-1));
+      }
+
+      function renderCustomerResults(list){
+        const out = document.getElementById('customer-results');
+        out.innerHTML = '';
+        if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">No se encontraron coincidencias para el cliente.</div>'; return; }
+        list.forEach(c=>{
+          const wrap = document.createElement('div'); wrap.className = 'p-4 border rounded-lg';
+          const port = c.portfolio.map(p => `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-svc="${p.svcId}" data-amt="${p.balance}" class="btn secondary collect-btn">Cobrar</button></td></tr>`).join('');
+          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">ID: ${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} servicios</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${port}</tbody></table></div>`;
+          out.appendChild(wrap);
+        });
+
+        // wire collect buttons
+        out.querySelectorAll('.collect-btn').forEach(btn=>{
+          btn.addEventListener('click', (ev)=>{
+            const cid = btn.getAttribute('data-cid');
+            const svc = btn.getAttribute('data-svc');
+            const amt = Number(btn.getAttribute('data-amt')) || 0;
+            // Ask agent how much to charge (pre-fill with owed balance)
+            const val = prompt(`Monto a cobrar por ${svc} (saldo: ${fmt(amt)})`, amt.toFixed(2));
+            const charge = Number(val);
+            if (!val || isNaN(charge) || charge <= 0) return alert('Monto inválido');
+            // redirect to checkout to process payment on behalf of client (agent flow)
+            const url = new URL('../checkout.html', location.href);
+            url.searchParams.set('amount', charge);
+            url.searchParams.set('flow', 'agent');
+            url.searchParams.set('clientId', cid);
+            location.href = url.href;
+          });
+        });
+      }
+
+      document.getElementById('customer-search-btn').addEventListener('click', ()=>{
+        const q = document.getElementById('customer-id').value || '';
+        const found = lookupCustomer(q);
+        renderCustomerResults(found);
+      });
+    </script>
   </main>
     <script>
       // Show a toast if we arrived from checkout with ?fromCheckout=1
