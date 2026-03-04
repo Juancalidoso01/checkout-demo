@@ -17,13 +17,13 @@
     <h1>Portal de Recargas</h1>
     <p class="muted">Selecciona cómo deseas recargar tu saldo.</p>
 
-    <div style="margin-top:12px">
+    <div class="spaced">
       <label>Monto seleccionado:</label>
-      <div id="amount" style="font-weight:700;font-size:1.3rem">$0.00</div>
+      <div id="amount" class="agent-balance">$0.00</div>
     </div>
 
-    <h3 style="margin-top:18px">Métodos</h3>
-    <div class="methods" id="methods">
+  <h3 class="spaced">Métodos</h3>
+  <div class="methods" id="methods">
       <div class="method" data-method="card">Tarjeta</div>
       <div class="method" data-method="yappy">Yappy</div>
       <div class="method" data-method="paypal">PayPal</div>
@@ -31,9 +31,9 @@
       <div class="method" data-method="apple">Apple Pay</div>
     </div>
 
-    <div style="margin-top:18px">
-      <button id="btn-pay" class="btn">Pagar y recargar</button>
-      <a href="/agents/" style="margin-left:12px">Cancelar</a>
+    <div class="spaced">
+      <button id="btn-pay" class="agent-btn" type="button">Pagar y recargar</button>
+      <a href="/agents/" class="link-inline">Cancelar</a>
     </div>
   </main>
 
@@ -51,8 +51,8 @@
       if(!m) return;
       chosen = m.getAttribute('data-method');
       // visual
-      document.querySelectorAll('.method').forEach(x=>x.style.outline='none');
-      m.style.outline='3px solid rgba(11,108,255,0.12)';
+  document.querySelectorAll('.method').forEach(x=>x.classList.remove('selected'));
+  m.classList.add('selected');
     });
 
     document.getElementById('btn-pay').addEventListener('click', ()=>{
