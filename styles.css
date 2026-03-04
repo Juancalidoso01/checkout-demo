@@ -15,7 +15,7 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0f172a;-webkit-font-smoothing:antialiased}
 
-.container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+.demo-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
 
 .card{width:100%;max-width:540px;padding:16px;border-radius:var(--radius);background:var(--card);
   box-shadow: 0 8px 20px rgba(11,20,40,0.06);border:1px solid rgba(11,75,160,0.05);position:relative;overflow:visible}
