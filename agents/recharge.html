@@ -59,31 +59,16 @@
       if(!chosen){ alert('Elige un método de pago'); return; }
       const amount = Number(sel);
       if(!amount || amount <= 0){ alert('Monto inválido'); return; }
-      // If method is card, redirect to checkout with amount prefilled
-      if(chosen === 'card'){
-        // pass flow=agent so checkout can optionally show origin
-  const url = new URL('../checkout.html', location.href);
+      // Always redirect to checkout to complete the payment; set flow=kiosk so checkout knows origin
+      try {
+        const url = new URL('../checkout.html', location.href);
         url.searchParams.set('amount', amount);
-        url.searchParams.set('flow', 'agent');
-        // navigate to site root checkout (works on GitHub Pages)
-  location.href = url.href;
-        return;
-      }
-      // For other methods simulate payment and update sandbox state
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[] };
-        state.balance = Number((Number(state.balance) + amount).toFixed(2));
-        state.txs = state.txs || [];
-        state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga via ${chosen}`, amount });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        // cleanup
-        sessionStorage.removeItem(AMOUNT_KEY);
-        // redirect back to agents
-        alert('Recarga simulada con éxito');
-        location.href = '/agents/';
-      }catch(err){
-        alert('Error interactuando con el estado del sandbox: '+err.message)
+        url.searchParams.set('flow', 'kiosk');
+        url.searchParams.set('method', chosen);
+        // navigate to checkout (relative URL will resolve correctly on GH Pages)
+        location.href = url.href;
+      } catch (err) {
+        alert('Error preparando redirección: '+err.message);
       }
     });
   </script>

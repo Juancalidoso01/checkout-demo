@@ -240,7 +240,8 @@
       function handleAgentReturn(amount, method, txId){
         try {
           const params = new URLSearchParams(location.search);
-          if (params.get('flow') !== 'agent') return false;
+          const flow = params.get('flow');
+          if (flow !== 'agent' && flow !== 'kiosk') return false;
           const STORAGE_KEY = 'pp_agent_sandbox_v1';
           const raw = localStorage.getItem(STORAGE_KEY);
           const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[] };
