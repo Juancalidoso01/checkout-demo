@@ -632,20 +632,55 @@
     // Ensure the phone input is visible when focused on mobile: scroll into view then offset a bit
     (function(){
       const inputs = ['client-phone','cashin-amount','ach-ref','ach-amount'];
-      function getOffset(){
-        try {
-          const nav = document.querySelector('nav');
-          const navH = nav ? nav.getBoundingClientRect().height : 56;
-          return Math.ceil(navH / 3); // heuristic: a third of nav height
-        } catch(e){ return 12; }
+
+      // Baseline viewport height used to detect keyboard appearance
+      let baselineVH = window.innerHeight;
+      if (window.visualViewport && window.visualViewport.height) baselineVH = window.visualViewport.height;
+
+      function computeOffset(navH, heightDelta){
+        // More aggressive heuristic: favor the largest sensible value
+        const fromNav = Math.ceil((navH || 56) * 0.45);
+        const fromDelta = Math.ceil((heightDelta || 0) * 0.7);
+        const MIN = 90; // ensure a comfortable minimum offset on small screens
+        return Math.max(fromNav, fromDelta, MIN);
       }
+
       function ensureVisible(el){
         try {
-          el.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'});
-          const OFFSET = getOffset();
-          setTimeout(()=>{ window.scrollBy({ top: -OFFSET, left:0, behavior:'smooth' }); }, 260);
+          // measure nav and viewport
+          const nav = document.querySelector('nav');
+          const navH = nav ? nav.getBoundingClientRect().height : 56;
+          const vv = window.visualViewport;
+          const currentVH = (vv && vv.height) ? vv.height : window.innerHeight;
+          const heightDelta = Math.max(0, baselineVH - currentVH);
+          const OFFSET = computeOffset(navH, heightDelta);
+
+          // initial attempt: bring the element near the bottom so it sits above keyboard
+          el.scrollIntoView({behavior:'smooth', block:'end', inline:'nearest'});
+
+          // perform multiple gentle upward adjustments because iOS often requires repeated nudges
+          setTimeout(()=>{ try { window.scrollBy({ top: -Math.round(OFFSET * 0.9), left:0, behavior:'smooth' }); } catch(e){} }, 80);
+          setTimeout(()=>{ try { window.scrollBy({ top: -Math.round(OFFSET * 0.5), left:0, behavior:'smooth' }); } catch(e){} }, 220);
+          setTimeout(()=>{ try { window.scrollBy({ top: -OFFSET, left:0, behavior:'smooth' }); } catch(e){} }, 420);
+
+          // Second pass: if visualViewport is available check again and adjust
+          if (vv){
+            const after = () => {
+              const newVH = vv.height || window.innerHeight;
+              const newDelta = Math.max(0, baselineVH - newVH);
+              const newOffset = computeOffset(navH, newDelta);
+              try { window.scrollBy({ top: -newOffset, left:0, behavior:'smooth' }); } catch(e){}
+            };
+            setTimeout(after, 650);
+          }
         } catch(e){ console.warn('ensureVisible failed', e); }
       }
+
+      // Update baseline when viewport increases (keyboard dismissed) or orientation changes
+      function refreshBaseline(){ try { baselineVH = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight; } catch(e){} }
+      window.addEventListener('resize', refreshBaseline, { passive: true });
+      window.addEventListener('orientationchange', () => setTimeout(refreshBaseline, 220));
+
       inputs.forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;

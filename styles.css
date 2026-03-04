@@ -314,6 +314,14 @@ button, .btn, .channel-btn { -webkit-tap-highlight-color: rgba(0,0,0,0); touch-a
 /* Demo container padding safety to avoid conflicts with frameworks that use .container */
 .demo-container{padding-left:12px;padding-right:12px}
 
+/* Help prevent parent overscroll / bounce when nudging inputs into view */
+html, body { overscroll-behavior-y: contain; scroll-behavior: smooth; }
+
+/* iOS specific: prefer native smooth-scrolling when available and avoid rubber-band */
+@supports (-webkit-overflow-scrolling: touch) {
+  html, body { -webkit-overflow-scrolling: touch; }
+}
+
 /* Friendly font-size for accessibility on smaller devices */
 @media (max-width:520px){
   body{font-size:15px}

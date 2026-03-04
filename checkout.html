@@ -682,10 +682,40 @@
         window.addEventListener('orientationchange', ()=> setTimeout(applyNavPadding, 160));
       })();
 
-      // Apply dynamic offset visibility for payment inputs on mobile
+      // Apply aggressive dynamic offset visibility for payment inputs on mobile
       (function(){
-        function getOffset(){ try { const nav = document.querySelector('nav'); const navH = nav?nav.getBoundingClientRect().height:56; return Math.ceil(navH/3); } catch(e){ return 12; } }
-        function ensureVisible(el){ try { el.scrollIntoView({behavior:'smooth', block:'center'}); const OFF = getOffset(); setTimeout(()=>{ window.scrollBy({ top: -OFF, left:0, behavior:'smooth' }); }, 220); } catch(e){console.warn(e);} }
+        let baselineVH = window.innerHeight;
+        if (window.visualViewport && window.visualViewport.height) baselineVH = window.visualViewport.height;
+
+        function computeOffset(navH, heightDelta){
+          const fromNav = Math.ceil((navH || 56) * 0.45);
+          const fromDelta = Math.ceil((heightDelta || 0) * 0.7);
+          const MIN = 90;
+          return Math.max(fromNav, fromDelta, MIN);
+        }
+
+        function ensureVisible(el){
+          try {
+            const nav = document.querySelector('nav');
+            const navH = nav ? nav.getBoundingClientRect().height : 56;
+            const vv = window.visualViewport;
+            const currentVH = (vv && vv.height) ? vv.height : window.innerHeight;
+            const heightDelta = Math.max(0, baselineVH - currentVH);
+            const OFFSET = computeOffset(navH, heightDelta);
+
+            el.scrollIntoView({behavior:'smooth', block:'end', inline:'nearest'});
+            setTimeout(()=>{ try { window.scrollBy({ top: -Math.round(OFFSET * 0.9), left:0, behavior:'smooth' }); } catch(e){} }, 80);
+            setTimeout(()=>{ try { window.scrollBy({ top: -Math.round(OFFSET * 0.5), left:0, behavior:'smooth' }); } catch(e){} }, 220);
+            setTimeout(()=>{ try { window.scrollBy({ top: -OFFSET, left:0, behavior:'smooth' }); } catch(e){} }, 420);
+
+            if (vv){ const after = () => { const newVH = vv.height || window.innerHeight; const newDelta = Math.max(0, baselineVH - newVH); const newOffset = computeOffset(navH, newDelta); try { window.scrollBy({ top: -newOffset, left:0, behavior:'smooth' }); } catch(e){} }; setTimeout(after, 650); }
+          } catch(e){ console.warn('ensureVisible failed', e); }
+        }
+
+        function refreshBaseline(){ try { baselineVH = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight; } catch(e){} }
+        window.addEventListener('resize', refreshBaseline, { passive: true });
+        window.addEventListener('orientationchange', () => setTimeout(refreshBaseline, 220));
+
         const ids = ['cardNumber','cardCvc','yappyPhone','docNumber'];
         ids.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('focus', ()=>ensureVisible(el), { passive:true }); el.addEventListener('touchstart', ()=> setTimeout(()=>{ try{ el.focus(); }catch(e){} },50), { passive:true }); });
       })();
