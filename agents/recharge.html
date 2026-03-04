@@ -605,5 +605,23 @@
       window.addEventListener('orientationchange', () => setTimeout(applyNavPadding, 160));
     })();
   </script>
+
+  <script>
+    // Ensure the phone input is visible when focused on mobile: scroll into view then offset a bit
+    (function(){
+      const ip = document.getElementById('client-phone');
+      if(!ip) return;
+      const OFFSET = 12; // extra px to bring field above keyboard/header
+      function ensureVisible(){
+        try {
+          ip.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'});
+          // small delay then offset to ensure it's visually above keyboard/header
+          setTimeout(()=>{ window.scrollBy({ top: -OFFSET, left:0, behavior:'smooth' }); }, 260);
+        } catch(e){ console.warn('ensureVisible failed', e); }
+      }
+      ip.addEventListener('focus', ensureVisible, { passive: true });
+      ip.addEventListener('touchstart', function(){ setTimeout(()=>{ ip.focus(); }, 50); }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
