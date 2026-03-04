@@ -236,6 +236,29 @@
         }
       } catch (e) { /* ignore */ }
 
+      // Helper: when checkout is used from agent flow, register recharge and redirect
+      function handleAgentReturn(amount, method, txId){
+        try {
+          const params = new URLSearchParams(location.search);
+          if (params.get('flow') !== 'agent') return false;
+          const STORAGE_KEY = 'pp_agent_sandbox_v1';
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[] };
+          const amt = Number(amount) || 0;
+          state.balance = Number((Number(state.balance) + amt).toFixed(2));
+          state.txs = state.txs || [];
+          state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga via ${method} (checkout) ID:${txId||''}`, amount: amt });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          // redirect back to agents sandbox
+          const agentsUrl = new URL('agents/', location.href).href;
+          // add a flag so agents page can show a success toast if desired
+          const target = new URL(agentsUrl);
+          target.searchParams.set('fromCheckout','1');
+          location.href = target.href;
+          return true;
+        } catch (e) { console.warn('Agent return failed', e); return false; }
+      }
+
       // Global error handlers to surface JS errors to the UI for debugging
       window.addEventListener('error', function (ev) {
         try {
@@ -517,6 +540,8 @@
             const res = await processPaymentDemo('paypal');
             updateSimSteps('final', true);
             showMessage({ type: 'success', text: 'Pago completado con PayPal. ID: ' + res.id });
+            // If originating from agent flow, record recharge and return
+            if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), 'paypal', res.id)) return;
             openRecurrenceWindow(res);
             return;
           }
@@ -527,6 +552,7 @@
             const res = await processPaymentDemo(method);
             updateSimSteps('final', true);
             showMessage({ type: 'success', text: `Pago completado con ${method === 'gpay' ? 'Google Pay' : 'Apple Pay'}. ID: ${res.id}` });
+            if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, res.id)) return;
             openRecurrenceWindow(res);
             return;
           }
@@ -545,6 +571,8 @@
           const result = await processPaymentDemo(method, payload);
           updateSimSteps('final', true);
           showMessage({ type: 'success', text: `Pago realizado correctamente (${result.method}). ID: ${result.id}` });
+          // If coming from agent flow, register the recharge and redirect
+          if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, result.id)) return;
           openRecurrenceWindow(result);
         } catch (err) {
           updateSimSteps('final', false);
