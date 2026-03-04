@@ -279,8 +279,8 @@
           state.txs = state.txs || [];
           state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga via ${method} (checkout) ID:${txId||''}`, amount: amt });
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-          // redirect back to agents sandbox
-          const agentsUrl = new URL('agents/', location.href).href;
+          // redirect back to agents recharge page
+          const agentsUrl = new URL('agents/recharge.html', location.href).href;
           // add a flag so agents page can show a success toast if desired
           const target = new URL(agentsUrl);
           target.searchParams.set('fromCheckout','1');
