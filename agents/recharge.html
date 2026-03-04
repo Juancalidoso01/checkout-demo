@@ -428,7 +428,23 @@
         }
         // if cashin selected, focus the phone input so iOS brings it into view
         if (section === 'cashin') {
+          // calculate available vertical space and center the cashin panel on small screens
+          try {
+            const nav = document.querySelector('nav');
+            const navH = nav ? nav.getBoundingClientRect().height : 0;
+            const safeTop = Number(window.getComputedStyle(document.documentElement).getPropertyValue('--safe-top') || 0) || 0;
+            const safeBottom = Number(window.getComputedStyle(document.documentElement).getPropertyValue('--safe-bottom') || 0) || 0;
+            const avail = window.innerHeight - navH - safeTop - safeBottom - 24; // margin
+            const cashEl = document.getElementById('section-cashin');
+            if (window.innerWidth <= 820 && cashEl) {
+              cashEl.style.minHeight = (avail > 300 ? avail : 300) + 'px';
+              cashEl.classList.add('section-center');
+            }
+          } catch(e){ console.warn('center calc failed', e); }
           setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
+        } else {
+          // remove centering when other sections are active
+          const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
         }
       } catch(e){ console.warn('showSection scroll failed', e); }
     }

@@ -318,3 +318,7 @@ button, .btn, .channel-btn { -webkit-tap-highlight-color: rgba(0,0,0,0); touch-a
 @media (max-width:520px){
   body{font-size:15px}
 }
+
+/* helper to center a section vertically (used for Cash In) */
+.section-center{display:flex;align-items:center;justify-content:center;padding-top:0;padding-bottom:0}
+.section-center > .bg-white{width:100%;max-width:720px;margin:0}
