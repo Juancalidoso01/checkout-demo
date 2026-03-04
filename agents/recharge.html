@@ -18,8 +18,9 @@
     <p class="muted">Selecciona cómo deseas recargar tu saldo.</p>
 
     <div class="spaced">
-      <label>Monto seleccionado:</label>
-      <div id="amount" class="agent-balance">$0.00</div>
+      <label for="amount-input">Monto a recargar</label>
+  <input id="amount-input" type="number" min="1" max="1000" step="0.01" placeholder="0.00" class="agent-input">
+      <div class="muted">Rango permitido: 1 - 1000</div>
     </div>
 
   <h3 class="spaced">Métodos</h3>
@@ -38,12 +39,13 @@
   </main>
 
   <script>
-    // read amount from sessionStorage (set by agents/index.html before redirect)
+    // Optional: prefill amount if agents/index.html stored it in sessionStorage
     const AMOUNT_KEY = 'pp_agent_sandbox_topup_amount';
-    const STORAGE_KEY = 'pp_agent_sandbox_v1';
-    function fmt(v){ return '$' + Number(v).toFixed(2) }
-    const sel = sessionStorage.getItem(AMOUNT_KEY) || '0';
-    document.getElementById('amount').textContent = fmt(sel);
+    const prefill = sessionStorage.getItem(AMOUNT_KEY);
+    const input = document.getElementById('amount-input');
+    if(prefill){
+      input.value = Number(prefill);
+    }
 
     let chosen = null;
     document.getElementById('methods').addEventListener('click', e => {
@@ -51,15 +53,25 @@
       if(!m) return;
       chosen = m.getAttribute('data-method');
       // visual
-  document.querySelectorAll('.method').forEach(x=>x.classList.remove('selected'));
-  m.classList.add('selected');
+      document.querySelectorAll('.method').forEach(x=>x.classList.remove('selected'));
+      m.classList.add('selected');
     });
 
     document.getElementById('btn-pay').addEventListener('click', ()=>{
+      const amount = Number(input.value);
+      if(!amount || isNaN(amount)){
+        alert('Ingresa un monto válido');
+        input.focus();
+        return;
+      }
+      if(amount < 1 || amount > 1000){
+        alert('El monto debe estar entre 1 y 1000');
+        input.focus();
+        return;
+      }
       if(!chosen){ alert('Elige un método de pago'); return; }
-      const amount = Number(sel);
-      if(!amount || amount <= 0){ alert('Monto inválido'); return; }
-      // Always redirect to checkout to complete the payment; set flow=kiosk so checkout knows origin
+
+      // Redirect to checkout to complete the payment; set flow=kiosk so checkout knows origin
       try {
         const url = new URL('../checkout.html', location.href);
         url.searchParams.set('amount', amount);
