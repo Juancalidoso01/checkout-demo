@@ -353,8 +353,8 @@
           setTimeout(()=>{
             const nextTries = tries + 1;
             sessionStorage.setItem(key, String(nextTries));
-            // If first try, randomly fail once (50% chance)
-            if (nextTries === 1 && Math.random() < 0.5){
+            // If first try, fail deterministically once (per session) to force retry
+            if (nextTries === 1){
               return reject(new Error('Búsqueda fallida (simulada). Intenta nuevamente.'));
             }
             // Otherwise return a fake customer with random subset of services
