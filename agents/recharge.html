@@ -405,6 +405,14 @@
             if (!amt || isNaN(amt) || amt <= 0) return alert('Ingresa un monto válido');
             // read hidden state
             const meta = modal._meta || {};
+            // record local intent in agent sandbox txs
+            try {
+              const desc = `Intento cobro a ${meta.cid || ''} servicio:${meta.svc || ''}`;
+              state.txs.push({ when: Date.now(), type: 'Intent: Cobro', desc, amount: amt });
+              saveState(state);
+              render();
+            } catch(e){ console.warn('Failed to record intent', e); }
+
             const url = new URL('../checkout.html', location.href);
             url.searchParams.set('amount', amt);
             url.searchParams.set('flow', 'agent');
