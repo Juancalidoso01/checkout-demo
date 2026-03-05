@@ -77,13 +77,13 @@
   <!-- Header / Navbar -->
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40">
     <div class="mx-auto flex justify-between items-center w-full max-w-4xl px-4">
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center gap-3 min-w-0">
         <!-- replace the div below with an <img> pointing to your logo file (e.g. assets/logo.png) -->
-        <div class="bg-white p-1 rounded-md">
+        <div class="bg-white px-2 py-1 rounded-md shadow-sm">
           <!-- logo file is now present in assets/logo.png; use ../assets since we're in agents/ -->
-          <img src="../assets/logo.png" alt="Punto Pago" class="h-6 w-auto">
+          <img src="../assets/logo.png" alt="Punto Pago" class="h-7 md:h-8 w-auto">
         </div>
-        <span class="text-xl font-bold tracking-tight uppercase flex items-center">
+        <span class="text-lg md:text-xl font-bold tracking-tight uppercase whitespace-nowrap">
           Agentes
         </span>
       </div>
@@ -702,7 +702,10 @@
     const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
     function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
     function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) }
-    function fmt(v){ return '$' + Number(v).toFixed(2) }
+    function fmt(v){
+      const n = Number(v);
+      return '$' + (Number.isFinite(n) ? n.toFixed(2) : '0.00');
+    }
     let state = loadState();
 
     const $balanceDisplay = document.getElementById('balance-display');
@@ -724,15 +727,7 @@
             $services.appendChild(el);
           });
         }
-        if($history){
-          $history.innerHTML = '';
-          state.txs.slice().reverse().forEach(tx => {
-            const tr = document.createElement('tr');
-            tr.className = 'border-b last:border-0 hover:bg-gray-50 transition';
-            tr.innerHTML = `<td class="py-4 text-gray-500 font-medium">${new Date(tx.when).toLocaleString()}</td><td class="py-4 font-bold text-gray-700">${tx.type}</td><td class="py-4">${tx.desc}</td><td class="py-4 text-right font-bold text-gray-800">${fmt(tx.amount)}</td>`;
-            $history.appendChild(tr);
-          });
-        }
+        // transaction history moved to setup.html
       }
 
       function recordTx(type, desc, amount){
