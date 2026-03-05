@@ -54,10 +54,14 @@
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40">
     <div class="mx-auto flex justify-between items-center w-full">
       <div class="flex items-center space-x-2">
+        <!-- replace the div below with an <img> pointing to your logo file (e.g. assets/logo.png) -->
         <div class="bg-white p-1 rounded-md">
-          <i class="fas fa-wallet text-blue-600 text-xl"></i>
+          <!-- logo file is now present in assets/logo.png; use ../assets since we're in agents/ -->
+          <img src="../assets/logo.png" alt="Punto Pago" class="h-6 w-auto">
         </div>
-        <span class="text-xl font-bold tracking-tight uppercase">Punto Pago Agentes</span>
+        <span class="text-xl font-bold tracking-tight uppercase flex items-center">
+          Punto Pago Agentes
+        </span>
       </div>
       <div class="flex items-center space-x-6">
         <div class="text-right flex flex-col items-end">
@@ -558,7 +562,7 @@
             const txt = document.getElementById('receipt-body').innerText;
             const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt);
             window.open(url, '_blank');
-          } catch(e){ }
+          } catch(e) {}
         });
         r.querySelector('#share-email').addEventListener('click', ()=>{
           try {
