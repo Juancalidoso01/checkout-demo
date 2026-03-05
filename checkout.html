@@ -274,15 +274,57 @@
           if (flow !== 'agent' && flow !== 'kiosk') return false;
           const STORAGE_KEY = 'pp_agent_sandbox_v1';
           const raw = localStorage.getItem(STORAGE_KEY);
-          const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[] };
-          const amt = Number(amount) || 0;
-          state.balance = Number((Number(state.balance) + amt).toFixed(2));
+          // Ensure required fields exist in stored state
+          const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[], cash: 0 };
           state.txs = state.txs || [];
-          state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga via ${method} (checkout) ID:${txId||''}`, amount: amt });
+          state.cash = typeof state.cash === 'number' ? state.cash : (state.cash ? Number(state.cash) : 0);
+          state.gain = typeof state.gain === 'number' ? state.gain : (state.gain ? Number(state.gain) : 0);
+          const amt = Number(amount) || 0;
+
+          // Determine if this checkout was initiated as a "Pago de servicios"
+          const clientId = params.get('clientId');
+          const svc = params.get('svc');
+          const isServicePayment = !!(clientId && svc);
+
+          // Distinguish digital methods
+          const digitalMethods = ['card','yappy','paypal','gpay','apple','clave'];
+
+          if (isServicePayment && method && digitalMethods.indexOf(method) >= 0) {
+            // CASE: Pago de servicios pagado por el cliente con método digital -> no aumentar balance, registrar comisión y el cobro en el histórico
+            // Random commission between $0.05 and $0.50 (two decimals)
+            const commission = Number((Math.random() * (0.50 - 0.05) + 0.05).toFixed(2));
+            state.gain = Number((Number(state.gain) + commission).toFixed(2));
+            state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión por pago digital (servicio) via ${method} ID:${txId||''}`, amount: commission });
+            // Also record the actual cobro (payment) in the history so agents can see the operation amount
+            state.txs.push({ when: Date.now(), type: 'Cobro', desc: `Cobro servicio (digital) cliente:${clientId||''} svc:${svc||''} via ${method} ID:${txId||''}`, amount: amt });
+          } else {
+            // CASE: Either a cash payment for a service, or a recarga iniciada por el agente (flow agent/kiosk)
+            // In both cases we credit the full amount to the agent balance. For agent/kiosk we also credit the cash pocket.
+            state.balance = Number((Number(state.balance) + amt).toFixed(2));
+            if (flow === 'agent' || flow === 'kiosk') {
+              state.cash = Number((Number(state.cash) + amt).toFixed(2));
+            }
+            // Choose a transaction type that helps auditing: 'Recarga' for agent-originated flows, 'Cobro' for service payments
+            const txType = isServicePayment ? 'Cobro' : 'Recarga';
+            state.txs.push({ when: Date.now(), type: txType, desc: `${txType} via ${method || 'efectivo'} (checkout) ID:${txId||''}`, amount: amt });
+          }
+
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          // If checkout was called for a specific client service, mark that service as paid
+          try {
+            const clientId = params.get('clientId');
+            const svc = params.get('svc');
+            if (clientId && svc) {
+              const PAID_MAP_KEY = 'pp_paid_services_v1';
+              const rawMap = localStorage.getItem(PAID_MAP_KEY);
+              const map = rawMap ? JSON.parse(rawMap) : {};
+              map[clientId] = map[clientId] || [];
+              if (map[clientId].indexOf(svc) < 0) map[clientId].push(svc);
+              localStorage.setItem(PAID_MAP_KEY, JSON.stringify(map));
+            }
+          } catch(e){ console.warn('Mark paid from checkout failed', e); }
           // redirect back to agents recharge page
           const agentsUrl = new URL('agents/recharge.html', location.href).href;
-          // add a flag so agents page can show a success toast if desired
           const target = new URL(agentsUrl);
           target.searchParams.set('fromCheckout','1');
           location.href = target.href;
