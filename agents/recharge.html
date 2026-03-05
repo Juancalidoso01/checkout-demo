@@ -588,6 +588,26 @@
         document.getElementById('receipt-body').innerHTML = body;
         r.classList.remove('hidden');
       }
+
+      // ensure phone field always contains the +507 prefix
+    (function setupPhonePrefix(){
+      const ip = document.getElementById('client-phone');
+      if (!ip) return;
+      function normalize(){
+        let v = ip.value || '';
+        // remove non numeric except +
+        v = v.replace(/[^0-9\+]/g, '');
+        if (!v.startsWith('+507')) {
+          // strip existing leading digits
+          v = v.replace(/^\+?\d*/, '');
+          v = '+507' + v;
+        }
+        ip.value = v;
+      }
+      ip.addEventListener('focus', normalize);
+      ip.addEventListener('input', normalize);
+      ip.addEventListener('blur', normalize);
+    })();
     </script>
   </main>
     <script>
@@ -620,7 +640,7 @@
         <i class="fas fa-paper-plane text-3xl"></i>
       </div>
       <h3 class="text-xl font-bold text-gray-800 mb-2">Alerta ACH Recibida</h3>
-      <p class="text-gray-500 text-sm">Nuestro equipo validará la transferencia. El distintivo naranja en tu barra superior indica que tienes un proceso pendiente.</p>
+      <p class="text-gray-500 text-sm">Nuestro equipo validará la transferencia. El distintivo
             <button type="button" onclick="closeACHModal()" class="mt-8 w-full btn-primary text-white py-4 rounded-xl font-bold shadow-lg">CONTINUAR OPERANDO</button>
     </div>
   </div>
@@ -743,8 +763,11 @@
 
     // Navegación de pasos en Cash In
     function nextStep(step) {
-      const phone = document.getElementById('client-phone').value;
-      const amount = document.getElementById('cashin-amount').value;
+       // corregir posibles saltos forzando scroll arriba antes de cambiar
+       try { window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); } catch(e){}
+       let phone = document.getElementById('client-phone').value || '';
+      phone = phone.replace(/^\+507/, '');
+       const amount = document.getElementById('cashin-amount').value;
 
       if (step === 2) {
         if (phone.length < 8) {
@@ -917,7 +940,6 @@
     })();
 
     // show an account menu when clicking the store icon (accessible)
-    (function wireStoreIcon(){
       const icon = document.getElementById('storeIcon');
       const modal = document.getElementById('agent-info-modal');
       if (!icon) return;
