@@ -833,6 +833,9 @@
 
       // initial render of page state
       render();
+
+      // restore last viewed section if any
+      try { const initial = prefs.lastSection || 'cashin'; showSection(initial); } catch(e){}
     </script>
 
   <script>
