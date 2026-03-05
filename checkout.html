@@ -954,20 +954,20 @@
         wrap.className = 'delivery-input-wrap';
         let inner = '';
         if (method === 'whatsapp' || method === 'sms') {
-          inner = `<label class="muted">Número de teléfono</label><input id="deliveryInput" placeholder="+593 9XXXXXXXX" type="tel">`;
+          inner = `<label class="muted">Número de teléfono</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" type="tel">`;
         } else if (method === 'telegram') {
-          inner = `<label class="muted">Usuario de Telegram</label><input id="deliveryInput" placeholder="@usuario">`;
+          inner = `<label class="muted">Usuario de Telegram</label><input class="delivery-input" placeholder="@usuario">`;
         } else if (method === 'email') {
-          inner = `<label class="muted">Correo electrónico</label><input id="deliveryInput" type="email" placeholder="tu@correo.com">`;
+          inner = `<label class="muted">Correo electrónico</label><input class="delivery-input" type="email" placeholder="tu@correo.com">`;
         } else if (method === 'ppapp') {
-          inner = `<div class="muted">Usa la app PuntoPago e ingresa tu ID o número vinculado</div><input id="deliveryInput" placeholder="ID / Teléfono">`;
+          inner = `<div class="muted">Usa la app PuntoPago e ingresa tu ID o número vinculado</div><input class="delivery-input" placeholder="ID / Teléfono">`;
         }
   wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery">Cancelar</button><button class="btn" id="sendDelivery">Enviar comprobante</button></div>`;
         container.appendChild(wrap);
 
         wrap.querySelector('#cancelDelivery').addEventListener('click', ()=>{ container.innerHTML = ''; });
         wrap.querySelector('#sendDelivery').addEventListener('click', async ()=>{
-          const input = wrap.querySelector('#deliveryInput');
+          const input = wrap.querySelector('.delivery-input');
           const val = input ? input.value.trim() : '';
           if (!val) { input.focus(); input.style.borderColor = 'var(--error)'; return; }
           // Simular envío
