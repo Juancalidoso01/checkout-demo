@@ -46,9 +46,33 @@
     /* Safe area adjustments for devices with notch (iPhone) */
     main.demo-container { padding-top: calc(env(safe-area-inset-top, 0px) + 1rem); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem); }
     nav { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
+    /* adjust layout when running as mobile app / in standalone mode */
+    html.is-mobile main.demo-container,
+    html.is-mobile nav > div {
+      max-width: none !important;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    html.is-mobile nav {
+      padding: calc(env(safe-area-inset-top, 0px) + 0.5rem);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
+
+  <script>
+    // if running on a mobile device, add class and attempt fullscreen
+    (function(){
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if(isMobile){
+        document.documentElement.classList.add('is-mobile');
+        // try to enter fullscreen for a more app-like experience
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(()=>{});
+        }
+      }
+    })();
+  </script>
 
   <!-- Header / Navbar -->
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40">
@@ -693,30 +717,6 @@
     function fmt(v){ return '$' + Number(v).toFixed(2) }
     let state = loadState();
 
-    // Persist map of paid services per client so paid items survive page reloads
-    const PAID_MAP_KEY = 'pp_paid_services_v1';
-    function loadPaidMap(){ try { return JSON.parse(localStorage.getItem(PAID_MAP_KEY)) || {}; } catch(e){ return {}; } }
-    function savePaidMap(m){ try { localStorage.setItem(PAID_MAP_KEY, JSON.stringify(m)); } catch(e){} }
-    function markServicePaidForClient(cid, svc){ if(!cid||!svc) return; const m=loadPaidMap(); m[cid]=m[cid]||[]; if(m[cid].indexOf(svc)<0) m[cid].push(svc); savePaidMap(m); }
-    function isServicePaidForClient(cid, svc){ const m=loadPaidMap(); return !!(m[cid] && m[cid].indexOf(svc)>=0); }
-
-    // Preferences for form inputs so sections retain values across tab switches/reloads
-    const PREFS_KEY = 'pp_agent_recharge_prefs_v1';
-    function loadPrefs(){ try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch(e){ return {}; } }
-    function savePrefs(p){ try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch(e){} }
-    const prefs = loadPrefs();
-
-    // Services available
-    const services = [
-      { id: 't1', name: 'Recarga móvil', price: 5.00, feePct: 0.02 },
-      { id: 't2', name: 'Pago de luz', price: 20.00, feePct: 0.015 },
-      { id: 't3', name: 'Pago de agua', price: 12.50, feePct: 0.015 },
-      { id: 't4', name: 'Paquete TV', price: 30.00, feePct: 0.01 },
-      { id: 't5', name: 'Recarga transporte', price: 10.00, feePct: 0.02 }
-    ];
-
-    const $services = document.getElementById('services');
-    const $history = document.getElementById('history');
     const $balanceDisplay = document.getElementById('balance-display');
     const $cashCount = document.getElementById('cash-count');
 

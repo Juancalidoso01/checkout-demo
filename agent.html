@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agente — Panel</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .agent-wrap{max-width:900px;margin:28px auto;padding:18px}
+    .row{display:flex;gap:12px;align-items:flex-start}
+    .col{flex:1}
+    .card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 8px 20px rgba(2,6,23,0.04)}
+    .balance{font-size:1.6rem;font-weight:700;color:var(--blue-600)}
+    .muted{color:var(--muted)}
+    .services-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .svc{padding:12px;border-radius:8px;border:1px solid #eef4ff;background:#fbfeff}
+    .btn{background:var(--blue-600);color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .small{font-size:0.9rem}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+    .gain{color:green;font-weight:700}
+  </style>
+</head>
+<body>
+  <main class="agent-wrap">
+    <h1>Módulo Agente</h1>
+    <p class="muted">Panel de pruebas: saldo, cobros, ganancias y historial. Este demo usa almacenamiento local para simular estado.</p>
+
+    <div class="row mb-12">
+      <div class="col card" style="flex:0 0 320px">
+        <h3>Saldo</h3>
+        <div id="balance" class="balance">$0.00</div>
+        <div class="muted small">Saldo disponible para pagar servicios o retirar</div>
+        <div style="margin-top:12px">
+          <input id="topup-amount" type="number" placeholder="Monto a recargar" style="width:100%" />
+          <button id="btn-topup" class="btn" style="margin-top:8px;width:100%">Recargar saldo (demo)</button>
+        </div>
+      </div>
+
+      <div class="col card">
+        <h3>Servicios disponibles</h3>
+        <div class="services-list" id="services">
+          <!-- services populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="gap:18px">
+      <div class="col card" style="flex:1 1 420px">
+        <h3>Dashboard</h3>
+        <p class="muted">Ganancias acumuladas y métricas rápidas</p>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div style="flex:1;border-radius:8px;padding:12px;background:#f7fefe">
+            <div class="muted">Ganancia total (demo)</div>
+            <div id="total-gain" class="gain">$0.00</div>
+          </div>
+          <div style="flex:1;border-radius:8px;padding:12px;background:#f7fefe">
+            <div class="muted">Transacciones</div>
+            <div id="tx-count">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col card">
+        <h3>Histórico</h3>
+        <p class="muted">Últimas transacciones</p>
+        <div style="max-height:280px;overflow:auto;margin-top:8px">
+          <table id="history"><thead><tr><th>Fecha</th><th>Tipo</th><th>Detalles</th><th>Monto</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Demo data and helpers (localStorage-backed)
+    const STORAGE_KEY = 'pp_agent_demo_v1';
+    const defaultState = { balance: 0, gain: 0, txs: [] };
+    function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
+    function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) }
+    function fmt(v){ return '$' + Number(v).toFixed(2) }
+
+    let state = loadState();
+
+    // services catalog (each service has fee % that becomes agent gain)
+    const services = [
+      { id: 't1', name: 'Recarga móvil', price: 5.00, feePct: 0.02 },
+      { id: 't2', name: 'Pago de luz', price: 20.00, feePct: 0.015 },
+      { id: 't3', name: 'Pago de agua', price: 12.50, feePct: 0.015 },
+      { id: 't4', name: 'Paquete TV', price: 30.00, feePct: 0.01 },
+      { id: 't5', name: 'Recarga transporte', price: 10.00, feePct: 0.02 }
+    ];
+
+    // UI Elements
+    const $balance = document.getElementById('balance');
+    const $gain = document.getElementById('total-gain');
+    const $txcount = document.getElementById('tx-count');
+    const $history = document.querySelector('#history tbody');
+    const $services = document.getElementById('services');
+
+    function render(){
+      $balance.textContent = fmt(state.balance);
+      $gain.textContent = fmt(state.gain);
+      $txcount.textContent = state.txs.length;
+      // history
+      $history.innerHTML = '';
+      state.txs.slice().reverse().forEach(tx => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${new Date(tx.when).toLocaleString()}</td><td>${tx.type}</td><td>${tx.desc}</td><td>${fmt(tx.amount)}</td>`;
+        $history.appendChild(tr);
+      });
+    }
+
+    function recordTx(type, desc, amount){
+      state.txs.push({ when: Date.now(), type, desc, amount });
+      saveState(state);
+      render();
+    }
+
+    // populate services
+    services.forEach(s => {
+      const d = document.createElement('div'); d.className='svc';
+      d.innerHTML = `<div style="font-weight:700">${s.name}</div><div class="muted">Precio: ${fmt(s.price)}</div><div style="margin-top:8px"><button class="btn small" data-id="${s.id}">Pagar</button></div>`;
+      $services.appendChild(d);
+    });
+
+    // handlers
+    $services.addEventListener('click', e => {
+      const btn = e.target.closest('button[data-id]');
+      if(!btn) return;
+      const id = btn.getAttribute('data-id');
+      const svc = services.find(x=>x.id===id);
+      if(!svc) return;
+      // confirm and attempt pay
+      if(state.balance < svc.price){ alert('Saldo insuficiente. Recarga primero.'); return; }
+      if(!confirm(`Confirmar pago de ${svc.name} por ${fmt(svc.price)}?`)) return;
+      // deduct
+      state.balance = Number(state.balance) - svc.price;
+      // agent gain = price * feePct
+      const gain = Number((svc.price * svc.feePct).toFixed(2));
+      state.gain = Number((Number(state.gain) + gain).toFixed(2));
+      saveState(state);
+      recordTx('Pago', svc.name, svc.price);
+      recordTx('Ganancia', `Comisión ${svc.name}`, gain);
+      render();
+      alert('Pago procesado (demo).');
+    });
+
+    // topup
+    document.getElementById('btn-topup').addEventListener('click', () => {
+      const v = parseFloat(document.getElementById('topup-amount').value || 0);
+      if(!v || v <= 0){ alert('Ingresa un monto válido (>0)'); return; }
+      state.balance = Number((Number(state.balance) + v).toFixed(2));
+      saveState(state);
+      recordTx('Recarga', 'Top-up demo', v);
+      render();
+      document.getElementById('topup-amount').value='';
+      alert('Saldo recargado (demo).');
+    });
+
+    // initialize
+    render();
+  </script>
+</body>
+</html>
