@@ -60,7 +60,7 @@
         <span class="text-xl font-bold tracking-tight uppercase">Punto Pago Agentes</span>
       </div>
       <div class="flex items-center space-x-6">
-        <div class="text-right hidden md:flex flex-col items-end">
+        <div class="text-right flex flex-col items-end">
           <p class="text-xs opacity-80 font-semibold uppercase">Saldo Disponible</p>
           <p class="text-lg font-bold" id="balance-display">$1,250.45</p>
           <p class="text-xs text-white/90 mt-1">Mi efectivo en caja: <span id="cash-in-header" class="font-semibold">$342.10</span></p>
@@ -69,9 +69,10 @@
         <div id="ach-transit-badge" class="hidden flex items-center bg-orange-500 text-white text-[10px] px-2 py-1 rounded-full animate-pulse font-bold">
           <i class="fas fa-clock mr-1"></i> ACH PENDIENTE
         </div>
-        <div id="storeIcon" class="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:bg-white/30 transition" title="Datos del agente">
+        <a id="storeIcon" href="../setup.html" class="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 cursor-pointer hover:bg-white/30 transition" title="Datos del agente / Configuración">
           <i class="fas fa-store"></i>
-        </div>
+          <span class="sr-only">Abrir configuración</span>
+        </a>
       </div>
     </div>
   </nav>
@@ -373,8 +374,14 @@
         if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">No se encontraron coincidencias para el cliente.</div>'; return; }
         list.forEach(c=>{
           const wrap = document.createElement('div'); wrap.className = 'p-4 border rounded-lg';
-          const port = c.portfolio.map(p => `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">Cobrar</button></td></tr>`).join('');
-          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">ID: ${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} servicios</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${port}</tbody></table></div>`;
+          const rows = c.portfolio.map(p => {
+            const paid = isServicePaidForClient(c.cid, p.svcId);
+            if (paid) {
+              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">PAGADO</span></td></tr>`;
+            }
+            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">Cobrar</button></td></tr>`;
+          }).join('');
+          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">ID: ${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} servicios</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
           out.appendChild(wrap);
         });
 
@@ -497,6 +504,8 @@
             state.cash = Number((Number(state.cash) + amt).toFixed(2));
             state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga en efectivo - cliente ${meta.cid || ''} servicio:${meta.svc || ''}`, amount: amt });
             saveState(state);
+            // mark service as paid for the client so UI reflects it
+            try { markServicePaidForClient(meta.cid, meta.svc); } catch(e){ console.warn('mark paid failed', e); }
             render();
             m.classList.add('hidden');
             // show receipt modal
@@ -619,7 +628,14 @@
     function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
     function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) }
     function fmt(v){ return '$' + Number(v).toFixed(2) }
-    let state = loadState();
+  let state = loadState();
+
+  // Persist map of paid services per client so paid items survive page reloads
+  const PAID_MAP_KEY = 'pp_paid_services_v1';
+  function loadPaidMap(){ try { return JSON.parse(localStorage.getItem(PAID_MAP_KEY)) || {}; } catch(e){ return {}; } }
+  function savePaidMap(m){ try { localStorage.setItem(PAID_MAP_KEY, JSON.stringify(m)); } catch(e){} }
+  function markServicePaidForClient(cid, svc){ if(!cid || !svc) return; const m = loadPaidMap(); m[cid] = m[cid] || []; if (m[cid].indexOf(svc) < 0) m[cid].push(svc); savePaidMap(m); }
+  function isServicePaidForClient(cid, svc){ const m = loadPaidMap(); return !!(m[cid] && m[cid].indexOf(svc) >= 0); }
 
     // Services available
     const services = [
@@ -896,18 +912,80 @@
       });
     })();
 
-    // show modal with current info when clicking store icon
+    // show an account menu when clicking the store icon (accessible)
     (function wireStoreIcon(){
       const icon = document.getElementById('storeIcon');
       const modal = document.getElementById('agent-info-modal');
-      if (!icon || !modal) return;
-      icon.addEventListener('click', ()=>{
-        const info = loadAgentInfo();
-        document.getElementById('agent-name').value = info.name || 'Nombre Agente';
-        document.getElementById('agent-id').value = info.id || '00000000';
-        document.getElementById('agent-balance').value = info.balance !== undefined ? info.balance : state.balance;
-        modal.classList.remove('hidden');
+      if (!icon) return;
+
+      // create menu container
+      const menu = document.createElement('div');
+      menu.className = 'absolute right-4 top-16 bg-white rounded-lg shadow-lg border z-50 hidden';
+      menu.setAttribute('role','menu');
+      menu.setAttribute('aria-hidden','true');
+      menu.style.minWidth = '200px';
+      menu.innerHTML = `
+        <ul class="divide-y">
+          <li><button id="menu-account" class="w-full text-left px-4 py-3 hover:bg-gray-50">Mi cuenta</button></li>
+          <li><button id="menu-setup" class="w-full text-left px-4 py-3 hover:bg-gray-50">Configuración</button></li>
+          <li><button id="menu-logout" class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50">Cerrar sesión</button></li>
+        </ul>`;
+      document.body.appendChild(menu);
+
+      function openMenu(){
+        // position the menu near the icon
+        const rect = icon.getBoundingClientRect();
+        menu.style.left = Math.min(window.innerWidth - 220, Math.round(rect.right - 200)) + 'px';
+        menu.style.top = Math.round(rect.bottom + 8) + 'px';
+        menu.classList.remove('hidden');
+        menu.setAttribute('aria-hidden','false');
+        // focus first item for keyboard users
+        const btn = menu.querySelector('button'); if(btn) btn.focus();
+      }
+
+      function closeMenu(){ menu.classList.add('hidden'); menu.setAttribute('aria-hidden','true'); }
+
+      icon.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        if (menu.classList.contains('hidden')) {
+          // update account label if available
+          const info = loadAgentInfo ? loadAgentInfo() : { name: 'Agente' };
+          // ensure menu exists and open
+          openMenu();
+        } else { closeMenu(); }
       });
+
+      // Menu actions
+      document.addEventListener('click', (ev)=>{ if (!menu.contains(ev.target) && ev.target !== icon) closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (!menu.classList.contains('hidden')) closeMenu(); });
+
+      // Wiring menu buttons (delegated after appended)
+      menu.addEventListener('click', (ev)=>{
+        const t = ev.target;
+        if (!t) return;
+        if (t.id === 'menu-account'){
+          closeMenu();
+          try {
+            const info = loadAgentInfo();
+            document.getElementById('agent-name').value = info.name || 'Nombre Agente';
+            document.getElementById('agent-id').value = info.id || '00000000';
+            document.getElementById('agent-balance').value = info.balance !== undefined ? info.balance : state.balance;
+            modal && modal.classList.remove('hidden');
+          } catch(e){ console.warn('open account failed', e); }
+        } else if (t.id === 'menu-setup'){
+          closeMenu();
+          location.href = '../setup.html';
+        } else if (t.id === 'menu-logout'){
+          closeMenu();
+          if (!confirm('Cerrar sesión del agente y limpiar datos locales?')) return;
+          try { localStorage.removeItem('pp_agent_info_v1'); localStorage.removeItem('pp_agent_sandbox_v1'); localStorage.removeItem('pp_paid_services_v1'); } catch(e){}
+          // redirect to setup so user can recreate account
+          location.href = '../setup.html';
+        }
+      });
+
+      // keyboard support: Esc to close
+      document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') closeMenu(); });
     })();
   </script>
 
