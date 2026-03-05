@@ -86,19 +86,19 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
   <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
         <i class="fas fa-file-invoice-dollar text-2xl mb-2 group-hover:scale-110 transition"></i>
-        <p class="font-bold">Pago de Servicios</p>
+        <span class="font-bold">Pago de Servicios</span>
       </button>
   <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group">
         <i class="fas fa-money-bill-wave text-2xl mb-2 group-hover:scale-110 transition"></i>
-        <p class="font-bold">Cash In</p>
+        <span class="font-bold">Cash In</span>
       </button>
   <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
         <i class="fas fa-university text-2xl mb-2 group-hover:scale-110 transition"></i>
-        <p class="font-bold">Notificar ACH</p>
+        <span class="font-bold">Notificar ACH</span>
       </button>
   <button type="button" class="p-4 bg-white rounded-xl shadow opacity-60 cursor-not-allowed text-center">
         <i class="fas fa-history text-2xl text-gray-400 mb-2"></i>
-        <p class="font-bold text-gray-400">Reportes</p>
+        <span class="font-bold text-gray-400">Reportes</span>
       </button>
     </div>
 
@@ -674,12 +674,6 @@
           }
         } catch(e){ console.warn('toast check failed', e); }
       })();
-
-    // initial tab selection (use persisted value if available)
-    try {
-      const initial = prefs.lastSection || 'cashin';
-      showSection(initial);
-    } catch(e){ showSection('cashin'); }
     </script>
 
   <!-- Overlay de Carga -->
@@ -704,6 +698,19 @@
     // Agent sandbox state (persisted)
     const STORAGE_KEY = 'pp_agent_sandbox_v1';
 
+    const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
+    function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
+    function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) }
+    function fmt(v){ return '$' + Number(v).toFixed(2) }
+    let state = loadState();
+
+    // Persist map of paid services per client so paid items survive page reloads
+    const PAID_MAP_KEY = 'pp_paid_services_v1';
+    function loadPaidMap(){ try { return JSON.parse(localStorage.getItem(PAID_MAP_KEY)) || {}; } catch(e){ return {}; } }
+    function savePaidMap(m){ try { localStorage.setItem(PAID_MAP_KEY, JSON.stringify(m)); } catch(e){} }
+    function markServicePaidForClient(cid, svc){ if(!cid||!svc) return; const m=loadPaidMap(); m[cid]=m[cid]||[]; if(m[cid].indexOf(svc)<0) m[cid].push(svc); savePaidMap(m); }
+    function isServicePaidForClient(cid, svc){ const m=loadPaidMap(); return !!(m[cid] && m[cid].indexOf(svc)>=0); }
+
     // Preferences for form inputs so sections retain values across tab switches/reloads
     const PREFS_KEY = 'pp_agent_recharge_prefs_v1';
     function loadPrefs(){ try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch(e){ return {}; } }
@@ -724,142 +731,109 @@
     const $balanceDisplay = document.getElementById('balance-display');
     const $cashCount = document.getElementById('cash-count');
 
-    // restore persisted inputs
-    (function restoreInputs(){
-      if (prefs.lastCustomerId && document.getElementById('customer-id')) {
-        document.getElementById('customer-id').value = prefs.lastCustomerId;
-      }
-      if (prefs.achBank && document.getElementById('ach-bank')) {
-        document.getElementById('ach-bank').value = prefs.achBank;
-      }
-      if (prefs.achRef && document.getElementById('ach-ref')) {
-        document.getElementById('ach-ref').value = prefs.achRef;
-      }
-      if (prefs.achAmount && document.getElementById('ach-amount')) {
-        document.getElementById('ach-amount').value = prefs.achAmount;
-      }
-      if (prefs.lastCustomerResults && prefs.lastCustomerResults.length && document.getElementById('customer-results')) {
-        renderCustomerResults(prefs.lastCustomerResults);
-      }
-    })();
-    // initial render
-    render();
-
-    // Agent info storage (simple profile persisted separate from sandbox state)
-    const AGENT_INFO_KEY = 'pp_agent_info_v1';
-    function loadAgentInfo(){ try { return JSON.parse(localStorage.getItem(AGENT_INFO_KEY)) || { name: 'Nombre Agente', id: '00000000', balance: state.balance }; } catch(e){ return { name:'Nombre Agente', id:'00000000', balance: state.balance }; } }
-    function saveAgentInfo(info){ try { localStorage.setItem(AGENT_INFO_KEY, JSON.stringify(info)); } catch(e){} }
-
-    // create agent info modal (hidden until needed)
-    (function createAgentModal(){
-      if (document.getElementById('agent-info-modal')) return;
-      const modal = document.createElement('div');
-      modal.id = 'agent-info-modal';
-      modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
-      modal.innerHTML = `
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
-          <h3 class="text-lg font-bold mb-2">Datos del Agente</h3>
-          <div class="space-y-2 mb-4">
-            <label class="muted">Nombre completo</label>
-            <input id="agent-name" class="w-full px-3 py-2 border rounded" />
-            <label class="muted">Cédula</label>
-            <input id="agent-id" class="w-full px-3 py-2 border rounded" />
-            <label class="muted">Balance actual</label>
-            <input id="agent-balance" class="w-full px-3 py-2 border rounded" />
-          </div>
-          <div class="flex justify-end gap-3">
-            <button id="agent-cancel" class="btn secondary">Cerrar</button>
-            <button id="agent-save" class="btn">Guardar</button>
-          </div>
-        </div>`;
-      document.body.appendChild(modal);
-
-      // wiring
-      modal.querySelector('#agent-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); });
-      modal.querySelector('#agent-save').addEventListener('click', ()=>{
-        const info = { name: document.getElementById('agent-name').value || 'Nombre Agente', id: document.getElementById('agent-id').value || '00000000', balance: Number((document.getElementById('agent-balance').value||state.balance)) };
-        saveAgentInfo(info);
-        // reflect to UI and state
-        try { state.balance = Number(info.balance); saveState(state); render(); } catch(e){}
-        modal.classList.add('hidden');
-      });
-    })();
-
-    // show an account menu when clicking the store icon (accessible)
-      const icon = document.getElementById('storeIcon');
-      const modal = document.getElementById('agent-info-modal');
-      if (!icon) return;
-
-      // create menu container
-      const menu = document.createElement('div');
-      menu.className = 'absolute right-4 top-16 bg-white rounded-lg shadow-lg border z-50 hidden';
-      menu.setAttribute('role','menu');
-      menu.setAttribute('aria-hidden','true');
-      menu.style.minWidth = '200px';
-      menu.innerHTML = `
-        <ul class="divide-y">
-          <li><button id="menu-account" class="w-full text-left px-4 py-3 hover:bg-gray-50">Mi cuenta</button></li>
-          <li><button id="menu-setup" class="w-full text-left px-4 py-3 hover:bg-gray-50">Configuración</button></li>
-          <li><button id="menu-logout" class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50">Cerrar sesión</button></li>
-        </ul>`;
-      document.body.appendChild(menu);
-
-      function openMenu(){
-        // position the menu near the icon
-        const rect = icon.getBoundingClientRect();
-        menu.style.left = Math.min(window.innerWidth - 220, Math.round(rect.right - 200)) + 'px';
-        menu.style.top = Math.round(rect.bottom + 8) + 'px';
-        menu.classList.remove('hidden');
-        menu.setAttribute('aria-hidden','false');
-        // focus first item for keyboard users
-        const btn = menu.querySelector('button'); if(btn) btn.focus();
-      }
-
-      function closeMenu(){ menu.classList.add('hidden'); menu.setAttribute('aria-hidden','true'); }
-
-      icon.addEventListener('click', (ev)=>{
-        ev.stopPropagation();
-        if (menu.classList.contains('hidden')) {
-          // update account label if available
-          const info = loadAgentInfo ? loadAgentInfo() : { name: 'Agente' };
-          // ensure menu exists and open
-          openMenu();
-        } else { closeMenu(); }
-      });
-
-      // Menu actions
-      document.addEventListener('click', (ev)=>{ if (!menu.contains(ev.target) && ev.target !== icon) closeMenu(); });
-      window.addEventListener('resize', ()=>{ if (!menu.classList.contains('hidden')) closeMenu(); });
-
-      // Wiring menu buttons (delegated after appended)
-      menu.addEventListener('click', (ev)=>{
-        const t = ev.target;
-        if (!t) return;
-        if (t.id === 'menu-account'){
-          closeMenu();
-          try {
-            const info = loadAgentInfo();
-            document.getElementById('agent-name').value = info.name || 'Nombre Agente';
-            document.getElementById('agent-id').value = info.id || '00000000';
-            document.getElementById('agent-balance').value = info.balance !== undefined ? info.balance : state.balance;
-            modal && modal.classList.remove('hidden');
-          } catch(e){ console.warn('open account failed', e); }
-        } else if (t.id === 'menu-setup'){
-          closeMenu();
-          location.href = '../setup.html';
-        } else if (t.id === 'menu-logout'){
-          closeMenu();
-          if (!confirm('Cerrar sesión del agente y limpiar datos locales?')) return;
-          try { localStorage.removeItem('pp_agent_info_v1'); localStorage.removeItem('pp_agent_sandbox_v1'); localStorage.removeItem('pp_paid_services_v1'); } catch(e){}
-          // redirect to setup so user can recreate account
-          location.href = '../setup.html';
+    // render state and UI
+    function render(){
+        if($balanceDisplay) $balanceDisplay.innerText = fmt(state.balance);
+        if($cashCount) $cashCount.innerText = fmt(state.cash);
+        const summaryEl = document.getElementById('summary-total');
+        if(summaryEl) summaryEl.innerText = '$0.00';
+        const cashHeader = document.getElementById('cash-in-header'); if (cashHeader) cashHeader.innerText = fmt(state.cash);
+        if($services){
+          $services.innerHTML = '';
+          services.forEach(s => {
+            const el = document.createElement('div');
+            el.className = 'p-4 border rounded-lg';
+            el.innerHTML = `<div class="font-bold">${s.name}</div><div class="text-sm text-gray-500">Precio: ${fmt(s.price)}</div><div class="mt-3"><button type="button" class="w-full btn-primary text-white py-2 rounded" data-id="${s.id}">Pagar</button></div>`;
+            $services.appendChild(el);
+          });
         }
-      });
+        if($history){
+          $history.innerHTML = '';
+          state.txs.slice().reverse().forEach(tx => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b last:border-0 hover:bg-gray-50 transition';
+            tr.innerHTML = `<td class="py-4 text-gray-500 font-medium">${new Date(tx.when).toLocaleString()}</td><td class="py-4 font-bold text-gray-700">${tx.type}</td><td class="py-4">${tx.desc}</td><td class="py-4 text-right font-bold text-gray-800">${fmt(tx.amount)}</td>`;
+            $history.appendChild(tr);
+          });
+        }
+      }
 
-      // keyboard support: Esc to close
-      document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') closeMenu(); });
-    })();
-  </script>
+      function recordTx(type, desc, amount){
+        state.txs.push({ when: Date.now(), type, desc, amount });
+        saveState(state);
+        render();
+      }
+
+      // Función para cambiar entre secciones
+      function showSection(section) {
+        const sections = ['cashin', 'fondear', 'pagos'];
+        sections.forEach(s => {
+          const element = document.getElementById(`section-${s}`);
+          const tab = document.getElementById(`tab-${s}`);
+          if (s === section) {
+            if(element) element.classList.remove('hidden');
+            if(tab) tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group";
+            if(tab) tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 text-blue-600 transition`;
+          } else {
+            if(element) element.classList.add('hidden');
+            if (tab) {
+              tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group";
+              tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 transition`;
+            }
+          }
+        });
+        try {
+          const el = document.getElementById(`section-${section}`);
+          if (el && typeof el.scrollIntoView === 'function') {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+          }
+          if (section === 'cashin') {
+            try {
+              const nav = document.querySelector('nav');
+              const navH = nav ? nav.getBoundingClientRect().height : 0;
+              const avail = window.innerHeight - navH - 24;
+              const cashEl = document.getElementById('section-cashin');
+              if (window.innerWidth <= 820 && cashEl) {
+                const minH = (avail > 300 ? avail : 300);
+                cashEl.style.minHeight = minH + 'px';
+                cashEl.classList.add('section-center');
+                const content = cashEl.querySelector('.bg-white');
+                if (content) {
+                  const contentH = content.getBoundingClientRect().height;
+                  if (contentH > avail) { cashEl.classList.add('compact'); }
+                  else { cashEl.classList.remove('compact'); }
+                }
+              }
+            } catch(e){ console.warn('center calc failed', e); }
+            setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
+          } else {
+            const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
+          }
+        } catch(e){ console.warn('showSection scroll failed', e); }
+      }
+
+      // restore previously filled inputs and results
+      (function restoreInputs(){
+        if (prefs.lastCustomerId && document.getElementById('customer-id')) {
+          document.getElementById('customer-id').value = prefs.lastCustomerId;
+        }
+        if (prefs.achBank && document.getElementById('ach-bank')) {
+          document.getElementById('ach-bank').value = prefs.achBank;
+        }
+        if (prefs.achRef && document.getElementById('ach-ref')) {
+          document.getElementById('ach-ref').value = prefs.achRef;
+        }
+        if (prefs.achAmount && document.getElementById('ach-amount')) {
+          document.getElementById('ach-amount').value = prefs.achAmount;
+        }
+        if (prefs.lastCustomerResults && prefs.lastCustomerResults.length && document.getElementById('customer-results')) {
+          renderCustomerResults(prefs.lastCustomerResults);
+        }
+      })();
+
+      // initial render of page state
+      render();
+    </script>
 
   <script>
     // Ensure the demo container has top padding equal to nav height when nav is fixed (mobile)
