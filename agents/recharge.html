@@ -1296,6 +1296,58 @@
         });
       });
     })();
+
+    // Global Mobile Swipe (left/right to switch active section)
+    (function initGlobalSwipe() {
+      let startX = 0, startY = 0;
+      let ignoreSwipe = false;
+      const threshold = 60; // minimum pixels to swipe
+      
+      document.addEventListener('touchstart', function(e) {
+        if(e.touches.length > 1) return;
+        startX = e.changedTouches[0].screenX;
+        startY = e.changedTouches[0].screenY;
+        
+        // Ignore swipes that start inside the top tabs or comercios modal
+        const target = e.target;
+        if (target.closest('.pp-top-tabs') || target.closest('#comercios-modal')) {
+          ignoreSwipe = true;
+        } else {
+          ignoreSwipe = false;
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchend', function(e) {
+        if(ignoreSwipe) return;
+        const endX = e.changedTouches[0].screenX;
+        const endY = e.changedTouches[0].screenY;
+        const dx = endX - startX;
+        const dy = endY - startY;
+        
+        // Check if movement is mostly horizontal
+        if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          const sections = ['factura', 'history', 'pagos', 'cashin', 'fondear'];
+          const activeIndex = sections.findIndex(s => {
+            const el = document.getElementById('section-' + s);
+            return el && !el.classList.contains('hidden');
+          });
+          
+          if (activeIndex === -1) return;
+          
+          if (dx < 0) {
+            // Swiped left => Next tab
+            if (activeIndex < sections.length - 1) {
+              showSection(sections[activeIndex + 1]);
+            }
+          } else {
+            // Swiped right => Prev tab
+            if (activeIndex > 0) {
+              showSection(sections[activeIndex - 1]);
+            }
+          }
+        }
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
