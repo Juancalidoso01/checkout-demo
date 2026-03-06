@@ -210,19 +210,6 @@
         </div>
   </div>
 
-      <!-- KPIs ya se muestran arriba: mantenemos aquí solo el bloque de servicios -->
-
-      <!-- Servicios disponibles (importado de agents/index.html) -->
-      <div class="mt-8 pp-card">
-        <div class="pp-card-head">
-          <h3 class="font-bold text-gray-700 uppercase text-xs tracking-wider">Servicios disponibles</h3>
-        </div>
-        <div class="pp-card-body">
-          <div id="services" class="grid md:grid-cols-3 gap-4">
-            <!-- services populated by JS -->
-          </div>
-        </div>
-      </div>
     </div>
 
     </div>
@@ -720,23 +707,6 @@
         const summaryEl = document.getElementById('summary-total');
         if(summaryEl) summaryEl.innerText = '$0.00';
         const cashHeader = document.getElementById('cash-in-header'); if (cashHeader) cashHeader.innerText = fmt(state.cash);
-        if($services){
-          $services.innerHTML = '';
-          services.forEach(s => {
-            const el = document.createElement('div');
-            el.className = 'pp-card';
-            el.innerHTML = `
-              <div class="pp-card-body">
-                <div class="font-extrabold text-gray-900">${s.name}</div>
-                <div class="text-sm text-gray-500 mt-1">Precio: <span class="font-semibold text-gray-800">${fmt(s.price)}</span></div>
-                <div class="mt-4">
-                  <button type="button" class="pp-btn pp-btn-primary -full" data-id="${s.id}">Pagar</button>
-                </div>
-              </div>
-            `;
-            $services.appendChild(el);
-          });
-        }
         // transaction history moved to setup.html
       }
 
