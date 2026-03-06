@@ -976,6 +976,7 @@
     })();
 
     // show an account menu when clicking the store icon (accessible)
+    (function setupAccountMenu(){
       const icon = document.getElementById('storeIcon');
       const modal = document.getElementById('agent-info-modal');
       if (!icon) return;
