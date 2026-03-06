@@ -88,7 +88,7 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
 
 /* Compact top tabs for modules (preferred) */
 .pp-top-tabs{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.pp-top-tab{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 22px rgba(0,0,0,.06);cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;color:var(--pp-text)}
+.pp-top-tab{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 22px rgba(0,0,0,.06);cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;color:var(--pp-text);touch-action:auto;pointer-events:auto}
 .pp-top-tab:hover{transform:translateY(-1px);box-shadow:0 14px 28px rgba(0,0,0,.08)}
 .pp-top-tab .icon{width:32px;height:32px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.10);color:var(--pp-primary)}
 .pp-top-tab .title{font-weight:800;letter-spacing:-.02em}
