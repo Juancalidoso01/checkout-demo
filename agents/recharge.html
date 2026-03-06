@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <title>Punto Pago - Portal</title>
+  <title>Punto Pago - Portal de Agentes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="../styles.css">
-  <script src="../auth.js"></script>
   <style>
     :root {
       --punto-pago-blue: #0047bb;
@@ -17,13 +15,12 @@
     }
     body {
       background-color: #f3f4f6;
-      font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
-      color: var(--pp-text, #171717);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .bg-punto-pago { background-color: var(--punto-pago-blue); }
     .text-punto-pago { color: var(--punto-pago-blue); }
     .btn-primary {
-      background: var(--pp-primary, var(--punto-pago-blue));
+      background: linear-gradient(135deg, var(--punto-pago-blue), var(--punto-pago-cyan));
       transition: all 0.3s ease;
     }
     .btn-primary:hover {
@@ -31,8 +28,8 @@
       transform: translateY(-1px);
     }
     .tab-active {
-      border-bottom: 4px solid var(--pp-primary, var(--punto-pago-blue));
-      color: var(--pp-primary, var(--punto-pago-blue));
+      border-bottom: 4px solid var(--punto-pago-blue);
+      color: var(--punto-pago-blue);
     }
     .tab-inactive {
       border-bottom: 4px solid transparent;
@@ -49,58 +46,26 @@
     /* Safe area adjustments for devices with notch (iPhone) */
     main.demo-container { padding-top: calc(env(safe-area-inset-top, 0px) + 1rem); padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem); }
     nav { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
-    /* adjust layout when running as mobile app / in standalone mode */
-    html.is-mobile main.demo-container,
-    html.is-mobile nav > div {
-      max-width: none !important;
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-    html.is-mobile nav {
-      padding: calc(env(safe-area-inset-top, 0px) + 0.5rem);
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <script>
-    // if running on a mobile device, add class and attempt fullscreen
-    (function(){
-      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if(isMobile){
-        document.documentElement.classList.add('is-mobile');
-        // try to enter fullscreen for a more app-like experience
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen().catch(()=>{});
-        }
-      }
-    })();
-  </script>
-
   <!-- Header / Navbar -->
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40">
-    <div class="mx-auto flex justify-between items-center w-full max-w-4xl px-4">
-      <div class="flex items-center gap-3 min-w-0">
+    <div class="mx-auto flex justify-between items-center w-full">
+      <div class="flex items-center space-x-2">
         <!-- replace the div below with an <img> pointing to your logo file (e.g. assets/logo.png) -->
-        <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
+        <div class="bg-white p-0 rounded-md">
           <!-- logo file is now present in assets/logo.png; use ../assets since we're in agents/ -->
-          <img src="../assets/logo.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
+          <img src="../assets/logo.png" alt="Punto Pago" class="h-4.5 w-auto">
         </div>
-        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">
-          Portal
-        </span>
       </div>
       <div class="flex items-center space-x-6">
-        <div class="hidden md:flex flex-col items-end text-right">
-          <div class="text-[10px] opacity-85 font-semibold uppercase">Sesión</div>
-          <div class="text-xs font-bold" data-pp-session></div>
-        </div>
         <div class="text-right flex flex-col items-end">
           <p class="text-xs opacity-80 font-semibold uppercase">Saldo Disponible</p>
           <p class="text-lg font-bold" id="balance-display">$1,250.45</p>
           <p class="text-xs text-white/90 mt-1">Mi efectivo en caja: <span id="cash-in-header" class="font-semibold">$342.10</span></p>
         </div>
-        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Salir</a>
         <!-- Alerta visual de ACH en proceso -->
         <div id="ach-transit-badge" class="hidden flex items-center bg-orange-500 text-white text-[10px] px-2 py-1 rounded-full animate-pulse font-bold">
           <i class="fas fa-clock mr-1"></i> ACH PENDIENTE
@@ -113,45 +78,33 @@
     </div>
   </nav>
 
-  <main class="pp-page flex-grow">
-    <div class="pp-shell">
-      <!-- Módulos (barra superior compacta) -->
-      <section class="pp-top-tabs mb-6" aria-label="Módulos">
-        <a href="../factura.html" id="tab-factura" class="pp-top-tab tab-inactive" aria-label="Enviar comprobante">
-          <span class="icon"><i class="fas fa-receipt"></i></span>
-          <span class="title">Factura</span>
-        </a>
-        <a href="team.html" id="tab-team" class="pp-top-tab tab-inactive" aria-label="Mi equipo">
-          <span class="icon"><i class="fas fa-users"></i></span>
-          <span class="title">Mi equipo</span>
-        </a>
-        <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="pp-top-tab tab-inactive" aria-controls="section-pagos">
-          <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
-          <span class="title">Pago de servicios</span>
-        </button>
+  <main class="demo-container mx-auto py-8 px-4 flex-grow">
+    <!-- Navegación de Funciones Principales -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
+        <i class="fas fa-file-invoice-dollar text-2xl mb-2 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Pago de Servicios</p>
+      </button>
+  <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group">
+        <i class="fas fa-money-bill-wave text-2xl mb-2 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Cash In</p>
+      </button>
+  <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
+        <i class="fas fa-university text-2xl mb-2 group-hover:scale-110 transition"></i>
+        <p class="font-bold">Notificar ACH</p>
+      </button>
+  <button type="button" class="p-4 bg-white rounded-xl shadow opacity-60 cursor-not-allowed text-center">
+        <i class="fas fa-history text-2xl text-gray-400 mb-2"></i>
+        <p class="font-bold text-gray-400">Reportes</p>
+      </button>
+    </div>
 
-        <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="pp-top-tab tab-active" aria-controls="section-cashin">
-          <span class="icon"><i class="fas fa-credit-card"></i></span>
-          <span class="title">Recarga digital</span>
-        </button>
-
-        <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="pp-top-tab tab-inactive" aria-controls="section-fondear">
-          <span class="icon"><i class="fas fa-university"></i></span>
-          <span class="title">Notificar ACH</span>
-        </button>
-
-        <button type="button" class="pp-top-tab -disabled" aria-disabled="true">
-          <span class="icon bg-gray-100 text-gray-400"><i class="fas fa-history"></i></span>
-          <span class="title text-gray-400">Reportes</span>
-        </button>
-      </section>
-
-    <!-- SECCIÓN: RECARGA DIGITAL (Fondeo por métodos digitales) -->
-    <div id="section-cashin" class="section-fade">
-      <div class="pp-card -soft overflow-hidden">
-        <div class="pp-card-head">
-          <h2 class="text-2xl font-bold pp-type">Recarga digital</h2>
-          <p class="text-gray-500 pp-type">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
+    <!-- SECCIÓN: CASH IN (Flujo de Depósito) -->
+    <div id="section-cashin" class="max-w-4xl mx-auto section-fade">
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-b-4 border-blue-600">
+        <div class="bg-gray-50 border-b p-6">
+          <h2 class="text-2xl font-bold text-gray-800">Recarga tu agente</h2>
+          <p class="text-gray-500">Carga balance a tu plataforma</p>
         </div>
 
       <!-- Toast de confirmación desde Checkout -->
@@ -159,66 +112,58 @@
         <div class="flex items-center space-x-3"><div class="font-bold">Recarga aplicada</div><button id="checkoutToastClose" type="button" class="ml-4 text-white opacity-90">✕</button></div>
       </div>
 
-        <div class="pp-card-body">
+        <div class="p-8">
+          <!-- Indicador de Pasos -->
+          <div class="flex justify-between mb-10 relative">
+            <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 z-0"></div>
+            <div id="step-dot-1" class="z-10 bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-md">1</div>
+            <div id="step-dot-2" class="z-10 bg-gray-200 text-gray-500 w-10 h-10 rounded-full flex items-center justify-center font-bold">2</div>
+            <div id="step-dot-3" class="z-10 bg-gray-200 text-gray-500 w-10 h-10 rounded-full flex items-center justify-center font-bold">3</div>
+          </div>
+
           <!-- Paso 1: Datos -->
           <div id="step-1" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label class="pp-label">Número del agente</label>
-                <div class="pp-input-group">
-                  <span class="pp-input-prefix"><i class="fas fa-id-badge"></i></span>
-                  <input type="text" id="agent-number" class="pp-input-control font-bold" readonly aria-label="Número del agente">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Número de Celular</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-3 text-gray-400 font-bold">+507</span>
+                  <input type="tel" id="client-phone" inputmode="numeric" pattern="[0-9]*" placeholder="60000000" class="w-full pl-14 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none" maxlength="8" autocomplete="tel" aria-label="Número de celular">
                 </div>
-                <p class="mt-2 text-xs text-gray-500">Este número es fijo y se usa como cuenta destino de la recarga.</p>
               </div>
-
               <div>
-                <label class="pp-label">Monto USD</label>
-                <div class="pp-input-group">
-                  <span class="pp-input-prefix">$</span>
-                  <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="pp-input-control font-bold text-xl" autocomplete="off" aria-label="Monto USD">
-                </div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Monto USD</label>
+                <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-xl outline-none" autocomplete="off" aria-label="Monto USD">
                 <!-- fees preview -->
                 <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
-                <div class="mt-3 p-3 rounded-xl border bg-gray-50">
-                  <div class="flex items-center justify-between">
-                    <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Valor real a recargar (neto)</div>
-                    <div id="cashin-net" class="text-lg font-extrabold text-gray-900">$0.00</div>
-                  </div>
-                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint">Neto = Monto - Comisión - ITBMS</div>
-                </div>
               </div>
             </div>
-
-            <div class="flex justify-center md:justify-end">
-              <button type="button" id="cashin-continue" class="pp-btn pp-btn-primary -full md:w-auto" disabled aria-disabled="true" title="Completa celular y monto para continuar">Continuar</button>
+            <div class="flex justify-end">
+              <button type="button" onclick="event.preventDefault(); nextStep(2)" class="btn-primary text-white px-10 py-3 rounded-lg font-bold shadow-lg">Continuar</button>
             </div>
           </div>
 
           <!-- Paso 2: Confirmación -->
           <div id="step-2" class="hidden space-y-6">
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen de recarga digital</h3>
+              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen del Depósito</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600">Cuenta (agente):</span>
-                <span class="font-bold text-gray-800" id="summary-phone">—</span>
+                <span class="text-gray-600">Cuenta de Destino:</span>
+                <span class="font-bold text-gray-800" id="summary-phone">6000-0000</span>
               </div>
-              <div class="text-sm text-gray-600 mb-4">
-                Serás redirigido al checkout para completar el pago con métodos digitales.
+              <div class="flex justify-between mb-4">
+                <span class="text-gray-600">Titular estimado:</span>
+                <span class="font-bold text-gray-800 uppercase">Juan Pérez</span>
               </div>
               <div class="flex justify-between border-t border-blue-200 pt-4 items-center">
-                <span class="font-bold text-lg text-gray-800">Monto a recargar:</span>
+                <span class="font-bold text-lg text-gray-800">Total a recibir en EFECTIVO:</span>
                 <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
               </div>
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
-              <div class="flex justify-between mt-3 items-center">
-                <span class="font-bold text-gray-800">Valor real a recargar:</span>
-                <span class="font-extrabold text-gray-900" id="summary-net">$0.00</span>
-              </div>
             </div>
             <div class="flex space-x-4">
-              <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary">Corregir</button>
-              <button type="button" id="cashin-go-checkout" class="w-2/3 pp-btn pp-btn-primary">Ir al checkout</button>
+              <button type="button" onclick="nextStep(1)" class="w-1/3 border-2 border-gray-200 text-gray-500 py-4 rounded-xl font-bold hover:bg-gray-50 transition">CORREGIR</button>
+              <button type="button" onclick="event.preventDefault(); processCashIn()" class="w-2/3 btn-primary text-white py-4 rounded-xl font-bold shadow-xl">CONFIRMAR Y PROCESAR</button>
             </div>
           </div>
 
@@ -232,10 +177,45 @@
                         <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
           </div>
         </div>
-  </div>
+      </div>
+            
+      <!-- Panel de Caja del Agente -->
+      <div class="mt-8 grid md:grid-cols-2 gap-6">
+        <!-- Mi efectivo moved to header for quicker glance -->
+        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-green-500">
+          <h3 class="font-bold text-gray-700 flex items-center mb-2 uppercase text-xs">
+            <i class="fas fa-hand-holding-usd text-green-500 mr-2"></i> Ganancia Neta Hoy
+          </h3>
+          <p class="text-3xl font-bold text-gray-800">$12.45</p>
+          <p class="text-xs text-gray-400 mt-1">Comisiones generadas por sus servicios.</p>
+        </div>
+      </div>
+            
+      <!-- Servicios disponibles (importado de agents/index.html) -->
+      <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Servicios disponibles</h3>
+        <div id="services" class="grid md:grid-cols-3 gap-4">
+          <!-- services populated by JS -->
+        </div>
+      </div>
 
-    </div>
-
+      <!-- Histórico de transacciones -->
+      <div class="mt-6 bg-white rounded-xl shadow-lg p-6">
+        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Histórico de transacciones</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead>
+              <tr class="text-gray-400 uppercase text-[10px]">
+                <th class="pb-4">Fecha</th>
+                <th class="pb-4">Tipo</th>
+                <th class="pb-4">Detalles</th>
+                <th class="pb-4 text-right">Monto</th>
+              </tr>
+            </thead>
+            <tbody id="history"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- SECCIÓN: NOTIFICAR ACH (Reporte de Recarga) -->
@@ -423,297 +403,239 @@
       }
 
       // wire search to async lookup with spinner
-      document.getElementById('customer-id') && document.getElementById('customer-id').addEventListener('input', (e)=>{
-        prefs.lastCustomerId = e.target.value;
-        savePrefs(prefs);
-      });
-
-      // persist ach inputs as they change
-      const achBankEl = document.getElementById('ach-bank');
-      const achRefEl = document.getElementById('ach-ref');
-      const achAmtEl = document.getElementById('ach-amount');
-      if (achBankEl) achBankEl.addEventListener('change', e=>{ prefs.achBank = e.target.value; savePrefs(prefs); });
-      if (achRefEl) achRefEl.addEventListener('input', e=>{ prefs.achRef = e.target.value; savePrefs(prefs); });
-      if (achAmtEl) achAmtEl.addEventListener('input', e=>{ prefs.achAmount = e.target.value; savePrefs(prefs); });
-
-      async function performCustomerSearch(q){
+      document.getElementById('customer-search-btn').addEventListener('click', async ()=>{
+        const q = document.getElementById('customer-id').value || '';
         const out = document.getElementById('customer-results');
         out.innerHTML = '<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">Buscando cliente&hellip;</div></div>';
         try {
           const found = await lookupCustomerAsync(q);
-          prefs.lastCustomerResults = found;
-          prefs.lastCustomerId = q;
-          savePrefs(prefs);
           renderCustomerResults(found);
         } catch(e){ out.innerHTML = '<div class="p-4 bg-red-50 border border-red-100 rounded">Error al buscar cliente.</div>'; }
+      });
+
+      // Charge modal (replace prompt) -------------------------------------------------
+      (function createChargeModal(){
+        if (document.getElementById('charge-modal')) return;
+        const modal = document.createElement('div');
+        modal.id = 'charge-modal';
+        modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Cobrar servicio</h3>
+            <div class="mb-4">
+              <div class="text-sm text-gray-600" id="charge-client"></div>
+              <div class="text-sm text-gray-600" id="charge-service"></div>
+            </div>
+            <label class="muted">Monto a cobrar</label>
+            <input id="charge-amount" type="number" step="0.01" class="w-full px-3 py-2 border rounded mt-2 mb-4" />
+            <div class="flex justify-end gap-3">
+              <button id="charge-cancel" type="button" class="btn secondary">Cancelar</button>
+              <button id="charge-confirm" type="button" class="btn">Confirmar cobro</button>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+
+        modal.querySelector('#charge-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); });
+        modal.querySelector('#charge-confirm').addEventListener('click', ()=>{
+          try {
+            const amt = Number(document.getElementById('charge-amount').value);
+            if (!amt || isNaN(amt) || amt <= 0) return alert('Ingresa un monto válido');
+            // read hidden state
+            const meta = modal._meta || {};
+            // record local intent in agent sandbox txs
+            try {
+              const desc = `Intento cobro a ${meta.cid || ''} servicio:${meta.svc || ''}`;
+              state.txs.push({ when: Date.now(), type: 'Intent: Cobro', desc, amount: amt });
+              saveState(state);
+              render();
+            } catch(e){ console.warn('Failed to record intent', e); }
+
+            // Instead of redirecting immediately, ask for payment method
+            openPaymentMethodModal({ cid: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName, amount: amt });
+            modal.classList.add('hidden');
+          } catch(e){ console.warn(e); alert('Error al procesar'); }
+        });
+
+      })();
+
+      function openChargeModal({ cid, clientName, svc, svcName, balance }){
+        const modal = document.getElementById('charge-modal'); if(!modal) return alert('No modal');
+        modal._meta = { cid, svc };
+        document.getElementById('charge-client').innerText = `Cliente: ${clientName} (${cid})`;
+        document.getElementById('charge-service').innerText = `Servicio: ${svcName} — Saldo: ${fmt(balance)}`;
+        const inp = document.getElementById('charge-amount'); inp.value = (balance || 0).toFixed(2);
+        modal.classList.remove('hidden');
+        setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 120);
       }
 
-      document.getElementById('customer-search-btn').addEventListener('click', async ()=>{
-          const q = document.getElementById('customer-id').value || '';
-          performCustomerSearch(q);
-      });
-     // Charge modal (replace prompt) -------------------------------------------------
-     (function createChargeModal(){
-       if (document.getElementById('charge-modal')) return;
-       const modal = document.createElement('div');
-       modal.id = 'charge-modal';
-       // Use flexbox when shown so the dialog is truly centered on all screens
-       modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
-       modal.innerHTML = `
-         <div class="bg-white rounded-2xl p-6 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl">
-           <h3 class="text-lg font-bold mb-2">Cobrar servicio</h3>
-           <div class="mb-4">
-             <div class="text-sm text-gray-600" id="charge-client"></div>
-             <div class="text-sm text-gray-600" id="charge-service"></div>
-           </div>
-           <label class="muted">Monto a cobrar</label>
-           <input id="charge-amount" type="number" step="0.01" class="w-full px-3 py-2 border rounded mt-2 mb-4" />
-           <div class="flex justify-end gap-3">
-             <button id="charge-cancel" type="button" class="btn secondary">Cancelar</button>
-             <button id="charge-confirm" type="button" class="btn">Confirmar cobro</button>
-           </div>
-         </div>`;
-       document.body.appendChild(modal);
+      // Payment method modal: choose between Cash or Other
+      (function createPaymentMethodModal(){
+        if (document.getElementById('payment-method-modal')) return;
+        const m = document.createElement('div');
+        m.id = 'payment-method-modal';
+        m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
+        m.innerHTML = `
+          <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
+            <h3 class="text-lg font-bold mb-2">Método de pago</h3>
+            <p class="text-sm text-gray-600 mb-4">¿Cómo recibiste el pago?</p>
+            <div class="grid gap-3 mb-4">
+              <button id="pay-cash" type="button" class="btn-primary py-3">Efectivo (recibí dinero)</button>
+              <button id="pay-other" type="button" class="btn secondary py-3">Otro medio (tarjeta, Yappy, etc.)</button>
+            </div>
+            <div class="flex justify-end"><button id="pay-cancel" type="button" class="btn secondary">Cancelar</button></div>
+          </div>`;
+        document.body.appendChild(m);
+        m.querySelector('#pay-cancel').addEventListener('click', ()=> m.classList.add('hidden'));
+        m.querySelector('#pay-other').addEventListener('click', ()=>{
+          try {
+            const meta = m._meta || {};
+            const url = new URL('../checkout.html', location.href);
+            url.searchParams.set('amount', meta.amount);
+            url.searchParams.set('flow', 'agent');
+            url.searchParams.set('clientId', meta.cid || '');
+            url.searchParams.set('svc', meta.svc || '');
+            m.classList.add('hidden');
+            location.href = url.href;
+          } catch(e){ console.warn(e); }
+        });
+        m.querySelector('#pay-cash').addEventListener('click', ()=>{
+          try {
+            const meta = m._meta || {};
+            const amt = Number(meta.amount) || 0;
+            if (!amt || isNaN(amt) || amt <= 0) { alert('Monto inválido'); return; }
+            // register immediate cash recharge: update balance and cash
+            state.balance = Number((Number(state.balance) + amt).toFixed(2));
+            state.cash = Number((Number(state.cash) + amt).toFixed(2));
+            state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga en efectivo - cliente ${meta.cid || ''} servicio:${meta.svc || ''}`, amount: amt });
+            saveState(state);
+            // mark service as paid for the client so UI reflects it
+            try { markServicePaidForClient(meta.cid, meta.svc); } catch(e){ console.warn('mark paid failed', e); }
+            render();
+            m.classList.add('hidden');
+            // show receipt modal
+            openReceiptModal({ amount: amt, clientId: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName });
+          } catch(e){ console.warn(e); }
+        });
+      })();
 
-      modal.querySelector('#charge-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); modal.classList.remove('flex'); });
-       modal.querySelector('#charge-confirm').addEventListener('click', ()=>{
-         try {
-           const amt = Number(document.getElementById('charge-amount').value);
-           if (!amt || isNaN(amt) || amt <= 0) return alert('Ingresa un monto válido');
-           // read hidden state
-           const meta = modal._meta || {};
-           // record local intent in agent sandbox txs
-           try {
-             const desc = `Intento cobro a ${meta.cid || ''} servicio:${meta.svc || ''}`;
-             state.txs.push({ when: Date.now(), type: 'Intent: Cobro', desc, amount: amt });
-             saveState(state);
-             render();
-           } catch(e){ console.warn('Failed to record intent', e); }
+      function openPaymentMethodModal(meta){
+        const m = document.getElementById('payment-method-modal'); if(!m) return;
+        m._meta = meta || {};
+        // copy some fields to meta for pay-other
+        m._meta.svcName = meta.svcName || '';
+        m._meta.clientName = meta.clientName || '';
+        m.classList.remove('hidden');
+      }
 
-           // Instead of redirecting immediately, ask for payment method
-           openPaymentMethodModal({ cid: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName, amount: amt });
-           modal.classList.add('hidden');
-           modal.classList.remove('flex');
-         } catch(e){ console.warn(e); alert('Error al procesar'); }
-       });
+      // Receipt modal with share/print actions
+      (function createReceiptModal(){
+        if (document.getElementById('receipt-modal')) return;
+        const r = document.createElement('div');
+        r.id = 'receipt-modal'; r.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
+        r.innerHTML = `
+          <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+            <h3 class="text-lg font-bold mb-2">Recibo</h3>
+            <div id="receipt-body" class="text-sm text-gray-700 mb-4"></div>
+            <div class="flex gap-3 mb-3">
+              <button id="share-whatsapp" type="button" class="btn">WhatsApp</button>
+              <button id="share-email" type="button" class="btn">Email</button>
+              <button id="print-receipt" type="button" class="btn secondary">Imprimir</button>
+            </div>
+            <div class="flex justify-end"><button id="receipt-close" class="btn secondary">Cerrar</button></div>
+          </div>`;
+        document.body.appendChild(r);
+        r.querySelector('#receipt-close').addEventListener('click', ()=> r.classList.add('hidden'));
+        r.querySelector('#print-receipt').addEventListener('click', ()=>{
+          try {
+            // open a small printable window
+            const content = document.getElementById('receipt-body').innerHTML;
+            const w = window.open('', 'Imprimir', 'width=600,height=600');
+            if (!w) return alert('No es posible abrir ventana de impresión');
+            w.document.write(`<html><head><title>Recibo</title></head><body>${content}</body></html>`);
+            w.document.close();
+            w.focus();
+            setTimeout(()=>{ w.print(); }, 400);
+          } catch(e){ console.warn(e); }
+        });
+        r.querySelector('#share-whatsapp').addEventListener('click', ()=>{
+          try {
+            const txt = document.getElementById('receipt-body').innerText;
+            const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt);
+            window.open(url, '_blank');
+          } catch(e) {}
+        });
+        r.querySelector('#share-email').addEventListener('click', ()=>{
+          try {
+            const subj = 'Recibo de pago PuntoPago';
+            const body = encodeURIComponent(document.getElementById('receipt-body').innerText);
+            window.location.href = `mailto:?subject=${encodeURIComponent(subj)}&body=${body}`;
+          } catch(e){}
+        });
+      })();
 
-     })();
+      function openReceiptModal({ amount, clientId, svc, svcName, clientName }){
+        const r = document.getElementById('receipt-modal'); if(!r) return;
+        const when = new Date();
+        const body = `
+          <div style="font-family:system-ui, -apple-system, sans-serif">
+            <div style="font-weight:700;font-size:18px;margin-bottom:8px">Punto Pago - Recibo</div>
+            <div style="font-size:13px;color:#374151">Fecha: ${when.toLocaleString()}</div>
+            <div style="margin-top:8px"><strong>Cliente:</strong> ${clientName || ''} (${clientId || ''})</div>
+            <div><strong>Servicio:</strong> ${svcName || svc || ''}</div>
+            <div style="margin-top:8px;font-size:16px"><strong>Monto:</strong> ${fmt(amount)}</div>
+            <div style="margin-top:8px;font-size:12px;color:#6b7280">Recibo generado por Punto Pago</div>
+          </div>`;
+        document.getElementById('receipt-body').innerHTML = body;
+        r.classList.remove('hidden');
+      }
 
-     function openChargeModal({ cid, clientName, svc, svcName, balance }){
-       const modal = document.getElementById('charge-modal'); if(!modal) return alert('No modal');
-       modal._meta = { cid, svc };
-       document.getElementById('charge-client').innerText = `Cliente: ${clientName} (${cid})`;
-       document.getElementById('charge-service').innerText = `Servicio: ${svcName} — Saldo: ${fmt(balance)}`;
-       const inp = document.getElementById('charge-amount'); inp.value = (balance || 0).toFixed(2);
-       // show as flex so items-center/justify-center take effect
-       modal.classList.remove('hidden');
-       modal.classList.add('flex');
-       setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 120);
-     }
+      // ensure phone field always contains the +507 prefix
+    (function setupPhonePrefix(){
+      const ip = document.getElementById('client-phone');
+      if (!ip) return;
+      function normalize(){
+        let v = ip.value || '';
+        // remove non numeric except +
+        v = v.replace(/[^0-9\+]/g, '');
+        if (!v.startsWith('+507')) {
+          // strip existing leading digits
+          v = v.replace(/^\+?\d*/, '');
+          v = '+507' + v;
+        }
+        ip.value = v;
+      }
+      ip.addEventListener('focus', normalize);
+      ip.addEventListener('input', normalize);
+      ip.addEventListener('blur', normalize);
+    })();
 
-     // Payment method modal: choose between Cash or Other
-     (function createPaymentMethodModal(){
-       if (document.getElementById('payment-method-modal')) return;
-       const m = document.createElement('div');
-       m.id = 'payment-method-modal';
-       m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
-       m.innerHTML = `
-         <div class="bg-white rounded-2xl p-6 max-w-sm w-full max-h-[85vh] overflow-y-auto shadow-2xl">
-           <h3 class="text-lg font-bold mb-2">Método de pago</h3>
-           <p class="text-sm text-gray-600 mb-4">¿Cómo recibiste el pago?</p>
-           <div class="grid gap-3 mb-4">
-             <button id="pay-cash" type="button" class="btn-primary py-3">Efectivo (recibí dinero)</button>
-             <button id="pay-other" type="button" class="btn secondary py-3">Otro medio (tarjeta, Yappy, etc.)</button>
-           </div>
-           <div class="flex justify-end"><button id="pay-cancel" type="button" class="btn secondary">Cancelar</button></div>
-         </div>`;
-       document.body.appendChild(m);
-       m.querySelector('#pay-cancel').addEventListener('click', ()=> { m.classList.add('hidden'); m.classList.remove('flex'); });
-       m.querySelector('#pay-other').addEventListener('click', ()=>{
-         try {
-           const meta = m._meta || {};
-           const url = new URL('../checkout.html', location.href);
-           url.searchParams.set('amount', meta.amount);
-           url.searchParams.set('flow', 'agent');
-           url.searchParams.set('clientId', meta.cid || '');
-           url.searchParams.set('svc', meta.svc || '');
-           // pass service/operator label so checkout can display the exact operator selected
-           url.searchParams.set('svcName', meta.svcName || '');
-           m.classList.add('hidden');
-           m.classList.remove('flex');
-           location.href = url.href;
-         } catch(e){ console.warn(e); }
-       });
-       m.querySelector('#pay-cash').addEventListener('click', ()=>{
-         try {
-           const meta = m._meta || {};
-           const amt = Number(meta.amount) || 0;
-           if (!amt || isNaN(amt) || amt <= 0) { alert('Monto inválido'); return; }
-           // register immediate cash recharge: update balance and cash
-           state.balance = Number((Number(state.balance) + amt).toFixed(2));
-           state.cash = Number((Number(state.cash) + amt).toFixed(2));
-           state.txs.push({ when: Date.now(), type: 'Recarga', desc: `Recarga en efectivo - cliente ${meta.cid || ''} servicio:${meta.svc || ''}`, amount: amt });
-           saveState(state);
-           // mark service as paid for the client so UI reflects it
-           try { markServicePaidForClient(meta.cid, meta.svc); } catch(e){ console.warn('mark paid failed', e); }
-           render();
-           m.classList.add('hidden');
-           m.classList.remove('flex');
-           // show receipt modal
-           openReceiptModal({ amount: amt, clientId: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName });
-         } catch(e){ console.warn(e); }
-       });
-     })();
+    // compute fees for cash-in amount
+    function calculateFees(amount){
+      const commission = Number((amount * 0.02 + 0.25).toFixed(2));
+      const ibms = Number((commission * 0.07).toFixed(2));
+      return { commission, ibms };
+    }
 
-     function openPaymentMethodModal(meta){
-       const m = document.getElementById('payment-method-modal'); if(!m) return;
-       m._meta = meta || {};
-       // copy some fields to meta for pay-other
-       m._meta.svcName = meta.svcName || '';
-       m._meta.clientName = meta.clientName || '';
-       // show as flex so items-center/justify-center take effect
-       m.classList.remove('hidden');
-       m.classList.add('flex');
-     }
-
-     // Receipt modal with share/print actions
-     (function createReceiptModal(){
-       if (document.getElementById('receipt-modal')) return;
-       const r = document.createElement('div');
-       r.id = 'receipt-modal'; r.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
-       r.innerHTML = `
-         <div class="bg-white rounded-2xl p-6 max-w-md w-full">
-           <h3 class="text-lg font-bold mb-2">Recibo</h3>
-           <div id="receipt-body" class="text-sm text-gray-700 mb-4"></div>
-           <div class="flex gap-3 mb-3">
-             <button id="share-whatsapp" type="button" class="btn">WhatsApp</button>
-             <button id="share-email" type="button" class="btn">Email</button>
-             <button id="print-receipt" type="button" class="btn secondary">Imprimir</button>
-           </div>
-           <div class="flex justify-end"><button id="receipt-close" class="btn secondary">Cerrar</button></div>
-         </div>`;
-       document.body.appendChild(r);
-       r.querySelector('#receipt-close').addEventListener('click', ()=> r.classList.add('hidden'));
-       r.querySelector('#print-receipt').addEventListener('click', ()=>{
-         try {
-           // open a small printable window
-           const content = document.getElementById('receipt-body').innerHTML;
-           const w = window.open('', 'Imprimir', 'width=600,height=600');
-           if (!w) return alert('No es posible abrir ventana de impresión');
-           w.document.write(`<html><head><title>Recibo</title></head><body>${content}</body></html>`);
-           w.document.close();
-           w.focus();
-           setTimeout(()=>{ w.print(); }, 400);
-         } catch(e){ console.warn(e); }
-       });
-       r.querySelector('#share-whatsapp').addEventListener('click', ()=>{
-         try {
-           const txt = document.getElementById('receipt-body').innerText;
-           const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt);
-           window.open(url, '_blank');
-         } catch(e) {}
-       });
-       r.querySelector('#share-email').addEventListener('click', ()=>{
-         try {
-           const subj = 'Recibo de pago PuntoPago';
-           const body = encodeURIComponent(document.getElementById('receipt-body').innerText);
-           window.location.href = `mailto:?subject=${encodeURIComponent(subj)}&body=${body}`;
-         } catch(e){}
-       });
-     })();
-
-     function openReceiptModal({ amount, clientId, svc, svcName, clientName }){
-       const r = document.getElementById('receipt-modal'); if(!r) return;
-       const when = new Date();
-       const body = `
-         <div style="font-family:system-ui, -apple-system, sans-serif">
-           <div style="font-weight:700;font-size:18px;margin-bottom:8px">Punto Pago - Recibo</div>
-           <div style="font-size:13px;color:#374151">Fecha: ${when.toLocaleString()}</div>
-           <div style="margin-top:8px"><strong>Cliente:</strong> ${clientName || ''} (${clientId || ''})</div>
-           <div><strong>Servicio:</strong> ${svcName || svc || ''}</div>
-           <div style="margin-top:8px;font-size:16px"><strong>Monto:</strong> ${fmt(amount)}</div>
-           <div style="margin-top:8px;font-size:12px;color:#6b7280">Recibo generado por Punto Pago</div>
-         </div>`;
-       document.getElementById('receipt-body').innerHTML = body;
-       r.classList.remove('hidden');
-     }
-
-     // Recarga digital uses the agent's fixed number (no phone input)
-     function getAgentNumber(){
-       try {
-         const s = (window.PPAuth && window.PPAuth.getSession && window.PPAuth.getSession()) || null;
-         const agentId = s?.agentId || null;
-         const users = (window.PPAuth && window.PPAuth.loadUsers && window.PPAuth.loadUsers()) || [];
-         const agent = users.find(u => u.id === agentId) || users.find(u => u.role === 'agent' && u.id === agentId);
-         // Prefer explicit phone stored in setup, fallback to username.
-         const agentInfo = (function(){
-           try { return JSON.parse(localStorage.getItem('pp_agent_info_v1')) || {}; }
-           catch(e){ return {}; }
-         })();
-         const phone = (agentInfo.phone || '').trim();
-         if (phone) return phone;
-         return (agent?.username || '').trim() || 'Agente';
-       } catch(e){
-         return 'Agente';
-       }
-     }
-
-     (function initAgentNumber(){
-       const el = document.getElementById('agent-number');
-       if (!el) return;
-       el.value = getAgentNumber();
-     })();
-
-   // compute fees for cash-in amount
-   function calculateFees(amount){
-     const commission = Number((amount * 0.02 + 0.25).toFixed(2));
-     const ibms = Number((commission * 0.07).toFixed(2));
-     return { commission, ibms };
-   }
-
-   function calculateNet(amount){
-     const amt = Number(amount) || 0;
-     if (!(amt > 0)) return 0;
-     const f = calculateFees(amt);
-     return Number((amt - f.commission - f.ibms).toFixed(2));
-   }
-
-   // live preview of fees while typing amount
-   (function setupFeePreview(){
-     const amt = document.getElementById('cashin-amount');
-     const feeDiv = document.getElementById('cashin-fees');
-     const netDiv = document.getElementById('cashin-net');
-     // if elements missing nothing to do
-     if (!amt || !feeDiv) return;
-     function update(){
-       const v = parseFloat(amt.value) || 0;
-       if (v > 0){
-         const f = calculateFees(v);
-  feeDiv.textContent = `Comisión 2%+$0.25: ${fmt(f.commission)}; ITBMS 7%: ${fmt(f.ibms)}`;
-         if (netDiv) netDiv.textContent = fmt(calculateNet(v));
-       } else {
-         feeDiv.textContent = '';
-         if (netDiv) netDiv.textContent = fmt(0);
-       }
-     }
-     amt.addEventListener('input', update);
-     amt.addEventListener('blur', update);
-     amt.addEventListener('focus', update);
-     update();
-   })();
+    // live preview of fees while typing amount
+    (function setupFeePreview(){
+      const amt = document.getElementById('cashin-amount');
+      const feeDiv = document.get
+      function update(){
+        const v = parseFloat(amt.value) || 0;
+        if (v > 0){
+          const f = calculateFees(v);
+          feeDiv.textContent = `Comisión 2%+$0.25: ${fmt(f.commission)}; IBMS 7%: ${fmt(f.ibms)}`;
+        } else {
+          feeDiv.textContent = '';
+        }
+      }
+      amt.addEventListener('input', update);
+      amt.addEventListener('blur', update);
+      amt.addEventListener('focus', update);
+    })();
     </script>
   </main>
     <script>
-      // Auth guard (agent + employee) -------------------------------------------------
-      (function(){
-        try {
-          const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
-          if (!session) return;
-          window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
-          window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
-        } catch(e){ console.warn('Auth guard failed', e); }
-      })();
-
       // Show a toast if we arrived from checkout with ?fromCheckout=1
       (function(){
         try {
@@ -743,282 +665,391 @@
         <i class="fas fa-paper-plane text-3xl"></i>
       </div>
       <h3 class="text-xl font-bold text-gray-800 mb-2">Alerta ACH Recibida</h3>
-      <p class="text-gray-500 text-sm">Nuestro equipo validará la transferencia. El distintivo</p>
-      <button type="button" onclick="closeACHModal()" class="mt-8 w-full btn-primary text-white py-4 rounded-xl font-bold shadow-lg">CONTINUAR OPERANDO</button>
+      <p class="text-gray-500 text-sm">Nuestro equipo validará la transferencia. El distintivo
+            <button type="button" onclick="closeACHModal()" class="mt-8 w-full btn-primary text-white py-4 rounded-xl font-bold shadow-lg">CONTINUAR OPERANDO</button>
     </div>
   </div>
 
   <script>
     // Agent sandbox state (persisted)
     const STORAGE_KEY = 'pp_agent_sandbox_v1';
-    const PREFS_KEY = 'pp_agent_recharge_prefs_v1';
-    const PAID_KEY = 'pp_paid_services_v1';
-
-    // lightweight prefs store for form persistence
-    function loadPrefs(){
-      try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; }
-      catch(e){ return {}; }
-    }
-    function savePrefs(p){
-      try { localStorage.setItem(PREFS_KEY, JSON.stringify(p || {})); }
-      catch(e){}
-    }
-    const prefs = loadPrefs();
-
-    // Paid-services store: { [clientId]: { [svcId]: { paidAt:number, amount:number } } }
-    function loadPaidStore(){
-      try { return JSON.parse(localStorage.getItem(PAID_KEY)) || {}; }
-      catch(e){ return {}; }
-    }
-    function savePaidStore(s){
-      try { localStorage.setItem(PAID_KEY, JSON.stringify(s || {})); }
-      catch(e){}
-    }
-    function isServicePaidForClient(clientId, svcId){
-      const store = loadPaidStore();
-      return !!(store && store[clientId] && store[clientId][svcId]);
-    }
-    function markServicePaidForClient(clientId, svcId, amount){
-      if (!clientId || !svcId) return;
-      const store = loadPaidStore();
-      if (!store[clientId]) store[clientId] = {};
-      store[clientId][svcId] = { paidAt: Date.now(), amount: Number(amount) || 0 };
-      savePaidStore(store);
-    }
-
     const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
     function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
     function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) }
-    function fmt(v){
-      const n = Number(v);
-      return '$' + (Number.isFinite(n) ? n.toFixed(2) : '0.00');
-    }
-    let state = loadState();
+    function fmt(v){ return '$' + Number(v).toFixed(2) }
+  let state = loadState();
 
+  // Persist map of paid services per client so paid items survive page reloads
+  const PAID_MAP_KEY = 'pp_paid_services_v1';
+  function loadPaidMap(){ try { return JSON.parse(localStorage.getItem(PAID_MAP_KEY)) || {}; } catch(e){ return {}; } }
+  function savePaidMap(m){ try { localStorage.setItem(PAID_MAP_KEY, JSON.stringify(m)); } catch(e){} }
+  function markServicePaidForClient(cid, svc){ if(!cid || !svc) return; const m = loadPaidMap(); m[cid] = m[cid] || []; if (m[cid].indexOf(svc) < 0) m[cid].push(svc); savePaidMap(m); }
+  function isServicePaidForClient(cid, svc){ const m = loadPaidMap(); return !!(m[cid] && m[cid].indexOf(svc) >= 0); }
+
+    // Services available
+    const services = [
+      { id: 't1', name: 'Recarga móvil', price: 5.00, feePct: 0.02 },
+      { id: 't2', name: 'Pago de luz', price: 20.00, feePct: 0.015 },
+      { id: 't3', name: 'Pago de agua', price: 12.50, feePct: 0.015 },
+      { id: 't4', name: 'Paquete TV', price: 30.00, feePct: 0.01 },
+      { id: 't5', name: 'Recarga transporte', price: 10.00, feePct: 0.02 }
+    ];
+
+    const $services = document.getElementById('services');
+    const $history = document.getElementById('history');
     const $balanceDisplay = document.getElementById('balance-display');
     const $cashCount = document.getElementById('cash-count');
 
-    // render state and UI
     function render(){
-        if($balanceDisplay) $balanceDisplay.innerText = fmt(state.balance);
-        if($cashCount) $cashCount.innerText = fmt(state.cash);
-        const summaryEl = document.getElementById('summary-total');
-        if(summaryEl) summaryEl.innerText = '$0.00';
-        const cashHeader = document.getElementById('cash-in-header'); if (cashHeader) cashHeader.innerText = fmt(state.cash);
-        // transaction history moved to setup.html
-      }
+      $balanceDisplay.innerText = fmt(state.balance);
+      $cashCount.innerText = fmt(state.cash);
+      document.getElementById('summary-total').innerText = '$0.00';
+      // Update header small cash display if present
+      const cashHeader = document.getElementById('cash-in-header'); if (cashHeader) cashHeader.innerText = fmt(state.cash);
+      // render services
+      $services.innerHTML = '';
+      services.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'p-4 border rounded-lg';
+        el.innerHTML = `<div class="font-bold">${s.name}</div><div class="text-sm text-gray-500">Precio: ${fmt(s.price)}</div><div class="mt-3"><button type="button" class="w-full btn-primary text-white py-2 rounded" data-id="${s.id}">Pagar</button></div>`;
+        $services.appendChild(el);
+      });
 
-      function recordTx(type, desc, amount){
-        state.txs.push({ when: Date.now(), type, desc, amount });
-        saveState(state);
-        render();
-      }
+      // render history
+      $history.innerHTML = '';
+      state.txs.slice().reverse().forEach(tx => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b last:border-0 hover:bg-gray-50 transition';
+        tr.innerHTML = `<td class="py-4 text-gray-500 font-medium">${new Date(tx.when).toLocaleString()}</td><td class="py-4 font-bold text-gray-700">${tx.type}</td><td class="py-4">${tx.desc}</td><td class="py-4 text-right font-bold text-gray-800">${fmt(tx.amount)}</td>`;
+        $history.appendChild(tr);
+      });
+    }
 
-      // Función para cambiar entre secciones
-      function showSection(section) {
-        const sections = ['cashin', 'fondear', 'pagos'];
-        sections.forEach(s => {
-          const element = document.getElementById(`section-${s}`);
-          const tab = document.getElementById(`tab-${s}`);
-          if (s === section) {
-            if(element) element.classList.remove('hidden');
-            if(tab) {
-              tab.classList.add('-active');
-              tab.classList.remove('tab-inactive');
-              tab.classList.add('tab-active');
-            }
-          } else {
-            if(element) element.classList.add('hidden');
-            if (tab) {
-              tab.classList.remove('-active');
-              tab.classList.remove('tab-active');
-              tab.classList.add('tab-inactive');
-            }
-          }
-        });
-        try {
-          const el = document.getElementById(`section-${section}`);
-          if (el && typeof el.scrollIntoView === 'function') {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-          }
-          if (section === 'cashin') {
-            try {
-              const nav = document.querySelector('nav');
-              const navH = nav ? nav.getBoundingClientRect().height : 0;
-              const avail = window.innerHeight - navH - 24;
-              const cashEl = document.getElementById('section-cashin');
-              if (window.innerWidth <= 820 && cashEl) {
-                const minH = (avail > 300 ? avail : 300);
-                cashEl.style.minHeight = minH + 'px';
-                cashEl.classList.add('section-center');
-                const content = cashEl.querySelector('.bg-white');
-                if (content) {
-                  const contentH = content.getBoundingClientRect().height;
-                  if (contentH > avail) { cashEl.classList.add('compact'); }
-                  else { cashEl.classList.remove('compact'); }
-                }
-              }
-            } catch(e){ console.warn('center calc failed', e); }
-            setTimeout(()=>{ const ip = document.getElementById('cashin-amount'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
-          } else {
-            const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
-          }
-        } catch(e){ console.warn('showSection scroll failed', e); }
-      }
-
-      // Persist last viewed section
-      (function wireSectionPersistence(){
-        const sections = ['cashin','fondear','pagos'];
-        sections.forEach(s => {
-          const tab = document.getElementById(`tab-${s}`);
-          if (!tab) return;
-          tab.addEventListener('click', ()=>{
-            try { prefs.lastSection = s; savePrefs(prefs); } catch(e){}
-          });
-        });
-      })();
-
-  // Recarga digital flow --------------------------------------------------
-      function nextStep(step){
-        const s1 = document.getElementById('step-1');
-        const s2 = document.getElementById('step-2');
-        const s3 = document.getElementById('step-3');
-        if (s1) s1.classList.toggle('hidden', step !== 1);
-        if (s2) s2.classList.toggle('hidden', step !== 2);
-        if (s3) s3.classList.toggle('hidden', step !== 3);
-
-        if (step === 2){
-          const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
-          if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); nextStep(1); return; }
-          const total = Number(amt.toFixed(2));
-          const f = calculateFees(total);
-          const net = calculateNet(total);
-          const sp = document.getElementById('summary-phone');
-          const st = document.getElementById('summary-total');
-          const sf = document.getElementById('summary-fees');
-          const sn = document.getElementById('summary-net');
-          if (sp) sp.textContent = getAgentNumber();
-          if (st) st.textContent = fmt(total);
-          if (sf) sf.textContent = `Comisión: ${fmt(f.commission)} · ITBMS: ${fmt(f.ibms)} · Neto: ${fmt(net)}`;
-          if (sn) sn.textContent = fmt(net);
-        }
-      }
-
-      function resetFlow(){
-        try { document.getElementById('cashin-amount').value = ''; } catch(e){}
-        try { document.getElementById('cashin-fees').textContent = ''; } catch(e){}
-        try { const n = document.getElementById('cashin-net'); if(n) n.textContent = fmt(0); } catch(e){}
-        nextStep(1);
-      }
-
-      function goToDigitalCheckout(){
-        const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
-        if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); return; }
-        try {
-          const url = new URL('../checkout.html', location.href);
-          url.searchParams.set('amount', String(amt.toFixed(2)));
-          url.searchParams.set('flow', 'agent');
-          // keep context for audit if needed
-          url.searchParams.set('agentNumber', getAgentNumber());
-          url.searchParams.set('purpose', 'topup');
-          location.href = url.href;
-        } catch(e){
-          console.warn(e);
-          alert('No se pudo abrir el checkout.');
-        }
-      }
-
-      // ACH flow (simple demo) ------------------------------------------------
-      function submitACH(){
-        const bank = (document.getElementById('ach-bank')?.value || '').trim();
-        const ref = (document.getElementById('ach-ref')?.value || '').trim();
-        const amt = parseFloat(document.getElementById('ach-amount')?.value || '0') || 0;
-        if (!bank){ alert('Selecciona tu banco.'); return; }
-        if (!ref){ alert('Ingresa la referencia.'); return; }
-        if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); return; }
-        // record tx as pending ACH
-        state.txs.push({ when: Date.now(), type: 'ACH', desc: `ACH notificado banco:${bank} ref:${ref}`, amount: amt, ref });
-        saveState(state);
-        render();
-        // show badge and modal
-        const badge = document.getElementById('ach-transit-badge');
-        if (badge) badge.classList.remove('hidden');
-        const modal = document.getElementById('ach-success-modal');
-        if (modal) modal.classList.remove('hidden');
-      }
-
-      function closeACHModal(){
-        const modal = document.getElementById('ach-success-modal');
-        if (modal) modal.classList.add('hidden');
-      }
-
-      // Cash In button wiring (avoid fragile inline onclick)
-      (function setupCashInContinue(){
-        const btn = document.getElementById('cashin-continue');
-        const amtEl = document.getElementById('cashin-amount');
-        const goBtn = document.getElementById('cashin-go-checkout');
-        if (!btn || !amtEl) return;
-
-        function isValid(){
-          const amt = parseFloat(amtEl.value || '0') || 0;
-          return amt > 0;
-        }
-
-        function sync(){
-          const ok = isValid();
-          btn.disabled = !ok;
-          btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
-          btn.classList.toggle('opacity-50', !ok);
-          btn.classList.toggle('cursor-not-allowed', !ok);
-          btn.title = ok ? 'Continuar' : 'Completa el monto para continuar';
-        }
-
-        btn.addEventListener('click', (e)=>{
-          e.preventDefault();
-          sync();
-          if (btn.disabled) return;
-          nextStep(2);
-        });
-
-        amtEl.addEventListener('input', sync);
-        amtEl.addEventListener('blur', sync);
-
-        // initial state
-        sync();
-
-        if (goBtn) {
-          goBtn.addEventListener('click', (e)=>{
-            e.preventDefault();
-            goToDigitalCheckout();
-          });
-        }
-      })();
-
-      // restore previously filled inputs and results
-      (function restoreInputs(){
-        if (prefs.lastCustomerId && document.getElementById('customer-id')) {
-          document.getElementById('customer-id').value = prefs.lastCustomerId;
-        }
-        if (prefs.achBank && document.getElementById('ach-bank')) {
-          document.getElementById('ach-bank').value = prefs.achBank;
-        }
-        if (prefs.achRef && document.getElementById('ach-ref')) {
-          document.getElementById('ach-ref').value = prefs.achRef;
-        }
-        if (prefs.achAmount && document.getElementById('ach-amount')) {
-          document.getElementById('ach-amount').value = prefs.achAmount;
-        }
-        if (prefs.lastCustomerResults && prefs.lastCustomerResults.length && document.getElementById('customer-results')) {
-          renderCustomerResults(prefs.lastCustomerResults);
-        }
-      })();
-
-      // initial render of page state
+    function recordTx(type, desc, amount){
+      state.txs.push({ when: Date.now(), type, desc, amount });
+      saveState(state);
       render();
+    }
 
-      // restore last viewed section if any
-      try { const initial = prefs.lastSection || 'cashin'; showSection(initial); } catch(e){}
-    </script>
+    // Función para cambiar entre secciones
+    function showSection(section) {
+      const sections = ['cashin', 'fondear', 'pagos'];
+      sections.forEach(s => {
+        const element = document.getElementById(`section-${s}`);
+        const tab = document.getElementById(`tab-${s}`);
+                
+        if (s === section) {
+          element.classList.remove('hidden');
+          tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group";
+          tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 text-blue-600 transition`;
+        } else {
+          element.classList.add('hidden');
+          if (tab) {
+            tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group";
+            tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 transition`;
+          }
+        }
+      });
+      // after toggling sections, ensure on mobile the selected section is visible
+      try {
+        const el = document.getElementById(`section-${section}`);
+        if (el && typeof el.scrollIntoView === 'function') {
+          // smooth scroll with nearest block to avoid overscrolling headers
+          el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        }
+        // if cashin selected, focus the phone input so iOS brings it into view
+        if (section === 'cashin') {
+          // calculate available vertical space and center the cashin panel on small screens
+          try {
+            const nav = document.querySelector('nav');
+            const navH = nav ? nav.getBoundingClientRect().height : 0;
+            const avail = window.innerHeight - navH - 24; // margin
+            const cashEl = document.getElementById('section-cashin');
+            if (window.innerWidth <= 820 && cashEl) {
+              const minH = (avail > 300 ? avail : 300);
+              cashEl.style.minHeight = minH + 'px';
+              cashEl.classList.add('section-center');
+              // check content height: if content is taller than available height, enable compact mode
+              const content = cashEl.querySelector('.bg-white');
+              if (content) {
+                const contentH = content.getBoundingClientRect().height;
+                if (contentH > avail) { cashEl.classList.add('compact'); }
+                else { cashEl.classList.remove('compact'); }
+              }
+            }
+          } catch(e){ console.warn('center calc failed', e); }
+          setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
+        } else {
+          // remove centering when other sections are active
+          const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
+        }
+      } catch(e){ console.warn('showSection scroll failed', e); }
+    }
+
+    // Navegación de pasos en Cash In
+    function nextStep(step) {
+       const phone = document.getElementById('client-phone').value;
+       const amount = document.getElementById('cashin-amount').value;
+
+      if (step === 2) {
+        if (phone.length < 8) {
+          alert("Ingrese un número de celular válido (8 dígitos).");
+          return;
+        }
+        if (!amount || parseFloat(amount) <= 0) {
+          alert("Ingrese un monto válido para el depósito.");
+          return;
+        }
+                
+        // Actualizar resumen de confirmación
+        document.getElementById('summary-phone').innerText = `+507 ${phone}`;
+        document.getElementById('summary-total').innerText = `$${parseFloat(amount).toFixed(2)}`;
+        // show fees breakdown
+        try {
+          const amt = parseFloat(amount) || 0;
+          const f = calculateFees(amt);
+          document.getElementById('summary-fees').innerText = `Comisión: ${fmt(f.commission)}, IBMS: ${fmt(f.ibms)}`;
+        } catch(e) { console.warn('fee summary failed', e); }
+      }
+
+      document.getElementById('step-1').classList.toggle('hidden', step !== 1);
+      document.getElementById('step-2').classList.toggle('hidden', step !== 2);
+      document.getElementById('step-3').classList.toggle('hidden', step !== 3);
+            
+      updateStepIndicator(step);
+      try { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); } catch(e){}
+    }
+
+    // Actualizar visualmente los puntos de progreso
+    function updateStepIndicator(step) {
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById(`step-dot-${i}`);
+        if (i < step) {
+          dot.className = "z-10 bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-sm transition-all duration-500";
+          dot.innerHTML = '<i class="fas fa-check"></i>';
+        } else if (i === step) {
+          dot.className = "z-10 bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg scale-110 transition-all duration-300";
+          dot.innerText = i;
+        } else {
+          dot.className = "z-10 bg-gray-200 text-gray-500 w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all";
+          dot.innerText = i;
+        }
+      }
+    }
+
+    // Procesar la transacción de Cash In: redirigir a checkout para que procese el pago
+    function processCashIn() {
+      const amount = parseFloat(document.getElementById('cashin-amount').value);
+      if (!amount || isNaN(amount) || amount <= 0) { alert('Ingresa un monto válido'); return; }
+      if (amount > state.balance) { alert('Su saldo operativo es insuficiente para realizar este depósito.'); return; }
+
+      // registrar comisiones sobre la recarga (2% + $0.25) y el IBMS 7% de la comisión
+      try {
+        const f = calculateFees(amount);
+        state.txs.push({ when: Date.now(), type: 'Comisión recarga', desc: '2% + $0.25 de recarga', amount: f.commission });
+        state.txs.push({ when: Date.now(), type: 'IBMS', desc: '7% IBMS sobre comisión', amount: f.ibms });
+        saveState(state);
+      } catch(e){ console.warn('failed to record cashin fees', e); }
+      try {
+        const url = new URL('../checkout.html', location.href);
+        url.searchParams.set('amount', amount);
+        url.searchParams.set('flow', 'kiosk');
+        // navigate to checkout where the payment will be completed; checkout will register the recharge
+        location.href = url.href;
+      } catch (err) {
+        alert('Error preparando la redirección: ' + err.message);
+      }
+    }
+
+    // Notificar un nuevo ACH
+    function submitACH() {
+      const ref = document.getElementById('ach-ref').value;
+      const amount = document.getElementById('ach-amount').value;
+      const bank = document.getElementById('ach-bank').value;
+
+      if (!ref || !amount || !bank) {
+        alert("Complete todos los campos de la transferencia para notificar el pago.");
+        return;
+      }
+
+      document.getElementById('loader').classList.remove('hidden');
+            
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('ach-success-modal').classList.remove('hidden');
+        document.getElementById('ach-transit-badge').classList.remove('hidden');
+                
+        // Agregar fila al historial de ACH
+        const history = document.getElementById('ach-history');
+        const row = `
+          <tr class="border-b last:border-0 hover:bg-gray-50 transition">
+            <td class="py-4 text-gray-400 font-medium italic text-[11px]">En revisión ahora</td>
+            <td class="py-4 font-bold text-gray-700">${ref}</td>
+            <td class="py-4 text-center font-bold text-gray-800">$${parseFloat(amount).toFixed(2)}</td>
+            <td class="py-4 text-right">
+              <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase">Validando</span>
+            </td>
+          </tr>
+        `;
+        history.insertAdjacentHTML('afterbegin', row);
+
+        // Record transaction as pending ACH (won't credit balance until confirmed)
+        recordTx('ACH Alert', `Ref ${ref}`, parseFloat(amount));
+
+        // Limpiar campos
+        document.getElementById('ach-ref').value = "";
+        document.getElementById('ach-amount').value = "";
+        document.getElementById('ach-bank').value = "";
+      }, 800);
+    }
+
+    function closeACHModal() {
+      document.getElementById('ach-success-modal').classList.add('hidden');
+      showSection('cashin');
+    }
+
+    function resetFlow() {
+      document.getElementById('client-phone').value = "";
+      document.getElementById('cashin-amount').value = "";
+      nextStep(1);
+    }
+
+    // wire payments for services (pay from sandbox balance)
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-id]');
+      if(!btn) return;
+      const id = btn.getAttribute('data-id');
+      const svc = services.find(s=>s.id===id);
+      if(!svc) return;
+      if(state.balance < svc.price){ alert('Saldo insuficiente. Recarga primero.'); return; }
+      if(!confirm(`Confirmar pago de ${svc.name} por ${fmt(svc.price)}?`)) return;
+      state.balance = Number((state.balance - svc.price).toFixed(2));
+      const gain = Number((svc.price * svc.feePct).toFixed(2));
+      state.gain = Number((state.gain + gain).toFixed(2));
+      saveState(state);
+      recordTx('Pago', svc.name, svc.price);
+      recordTx('Ganancia', `Comisión ${svc.name}`, gain);
+      alert('Pago procesado (sandbox).');
+    });
+
+    // initial render
+    render();
+
+    // Agent info storage (simple profile persisted separate from sandbox state)
+    const AGENT_INFO_KEY = 'pp_agent_info_v1';
+    function loadAgentInfo(){ try { return JSON.parse(localStorage.getItem(AGENT_INFO_KEY)) || { name: 'Nombre Agente', id: '00000000', balance: state.balance }; } catch(e){ return { name:'Nombre Agente', id:'00000000', balance: state.balance }; } }
+    function saveAgentInfo(info){ try { localStorage.setItem(AGENT_INFO_KEY, JSON.stringify(info)); } catch(e){} }
+
+    // create agent info modal (hidden until needed)
+    (function createAgentModal(){
+      if (document.getElementById('agent-info-modal')) return;
+      const modal = document.createElement('div');
+      modal.id = 'agent-info-modal';
+      modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
+      modal.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
+          <h3 class="text-lg font-bold mb-2">Datos del Agente</h3>
+          <div class="space-y-2 mb-4">
+            <label class="muted">Nombre completo</label>
+            <input id="agent-name" class="w-full px-3 py-2 border rounded" />
+            <label class="muted">Cédula</label>
+            <input id="agent-id" class="w-full px-3 py-2 border rounded" />
+            <label class="muted">Balance actual</label>
+            <input id="agent-balance" class="w-full px-3 py-2 border rounded" />
+          </div>
+          <div class="flex justify-end gap-3">
+            <button id="agent-cancel" class="btn secondary">Cerrar</button>
+            <button id="agent-save" class="btn">Guardar</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modal);
+
+      // wiring
+      modal.querySelector('#agent-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); });
+      modal.querySelector('#agent-save').addEventListener('click', ()=>{
+        const info = { name: document.getElementById('agent-name').value || 'Nombre Agente', id: document.getElementById('agent-id').value || '00000000', balance: Number((document.getElementById('agent-balance').value||state.balance)) };
+        saveAgentInfo(info);
+        // reflect to UI and state
+        try { state.balance = Number(info.balance); saveState(state); render(); } catch(e){}
+        modal.classList.add('hidden');
+      });
+    })();
+
+    // show an account menu when clicking the store icon (accessible)
+      const icon = document.getElementById('storeIcon');
+      const modal = document.getElementById('agent-info-modal');
+      if (!icon) return;
+
+      // create menu container
+      const menu = document.createElement('div');
+      menu.className = 'absolute right-4 top-16 bg-white rounded-lg shadow-lg border z-50 hidden';
+      menu.setAttribute('role','menu');
+      menu.setAttribute('aria-hidden','true');
+      menu.style.minWidth = '200px';
+      menu.innerHTML = `
+        <ul class="divide-y">
+          <li><button id="menu-account" class="w-full text-left px-4 py-3 hover:bg-gray-50">Mi cuenta</button></li>
+          <li><button id="menu-setup" class="w-full text-left px-4 py-3 hover:bg-gray-50">Configuración</button></li>
+          <li><button id="menu-logout" class="w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50">Cerrar sesión</button></li>
+        </ul>`;
+      document.body.appendChild(menu);
+
+      function openMenu(){
+        // position the menu near the icon
+        const rect = icon.getBoundingClientRect();
+        menu.style.left = Math.min(window.innerWidth - 220, Math.round(rect.right - 200)) + 'px';
+        menu.style.top = Math.round(rect.bottom + 8) + 'px';
+        menu.classList.remove('hidden');
+        menu.setAttribute('aria-hidden','false');
+        // focus first item for keyboard users
+        const btn = menu.querySelector('button'); if(btn) btn.focus();
+      }
+
+      function closeMenu(){ menu.classList.add('hidden'); menu.setAttribute('aria-hidden','true'); }
+
+      icon.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        if (menu.classList.contains('hidden')) {
+          // update account label if available
+          const info = loadAgentInfo ? loadAgentInfo() : { name: 'Agente' };
+          // ensure menu exists and open
+          openMenu();
+        } else { closeMenu(); }
+      });
+
+      // Menu actions
+      document.addEventListener('click', (ev)=>{ if (!menu.contains(ev.target) && ev.target !== icon) closeMenu(); });
+      window.addEventListener('resize', ()=>{ if (!menu.classList.contains('hidden')) closeMenu(); });
+
+      // Wiring menu buttons (delegated after appended)
+      menu.addEventListener('click', (ev)=>{
+        const t = ev.target;
+        if (!t) return;
+        if (t.id === 'menu-account'){
+          closeMenu();
+          try {
+            const info = loadAgentInfo();
+            document.getElementById('agent-name').value = info.name || 'Nombre Agente';
+            document.getElementById('agent-id').value = info.id || '00000000';
+            document.getElementById('agent-balance').value = info.balance !== undefined ? info.balance : state.balance;
+            modal && modal.classList.remove('hidden');
+          } catch(e){ console.warn('open account failed', e); }
+        } else if (t.id === 'menu-setup'){
+          closeMenu();
+          location.href = '../setup.html';
+        } else if (t.id === 'menu-logout'){
+          closeMenu();
+          if (!confirm('Cerrar sesión del agente y limpiar datos locales?')) return;
+          try { localStorage.removeItem('pp_agent_info_v1'); localStorage.removeItem('pp_agent_sandbox_v1'); localStorage.removeItem('pp_paid_services_v1'); } catch(e){}
+          // redirect to setup so user can recreate account
+          location.href = '../setup.html';
+        }
+      });
+
+      // keyboard support: Esc to close
+      document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') closeMenu(); });
+    })();
+  </script>
 
   <script>
     // Ensure the demo container has top padding equal to nav height when nav is fixed (mobile)
@@ -1060,7 +1091,7 @@
   <script>
     // Ensure the phone input is visible when focused on mobile: scroll into view then offset a bit
     (function(){
-  const inputs = ['cashin-amount','ach-ref','ach-amount'];
+      const inputs = ['client-phone','cashin-amount','ach-ref','ach-amount'];
 
       // Baseline viewport height used to detect keyboard appearance
       let baselineVH = window.innerHeight;
