@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Retirar Fondos — Punto Pago</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../auth.js"></script>
+  <style>
+    body { background: #f3f4f6; font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
+    .card-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .nav-header { padding-top: calc(env(safe-area-inset-top, 0px) + 1rem); }
+    .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="min-h-screen">
+  
+  <nav class="bg-[#0047bb] text-white shadow-md sticky top-0 z-40 nav-header pb-4 px-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="recharge.html" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="font-extrabold text-lg">Retiro de fondos</h1>
+      </div>
+      <!-- Right: session (optional) -->
+      <div class="hidden sm:block text-xs text-white/80">
+        <span data-pp-session></span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="card-container pb-12">
+    <!-- Calculator / Balance Card -->
+    <div class="glass-panel rounded-3xl shadow-sm border border-gray-100 p-6 mb-6 mt-4">
+      <div class="text-center mb-6">
+        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Fondos Disponibles</div>
+        <div class="text-4xl font-black text-gray-900 tracking-tight" id="total-balance">$1,250.45</div>
+        <div class="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold">
+          <i class="fas fa-arrow-trend-up"></i>
+          <span>Ganancias por comisiones (Mes): <strong id="profit-calc">$42.80</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bank Account Section -->
+    <div class="glass-panel rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+      <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
+        <h2 class="text-lg font-bold">Cuenta de destino</h2>
+        <i class="fas fa-building-columns text-gray-300 text-xl"></i>
+      </div>
+      
+      <div class="p-6">
+        <!-- State: No bank account linked -->
+        <div id="no-bank-state" class="text-center py-4">
+          <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="fas fa-plus"></i>
+          </div>
+          <p class="text-gray-500 text-sm mb-4">Agrega una cuenta bancaria para poder retirar tus ganancias y saldo a favor.</p>
+          <button type="button" id="btn-add-bank" class="pp-btn w-full justify-center shadow-md bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors">
+            Registrar cuenta bancaria
+          </button>
+        </div>
+
+        <!-- State: Bank account exists -->
+        <div id="has-bank-state" class="hidden">
+          <div class="flex items-center p-4 border border-blue-100 bg-blue-50/50 rounded-2xl">
+            <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 text-xl mr-4 shrink-0 border border-gray-100">
+              <i class="fas fa-piggy-bank"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="font-bold text-gray-900 truncate" id="bank-name-display">Banco General</div>
+              <div class="text-sm text-gray-500 truncate mt-0.5"><span id="bank-type-display">Ahorros</span> •••• <span id="bank-number-display">1234</span></div>
+            </div>
+            <button id="btn-edit-bank" class="text-blue-600 hover:text-blue-800 p-2 font-bold text-sm">Cambiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cashout Action -->
+    <div id="cashout-action-section" class="glass-panel rounded-3xl shadow-sm border border-gray-100 p-6 hidden opacity-0 transition-opacity duration-500">
+      <label class="block text-sm font-bold text-gray-700 mb-2">Monto a retirar</label>
+      <div class="relative mb-6">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-xl">$</span>
+        <input type="number" id="cashout-amount" class="w-full pl-9 pr-4 py-4 rounded-xl border-2 border-gray-200 focus:border-[#0047bb] focus:ring-4 focus:ring-blue-100 font-black text-2xl outline-none transition-all" placeholder="0.00" step="0.01">
+        <button id="btn-max-amount" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-200">MAX</button>
+      </div>
+
+      <button id="btn-submit-cashout" class="w-full text-center py-4 bg-[#0047bb] text-white font-extrabold rounded-xl shadow-lg opacity-50 cursor-not-allowed transition-all" disabled>
+        Transferir fondos a mi cuenta
+      </button>
+      <p class="text-xs text-center text-gray-400 mt-3 font-medium"><i class="fas fa-info-circle mr-1"></i> Retiros ACH toman de 24 a 48 hs hábiles.</p>
+    </div>
+
+  </main>
+
+  <!-- ADD BANK MODAL (Overlay) -->
+  <div id="bank-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" id="bank-modal-bg"></div>
+    <div class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[90vh]" id="bank-modal-sheet">
+      <div class="flex items-center justify-between p-6 border-b border-gray-100">
+        <h3 class="text-xl font-extrabold">Datos Bancarios</h3>
+        <button type="button" id="close-bank-modal" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Banco de destino</label>
+          <select id="input-bank-name" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 bg-white font-medium">
+            <option value="">Seleccione banco...</option>
+            <option value="Banco General">Banco General</option>
+            <option value="Banistmo">Banistmo</option>
+            <option value="BAC Credomatic">BAC Credomatic</option>
+            <option value="Global Bank">Global Bank</option>
+            <option value="Caja de Ahorros">Caja de Ahorros</option>
+            <option value="Banesco">Banesco</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Tipo de cuenta</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="relative flex items-center justify-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(input:checked)]:border-blue-500 [&:has(input:checked)]:bg-blue-50/50">
+              <input type="radio" name="bank-type" value="Ahorros" class="sr-only" checked>
+              <span class="font-semibold text-gray-700">Ahorros</span>
+            </label>
+            <label class="relative flex items-center justify-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(input:checked)]:border-blue-500 [&:has(input:checked)]:bg-blue-50/50">
+              <input type="radio" name="bank-type" value="Corriente" class="sr-only" >
+              <span class="font-semibold text-gray-700">Corriente</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Número de cuenta</label>
+          <input type="number" id="input-bank-number" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 font-bold tracking-widest outline-none" placeholder="0000000000" inputmode="numeric">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Titular de la cuenta</label>
+          <input type="text" id="input-bank-owner" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 font-medium outline-none" placeholder="Nombre completo">
+        </div>
+
+        <button type="button" id="save-bank-btn" class="w-full mt-4 py-4 bg-gray-900 text-white font-bold rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors" disabled>
+          Guardar cuenta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Initialize basic state and display data
+      const config = {
+        totalBalance: 1250.45,
+        profitBalance: 42.80
+      };
+      
+      const els = {
+        noBank: document.getElementById('no-bank-state'),
+        hasBank: document.getElementById('has-bank-state'),
+        bankNameDisp: document.getElementById('bank-name-display'),
+        bankTypeDisp: document.getElementById('bank-type-display'),
+        bankNumDisp: document.getElementById('bank-number-display'),
+        cashoutSection: document.getElementById('cashout-action-section'),
+        amountInput: document.getElementById('cashout-amount'),
+        maxBtn: document.getElementById('btn-max-amount'),
+        submitBtn: document.getElementById('btn-submit-cashout')
+      };
+
+      let savedBank = null;
+      try {
+        savedBank = JSON.parse(localStorage.getItem('pp_agent_bank_v1'));
+      } catch(e){}
+
+      function renderState() {
+        if (savedBank && savedBank.bankName) {
+          els.noBank.classList.add('hidden');
+          els.hasBank.classList.remove('hidden');
+          els.cashoutSection.classList.remove('hidden');
+          setTimeout(() => els.cashoutSection.classList.remove('opacity-0'), 50);
+
+          els.bankNameDisp.textContent = savedBank.bankName;
+          els.bankTypeDisp.textContent = savedBank.type;
+          els.bankNumDisp.textContent = savedBank.number.slice(-4);
+        } else {
+          els.noBank.classList.remove('hidden');
+          els.hasBank.classList.add('hidden');
+          els.cashoutSection.classList.add('hidden');
+          els.cashoutSection.classList.add('opacity-0');
+        }
+        validateAmount();
+      }
+
+      function validateAmount() {
+        if (!savedBank) return;
+        const val = parseFloat(els.amountInput.value) || 0;
+        if (val > 0 && val <= config.totalBalance) {
+          els.submitBtn.disabled = false;
+          els.submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+          els.submitBtn.classList.add('hover:bg-blue-800', 'hover:shadow-xl');
+        } else {
+          els.submitBtn.disabled = true;
+          els.submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          els.submitBtn.classList.remove('hover:bg-blue-800', 'hover:shadow-xl');
+        }
+      }
+
+      els.amountInput.addEventListener('input', validateAmount);
+      els.maxBtn.addEventListener('click', () => {
+        els.amountInput.value = config.totalBalance.toFixed(2);
+        validateAmount();
+      });
+
+      els.submitBtn.addEventListener('click', () => {
+        const amt = parseFloat(els.amountInput.value);
+        const btn = els.submitBtn;
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Procesando retiro...`;
+        
+        // fake api call
+        setTimeout(() => {
+          btn.classList.replace('bg-[#0047bb]', 'bg-emerald-600');
+          btn.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ¡Retiro completado!`;
+          // deduct offline for visual feedback
+          document.getElementById('total-balance').textContent = '$' + (config.totalBalance - amt).toFixed(2);
+          
+          setTimeout(() => {
+            alert(`Felicidades, se enviaron $${amt.toFixed(2)} a tu cuenta de ${savedBank.bankName} terminada en ${savedBank.number.slice(-4)}.\nTiempo estimado ACH: 1 a 2 días hábiles.`);
+            window.location.href = 'recharge.html';
+          }, 1500);
+        }, 2000);
+      });
+
+      // MODAL LOGIC
+      const m = document.getElementById('bank-modal');
+      const mBg = document.getElementById('bank-modal-bg');
+      const mSheet = document.getElementById('bank-modal-sheet');
+
+      function openModal() {
+        m.classList.remove('hidden');
+        // read back values if exist
+        if (savedBank) {
+          document.getElementById('input-bank-name').value = savedBank.bankName || '';
+          document.getElementById('input-bank-number').value = savedBank.number || '';
+          document.getElementById('input-bank-owner').value = savedBank.owner || '';
+          const radios = document.getElementsByName('bank-type');
+          for(let r of radios) { if(r.value === savedBank.type) r.checked = true; }
+        }
+        validateModal();
+        // start animation
+        requestAnimationFrame(() => mSheet.classList.remove('translate-y-full'));
+      }
+      
+      function closeModal() {
+        mSheet.classList.add('translate-y-full');
+        setTimeout(() => m.classList.add('hidden'), 300);
+      }
+
+      document.getElementById('btn-add-bank').addEventListener('click', openModal);
+      document.getElementById('btn-edit-bank').addEventListener('click', openModal);
+      document.getElementById('close-bank-modal').addEventListener('click', closeModal);
+      mBg.addEventListener('click', closeModal);
+
+      // Validate inputs inside modal
+      const mInputs = ['input-bank-name', 'input-bank-number', 'input-bank-owner'];
+      const mSaveBtn = document.getElementById('save-bank-btn');
+      
+      function validateModal() {
+        const name = document.getElementById('input-bank-name').value;
+        const num = document.getElementById('input-bank-number').value;
+        const own = document.getElementById('input-bank-owner').value;
+        if (name && num.length > 4 && own.length > 3) {
+          mSaveBtn.disabled = false;
+        } else {
+          mSaveBtn.disabled = true;
+        }
+      }
+      
+      mInputs.forEach(id => document.getElementById(id).addEventListener('input', validateModal));
+      document.getElementById('input-bank-name').addEventListener('change', validateModal);
+
+      mSaveBtn.addEventListener('click', () => {
+        let type = 'Ahorros';
+        const radios = document.getElementsByName('bank-type');
+        for(let r of radios){ if(r.checked) type = r.value; }
+        
+        savedBank = {
+          bankName: document.getElementById('input-bank-name').value,
+          number: document.getElementById('input-bank-number').value,
+          owner: document.getElementById('input-bank-owner').value,
+          type: type
+        };
+        localStorage.setItem('pp_agent_bank_v1', JSON.stringify(savedBank));
+        
+        mSaveBtn.innerHTML = `<i class="fas fa-check"></i> Guardado`;
+        mSaveBtn.classList.replace('bg-gray-900', 'bg-emerald-600');
+        
+        setTimeout(() => {
+          mSaveBtn.innerHTML = `Guardar cuenta`;
+          mSaveBtn.classList.replace('bg-emerald-600', 'bg-gray-900');
+          closeModal();
+          renderState();
+        }, 600);
+      });
+
+      renderState();
+    })();
+  </script>
+</body>
+</html>
