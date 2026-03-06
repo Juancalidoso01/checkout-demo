@@ -272,6 +272,7 @@
           const params = new URLSearchParams(location.search);
           const flow = params.get('flow');
           if (flow !== 'agent' && flow !== 'kiosk') return false;
+          const purpose = (params.get('purpose') || '').toLowerCase();
           const STORAGE_KEY = 'pp_agent_sandbox_v1';
           const raw = localStorage.getItem(STORAGE_KEY);
           // Ensure required fields exist in stored state
@@ -299,13 +300,15 @@
             state.txs.push({ when: Date.now(), type: 'Cobro', desc: `Cobro servicio (digital) cliente:${clientId||''} svc:${svc||''} via ${method} ID:${txId||''}`, amount: amt });
           } else {
             // CASE: Either a cash payment for a service, or a recarga iniciada por el agente (flow agent/kiosk)
-            // In both cases we credit the full amount to the agent balance. For agent/kiosk we also credit the cash pocket.
+            // In both cases we credit the full amount to the agent balance.
+            // For agent/kiosk we also credit the cash pocket, except when this is a DIGITAL TOP-UP (purpose=topup).
             state.balance = Number((Number(state.balance) + amt).toFixed(2));
-            if (flow === 'agent' || flow === 'kiosk') {
+            const isDigitalTopup = purpose === 'topup' || purpose === 'digital_topup' || purpose === 'recarga_digital';
+            if ((flow === 'agent' || flow === 'kiosk') && !isDigitalTopup) {
               state.cash = Number((Number(state.cash) + amt).toFixed(2));
             }
             // Choose a transaction type that helps auditing: 'Recarga' for agent-originated flows, 'Cobro' for service payments
-            const txType = isServicePayment ? 'Cobro' : 'Recarga';
+            const txType = isServicePayment ? 'Cobro' : (isDigitalTopup ? 'Recarga digital' : 'Recarga');
             state.txs.push({ when: Date.now(), type: txType, desc: `${txType} via ${method || 'efectivo'} (checkout) ID:${txId||''}`, amount: amt });
           }
 
