@@ -391,6 +391,32 @@
     }
 
   })();
+
+  // Forward swipes to parent window (for mobile navigation in Agent portal)
+  (function initIframeSwipe() {
+    let startX = 0, startY = 0;
+    const threshold = 60;
+    
+    document.addEventListener('touchstart', function(e) {
+      if(e.touches.length > 1) return;
+      startX = e.changedTouches[0].screenX;
+      startY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      const endX = e.changedTouches[0].screenX;
+      const endY = e.changedTouches[0].screenY;
+      const dx = endX - startX;
+      const dy = endY - startY;
+      
+      // Check if movement is mostly horizontal
+      if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'iframeSwipe', dx: dx, dy: dy }, '*');
+        }
+      }
+    }, { passive: true });
+  })();
   </script>
 </body>
 </html>

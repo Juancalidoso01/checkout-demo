@@ -806,9 +806,34 @@
       });
     }
 
+    // Toast para notificar al usuario
+    let swipeToastTimer;
+    function showSwipeToast(label, iconText) {
+      let toast = document.getElementById('swipe-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'swipe-toast';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<span class="mr-2">${iconText}</span> ${label}`;
+      toast.classList.add('visible');
+      clearTimeout(swipeToastTimer);
+      swipeToastTimer = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 1500);
+    }
+
     // Función para cambiar entre secciones
-    function showSection(section) {
+    function showSection(section, direction = null) {
       const sections = ['factura', 'history', 'pagos', 'cashin', 'fondear'];
+      const sectionLabels = {
+        'factura': { label: 'Factura', icon: '📝' },
+        'history': { label: 'Historial', icon: '🕒' },
+        'pagos': { label: 'Pagos', icon: '💡' },
+        'cashin': { label: 'Recarga', icon: '⚡' },
+        'fondear': { label: 'Fondear', icon: '🏦' }
+      };
+
       sections.forEach(s => {
         const element = document.getElementById(`section-${s}`);
         const tab = document.getElementById(`tab-${s}`);
@@ -817,9 +842,15 @@
           if (element) {
             element.classList.remove('hidden');
             // Animate it
-            element.classList.remove('animate-section-slide');
+            element.classList.remove('animate-section-slide', 'animate-slide-left', 'animate-slide-right');
             void element.offsetWidth; // trigger reflow to reset animation
-            element.classList.add('animate-section-slide');
+            if (direction === 'left') {
+              element.classList.add('animate-slide-left');
+            } else if (direction === 'right') {
+              element.classList.add('animate-slide-right');
+            } else {
+              element.classList.add('animate-section-slide');
+            }
           }
           if (tab) {
             tab.classList.add('tab-active');
@@ -842,6 +873,10 @@
           }
         }
       });
+
+      if (direction) {
+        showSwipeToast(sectionLabels[section].label, sectionLabels[section].icon);
+      }
 
       // Mobile banner/carousel: ensure the active tab is the one shown
       try {
@@ -1109,41 +1144,42 @@
   m.className = 'fixed inset-0 hidden z-60';
       m.innerHTML = `
         <div class="pp-comercios-backdrop" data-close-comercios></div>
-        <aside class="pp-comercios-sheet bg-white shadow-2xl">
-          <div class="px-5 py-5 border-b flex items-start justify-between gap-3 pp-comercios-head">
-            <div class="min-w-0">
-              <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Comercios</div>
-              <div class="text-xl font-extrabold pp-type">Accesos rápidos</div>
-              <p class="text-sm text-gray-500 mt-1">Administra tus accesos y tu equipo desde aquí.</p>
+        <aside class="pp-comercios-sheet shadow-2xl">
+          <div class="px-6 py-8 flex items-start justify-between gap-3 pp-comercios-head bg-white">
+            <div class="min-w-0 pt-2">
+              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight">Menú</div>
+              <p class="text-sm text-gray-500 mt-2 font-medium">Personaliza tu terminal y equipo</p>
             </div>
-            <button type="button" id="comercios-close" class="pp-btn pp-btn-secondary">Cerrar</button>
+            <button type="button" id="comercios-close" class="rounded-full w-11 h-11 flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
+               <i class="fas fa-times text-lg"></i>
+            </button>
           </div>
-          <div class="p-5 space-y-4 pp-comercios-body">
-            <div class="pp-comercios-actions">
-              <a href="../setup.html" class="pp-comercios-action">
-                <span class="icon"><i class="fas fa-sliders-h"></i></span>
-                <span>
-                  <strong>Setup</strong>
-                  <small>Configuración general del comercio</small>
-                </span>
+          <div class="p-6 space-y-6 pp-comercios-body">
+            <div class="grid grid-cols-2 gap-4">
+              <a href="../setup.html" class="pp-comercios-card">
+                <div class="icon-wrap bg-blue-50 text-blue-600">
+                  <i class="fas fa-cog"></i>
+                </div>
+                <strong>Setup</strong>
+                <span>Ajustes del comercio</span>
               </a>
-              <button type="button" id="comercios-toggle-team" class="pp-comercios-action is-primary">
-                <span class="icon"><i class="fas fa-users"></i></span>
-                <span>
-                  <strong>Mi equipo</strong>
-                  <small>Usuarios, roles y permisos</small>
-                </span>
+              <button type="button" id="comercios-toggle-team" class="pp-comercios-card">
+                <div class="icon-wrap bg-purple-50 text-purple-600">
+                  <i class="fas fa-user-friends"></i>
+                </div>
+                <strong>Mi equipo</strong>
+                <span>Accesos y roles</span>
               </button>
             </div>
 
-            <div id="comercios-team-wrap" class="hidden">
-              <div class="pp-card -soft overflow-hidden">
-                <div class="pp-card-head">
-                  <h3 class="text-lg font-extrabold pp-type">Mi equipo</h3>
-                  <p class="text-gray-500 pp-type">Usuarios, roles y permisos del agente.</p>
+            <div id="comercios-team-wrap" class="hidden animate-section-slide">
+              <div class="pp-card -soft overflow-hidden !border-none !shadow-xl">
+                <div class="pp-card-head bg-white !pb-4">
+                  <h3 class="text-xl font-extrabold pp-type">Usuarios</h2>
+                  <p class="text-gray-500 text-sm mt-1">Gestiona accesos al portal</p>
                 </div>
                 <div class="pp-card-body p-0">
-                  <iframe src="team.html?embed=1" title="Mi equipo" class="pp-embed-frame"></iframe>
+                  <iframe src="team.html?embed=1" title="Mi equipo" class="pp-embed-frame" style="min-height: 480px;"></iframe>
                 </div>
               </div>
             </div>
@@ -1342,13 +1378,34 @@
           
           if (dx < 0) {
             // Swiped left => Next tab (wrap around if at the end)
-            showSection(sections[(activeIndex + 1) % sections.length]);
+            showSection(sections[(activeIndex + 1) % sections.length], 'right');
           } else {
             // Swiped right => Prev tab (wrap around to the end if at the start)
-            showSection(sections[(activeIndex - 1 + sections.length) % sections.length]);
+            showSection(sections[(activeIndex - 1 + sections.length) % sections.length], 'left');
           }
         }
       }, { passive: true });
+
+      // Listen for swipe messages from iframes (like Factura)
+      window.addEventListener('message', function(e) {
+        if(e.data && e.data.type === 'iframeSwipe') {
+          const dx = e.data.dx;
+          const dy = e.data.dy;
+          if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            const sections = ['factura', 'history', 'pagos', 'cashin', 'fondear'];
+            const activeIndex = sections.findIndex(s => {
+              const el = document.getElementById('section-' + s);
+              return el && !el.classList.contains('hidden');
+            });
+            if (activeIndex === -1) return;
+            if (dx < 0) {
+              showSection(sections[(activeIndex + 1) % sections.length], 'right');
+            } else {
+              showSection(sections[(activeIndex - 1 + sections.length) % sections.length], 'left');
+            }
+          }
+        }
+      });
     })();
   </script>
 </body>
