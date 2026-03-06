@@ -121,8 +121,8 @@
         </button>
 
         <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="pp-top-tab tab-active" aria-controls="section-cashin">
-          <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
-          <span class="title">Cash In</span>
+          <span class="icon"><i class="fas fa-credit-card"></i></span>
+          <span class="title">Recarga digital</span>
         </button>
 
         <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="pp-top-tab tab-inactive" aria-controls="section-fondear">
@@ -136,12 +136,12 @@
         </button>
       </section>
 
-    <!-- SECCIÓN: CASH IN (Flujo de Depósito) -->
+    <!-- SECCIÓN: RECARGA DIGITAL (Fondeo por métodos digitales) -->
     <div id="section-cashin" class="section-fade">
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
-          <h2 class="text-2xl font-bold pp-type">Recarga tu agente</h2>
-          <p class="text-gray-500 pp-type">Carga balance a tu plataforma</p>
+          <h2 class="text-2xl font-bold pp-type">Recarga digital</h2>
+          <p class="text-gray-500 pp-type">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
         </div>
 
       <!-- Toast de confirmación desde Checkout -->
@@ -181,24 +181,23 @@
           <!-- Paso 2: Confirmación -->
           <div id="step-2" class="hidden space-y-6">
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen del Depósito</h3>
+              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen de recarga digital</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600">Cuenta de Destino:</span>
+                <span class="text-gray-600">Cuenta / Celular:</span>
                 <span class="font-bold text-gray-800" id="summary-phone">6000-0000</span>
               </div>
-              <div class="flex justify-between mb-4">
-                <span class="text-gray-600">Titular estimado:</span>
-                <span class="font-bold text-gray-800 uppercase">Juan Pérez</span>
+              <div class="text-sm text-gray-600 mb-4">
+                Serás redirigido al checkout para completar el pago con métodos digitales.
               </div>
               <div class="flex justify-between border-t border-blue-200 pt-4 items-center">
-                <span class="font-bold text-lg text-gray-800">Total a recibir en EFECTIVO:</span>
+                <span class="font-bold text-lg text-gray-800">Monto a recargar:</span>
                 <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
               </div>
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
             </div>
             <div class="flex space-x-4">
               <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary">Corregir</button>
-              <button type="button" onclick="event.preventDefault(); processCashIn()" class="w-2/3 pp-btn pp-btn-primary">Confirmar y procesar</button>
+              <button type="button" id="cashin-go-checkout" class="w-2/3 pp-btn pp-btn-primary">Ir al checkout</button>
             </div>
           </div>
 
@@ -818,7 +817,7 @@
         });
       })();
 
-      // Cash In flow -----------------------------------------------------------
+  // Recarga digital flow --------------------------------------------------
       function nextStep(step){
         const s1 = document.getElementById('step-1');
         const s2 = document.getElementById('step-2');
@@ -832,14 +831,14 @@
           const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
           if (!phone){ alert('Ingresa el número de celular.'); nextStep(1); return; }
           if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); nextStep(1); return; }
-          const f = calculateFees(amt);
-          const total = Number((amt - f.commission - f.ibms).toFixed(2));
+          // Digital top-up: fees (if any) are handled by checkout/provider.
+          const total = Number(amt.toFixed(2));
           const sp = document.getElementById('summary-phone');
           const st = document.getElementById('summary-total');
           const sf = document.getElementById('summary-fees');
           if (sp) sp.textContent = phone;
           if (st) st.textContent = fmt(total);
-          if (sf) sf.textContent = `Comisión: ${fmt(f.commission)} · IBMS: ${fmt(f.ibms)} · Monto: ${fmt(amt)}`;
+          if (sf) sf.textContent = `Completa el pago en checkout con tarjeta, Yappy u otros métodos.`;
         }
       }
 
@@ -850,22 +849,23 @@
         nextStep(1);
       }
 
-      function processCashIn(){
+      function goToDigitalCheckout(){
         const phone = (document.getElementById('client-phone')?.value || '').trim();
         const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
         if (!phone){ alert('Ingresa el número de celular.'); return; }
         if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); return; }
-        const f = calculateFees(amt);
-        const net = Number((amt - f.commission - f.ibms).toFixed(2));
-        // In this demo, Cash In means the agent receives cash and balance increases
-        state.balance = Number((Number(state.balance) + net).toFixed(2));
-        state.cash = Number((Number(state.cash) + amt).toFixed(2));
-        state.txs.push({ when: Date.now(), type: 'Cash In', desc: `Cash In desde ${phone}`, amount: net, ref: `CIN-${Math.floor(Math.random()*900000+100000)}` });
-        saveState(state);
-        render();
-        nextStep(3);
-        // show receipt (basic)
-        try { openReceiptModal({ amount: net, clientId: phone, svc: 'cashin', svcName: 'Cash In', clientName: '' }); } catch(e){}
+        try {
+          const url = new URL('../checkout.html', location.href);
+          url.searchParams.set('amount', String(amt.toFixed(2)));
+          url.searchParams.set('flow', 'agent');
+          // optional: keep context for future evolutions
+          url.searchParams.set('phone', phone);
+          url.searchParams.set('purpose', 'topup');
+          location.href = url.href;
+        } catch(e){
+          console.warn(e);
+          alert('No se pudo abrir el checkout.');
+        }
       }
 
       // ACH flow (simple demo) ------------------------------------------------
@@ -897,6 +897,7 @@
         const btn = document.getElementById('cashin-continue');
         const phoneEl = document.getElementById('client-phone');
         const amtEl = document.getElementById('cashin-amount');
+        const goBtn = document.getElementById('cashin-go-checkout');
         if (!btn || !phoneEl || !amtEl) return;
 
         function isValid(){
@@ -928,6 +929,13 @@
 
         // initial state
         sync();
+
+        if (goBtn) {
+          goBtn.addEventListener('click', (e)=>{
+            e.preventDefault();
+            goToDigitalCheckout();
+          });
+        }
       })();
 
       // restore previously filled inputs and results
