@@ -106,6 +106,8 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
     padding:0;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+    pointer-events:auto;
   }
   .pp-top-tabs::-webkit-scrollbar{display:none}
   .pp-top-tabs{scrollbar-width:none}
@@ -119,6 +121,8 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
     scroll-snap-align:start;
     scroll-snap-stop:always;
     margin:0;
+    touch-action:pan-x;
+    pointer-events:auto;
   }
   /* Keep the "card" look without showing multiple slides at once */
   .pp-top-tab{box-sizing:border-box}
