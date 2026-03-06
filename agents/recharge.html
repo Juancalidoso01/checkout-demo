@@ -108,23 +108,23 @@
   <main class="pp-page flex-grow">
     <div class="pp-shell">
       <section class="pp-top-tabs mb-6" aria-label="Módulos">
-  <button type="button" onclick="showSection('factura', { syncTabScroll: true, syncContentScroll: true })" id="tab-factura" class="pp-top-tab tab-inactive" aria-controls="section-factura" aria-label="Enviar comprobante">
+  <button type="button" onclick="showSection('factura')" id="tab-factura" class="pp-top-tab tab-inactive" aria-controls="section-factura" aria-label="Enviar comprobante">
           <span class="icon"><i class="fas fa-receipt"></i></span>
           <span class="title">Factura</span>
         </button>
-  <button type="button" onclick="showSection('history', { syncTabScroll: true, syncContentScroll: true })" id="tab-history" class="pp-top-tab tab-inactive" aria-controls="section-history" aria-label="Histórico de transacciones">
+  <button type="button" onclick="showSection('history')" id="tab-history" class="pp-top-tab tab-inactive" aria-controls="section-history" aria-label="Histórico de transacciones">
           <span class="icon"><i class="fas fa-clock-rotate-left"></i></span>
           <span class="title">Histórico</span>
         </button>
-  <button type="button" onclick="showSection('pagos', { syncTabScroll: true, syncContentScroll: true })" id="tab-pagos" class="pp-top-tab tab-inactive" aria-controls="section-pagos">
+  <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="pp-top-tab tab-inactive" aria-controls="section-pagos">
           <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
           <span class="title">Pago de servicios</span>
         </button>
-  <button type="button" onclick="showSection('cashin', { syncTabScroll: true, syncContentScroll: true })" id="tab-cashin" class="pp-top-tab tab-active" aria-controls="section-cashin">
+  <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="pp-top-tab tab-active" aria-controls="section-cashin">
           <span class="icon"><i class="fas fa-credit-card"></i></span>
           <span class="title">Recarga digital</span>
         </button>
-  <button type="button" onclick="showSection('fondear', { syncTabScroll: true, syncContentScroll: true })" id="tab-fondear" class="pp-top-tab tab-inactive" aria-controls="section-fondear">
+  <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="pp-top-tab tab-inactive" aria-controls="section-fondear">
           <span class="icon"><i class="fas fa-university"></i></span>
           <span class="title">Notificar ACH</span>
         </button>
@@ -807,8 +807,7 @@
     }
 
     // Función para cambiar entre secciones
-    function showSection(section, options = {}) {
-      const { syncTabScroll = true, syncContentScroll = true } = options;
+    function showSection(section) {
       const sections = ['factura', 'history', 'pagos', 'cashin', 'fondear'];
       sections.forEach(s => {
         const element = document.getElementById(`section-${s}`);
@@ -841,7 +840,7 @@
       // Mobile banner/carousel: ensure the active tab is the one shown
       try {
         const activeTab = document.getElementById(`tab-${section}`);
-        if (syncTabScroll && activeTab && window.matchMedia && window.matchMedia('(max-width: 520px)').matches) {
+        if (activeTab && window.matchMedia && window.matchMedia('(max-width: 520px)').matches) {
           activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
       } catch(e) { /* ignore */ }
@@ -849,7 +848,7 @@
       // after toggling sections, ensure on mobile the selected section is visible
       try {
         const el = document.getElementById(`section-${section}`);
-        if (syncContentScroll && el && typeof el.scrollIntoView === 'function') {
+        if (el && typeof el.scrollIntoView === 'function') {
           // smooth scroll with nearest block to avoid overscrolling headers
           el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
         }
@@ -919,7 +918,7 @@
           if (!best || !best.id) return;
           const section = best.id.replace(/^tab-/, '');
           const isActive = best.classList.contains('tab-active');
-          if (!isActive) showSection(section, { syncTabScroll: false, syncContentScroll: false });
+          if (!isActive) showSection(section);
         }, 120);
       }, { passive: true });
 
