@@ -95,6 +95,27 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
 .pp-top-tab.-active{border-color:rgba(84,98,230,.35);box-shadow:0 18px 38px rgba(84,98,230,.14)}
 .pp-top-tab.-disabled{opacity:.55;cursor:not-allowed}
 
+/* Header brand (logo pill) helpers */
+.pp-brand-pill{height:44px;padding:0 14px;max-width:210px}
+.pp-brand-pill img{height:28px}
+
+/* Header brand (alt #3): inline logo on the blue header */
+.pp-brand-inline{display:inline-flex;align-items:center;justify-content:flex-start;min-width:0}
+.pp-brand-img{height:28px;width:auto;max-width:180px;object-fit:contain;display:block}
+
+@media (max-width: 520px){
+  .pp-brand-pill{height:40px;padding:0 12px;max-width:140px}
+  .pp-brand-pill img{height:24px}
+
+  .pp-brand-img{height:24px;max-width:140px}
+}
+
+@media (max-width: 360px){
+  .pp-brand-pill{max-width:124px}
+
+  .pp-brand-img{max-width:124px}
+}
+
 @media (max-width: 520px){
   /* Mobile: swipeable carousel (one card per view) */
   .pp-top-tabs{
