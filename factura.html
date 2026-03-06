@@ -12,9 +12,20 @@
   <style>
     body{background:#f3f4f6;font-family:var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);color:var(--pp-text,#171717)}
     .bg-punto-pago{background:#0047bb}
+    body.pp-embed nav{display:none !important}
+    body.pp-embed .pp-page{padding-top:0 !important}
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
+
+  <script>
+    (function(){
+      try{
+        const p = new URLSearchParams(location.search);
+        if (p.get('embed') === '1') document.body.classList.add('pp-embed');
+      }catch(e){}
+    })();
+  </script>
 
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
     <div class="mx-auto flex justify-between items-center w-full max-w-5xl px-4">
