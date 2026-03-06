@@ -65,12 +65,7 @@
         <label><input type="checkbox" id="demoMode" checked> Modo demo: aceptar cualquier dato</label>
       </div>
 
-        <!-- PuntoPago APP registration (demo control) -->
-        <div id="ppRegistration" class="pp-registration">
-          <div class="muted">Estado PuntoPago APP:</div>
-          <div id="ppStatus" class="muted">No registrado</div>
-          <button id="ppRegisterBtn" class="btn" type="button">Simular registro</button>
-        </div>
+        <!-- PuntoPago APP registration removed: all methods available, no restrictions -->
 
       <!-- entry selection removed per request -->
 
@@ -496,38 +491,7 @@
       // Inicialmente ocultar todo si no hay selección
       updateMethodUI();
 
-      // PuntoPago app registration simulation
-      const ppRegisterBtn = document.getElementById('ppRegisterBtn');
-      const ppStatus = document.getElementById('ppStatus');
-      let ppRegistered = false;
-      function updatePPStatus() {
-        ppStatus.textContent = ppRegistered ? 'Registrado' : 'No registrado';
-        ppStatus.style.color = ppRegistered ? 'var(--blue-600)' : 'var(--muted)';
-        // enable/disable paypal/gpay/apple radios
-        const disallowed = ['paypal','gpay','apple'];
-        disallowed.forEach(v => {
-          const r = document.querySelector(`input[name="payMethod"][value="${v}"]`);
-          if (r) {
-            r.disabled = !ppRegistered;
-            const label = r.closest('label');
-            if (label) label.style.opacity = r.disabled ? '0.55' : '1';
-          }
-        });
-        // if current selection is disabled, switch to a card option (visa fallback)
-        const sel = document.querySelector('input[name="payMethod"]:checked');
-        if (sel && sel.disabled) {
-          const cardRadio = document.querySelector('input[name="payMethod"][value="card"]');
-          if (cardRadio) cardRadio.checked = true;
-          updateMethodUI();
-        }
-      }
-
-      ppRegisterBtn.addEventListener('click', ()=>{
-        ppRegistered = !ppRegistered;
-        ppRegisterBtn.textContent = ppRegistered ? 'Simular cerrar sesión' : 'Simular registro';
-        updatePPStatus();
-      });
-      updatePPStatus();
+      // PuntoPago APP registration gate removed: all methods are always enabled
 
       // Validaciones básicas por método
       function validateCard() {
@@ -636,13 +600,7 @@
   // normalize card types
   if (method && method.startsWith('card')) method = 'card';
   console.debug('handleCheckoutClick: normalized method=', method);
-        // Prevent using certain methods unless registered in PuntoPago APP
-        if ((method === 'paypal' || method === 'gpay' || method === 'apple') && !ppRegistered) {
-          showMessage({ type: 'error', text: 'Para usar ' + (method === 'paypal' ? 'PayPal' : method === 'gpay' ? 'Google Pay' : 'Apple Pay') + ' debes estar registrado en la PuntoPago APP. Pulsa "Simular registro" para probar.' });
-          // focus the registration button for convenience
-          if (ppRegisterBtn) ppRegisterBtn.focus();
-          return;
-        }
+        // No registration restrictions: all methods available
 
         // Validaciones por método
         let validationError = null;
