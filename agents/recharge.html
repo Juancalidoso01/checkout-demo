@@ -132,25 +132,6 @@
         </button>
       </section>
 
-      <!-- Top KPIs (banking style) -->
-      <section class="pp-grid pp-grid.-summary mb-6" aria-label="Resumen">
-        <div class="pp-kpi pp-col-4">
-          <div class="label">Saldo disponible</div>
-          <div class="value" id="balance-kpi">$0.00</div>
-          <div class="hint">Disponible para transacciones</div>
-        </div>
-        <div class="pp-kpi pp-col-4">
-          <div class="label">Efectivo en caja</div>
-          <div class="value" id="cash-kpi">$0.00</div>
-          <div class="hint">Lo que tienes físicamente</div>
-        </div>
-        <div class="pp-kpi pp-col-4">
-          <div class="label">Ganancia neta hoy</div>
-          <div class="value" id="gain-kpi">$0.00</div>
-          <div class="hint">Comisiones del día</div>
-        </div>
-      </section>
-
     <!-- SECCIÓN: CASH IN (Flujo de Depósito) -->
     <div id="section-cashin" class="section-fade">
       <div class="pp-card -soft overflow-hidden">
@@ -731,17 +712,11 @@
 
     const $balanceDisplay = document.getElementById('balance-display');
     const $cashCount = document.getElementById('cash-count');
-  const $balanceKpi = document.getElementById('balance-kpi');
-  const $cashKpi = document.getElementById('cash-kpi');
-  const $gainKpi = document.getElementById('gain-kpi');
 
     // render state and UI
     function render(){
         if($balanceDisplay) $balanceDisplay.innerText = fmt(state.balance);
         if($cashCount) $cashCount.innerText = fmt(state.cash);
-        if($balanceKpi) $balanceKpi.innerText = fmt(state.balance);
-        if($cashKpi) $cashKpi.innerText = fmt(state.cash);
-        if($gainKpi) $gainKpi.innerText = fmt(state.gain);
         const summaryEl = document.getElementById('summary-total');
         if(summaryEl) summaryEl.innerText = '$0.00';
         const cashHeader = document.getElementById('cash-in-header'); if (cashHeader) cashHeader.innerText = fmt(state.cash);
