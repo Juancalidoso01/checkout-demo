@@ -77,7 +77,7 @@
       <form id="checkoutForm" novalidate>
         <!-- Información del pedido -->
         <div class="row">
-          <div class="muted">Pedido: ENSA prepago</div>
+          <div class="muted" id="orderLabel">Pedido: ENSA prepago</div>
         </div>
 
         <!-- Selección de método de pago -->
@@ -401,6 +401,33 @@
   let isProcessing = false;
   const demoModeCheckbox = document.getElementById('demoMode');
 
+  // Flow detection (entry into checkout)
+  const __params = new URLSearchParams(location.search);
+  const __purpose = (__params.get('purpose') || '').toLowerCase();
+  const __isAgentDigitalTopup = __purpose === 'topup' || __purpose === 'digital_topup' || __purpose === 'recarga_digital';
+  const __clientId = __params.get('clientId');
+  const __svc = __params.get('svc');
+  const __svcName = __params.get('svcName');
+  const __isServicePayment = !!(__clientId && __svc);
+
+  // Update UI for agent top-up flow
+  (function applyCheckoutContext(){
+    try {
+      const order = document.getElementById('orderLabel');
+      if (order && __isAgentDigitalTopup) {
+        order.textContent = 'Pedido: Recarga agente';
+      } else if (order && __isServicePayment) {
+        // Show operator/service name selected in Pago de servicios (e.g., ENSA / Naturgy / etc.)
+        const label = (__svcName || __svc || '').trim();
+        order.textContent = label ? `Pedido: Pago de servicios — ${label}` : 'Pedido: Pago de servicios';
+      }
+
+      // For recarga agente, PuntoPago APP is not required
+      const ppReg = document.getElementById('ppRegistration');
+      if (ppReg && __isAgentDigitalTopup) ppReg.style.display = 'none';
+    } catch(e){ console.warn('applyCheckoutContext failed', e); }
+  })();
+
       // Utility: remove any stray overlay-backdrop that might block clicks
       function removeStrayOverlays() {
         const nodes = Array.from(document.querySelectorAll('.overlay-backdrop'));
@@ -516,6 +543,7 @@
 
       function validateYappy() {
         if (demoModeCheckbox && demoModeCheckbox.checked) return null;
+        if (__isAgentDigitalTopup) return null;
         if (!yappyPhone.value.trim()) return 'Ingresa el teléfono asociado a Yappy.';
         return null;
       }

@@ -533,6 +533,8 @@
            url.searchParams.set('flow', 'agent');
            url.searchParams.set('clientId', meta.cid || '');
            url.searchParams.set('svc', meta.svc || '');
+           // pass service/operator label so checkout can display the exact operator selected
+           url.searchParams.set('svcName', meta.svcName || '');
            m.classList.add('hidden');
            location.href = url.href;
          } catch(e){ console.warn(e); }
