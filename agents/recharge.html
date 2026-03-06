@@ -807,7 +807,8 @@
     }
 
     // Función para cambiar entre secciones
-    function showSection(section) {
+    function showSection(section, options = {}) {
+      const { syncTabScroll = true } = options;
       const sections = ['factura', 'history', 'pagos', 'cashin', 'fondear'];
       sections.forEach(s => {
         const element = document.getElementById(`section-${s}`);
@@ -840,7 +841,7 @@
       // Mobile banner/carousel: ensure the active tab is the one shown
       try {
         const activeTab = document.getElementById(`tab-${section}`);
-        if (activeTab && window.matchMedia && window.matchMedia('(max-width: 520px)').matches) {
+        if (syncTabScroll && activeTab && window.matchMedia && window.matchMedia('(max-width: 520px)').matches) {
           activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
       } catch(e) { /* ignore */ }
@@ -918,7 +919,7 @@
           if (!best || !best.id) return;
           const section = best.id.replace(/^tab-/, '');
           const isActive = best.classList.contains('tab-active');
-          if (!isActive) showSection(section);
+          if (!isActive) showSection(section, { syncTabScroll: false });
         }, 120);
       }, { passive: true });
 
