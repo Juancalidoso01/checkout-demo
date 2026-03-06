@@ -1100,7 +1100,7 @@
       if (document.getElementById('comercios-modal')) return;
       const m = document.createElement('div');
       m.id = 'comercios-modal';
-      m.className = 'fixed inset-0 bg-black/45 hidden z-60';
+  m.className = 'fixed inset-0 hidden z-60';
       m.innerHTML = `
         <div class="pp-comercios-backdrop" data-close-comercios></div>
         <aside class="pp-comercios-sheet bg-white shadow-2xl">
@@ -1145,8 +1145,14 @@
         </aside>`;
       document.body.appendChild(m);
 
-      function close(){ m.classList.add('hidden'); }
-      function open(){ m.classList.remove('hidden'); }
+      function close(){
+        m.classList.remove('is-open');
+        setTimeout(() => m.classList.add('hidden'), 260);
+      }
+      function open(){
+        m.classList.remove('hidden');
+        requestAnimationFrame(() => m.classList.add('is-open'));
+      }
       m.querySelector('#comercios-close').addEventListener('click', close);
       m.querySelector('[data-close-comercios]').addEventListener('click', close);
       document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') close(); });

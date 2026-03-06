@@ -159,7 +159,14 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
 
 /* Comercios drawer (agent portal) */
 #comercios-modal{display:block}
-.pp-comercios-backdrop{position:absolute;inset:0}
+.pp-comercios-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(15,23,42,.42);
+  opacity:0;
+  transition:opacity .28s ease;
+  backdrop-filter:blur(2px);
+}
 .pp-comercios-sheet{
   position:absolute;
   top:0;
@@ -171,49 +178,53 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
   overflow:hidden;
   border-top-right-radius:28px;
   border-bottom-right-radius:28px;
-  animation:ppDrawerIn .22s ease-out;
+  transform:translateX(-102%);
+  opacity:.99;
+  transition:transform .32s cubic-bezier(.22,.9,.2,1), opacity .24s ease;
 }
+#comercios-modal.is-open .pp-comercios-backdrop{opacity:1}
+#comercios-modal.is-open .pp-comercios-sheet{transform:translateX(0);opacity:1}
 .pp-comercios-head{flex:0 0 auto}
 .pp-comercios-body{flex:1 1 auto;overflow:auto;background:#fbfbfe}
-.pp-comercios-actions{display:grid;gap:12px}
+.pp-comercios-actions{display:grid;gap:16px}
 .pp-comercios-action{
   width:100%;
   display:flex;
   align-items:center;
-  gap:14px;
-  padding:16px 18px;
+  gap:16px;
+  padding:20px 20px;
   text-align:left;
   border:1px solid rgba(84,98,230,.14);
-  border-radius:20px;
+  border-radius:24px;
   background:#fff;
   color:var(--pp-text);
   text-decoration:none;
   box-shadow:0 10px 24px rgba(84,98,230,.08);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
+.pp-comercios-action:hover{transform:translateX(3px);box-shadow:0 16px 30px rgba(84,98,230,.12)}
 .pp-comercios-action .icon{
-  width:44px;
-  height:44px;
-  border-radius:14px;
+  width:52px;
+  height:52px;
+  border-radius:18px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:rgba(84,98,230,.12);
   color:var(--pp-primary);
   flex:0 0 auto;
+  font-size:20px;
 }
-.pp-comercios-action strong{display:block;font-size:16px;line-height:1.1}
-.pp-comercios-action small{display:block;margin-top:4px;color:#6b7280;font-size:12px;line-height:1.35}
+.pp-comercios-action strong{display:block;font-size:18px;line-height:1.15}
+.pp-comercios-action small{display:block;margin-top:6px;color:#6b7280;font-size:13px;line-height:1.45}
 .pp-comercios-action.is-primary{background:linear-gradient(180deg,#5c69ee,#5462e6);color:#fff;border-color:transparent}
 .pp-comercios-action.is-primary .icon{background:rgba(255,255,255,.16);color:#fff}
 .pp-comercios-action.is-primary small{color:rgba(255,255,255,.82)}
 
-@keyframes ppDrawerIn{
-  from{transform:translateX(-100%);opacity:.98}
-  to{transform:translateX(0);opacity:1}
-}
-
 @media (max-width: 520px){
   .pp-comercios-sheet{width:min(360px, 92vw);border-radius:0 24px 24px 0}
+  .pp-comercios-action{padding:18px 18px}
+  .pp-comercios-action strong{font-size:17px}
 }
 
 /* Tabs */
