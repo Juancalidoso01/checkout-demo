@@ -174,7 +174,7 @@
             </div>
 
             <div class="flex justify-center md:justify-end">
-              <button type="button" onclick="event.preventDefault(); nextStep(2)" class="pp-btn pp-btn-primary -full md:w-auto">Continuar</button>
+              <button type="button" id="cashin-continue" class="pp-btn pp-btn-primary -full md:w-auto" disabled aria-disabled="true" title="Completa celular y monto para continuar">Continuar</button>
             </div>
           </div>
 
@@ -891,6 +891,44 @@
         const modal = document.getElementById('ach-success-modal');
         if (modal) modal.classList.add('hidden');
       }
+
+      // Cash In button wiring (avoid fragile inline onclick)
+      (function setupCashInContinue(){
+        const btn = document.getElementById('cashin-continue');
+        const phoneEl = document.getElementById('client-phone');
+        const amtEl = document.getElementById('cashin-amount');
+        if (!btn || !phoneEl || !amtEl) return;
+
+        function isValid(){
+          const phone = (phoneEl.value || '').trim();
+          const amt = parseFloat(amtEl.value || '0') || 0;
+          return !!phone && amt > 0;
+        }
+
+        function sync(){
+          const ok = isValid();
+          btn.disabled = !ok;
+          btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
+          btn.classList.toggle('opacity-50', !ok);
+          btn.classList.toggle('cursor-not-allowed', !ok);
+          btn.title = ok ? 'Continuar' : 'Completa celular y monto para continuar';
+        }
+
+        btn.addEventListener('click', (e)=>{
+          e.preventDefault();
+          sync();
+          if (btn.disabled) return;
+          nextStep(2);
+        });
+
+        phoneEl.addEventListener('input', sync);
+        phoneEl.addEventListener('blur', sync);
+        amtEl.addEventListener('input', sync);
+        amtEl.addEventListener('blur', sync);
+
+        // initial state
+        sync();
+      })();
 
       // restore previously filled inputs and results
       (function restoreInputs(){
