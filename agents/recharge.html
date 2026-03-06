@@ -164,12 +164,12 @@
           <div id="step-1" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label class="pp-label">Número de Celular</label>
+                <label class="pp-label">Número del agente</label>
                 <div class="pp-input-group">
-                  <span class="pp-input-prefix">+</span>
-                  <input type="tel" id="client-phone" inputmode="tel" pattern="\+?[0-9]*" placeholder="Ej: +50760000000 o +19171234567" class="pp-input-control" autocomplete="tel" aria-label="Número de celular">
+                  <span class="pp-input-prefix"><i class="fas fa-id-badge"></i></span>
+                  <input type="text" id="agent-number" class="pp-input-control font-bold" readonly aria-label="Número del agente">
                 </div>
-                <p class="mt-2 text-xs text-gray-500">Incluye el código de país. Ej: <span class="font-mono">+507</span>, <span class="font-mono">+1</span>, <span class="font-mono">+593</span>.</p>
+                <p class="mt-2 text-xs text-gray-500">Este número es fijo y se usa como cuenta destino de la recarga.</p>
               </div>
 
               <div>
@@ -180,6 +180,13 @@
                 </div>
                 <!-- fees preview -->
                 <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
+                <div class="mt-3 p-3 rounded-xl border bg-gray-50">
+                  <div class="flex items-center justify-between">
+                    <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Valor real a recargar (neto)</div>
+                    <div id="cashin-net" class="text-lg font-extrabold text-gray-900">$0.00</div>
+                  </div>
+                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint">Neto = Monto - Comisión - IBMS</div>
+                </div>
               </div>
             </div>
 
@@ -193,8 +200,8 @@
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
               <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen de recarga digital</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600">Cuenta / Celular:</span>
-                <span class="font-bold text-gray-800" id="summary-phone">6000-0000</span>
+                <span class="text-gray-600">Cuenta (agente):</span>
+                <span class="font-bold text-gray-800" id="summary-phone">—</span>
               </div>
               <div class="text-sm text-gray-600 mb-4">
                 Serás redirigido al checkout para completar el pago con métodos digitales.
@@ -204,6 +211,10 @@
                 <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
               </div>
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
+              <div class="flex justify-between mt-3 items-center">
+                <span class="font-bold text-gray-800">Valor real a recargar:</span>
+                <span class="font-extrabold text-gray-900" id="summary-net">$0.00</span>
+              </div>
             </div>
             <div class="flex space-x-4">
               <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary">Corregir</button>
@@ -617,22 +628,31 @@
        r.classList.remove('hidden');
      }
 
-     // ensure phone field always contains the +507 prefix
-   (function setupPhoneNormalization(){
-      const ip = document.getElementById('client-phone');
-      if (!ip) return;
-      function normalize(){
-        let v = ip.value || '';
-        // strip everything except digits and leading +
-        v = v.replace(/[^0-9\+]/g, '');
-        // collapse multiple leading + into one
-        v = v.replace(/^\++/, '+');
-        ip.value = v;
-      }
-      ip.addEventListener('focus', normalize);
-      ip.addEventListener('input', normalize);
-      ip.addEventListener('blur', normalize);
-    })();
+     // Recarga digital uses the agent's fixed number (no phone input)
+     function getAgentNumber(){
+       try {
+         const s = (window.PPAuth && window.PPAuth.getSession && window.PPAuth.getSession()) || null;
+         const agentId = s?.agentId || null;
+         const users = (window.PPAuth && window.PPAuth.loadUsers && window.PPAuth.loadUsers()) || [];
+         const agent = users.find(u => u.id === agentId) || users.find(u => u.role === 'agent' && u.id === agentId);
+         // Prefer explicit phone stored in setup, fallback to username.
+         const agentInfo = (function(){
+           try { return JSON.parse(localStorage.getItem('pp_agent_info_v1')) || {}; }
+           catch(e){ return {}; }
+         })();
+         const phone = (agentInfo.phone || '').trim();
+         if (phone) return phone;
+         return (agent?.username || '').trim() || 'Agente';
+       } catch(e){
+         return 'Agente';
+       }
+     }
+
+     (function initAgentNumber(){
+       const el = document.getElementById('agent-number');
+       if (!el) return;
+       el.value = getAgentNumber();
+     })();
 
    // compute fees for cash-in amount
    function calculateFees(amount){
@@ -641,10 +661,18 @@
      return { commission, ibms };
    }
 
+   function calculateNet(amount){
+     const amt = Number(amount) || 0;
+     if (!(amt > 0)) return 0;
+     const f = calculateFees(amt);
+     return Number((amt - f.commission - f.ibms).toFixed(2));
+   }
+
    // live preview of fees while typing amount
    (function setupFeePreview(){
      const amt = document.getElementById('cashin-amount');
      const feeDiv = document.getElementById('cashin-fees');
+     const netDiv = document.getElementById('cashin-net');
      // if elements missing nothing to do
      if (!amt || !feeDiv) return;
      function update(){
@@ -652,13 +680,16 @@
        if (v > 0){
          const f = calculateFees(v);
          feeDiv.textContent = `Comisión 2%+$0.25: ${fmt(f.commission)}; IBMS 7%: ${fmt(f.ibms)}`;
+         if (netDiv) netDiv.textContent = fmt(calculateNet(v));
        } else {
          feeDiv.textContent = '';
+         if (netDiv) netDiv.textContent = fmt(0);
        }
      }
      amt.addEventListener('input', update);
      amt.addEventListener('blur', update);
      amt.addEventListener('focus', update);
+     update();
    })();
     </script>
   </main>
@@ -818,7 +849,7 @@
                 }
               }
             } catch(e){ console.warn('center calc failed', e); }
-            setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
+            setTimeout(()=>{ const ip = document.getElementById('cashin-amount'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
           } else {
             const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
           }
@@ -847,39 +878,38 @@
         if (s3) s3.classList.toggle('hidden', step !== 3);
 
         if (step === 2){
-          const phone = (document.getElementById('client-phone')?.value || '').trim();
           const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
-          if (!phone){ alert('Ingresa el número de celular.'); nextStep(1); return; }
           if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); nextStep(1); return; }
-          // Digital top-up: fees (if any) are handled by checkout/provider.
           const total = Number(amt.toFixed(2));
+          const f = calculateFees(total);
+          const net = calculateNet(total);
           const sp = document.getElementById('summary-phone');
           const st = document.getElementById('summary-total');
           const sf = document.getElementById('summary-fees');
-          if (sp) sp.textContent = phone;
+          const sn = document.getElementById('summary-net');
+          if (sp) sp.textContent = getAgentNumber();
           if (st) st.textContent = fmt(total);
-          if (sf) sf.textContent = `Completa el pago en checkout con tarjeta, Yappy u otros métodos.`;
+          if (sf) sf.textContent = `Comisión: ${fmt(f.commission)} · IBMS: ${fmt(f.ibms)} · Neto: ${fmt(net)}`;
+          if (sn) sn.textContent = fmt(net);
         }
       }
 
       function resetFlow(){
-        try { document.getElementById('client-phone').value = ''; } catch(e){}
         try { document.getElementById('cashin-amount').value = ''; } catch(e){}
         try { document.getElementById('cashin-fees').textContent = ''; } catch(e){}
+        try { const n = document.getElementById('cashin-net'); if(n) n.textContent = fmt(0); } catch(e){}
         nextStep(1);
       }
 
       function goToDigitalCheckout(){
-        const phone = (document.getElementById('client-phone')?.value || '').trim();
         const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
-        if (!phone){ alert('Ingresa el número de celular.'); return; }
         if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); return; }
         try {
           const url = new URL('../checkout.html', location.href);
           url.searchParams.set('amount', String(amt.toFixed(2)));
           url.searchParams.set('flow', 'agent');
-          // optional: keep context for future evolutions
-          url.searchParams.set('phone', phone);
+          // keep context for audit if needed
+          url.searchParams.set('agentNumber', getAgentNumber());
           url.searchParams.set('purpose', 'topup');
           location.href = url.href;
         } catch(e){
@@ -915,15 +945,13 @@
       // Cash In button wiring (avoid fragile inline onclick)
       (function setupCashInContinue(){
         const btn = document.getElementById('cashin-continue');
-        const phoneEl = document.getElementById('client-phone');
         const amtEl = document.getElementById('cashin-amount');
         const goBtn = document.getElementById('cashin-go-checkout');
-        if (!btn || !phoneEl || !amtEl) return;
+        if (!btn || !amtEl) return;
 
         function isValid(){
-          const phone = (phoneEl.value || '').trim();
           const amt = parseFloat(amtEl.value || '0') || 0;
-          return !!phone && amt > 0;
+          return amt > 0;
         }
 
         function sync(){
@@ -932,7 +960,7 @@
           btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
           btn.classList.toggle('opacity-50', !ok);
           btn.classList.toggle('cursor-not-allowed', !ok);
-          btn.title = ok ? 'Continuar' : 'Completa celular y monto para continuar';
+          btn.title = ok ? 'Continuar' : 'Completa el monto para continuar';
         }
 
         btn.addEventListener('click', (e)=>{
@@ -942,8 +970,6 @@
           nextStep(2);
         });
 
-        phoneEl.addEventListener('input', sync);
-        phoneEl.addEventListener('blur', sync);
         amtEl.addEventListener('input', sync);
         amtEl.addEventListener('blur', sync);
 
@@ -1024,7 +1050,7 @@
   <script>
     // Ensure the phone input is visible when focused on mobile: scroll into view then offset a bit
     (function(){
-      const inputs = ['client-phone','cashin-amount','ach-ref','ach-amount'];
+  const inputs = ['cashin-amount','ach-ref','ach-amount'];
 
       // Baseline viewport height used to detect keyboard appearance
       let baselineVH = window.innerHeight;
