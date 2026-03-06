@@ -727,6 +727,15 @@
           }
         }
       });
+
+      // Mobile banner/carousel: ensure the active tab is the one shown
+      try {
+        const activeTab = document.getElementById(`tab-${section}`);
+        if (activeTab && window.matchMedia && window.matchMedia('(max-width: 520px)').matches) {
+          activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      } catch(e) { /* ignore */ }
+
       // after toggling sections, ensure on mobile the selected section is visible
       try {
         const el = document.getElementById(`section-${section}`);
