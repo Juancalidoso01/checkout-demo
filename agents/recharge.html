@@ -691,6 +691,40 @@
   <script>
     // Agent sandbox state (persisted)
     const STORAGE_KEY = 'pp_agent_sandbox_v1';
+    const PREFS_KEY = 'pp_agent_recharge_prefs_v1';
+    const PAID_KEY = 'pp_paid_services_v1';
+
+    // lightweight prefs store for form persistence
+    function loadPrefs(){
+      try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; }
+      catch(e){ return {}; }
+    }
+    function savePrefs(p){
+      try { localStorage.setItem(PREFS_KEY, JSON.stringify(p || {})); }
+      catch(e){}
+    }
+    const prefs = loadPrefs();
+
+    // Paid-services store: { [clientId]: { [svcId]: { paidAt:number, amount:number } } }
+    function loadPaidStore(){
+      try { return JSON.parse(localStorage.getItem(PAID_KEY)) || {}; }
+      catch(e){ return {}; }
+    }
+    function savePaidStore(s){
+      try { localStorage.setItem(PAID_KEY, JSON.stringify(s || {})); }
+      catch(e){}
+    }
+    function isServicePaidForClient(clientId, svcId){
+      const store = loadPaidStore();
+      return !!(store && store[clientId] && store[clientId][svcId]);
+    }
+    function markServicePaidForClient(clientId, svcId, amount){
+      if (!clientId || !svcId) return;
+      const store = loadPaidStore();
+      if (!store[clientId]) store[clientId] = {};
+      store[clientId][svcId] = { paidAt: Date.now(), amount: Number(amount) || 0 };
+      savePaidStore(store);
+    }
 
     const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
     function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
@@ -770,6 +804,92 @@
             const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
           }
         } catch(e){ console.warn('showSection scroll failed', e); }
+      }
+
+      // Persist last viewed section
+      (function wireSectionPersistence(){
+        const sections = ['cashin','fondear','pagos'];
+        sections.forEach(s => {
+          const tab = document.getElementById(`tab-${s}`);
+          if (!tab) return;
+          tab.addEventListener('click', ()=>{
+            try { prefs.lastSection = s; savePrefs(prefs); } catch(e){}
+          });
+        });
+      })();
+
+      // Cash In flow -----------------------------------------------------------
+      function nextStep(step){
+        const s1 = document.getElementById('step-1');
+        const s2 = document.getElementById('step-2');
+        const s3 = document.getElementById('step-3');
+        if (s1) s1.classList.toggle('hidden', step !== 1);
+        if (s2) s2.classList.toggle('hidden', step !== 2);
+        if (s3) s3.classList.toggle('hidden', step !== 3);
+
+        if (step === 2){
+          const phone = (document.getElementById('client-phone')?.value || '').trim();
+          const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
+          if (!phone){ alert('Ingresa el número de celular.'); nextStep(1); return; }
+          if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); nextStep(1); return; }
+          const f = calculateFees(amt);
+          const total = Number((amt - f.commission - f.ibms).toFixed(2));
+          const sp = document.getElementById('summary-phone');
+          const st = document.getElementById('summary-total');
+          const sf = document.getElementById('summary-fees');
+          if (sp) sp.textContent = phone;
+          if (st) st.textContent = fmt(total);
+          if (sf) sf.textContent = `Comisión: ${fmt(f.commission)} · IBMS: ${fmt(f.ibms)} · Monto: ${fmt(amt)}`;
+        }
+      }
+
+      function resetFlow(){
+        try { document.getElementById('client-phone').value = ''; } catch(e){}
+        try { document.getElementById('cashin-amount').value = ''; } catch(e){}
+        try { document.getElementById('cashin-fees').textContent = ''; } catch(e){}
+        nextStep(1);
+      }
+
+      function processCashIn(){
+        const phone = (document.getElementById('client-phone')?.value || '').trim();
+        const amt = parseFloat(document.getElementById('cashin-amount')?.value || '0') || 0;
+        if (!phone){ alert('Ingresa el número de celular.'); return; }
+        if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); return; }
+        const f = calculateFees(amt);
+        const net = Number((amt - f.commission - f.ibms).toFixed(2));
+        // In this demo, Cash In means the agent receives cash and balance increases
+        state.balance = Number((Number(state.balance) + net).toFixed(2));
+        state.cash = Number((Number(state.cash) + amt).toFixed(2));
+        state.txs.push({ when: Date.now(), type: 'Cash In', desc: `Cash In desde ${phone}`, amount: net, ref: `CIN-${Math.floor(Math.random()*900000+100000)}` });
+        saveState(state);
+        render();
+        nextStep(3);
+        // show receipt (basic)
+        try { openReceiptModal({ amount: net, clientId: phone, svc: 'cashin', svcName: 'Cash In', clientName: '' }); } catch(e){}
+      }
+
+      // ACH flow (simple demo) ------------------------------------------------
+      function submitACH(){
+        const bank = (document.getElementById('ach-bank')?.value || '').trim();
+        const ref = (document.getElementById('ach-ref')?.value || '').trim();
+        const amt = parseFloat(document.getElementById('ach-amount')?.value || '0') || 0;
+        if (!bank){ alert('Selecciona tu banco.'); return; }
+        if (!ref){ alert('Ingresa la referencia.'); return; }
+        if (!amt || amt <= 0){ alert('Ingresa un monto válido.'); return; }
+        // record tx as pending ACH
+        state.txs.push({ when: Date.now(), type: 'ACH', desc: `ACH notificado banco:${bank} ref:${ref}`, amount: amt, ref });
+        saveState(state);
+        render();
+        // show badge and modal
+        const badge = document.getElementById('ach-transit-badge');
+        if (badge) badge.classList.remove('hidden');
+        const modal = document.getElementById('ach-success-modal');
+        if (modal) modal.classList.remove('hidden');
+      }
+
+      function closeACHModal(){
+        const modal = document.getElementById('ach-success-modal');
+        if (modal) modal.classList.add('hidden');
       }
 
       // restore previously filled inputs and results
