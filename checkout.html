@@ -300,16 +300,37 @@
             state.txs.push({ when: Date.now(), type: 'Cobro', desc: `Cobro servicio (digital) cliente:${clientId||''} svc:${svc||''} via ${method} ID:${txId||''}`, amount: amt });
           } else {
             // CASE: Either a cash payment for a service, or a recarga iniciada por el agente (flow agent/kiosk)
-            // In both cases we credit the full amount to the agent balance.
-            // For agent/kiosk we also credit the cash pocket, except when this is a DIGITAL TOP-UP (purpose=topup).
-            state.balance = Number((Number(state.balance) + amt).toFixed(2));
             const isDigitalTopup = purpose === 'topup' || purpose === 'digital_topup' || purpose === 'recarga_digital';
-            if ((flow === 'agent' || flow === 'kiosk') && !isDigitalTopup) {
-              state.cash = Number((Number(state.cash) + amt).toFixed(2));
+
+            // For DIGITAL TOP-UP we credit ONLY the NET amount (after fees) to the balance.
+            // For other cases, we credit the full amount.
+            if (isDigitalTopup) {
+              const commission = Number((amt * 0.02 + 0.25).toFixed(2));
+              const ibms = Number((commission * 0.07).toFixed(2));
+              const net = Number((amt - commission - ibms).toFixed(2));
+
+              state.balance = Number((Number(state.balance) + net).toFixed(2));
+              // Track fees as gain (optional, useful for reporting)
+              state.gain = Number((Number(state.gain) + commission + ibms).toFixed(2));
+
+              state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión recarga digital (checkout) ID:${txId||''}`, amount: commission });
+              state.txs.push({ when: Date.now(), type: 'Impuesto', desc: `IBMS sobre comisión recarga digital (checkout) ID:${txId||''}`, amount: ibms });
+
+              // Include gross and net in the description for audit
+              state.txs.push({ when: Date.now(), type: 'Recarga digital', desc: `Recarga digital via ${method || 'digital'} (checkout) ID:${txId||''} bruto:${amt.toFixed(2)} neto:${net.toFixed(2)}`, amount: net });
+            } else {
+              // Non-topup: credit full amount
+              state.balance = Number((Number(state.balance) + amt).toFixed(2));
+
+              // For agent/kiosk we also credit the cash pocket, except when this is a DIGITAL TOP-UP (purpose=topup).
+              if ((flow === 'agent' || flow === 'kiosk')) {
+                state.cash = Number((Number(state.cash) + amt).toFixed(2));
+              }
+
+              // Choose a transaction type that helps auditing: 'Recarga' for agent-originated flows, 'Cobro' for service payments
+              const txType = isServicePayment ? 'Cobro' : 'Recarga';
+              state.txs.push({ when: Date.now(), type: txType, desc: `${txType} via ${method || 'efectivo'} (checkout) ID:${txId||''}`, amount: amt });
             }
-            // Choose a transaction type that helps auditing: 'Recarga' for agent-originated flows, 'Cobro' for service payments
-            const txType = isServicePayment ? 'Cobro' : (isDigitalTopup ? 'Recarga digital' : 'Recarga');
-            state.txs.push({ when: Date.now(), type: txType, desc: `${txType} via ${method || 'efectivo'} (checkout) ID:${txId||''}`, amount: amt });
           }
 
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
