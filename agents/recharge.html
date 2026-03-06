@@ -518,7 +518,7 @@
        m.id = 'payment-method-modal';
        m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
        m.innerHTML = `
-         <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
+         <div class="bg-white rounded-2xl p-6 max-w-sm w-full max-h-[85vh] overflow-y-auto shadow-2xl">
            <h3 class="text-lg font-bold mb-2">Método de pago</h3>
            <p class="text-sm text-gray-600 mb-4">¿Cómo recibiste el pago?</p>
            <div class="grid gap-3 mb-4">
@@ -528,7 +528,7 @@
            <div class="flex justify-end"><button id="pay-cancel" type="button" class="btn secondary">Cancelar</button></div>
          </div>`;
        document.body.appendChild(m);
-       m.querySelector('#pay-cancel').addEventListener('click', ()=> m.classList.add('hidden'));
+       m.querySelector('#pay-cancel').addEventListener('click', ()=> { m.classList.add('hidden'); m.classList.remove('flex'); });
        m.querySelector('#pay-other').addEventListener('click', ()=>{
          try {
            const meta = m._meta || {};
@@ -540,6 +540,7 @@
            // pass service/operator label so checkout can display the exact operator selected
            url.searchParams.set('svcName', meta.svcName || '');
            m.classList.add('hidden');
+           m.classList.remove('flex');
            location.href = url.href;
          } catch(e){ console.warn(e); }
        });
@@ -557,6 +558,7 @@
            try { markServicePaidForClient(meta.cid, meta.svc); } catch(e){ console.warn('mark paid failed', e); }
            render();
            m.classList.add('hidden');
+           m.classList.remove('flex');
            // show receipt modal
            openReceiptModal({ amount: amt, clientId: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName });
          } catch(e){ console.warn(e); }
@@ -569,7 +571,9 @@
        // copy some fields to meta for pay-other
        m._meta.svcName = meta.svcName || '';
        m._meta.clientName = meta.clientName || '';
+       // show as flex so items-center/justify-center take effect
        m.classList.remove('hidden');
+       m.classList.add('flex');
      }
 
      // Receipt modal with share/print actions
