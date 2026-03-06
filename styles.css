@@ -157,6 +157,17 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
 /* Embedded sections (Factura / Mi equipo) inside agent portal */
 .pp-embed-frame{width:100%;border:0;display:block;min-height:calc(100vh - 220px)}
 
+/* Comercios modal (agent portal) */
+.pp-comercios-sheet{max-height:calc(100vh - 120px);display:flex;flex-direction:column}
+.pp-comercios-head{flex:0 0 auto}
+.pp-comercios-body{flex:1 1 auto;overflow:auto}
+
+@media (max-width: 520px){
+  /* Bottom-sheet style: easier to use on iPhone */
+  #comercios-modal{align-items:flex-end !important;padding:12px !important}
+  .pp-comercios-sheet{width:100%;max-width:none;border-bottom-left-radius:0;border-bottom-right-radius:0;max-height:calc(100vh - 92px)}
+}
+
 /* Tabs */
 .pp-tab{border:1px solid rgba(0,0,0,.06);background:#fff;border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.06)}
 .pp-tab.-active{border-bottom:4px solid var(--pp-primary);color:var(--pp-primary)}

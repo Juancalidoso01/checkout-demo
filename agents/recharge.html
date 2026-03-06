@@ -91,7 +91,7 @@
           </div>
 
           <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-10 md:h-[42px] rounded-[16px] px-4 md:px-5">Salir</a>
-          <a id="storeIcon" href="../setup.html" class="h-10 w-10 bg-white/15 rounded-full flex items-center justify-center border border-white/25 cursor-pointer hover:bg-white/25 transition" title="Datos del agente / Configuracin">
+          <a id="storeIcon" href="../setup.html" class="h-10 w-10 bg-white/15 rounded-full flex items-center justify-center border border-white/25 cursor-pointer hover:bg-white/25 transition" title="Comercios">
             <i class="fas fa-store"></i>
             <span class="sr-only">Abrir configuracin</span>
           </a>
@@ -1102,18 +1102,18 @@
       m.id = 'comercios-modal';
       m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
       m.innerHTML = `
-        <div class="bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-xl">
-          <div class="px-5 py-4 border-b flex items-center justify-between">
+        <div class="pp-comercios-sheet bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-xl">
+          <div class="px-5 py-4 border-b flex items-center justify-between pp-comercios-head">
             <div class="min-w-0">
               <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Comercios</div>
               <div class="text-lg font-extrabold truncate">Gestión rápida</div>
             </div>
             <button type="button" id="comercios-close" class="pp-btn pp-btn-secondary">Cerrar</button>
           </div>
-          <div class="p-5 space-y-4">
-            <div class="flex flex-wrap gap-2">
-              <a href="../setup.html" class="pp-btn pp-btn-secondary">Abrir Setup</a>
-              <button type="button" id="comercios-toggle-team" class="pp-btn pp-btn-primary">Mi equipo</button>
+          <div class="p-5 space-y-4 pp-comercios-body">
+            <div class="grid grid-cols-2 gap-3">
+              <a href="../setup.html" class="pp-btn pp-btn-secondary w-full">Setup</a>
+              <button type="button" id="comercios-toggle-team" class="pp-btn pp-btn-primary w-full">Mi equipo</button>
             </div>
 
             <div id="comercios-team-wrap" class="hidden">
