@@ -457,9 +457,10 @@
        if (document.getElementById('charge-modal')) return;
        const modal = document.createElement('div');
        modal.id = 'charge-modal';
+       // Use flexbox when shown so the dialog is truly centered on all screens
        modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
        modal.innerHTML = `
-         <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+         <div class="bg-white rounded-2xl p-6 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl">
            <h3 class="text-lg font-bold mb-2">Cobrar servicio</h3>
            <div class="mb-4">
              <div class="text-sm text-gray-600" id="charge-client"></div>
@@ -474,7 +475,7 @@
          </div>`;
        document.body.appendChild(modal);
 
-       modal.querySelector('#charge-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); });
+      modal.querySelector('#charge-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); modal.classList.remove('flex'); });
        modal.querySelector('#charge-confirm').addEventListener('click', ()=>{
          try {
            const amt = Number(document.getElementById('charge-amount').value);
@@ -492,6 +493,7 @@
            // Instead of redirecting immediately, ask for payment method
            openPaymentMethodModal({ cid: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName, amount: amt });
            modal.classList.add('hidden');
+           modal.classList.remove('flex');
          } catch(e){ console.warn(e); alert('Error al procesar'); }
        });
 
@@ -503,7 +505,9 @@
        document.getElementById('charge-client').innerText = `Cliente: ${clientName} (${cid})`;
        document.getElementById('charge-service').innerText = `Servicio: ${svcName} — Saldo: ${fmt(balance)}`;
        const inp = document.getElementById('charge-amount'); inp.value = (balance || 0).toFixed(2);
+       // show as flex so items-center/justify-center take effect
        modal.classList.remove('hidden');
+       modal.classList.add('flex');
        setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 120);
      }
 
