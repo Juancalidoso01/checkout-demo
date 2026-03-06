@@ -8,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../styles.css">
+  <script src="../auth.js"></script>
   <style>
     :root {
       --punto-pago-blue: #0047bb;
@@ -90,11 +91,16 @@
         </span>
       </div>
       <div class="flex items-center space-x-6">
+        <div class="hidden md:flex flex-col items-end text-right">
+          <div class="text-[10px] opacity-85 font-semibold uppercase">Sesión</div>
+          <div class="text-xs font-bold" data-pp-session></div>
+        </div>
         <div class="text-right flex flex-col items-end">
           <p class="text-xs opacity-80 font-semibold uppercase">Saldo Disponible</p>
           <p class="text-lg font-bold" id="balance-display">$1,250.45</p>
           <p class="text-xs text-white/90 mt-1">Mi efectivo en caja: <span id="cash-in-header" class="font-semibold">$342.10</span></p>
         </div>
+        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Salir</a>
         <!-- Alerta visual de ACH en proceso -->
         <div id="ach-transit-badge" class="hidden flex items-center bg-orange-500 text-white text-[10px] px-2 py-1 rounded-full animate-pulse font-bold">
           <i class="fas fa-clock mr-1"></i> ACH PENDIENTE
@@ -653,6 +659,16 @@
     </script>
   </main>
     <script>
+      // Auth guard (agent + employee) -------------------------------------------------
+      (function(){
+        try {
+          const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
+          if (!session) return;
+          window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+          window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+        } catch(e){ console.warn('Auth guard failed', e); }
+      })();
+
       // Show a toast if we arrived from checkout with ?fromCheckout=1
       (function(){
         try {

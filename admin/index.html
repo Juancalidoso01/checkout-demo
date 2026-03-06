@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Super Admin — Usuarios</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
+    .bg-punto-pago{background:#0047bb}
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+    <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
+          <img src="../assets/logo.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
+        </div>
+        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Super Admin</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex flex-col items-end text-right">
+          <div class="text-xs opacity-85 font-semibold uppercase">Sesión</div>
+          <div class="text-sm font-bold" data-pp-session></div>
+        </div>
+        <a href="../agents/recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Portal agentes</a>
+        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pp-page flex-grow">
+    <div class="pp-shell">
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <section class="pp-card -soft overflow-hidden lg:col-span-2">
+          <div class="pp-card-head">
+            <h1 class="text-2xl font-extrabold pp-type">Usuarios</h1>
+            <p class="text-sm text-gray-500">Crea agentes y empleados. Asigna empleados a un agente.</p>
+          </div>
+          <div class="pp-card-body">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-gray-500">
+                    <th class="text-left py-2">Usuario</th>
+                    <th class="text-left py-2">Nombre</th>
+                    <th class="text-left py-2">Rol</th>
+                    <th class="text-left py-2">Agente padre</th>
+                    <th class="text-left py-2">Estado</th>
+                    <th class="text-right py-2">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold pp-type">Crear / Editar</h2>
+            <p class="text-sm text-gray-500">Demo: credenciales en <code>localStorage</code> (no usar así en producción).</p>
+          </div>
+          <div class="pp-card-body">
+            <form class="grid gap-3" onsubmit="return false;">
+              <input id="editId" type="hidden">
+
+              <div>
+                <label class="pp-label">Usuario</label>
+                <input id="fUsername" type="text" class="pp-field" placeholder="agente02" autocomplete="off">
+              </div>
+
+              <div>
+                <label class="pp-label">Nombre</label>
+                <input id="fDisplayName" type="text" class="pp-field" placeholder="Agente 02" autocomplete="off">
+              </div>
+
+            <div>
+              <label class="pp-label">Rol</label>
+              <select id="fRole" class="pp-field">
+                <option value="agent">Agent</option>
+                <option value="employee">Employee</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="pp-label">Agente padre (solo employee)</label>
+              <select id="fAgent" class="pp-field"></select>
+            </div>
+
+            <div>
+              <label class="pp-label">Contraseña</label>
+              <input id="fPassword" type="password" class="pp-field" placeholder="1234" autocomplete="new-password">
+            </div>
+
+            <div class="flex gap-3">
+              <button id="saveBtn" type="button" class="pp-btn pp-btn-primary -full">Guardar</button>
+              <button id="resetBtn" type="button" class="pp-btn pp-btn-secondary -full">Limpiar</button>
+            </div>
+
+            <button type="submit" class="hidden" aria-hidden="true" tabindex="-1">submit</button>
+
+            <p id="msg" class="text-sm text-gray-600"></p>
+            </form>
+          </div>
+        </section>
+
+      </div>
+
+      <footer class="mt-8 text-xs text-gray-500">
+        Nota: Esto es un demo con <code>localStorage</code>. Producción requiere backend, hash de contraseñas y autorización real.
+      </footer>
+
+    </div>
+  </main>
+
+  <script src="../auth.js"></script>
+  <script>
+    (function(){
+      const session = window.PPAuth.requireAuth({ role: 'superadmin' });
+      if (!session) return;
+
+      window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+      window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+
+      const $table = document.getElementById('usersTable');
+      const $editId = document.getElementById('editId');
+      const $u = document.getElementById('fUsername');
+      const $n = document.getElementById('fDisplayName');
+      const $r = document.getElementById('fRole');
+      const $a = document.getElementById('fAgent');
+      const $p = document.getElementById('fPassword');
+      const $msg = document.getElementById('msg');
+
+      function uuid(){ return 'u_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16); }
+      function esc(s){ return (s||'').toString().replace(/[&<>\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+
+      function getUsers(){ return window.PPAuth.loadUsers(); }
+      function setUsers(users){ window.PPAuth.saveUsers(users); }
+
+      function resetForm(){
+        $editId.value = '';
+        $u.value = '';
+        $n.value = '';
+        $r.value = 'agent';
+        $p.value = '';
+        $msg.textContent = '';
+        syncAgentsSelect();
+      }
+
+      function syncAgentsSelect(){
+        const users = getUsers();
+        const agents = users.filter(x => x.role === 'agent');
+        $a.innerHTML = agents.map(x => `<option value="${esc(x.id)}">${esc(x.username)} — ${esc(x.displayName||'')}</option>`).join('');
+        if (!agents.length) $a.innerHTML = '<option value="">(no hay agentes)</option>';
+        // if editing an agent, still keep selection
+        if ($r.value === 'agent') $a.value = session?.agentId || (agents[0]?.id || '');
+      }
+
+      function render(){
+        const users = getUsers();
+        const byId = Object.fromEntries(users.map(u => [u.id,u]));
+        $table.innerHTML = users
+          .filter(u => u.role !== 'superadmin')
+          .map(u => {
+            const parent = u.role === 'employee' ? (byId[u.agentId]?.username || '—') : '—';
+            const status = u.active ? '<span class="px-2 py-1 rounded-full text-[10px] bg-green-100 text-green-700 font-bold">ACTIVO</span>' : '<span class="px-2 py-1 rounded-full text-[10px] bg-gray-100 text-gray-600 font-bold">OFF</span>';
+            return `
+              <tr class="border-t">
+                <td class="py-2 font-bold">${esc(u.username)}</td>
+                <td class="py-2">${esc(u.displayName||'')}</td>
+                <td class="py-2">${esc(u.role)}</td>
+                <td class="py-2">${esc(parent)}</td>
+                <td class="py-2">${status}</td>
+                <td class="py-2 text-right space-x-2">
+                  <button data-act="edit" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;">Editar</button>
+                  <button data-act="toggle" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;">${u.active ? 'Deshabilitar' : 'Habilitar'}</button>
+                </td>
+              </tr>`;
+          }).join('');
+
+        syncAgentsSelect();
+      }
+
+      function loadToForm(id){
+        const users = getUsers();
+        const u0 = users.find(x => x.id === id);
+        if (!u0) return;
+        $editId.value = u0.id;
+        $u.value = u0.username || '';
+        $n.value = u0.displayName || '';
+        $r.value = u0.role || 'agent';
+        $p.value = u0.password || '';
+        syncAgentsSelect();
+        if (u0.role === 'employee') $a.value = u0.agentId || '';
+      }
+
+      function toggleActive(id){
+        const users = getUsers();
+        const idx = users.findIndex(x => x.id === id);
+        if (idx < 0) return;
+        users[idx].active = !users[idx].active;
+        users[idx].updatedAt = Date.now();
+        setUsers(users);
+        render();
+      }
+
+      function save(){
+        $msg.textContent = '';
+        const id = ($editId.value || '').trim();
+        const username = ($u.value || '').trim();
+        const displayName = ($n.value || '').trim();
+        const role = ($r.value || 'agent').trim();
+        const password = ($p.value || '').toString();
+        const agentId = role === 'employee' ? ($a.value || '').trim() : null;
+
+        if (!username) { $msg.textContent = 'Usuario requerido.'; return; }
+        if (!password) { $msg.textContent = 'Contraseña requerida.'; return; }
+        if (role === 'employee' && !agentId) { $msg.textContent = 'Selecciona agente padre.'; return; }
+
+        const users = getUsers();
+        const unameLower = username.toLowerCase();
+        const conflict = users.find(x => x.username.toLowerCase() === unameLower && x.id !== id);
+        if (conflict) { $msg.textContent = 'Ese usuario ya existe.'; return; }
+
+        if (!id){
+          const newId = uuid();
+          const agentSelf = role === 'agent' ? newId : agentId;
+          users.push({
+            id: newId,
+            username,
+            password,
+            role,
+            displayName,
+            agentId: agentSelf,
+            active: true,
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          });
+          setUsers(users);
+          $msg.textContent = 'Usuario creado.';
+          resetForm();
+          render();
+          return;
+        }
+
+        const idx = users.findIndex(x => x.id === id);
+        if (idx < 0) { $msg.textContent = 'No existe el usuario.'; return; }
+        users[idx] = {
+          ...users[idx],
+          username,
+          password,
+          role,
+          displayName,
+          agentId: role === 'agent' ? id : agentId,
+          updatedAt: Date.now()
+        };
+        setUsers(users);
+        $msg.textContent = 'Usuario actualizado.';
+        resetForm();
+        render();
+      }
+
+      document.getElementById('saveBtn').addEventListener('click', save);
+      document.getElementById('resetBtn').addEventListener('click', resetForm);
+      document.getElementById('fRole').addEventListener('change', ()=>{
+        syncAgentsSelect();
+      });
+
+      $table.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-act]');
+        if (!btn) return;
+        const act = btn.getAttribute('data-act');
+        const id = btn.getAttribute('data-id');
+        if (act === 'edit') loadToForm(id);
+        if (act === 'toggle') toggleActive(id);
+      });
+
+      resetForm();
+      render();
+    })();
+  </script>
+</body>
+</html>

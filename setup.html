@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
   <style>
     body { background: #f3f4f6; font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
     .card { max-width: 880px; margin: 32px auto; }
@@ -20,7 +21,12 @@
         <p class="text-sm text-gray-500">Edita los parámetros de la cuenta del agente y valores del sandbox.</p>
       </div>
       <div class="text-right">
-  <a href="agents/recharge.html" class="pp-btn pp-btn-secondary" aria-label="Volver al portal" >Volver al Portal de Agentes</a>
+        <div class="flex items-center justify-end gap-2 mb-2">
+          <span class="text-xs text-gray-500">Sesión:</span>
+          <span class="text-xs font-bold" data-pp-session></span>
+          <a href="#" data-pp-logout class="pp-btn pp-btn-secondary">Salir</a>
+        </div>
+        <a href="agents/recharge.html" class="pp-btn pp-btn-secondary" aria-label="Volver al portal">Volver al Portal de Agentes</a>
       </div>
     </div>
 
@@ -260,6 +266,19 @@
   // Initialize
   render();
 })();
+
 </script>
+
+<script>
+  (function(){
+    try {
+      const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
+      if (!session) return;
+      window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+      window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+    } catch(e){ console.warn('Auth guard failed', e); }
+  })();
+</script>
+
 </body>
 </html>

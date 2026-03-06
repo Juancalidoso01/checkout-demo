@@ -8,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
   <style>
     body{background:#f3f4f6;font-family:var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);color:var(--pp-text,#171717)}
     .bg-punto-pago{background:#0047bb}
@@ -24,7 +25,12 @@
         <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Factura</span>
       </div>
       <div class="flex items-center gap-3">
+        <div class="hidden md:flex flex-col items-end text-right">
+          <div class="text-[10px] opacity-85 font-semibold uppercase">Sesión</div>
+          <div class="text-xs font-bold" data-pp-session></div>
+        </div>
         <a href="agents/recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Volver</a>
+        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Salir</a>
       </div>
     </div>
   </nav>
@@ -137,6 +143,14 @@
 
   <script>
   (function(){
+    // Auth guard (agent + employee) ----------------------------------------
+    try {
+      const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
+      if (!session) return;
+      window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+      window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+    } catch(e){ console.warn('Auth guard failed', e); }
+
     const STORAGE_KEY = 'pp_agent_sandbox_v1';
     const DRAFT_KEY = 'pp_receipt_draft_v1';
 
