@@ -86,27 +86,7 @@
       </div>
     </section>
 
-    <section class="mt-6 p-4 border rounded-lg">
-      <div class="flex items-center justify-between gap-4">
-        <h2 class="font-bold">Histórico de transacciones</h2>
-        <button id="clearTxs" class="pp-btn pp-btn-secondary" type="button">Borrar histórico</button>
-      </div>
-      <p class="text-sm text-gray-500 mt-1">Este historial viene del sandbox (<code>pp_agent_sandbox_v1</code>) y se actualiza cuando haces Cash In o pagos.</p>
-
-      <div class="overflow-x-auto mt-4">
-        <table class="w-full text-sm text-left">
-          <thead>
-            <tr class="text-gray-400 uppercase text-[10px]">
-              <th class="pb-3">Fecha</th>
-              <th class="pb-3">Tipo</th>
-              <th class="pb-3">Detalles</th>
-              <th class="pb-3 text-right">Monto</th>
-            </tr>
-          </thead>
-          <tbody id="tx-history"></tbody>
-        </table>
-      </div>
-    </section>
+    <!-- Histórico de transacciones se movió al portal del agente (carrusel) -->
 
     <section class="mt-6 p-4 border rounded-lg">
       <h2 class="font-bold mb-3">Importar / Estado bruto</h2>
@@ -148,39 +128,9 @@
   const cashInput = document.getElementById('cash-input');
   const gainInput = document.getElementById('gain-input');
   const importArea = document.getElementById('importArea');
-  const txHistoryBody = document.getElementById('tx-history');
+  // tx history moved to agents/recharge.html
 
   function fmt(v){ return '$' + Number(v||0).toFixed(2) }
-
-  function renderTxs(){
-    if (!txHistoryBody) return;
-    const s = loadState();
-    const txs = Array.isArray(s.txs) ? s.txs : [];
-    txHistoryBody.innerHTML = '';
-
-    if (!txs.length){
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td colspan="4" class="py-4 text-gray-500">No hay transacciones registradas.</td>`;
-      txHistoryBody.appendChild(tr);
-      return;
-    }
-
-    txs.slice().reverse().forEach(tx => {
-      const tr = document.createElement('tr');
-      tr.className = 'border-b last:border-0';
-      const when = tx.when ? new Date(tx.when).toLocaleString() : '';
-      const type = tx.type || '';
-      const desc = tx.desc || '';
-      const amount = fmt(tx.amount);
-      tr.innerHTML = `
-        <td class="py-3 text-gray-500 font-medium">${when}</td>
-        <td class="py-3 font-bold text-gray-700">${type}</td>
-        <td class="py-3 text-gray-600">${desc}</td>
-        <td class="py-3 text-right font-bold text-gray-800">${amount}</td>
-      `;
-      txHistoryBody.appendChild(tr);
-    });
-  }
 
   function render(){
     const a = loadAgent();
@@ -195,18 +145,6 @@
     balanceInput.value = Number(s.balance||0).toFixed(2);
     cashInput.value = Number(s.cash||0).toFixed(2);
     gainInput.value = Number(s.gain||0).toFixed(2);
-    renderTxs();
-  }
-
-  const clearTxsBtn = document.getElementById('clearTxs');
-  if (clearTxsBtn) {
-    clearTxsBtn.addEventListener('click', ()=>{
-      if (!confirm('Borrar el histórico de transacciones del sandbox?')) return;
-      const s = loadState();
-      s.txs = [];
-      saveState(s);
-      render();
-    });
   }
 
   document.getElementById('saveAgent').addEventListener('click', ()=>{
