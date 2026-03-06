@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Factura — Enviar comprobante</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:#f3f4f6;font-family:var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);color:var(--pp-text,#171717)}
+    .bg-punto-pago{background:#0047bb}
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+    <div class="mx-auto flex justify-between items-center w-full max-w-5xl px-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
+          <img src="assets/logo.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
+        </div>
+        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Factura</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="agents/recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Volver</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pp-page flex-grow">
+    <div class="pp-shell">
+
+      <section class="pp-top-tabs mb-6" aria-label="Acciones">
+        <button type="button" id="loadLastTx" class="pp-top-tab -active">
+          <span class="icon"><i class="fas fa-rotate"></i></span>
+          <span class="title">Cargar última operación</span>
+        </button>
+        <button type="button" id="clearDraft" class="pp-top-tab">
+          <span class="icon"><i class="fas fa-eraser"></i></span>
+          <span class="title">Limpiar</span>
+        </button>
+      </section>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Datos de contacto -->
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold pp-type">Enviar comprobante</h2>
+            <p class="text-sm text-gray-500">Confirma los datos del cliente para compartir el recibo.</p>
+          </div>
+          <div class="pp-card-body space-y-5">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="pp-label">Nombre (opcional)</label>
+                <input id="clientName" class="pp-field" type="text" placeholder="Ej: Juan Pérez" autocomplete="name">
+              </div>
+              <div>
+                <label class="pp-label">Documento / ID (opcional)</label>
+                <input id="clientId" class="pp-field" type="text" placeholder="Ej: 8-888-888" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="pp-label">WhatsApp (tel con país)</label>
+                <div class="pp-input-group">
+                  <span class="pp-input-prefix">+</span>
+                  <input id="waPhone" class="pp-input-control" type="tel" inputmode="tel" placeholder="50760000000" autocomplete="tel">
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Formato sin espacios. Ej: 50760000000</p>
+              </div>
+              <div>
+                <label class="pp-label">Correo electrónico</label>
+                <input id="email" class="pp-field" type="email" placeholder="cliente@correo.com" autocomplete="email">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="pp-label">Telegram (usuario o número)</label>
+                <input id="telegram" class="pp-field" type="text" placeholder="@usuario o 50760000000" autocomplete="off">
+              </div>
+              <div>
+                <label class="pp-label">Mensaje (editable)</label>
+                <textarea id="message" class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-4" rows="4" placeholder="Mensaje para el cliente..."></textarea>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+              <button type="button" id="sendWhatsapp" class="pp-btn pp-btn-primary -full">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+              </button>
+              <button type="button" id="sendTelegram" class="pp-btn pp-btn-primary -full">
+                <i class="fab fa-telegram"></i> Telegram
+              </button>
+              <button type="button" id="sendEmail" class="pp-btn pp-btn-primary -full">
+                <i class="fas fa-envelope"></i> Correo
+              </button>
+            </div>
+
+            <p id="status" class="text-sm text-gray-500"></p>
+          </div>
+        </section>
+
+        <!-- Preview de recibo -->
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold pp-type">Vista previa</h2>
+            <p class="text-sm text-gray-500">Así verá el recibo el cliente (texto).</p>
+          </div>
+          <div class="pp-card-body">
+            <div class="rounded-2xl border border-gray-200 bg-white p-5">
+              <div class="text-xs tracking-widest text-gray-500 font-bold uppercase">Punto Pago — Comprobante</div>
+              <div id="receiptTitle" class="mt-2 text-lg font-extrabold">Operación</div>
+              <div id="receiptMeta" class="mt-2 text-sm text-gray-600"></div>
+              <div class="mt-4 border-t pt-4">
+                <div class="flex justify-between text-sm"><span class="text-gray-500">Monto</span><span id="receiptAmount" class="font-extrabold">$0.00</span></div>
+                <div class="flex justify-between text-sm mt-2"><span class="text-gray-500">Referencia</span><span id="receiptRef" class="font-mono text-gray-700">—</span></div>
+              </div>
+              <div class="mt-4 text-xs text-gray-500">Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <footer class="mt-8 text-xs text-gray-500">
+        Demo — Los datos se guardan en <code>localStorage</code>. Fuente de operaciones: sandbox <code>pp_agent_sandbox_v1</code>.
+      </footer>
+
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    const STORAGE_KEY = 'pp_agent_sandbox_v1';
+    const DRAFT_KEY = 'pp_receipt_draft_v1';
+
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { txs: [] }; }
+      catch(e){ return { txs: [] }; }
+    }
+
+    function fmt(v){
+      const n = Number(v);
+      return '$' + (Number.isFinite(n) ? n.toFixed(2) : '0.00');
+    }
+
+    function safeText(v){ return (v ?? '').toString().trim(); }
+
+    const els = {
+      clientName: document.getElementById('clientName'),
+      clientId: document.getElementById('clientId'),
+      waPhone: document.getElementById('waPhone'),
+      email: document.getElementById('email'),
+      telegram: document.getElementById('telegram'),
+      message: document.getElementById('message'),
+      status: document.getElementById('status'),
+      receiptTitle: document.getElementById('receiptTitle'),
+      receiptMeta: document.getElementById('receiptMeta'),
+      receiptAmount: document.getElementById('receiptAmount'),
+      receiptRef: document.getElementById('receiptRef'),
+      loadLastTx: document.getElementById('loadLastTx'),
+      clearDraft: document.getElementById('clearDraft'),
+      sendWhatsapp: document.getElementById('sendWhatsapp'),
+      sendTelegram: document.getElementById('sendTelegram'),
+      sendEmail: document.getElementById('sendEmail'),
+    };
+
+    function setStatus(msg){
+      if (!els.status) return;
+      els.status.textContent = msg;
+    }
+
+    function buildReceiptFromTx(tx){
+      const when = tx?.when ? new Date(tx.when) : new Date();
+      const type = safeText(tx?.type) || 'Operación';
+      const desc = safeText(tx?.desc) || '—';
+      const amount = fmt(tx?.amount);
+      const ref = safeText(tx?.ref) || safeText(tx?.id) || safeText(tx?.reference) || '—';
+
+      const title = type;
+      const meta = `${when.toLocaleString()} — ${desc}`;
+
+      return { title, meta, amount, ref };
+    }
+
+    function updatePreview(receipt){
+      els.receiptTitle.textContent = receipt.title;
+      els.receiptMeta.textContent = receipt.meta;
+      els.receiptAmount.textContent = receipt.amount;
+      els.receiptRef.textContent = receipt.ref;
+    }
+
+    function defaultMessage(receipt, clientName){
+      const name = safeText(clientName);
+      const greet = name ? `Hola ${name},` : 'Hola,';
+      return [
+        greet,
+        'Te compartimos tu comprobante de pago:',
+        `${receipt.title}`,
+        `${receipt.meta}`,
+        `Monto: ${receipt.amount}`,
+        `Referencia: ${receipt.ref}`,
+        'Gracias por usar Punto Pago.'
+      ].join('\n');
+    }
+
+    function loadDraft(){
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch(e){
+        return null;
+      }
+    }
+
+    function saveDraft(d){
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch(e){}
+    }
+
+    function clearDraft(){
+      try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+    }
+
+    function hydrateFromDraft(){
+      const d = loadDraft();
+      if (!d) return;
+      if (d.clientName) els.clientName.value = d.clientName;
+      if (d.clientId) els.clientId.value = d.clientId;
+      if (d.waPhone) els.waPhone.value = d.waPhone;
+      if (d.email) els.email.value = d.email;
+      if (d.telegram) els.telegram.value = d.telegram;
+      if (d.message) els.message.value = d.message;
+      if (d.receipt) updatePreview(d.receipt);
+    }
+
+    function persist(){
+      const d = {
+        clientName: safeText(els.clientName.value),
+        clientId: safeText(els.clientId.value),
+        waPhone: safeText(els.waPhone.value),
+        email: safeText(els.email.value),
+        telegram: safeText(els.telegram.value),
+        message: safeText(els.message.value),
+        receipt: {
+          title: safeText(els.receiptTitle.textContent),
+          meta: safeText(els.receiptMeta.textContent),
+          amount: safeText(els.receiptAmount.textContent),
+          ref: safeText(els.receiptRef.textContent),
+        }
+      };
+      saveDraft(d);
+    }
+
+    function ensureMessage(){
+      const current = safeText(els.message.value);
+      if (current) return current;
+      const receipt = {
+        title: safeText(els.receiptTitle.textContent) || 'Operación',
+        meta: safeText(els.receiptMeta.textContent) || '',
+        amount: safeText(els.receiptAmount.textContent) || '$0.00',
+        ref: safeText(els.receiptRef.textContent) || '—',
+      };
+      const msg = defaultMessage(receipt, els.clientName.value);
+      els.message.value = msg;
+      return msg;
+    }
+
+    function openUrl(url){
+      // new tab to avoid losing state
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function sendWhatsApp(){
+      const phone = safeText(els.waPhone.value).replace(/[^0-9]/g,'');
+      if (!phone){
+        setStatus('Ingresa el número de WhatsApp (con código de país, sin +).');
+        els.waPhone.focus();
+        return;
+      }
+      const msg = ensureMessage();
+      const url = `https://wa.me/${encodeURIComponent(phone)}?text=${encodeURIComponent(msg)}`;
+      setStatus('Abriendo WhatsApp…');
+      openUrl(url);
+    }
+
+    function sendEmail(){
+      const email = safeText(els.email.value);
+      if (!email){
+        setStatus('Ingresa un correo del cliente.');
+        els.email.focus();
+        return;
+      }
+      const msg = ensureMessage();
+      const subject = 'Comprobante de pago — Punto Pago';
+      const url = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
+      setStatus('Abriendo correo…');
+      openUrl(url);
+    }
+
+    function sendTelegram(){
+      const handle = safeText(els.telegram.value);
+      const msg = ensureMessage();
+      if (!handle){
+        // fallback: open t.me share
+        const url = `https://t.me/share/url?url=&text=${encodeURIComponent(msg)}`;
+        setStatus('Abriendo Telegram (compartir)…');
+        openUrl(url);
+        return;
+      }
+      // if user provided @username, open chat
+      const clean = handle.replace(/^@/,'').trim();
+      const url = `https://t.me/${encodeURIComponent(clean)}`;
+      setStatus('Abriendo Telegram… (luego pega el mensaje)');
+      openUrl(url);
+    }
+
+    function loadLastTx(){
+      const st = loadState();
+      const txs = Array.isArray(st.txs) ? st.txs : [];
+      if (!txs.length){
+        setStatus('No hay transacciones en el sandbox todavía. Realiza un Cash In o un pago primero.');
+        const blank = { title: 'Operación', meta: new Date().toLocaleString(), amount: '$0.00', ref: '—' };
+        updatePreview(blank);
+        els.message.value = '';
+        persist();
+        return;
+      }
+      const last = txs[txs.length - 1];
+      const receipt = buildReceiptFromTx(last);
+      updatePreview(receipt);
+      els.message.value = '';
+      setStatus('Última operación cargada. Completa los datos del cliente y elige el canal.');
+      persist();
+    }
+
+    // Wire
+    ['input','change','blur'].forEach(evt => {
+      [els.clientName, els.clientId, els.waPhone, els.email, els.telegram, els.message].forEach(el => {
+        if (!el) return;
+        el.addEventListener(evt, persist);
+      });
+    });
+
+    els.sendWhatsapp.addEventListener('click', ()=>{ persist(); sendWhatsApp(); });
+    els.sendTelegram.addEventListener('click', ()=>{ persist(); sendTelegram(); });
+    els.sendEmail.addEventListener('click', ()=>{ persist(); sendEmail(); });
+
+    els.loadLastTx.addEventListener('click', ()=>{ loadLastTx(); });
+    els.clearDraft.addEventListener('click', ()=>{
+      clearDraft();
+      location.reload();
+    });
+
+    // Init
+    hydrateFromDraft();
+    if (!safeText(els.receiptTitle.textContent) || els.receiptTitle.textContent === 'Operación'){
+      // attempt to populate automatically
+      loadLastTx();
+    }
+
+  })();
+  </script>
+</body>
+</html>
