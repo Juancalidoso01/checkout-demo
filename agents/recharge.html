@@ -185,7 +185,7 @@
                     <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Valor real a recargar (neto)</div>
                     <div id="cashin-net" class="text-lg font-extrabold text-gray-900">$0.00</div>
                   </div>
-                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint">Neto = Monto - Comisión - IBMS</div>
+                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint">Neto = Monto - Comisión - ITBMS</div>
                 </div>
               </div>
             </div>
@@ -679,7 +679,7 @@
        const v = parseFloat(amt.value) || 0;
        if (v > 0){
          const f = calculateFees(v);
-         feeDiv.textContent = `Comisión 2%+$0.25: ${fmt(f.commission)}; IBMS 7%: ${fmt(f.ibms)}`;
+  feeDiv.textContent = `Comisión 2%+$0.25: ${fmt(f.commission)}; ITBMS 7%: ${fmt(f.ibms)}`;
          if (netDiv) netDiv.textContent = fmt(calculateNet(v));
        } else {
          feeDiv.textContent = '';
@@ -889,7 +889,7 @@
           const sn = document.getElementById('summary-net');
           if (sp) sp.textContent = getAgentNumber();
           if (st) st.textContent = fmt(total);
-          if (sf) sf.textContent = `Comisión: ${fmt(f.commission)} · IBMS: ${fmt(f.ibms)} · Neto: ${fmt(net)}`;
+          if (sf) sf.textContent = `Comisión: ${fmt(f.commission)} · ITBMS: ${fmt(f.ibms)} · Neto: ${fmt(net)}`;
           if (sn) sn.textContent = fmt(net);
         }
       }

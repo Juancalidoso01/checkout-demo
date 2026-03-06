@@ -314,7 +314,7 @@
               state.gain = Number((Number(state.gain) + commission + ibms).toFixed(2));
 
               state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión recarga digital (checkout) ID:${txId||''}`, amount: commission });
-              state.txs.push({ when: Date.now(), type: 'Impuesto', desc: `IBMS sobre comisión recarga digital (checkout) ID:${txId||''}`, amount: ibms });
+              state.txs.push({ when: Date.now(), type: 'Impuesto', desc: `ITBMS sobre comisión recarga digital (checkout) ID:${txId||''}`, amount: ibms });
 
               // Include gross and net in the description for audit
               state.txs.push({ when: Date.now(), type: 'Recarga digital', desc: `Recarga digital via ${method || 'digital'} (checkout) ID:${txId||''} bruto:${amt.toFixed(2)} neto:${net.toFixed(2)}`, amount: net });
