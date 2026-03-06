@@ -154,6 +154,9 @@ html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffff
 .pp-input-prefix{display:inline-flex;align-items:center;padding:0 14px;background:rgba(0,0,0,.02);color:#6b7280;font-weight:700;user-select:none}
 .pp-input-control{flex:1;min-width:0;border:0;outline:none;padding:0 16px;font-size:16px;color:var(--pp-text);background:transparent;height:54px}
 
+/* Embedded sections (Factura / Mi equipo) inside agent portal */
+.pp-embed-frame{width:100%;border:0;display:block;min-height:calc(100vh - 220px)}
+
 /* Tabs */
 .pp-tab{border:1px solid rgba(0,0,0,.06);background:#fff;border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.06)}
 .pp-tab.-active{border-bottom:4px solid var(--pp-primary);color:var(--pp-primary)}

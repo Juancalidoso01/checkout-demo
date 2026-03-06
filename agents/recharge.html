@@ -108,14 +108,14 @@
   <main class="pp-page flex-grow">
     <div class="pp-shell">
       <section class="pp-top-tabs mb-6" aria-label="Módulos">
-        <a href="../factura.html" id="tab-factura" class="pp-top-tab tab-inactive" aria-label="Enviar comprobante">
+        <button type="button" onclick="showSection('factura')" id="tab-factura" class="pp-top-tab tab-inactive" aria-controls="section-factura" aria-label="Enviar comprobante">
           <span class="icon"><i class="fas fa-receipt"></i></span>
           <span class="title">Factura</span>
-        </a>
-        <a href="team.html" id="tab-team" class="pp-top-tab tab-inactive" aria-label="Mi equipo">
+        </button>
+        <button type="button" onclick="showSection('team')" id="tab-team" class="pp-top-tab tab-inactive" aria-controls="section-team" aria-label="Mi equipo">
           <span class="icon"><i class="fas fa-users"></i></span>
           <span class="title">Mi equipo</span>
-        </a>
+        </button>
         <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="pp-top-tab tab-inactive" aria-controls="section-pagos">
           <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
           <span class="title">Pago de servicios</span>
@@ -133,6 +133,40 @@
       <div class="md:hidden -mt-3 mb-4 text-center text-[11px] text-gray-500">
         Desliza para ver más opciones · « »
       </div>
+
+    <!-- SECCIÓN: FACTURA (embed para mantener carrusel+contenido en la misma pantalla) -->
+    <div id="section-factura" class="hidden section-fade">
+      <div class="pp-card -soft overflow-hidden">
+        <div class="pp-card-head">
+          <h2 class="text-2xl font-bold pp-type">Factura</h2>
+          <p class="text-gray-500 pp-type">Enviar comprobante y compartir recibo.</p>
+        </div>
+        <div class="pp-card-body p-0">
+          <iframe
+            src="../factura.html"
+            title="Factura"
+            class="pp-embed-frame">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: MI EQUIPO (embed) -->
+    <div id="section-team" class="hidden section-fade">
+      <div class="pp-card -soft overflow-hidden">
+        <div class="pp-card-head">
+          <h2 class="text-2xl font-bold pp-type">Mi equipo</h2>
+          <p class="text-gray-500 pp-type">Usuarios, roles y permisos del agente.</p>
+        </div>
+        <div class="pp-card-body p-0">
+          <iframe
+            src="team.html"
+            title="Mi equipo"
+            class="pp-embed-frame">
+          </iframe>
+        </div>
+      </div>
+    </div>
 
     <!-- SECCIÓN: RECARGA DIGITAL (Fondeo por métodos digitales) -->
     <div id="section-cashin" class="section-fade">
@@ -716,13 +750,13 @@
 
     // Función para cambiar entre secciones
     function showSection(section) {
-      const sections = ['cashin', 'fondear', 'pagos'];
+      const sections = ['factura', 'team', 'pagos', 'cashin', 'fondear'];
       sections.forEach(s => {
         const element = document.getElementById(`section-${s}`);
         const tab = document.getElementById(`tab-${s}`);
                 
         if (s === section) {
-          element.classList.remove('hidden');
+          if (element) element.classList.remove('hidden');
           if (tab) {
             tab.classList.add('tab-active');
             tab.classList.remove('tab-inactive');
@@ -733,7 +767,7 @@
             }
           }
         } else {
-          element.classList.add('hidden');
+          if (element) element.classList.add('hidden');
           if (tab) {
             tab.classList.add('tab-inactive');
             tab.classList.remove('tab-active');
@@ -787,7 +821,51 @@
           const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
         }
       } catch(e){ console.warn('showSection scroll failed', e); }
+
+      // reflect current module in URL (so refresh keeps the same section)
+      try {
+        const url = new URL(location.href);
+        url.searchParams.set('tab', section);
+        history.replaceState({}, '', url.toString());
+      } catch(e) { /* ignore */ }
     }
+
+    // Swipe sync: when user swipes the module carousel, show the matching section
+    (function wireModuleCarouselSync(){
+      const tabsWrap = document.querySelector('.pp-top-tabs');
+      if (!tabsWrap) return;
+
+      let t;
+      tabsWrap.addEventListener('scroll', () => {
+        if (!window.matchMedia || !window.matchMedia('(max-width: 520px)').matches) return;
+        clearTimeout(t);
+        t = setTimeout(() => {
+          const tabs = Array.from(tabsWrap.querySelectorAll('.pp-top-tab'));
+          if (!tabs.length) return;
+          const wrapRect = tabsWrap.getBoundingClientRect();
+          const wrapCenter = wrapRect.left + wrapRect.width / 2;
+          let best = null;
+          let bestDist = Infinity;
+          for (const tab of tabs) {
+            const r = tab.getBoundingClientRect();
+            const c = r.left + r.width / 2;
+            const d = Math.abs(c - wrapCenter);
+            if (d < bestDist) { bestDist = d; best = tab; }
+          }
+          if (!best || !best.id) return;
+          const section = best.id.replace(/^tab-/, '');
+          const isActive = best.classList.contains('tab-active');
+          if (!isActive) showSection(section);
+        }, 120);
+      }, { passive: true });
+
+      // initial tab from URL
+      try {
+        const url = new URL(location.href);
+        const tab = url.searchParams.get('tab');
+        if (tab) showSection(tab);
+      } catch(e) { /* ignore */ }
+    })();
 
     // Navegación de pasos en Recarga digital
     (function wireRecargaButtons(){
