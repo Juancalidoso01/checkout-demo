@@ -10,10 +10,44 @@
   --radius: 12px;
   --glass: rgba(255,255,255,0.6);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* PuntoPago-inspired design tokens (from puntopago.net) */
+  --pp-font: "Hellix", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pp-font-secondary: "Gilroy", var(--pp-font);
+  --pp-font-tertiary: "Mulish", var(--pp-font);
+
+  --pp-text: #171717;
+  --pp-bg: #ffffff;
+  --pp-surface: #f6f6f6;
+  --pp-border: #dcdcdc;
+  --pp-primary: #5462e6;
+  --pp-primary-900: #3738ab;
+  --pp-danger: #eb4242;
+
+  --pp-radius-sm: 12px;
+  --pp-radius-md: 24px;
+  --pp-shadow-card: 0 4px 12px rgba(0,0,0,.15);
 }
 
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0f172a;-webkit-font-smoothing:antialiased}
+
+/* Optional: shared typography helpers */
+.pp-type{font-family:var(--pp-font);color:var(--pp-text)}
+.pp-h1{font-size:4rem;line-height:1.05;letter-spacing:-.03em;font-weight:700}
+.pp-h2{font-size:3.2rem;line-height:1.1;letter-spacing:-.03em;font-weight:700}
+.pp-h3{font-size:2.4rem;line-height:1.1;letter-spacing:-.02em;font-weight:600}
+.pp-body{font-size:1.6rem;line-height:1.2}
+.pp-small{font-size:1.4rem;line-height:1.2}
+
+/* PuntoPago-like buttons (can be adopted gradually) */
+.pp-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;text-decoration:none}
+.pp-btn-primary{height:54px;padding:0 20px;border-radius:var(--pp-radius-md);background:var(--pp-primary);color:#fff;font-size:16px;font-weight:500;line-height:1;letter-spacing:-.02em;transition:transform .12s ease,filter .12s ease,opacity .12s ease}
+.pp-btn-primary:hover{filter:brightness(1.02);transform:translateY(-1px)}
+.pp-btn-primary:active{transform:translateY(0)}
+.pp-btn-primary.-full{width:100%}
+
+.pp-btn-secondary{height:54px;padding:0 20px;border-radius:var(--pp-radius-sm);background:transparent;color:var(--pp-primary);font-size:16px;font-weight:600;line-height:1.2;letter-spacing:-.02em}
 
 /* Improve touch scrolling on iOS/Safari */
 html, body { -webkit-overflow-scrolling: touch; touch-action: pan-y; }

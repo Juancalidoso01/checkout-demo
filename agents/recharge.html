@@ -7,6 +7,7 @@
   <title>Punto Pago - Portal de Agentes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
   <style>
     :root {
       --punto-pago-blue: #0047bb;
@@ -15,12 +16,13 @@
     }
     body {
       background-color: #f3f4f6;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
+      color: var(--pp-text, #171717);
     }
     .bg-punto-pago { background-color: var(--punto-pago-blue); }
     .text-punto-pago { color: var(--punto-pago-blue); }
     .btn-primary {
-      background: linear-gradient(135deg, var(--punto-pago-blue), var(--punto-pago-cyan));
+      background: var(--pp-primary, var(--punto-pago-blue));
       transition: all 0.3s ease;
     }
     .btn-primary:hover {
