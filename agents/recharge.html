@@ -109,6 +109,29 @@
 
   <main class="pp-page flex-grow">
     <div class="pp-shell">
+      <!-- Módulos (barra superior compacta) -->
+      <section class="pp-top-tabs mb-6" aria-label="Módulos">
+        <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="pp-top-tab tab-inactive" aria-controls="section-pagos">
+          <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
+          <span class="title">Pago de servicios</span>
+        </button>
+
+        <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="pp-top-tab tab-active" aria-controls="section-cashin">
+          <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
+          <span class="title">Cash In</span>
+        </button>
+
+        <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="pp-top-tab tab-inactive" aria-controls="section-fondear">
+          <span class="icon"><i class="fas fa-university"></i></span>
+          <span class="title">Notificar ACH</span>
+        </button>
+
+        <button type="button" class="pp-top-tab -disabled" aria-disabled="true">
+          <span class="icon bg-gray-100 text-gray-400"><i class="fas fa-history"></i></span>
+          <span class="title text-gray-400">Reportes</span>
+        </button>
+      </section>
+
       <!-- Top KPIs (banking style) -->
       <section class="pp-grid pp-grid.-summary mb-6" aria-label="Resumen">
         <div class="pp-kpi pp-col-4">
@@ -126,41 +149,6 @@
           <div class="value" id="gain-kpi">$0.00</div>
           <div class="hint">Comisiones del día</div>
         </div>
-      </section>
-
-      <!-- Módulos -->
-      <section class="pp-menu mb-6" aria-label="Módulos">
-        <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="pp-menu-btn tab-inactive" aria-controls="section-pagos">
-          <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
-          <span class="block">
-            <span class="title block">Pago de servicios</span>
-            <span class="sub block">ENSA, recargas, etc.</span>
-          </span>
-        </button>
-
-        <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="pp-menu-btn tab-active" aria-controls="section-cashin">
-          <span class="icon"><i class="fas fa-money-bill-wave"></i></span>
-          <span class="block">
-            <span class="title block">Cash In</span>
-            <span class="sub block">Recarga de saldo</span>
-          </span>
-        </button>
-
-        <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="pp-menu-btn tab-inactive" aria-controls="section-fondear">
-          <span class="icon"><i class="fas fa-university"></i></span>
-          <span class="block">
-            <span class="title block">Notificar ACH</span>
-            <span class="sub block">Transferencias entrantes</span>
-          </span>
-        </button>
-
-        <button type="button" class="pp-menu-btn -disabled" aria-disabled="true">
-          <span class="icon bg-gray-100 text-gray-400"><i class="fas fa-history"></i></span>
-          <span class="block">
-            <span class="title block text-gray-400">Reportes</span>
-            <span class="sub block">Próximamente</span>
-          </span>
-        </button>
       </section>
 
     <!-- SECCIÓN: CASH IN (Flujo de Depósito) -->
