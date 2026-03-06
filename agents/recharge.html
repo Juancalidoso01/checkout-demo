@@ -30,8 +30,8 @@
       transform: translateY(-1px);
     }
     .tab-active {
-      border-bottom: 4px solid var(--punto-pago-blue);
-      color: var(--punto-pago-blue);
+      border-bottom: 4px solid var(--pp-primary, var(--punto-pago-blue));
+      color: var(--pp-primary, var(--punto-pago-blue));
     }
     .tab-inactive {
       border-bottom: 4px solid transparent;
@@ -110,19 +110,19 @@
   <main class="demo-container mx-auto py-8 px-4 flex-grow">
     <!-- Navegación de Funciones Principales -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-  <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
+  <button type="button" onclick="showSection('pagos')" id="tab-pagos" class="p-4 text-center transition group pp-tab pp-type tab-inactive">
         <i class="fas fa-file-invoice-dollar text-2xl mb-2 group-hover:scale-110 transition"></i>
         <span class="font-bold">Pago de Servicios</span>
       </button>
-  <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group">
+  <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="p-4 text-center transition group pp-tab pp-type tab-active">
         <i class="fas fa-money-bill-wave text-2xl mb-2 group-hover:scale-110 transition"></i>
         <span class="font-bold">Cash In</span>
       </button>
-  <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group">
+  <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="p-4 text-center transition group pp-tab pp-type tab-inactive">
         <i class="fas fa-university text-2xl mb-2 group-hover:scale-110 transition"></i>
         <span class="font-bold">Notificar ACH</span>
       </button>
-  <button type="button" class="p-4 bg-white rounded-xl shadow opacity-60 cursor-not-allowed text-center">
+  <button type="button" class="p-4 opacity-60 cursor-not-allowed text-center pp-tab pp-type">
         <i class="fas fa-history text-2xl text-gray-400 mb-2"></i>
         <span class="font-bold text-gray-400">Reportes</span>
       </button>
@@ -130,10 +130,10 @@
 
     <!-- SECCIÓN: CASH IN (Flujo de Depósito) -->
     <div id="section-cashin" class="max-w-4xl mx-auto section-fade">
-      <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-b-4 border-blue-600">
-        <div class="bg-gray-50 border-b p-6">
-          <h2 class="text-2xl font-bold text-gray-800">Recarga tu agente</h2>
-          <p class="text-gray-500">Carga balance a tu plataforma</p>
+      <div class="pp-card -soft overflow-hidden">
+        <div class="pp-card-head">
+          <h2 class="text-2xl font-bold pp-type">Recarga tu agente</h2>
+          <p class="text-gray-500 pp-type">Carga balance a tu plataforma</p>
         </div>
 
       <!-- Toast de confirmación desde Checkout -->
@@ -141,24 +141,24 @@
         <div class="flex items-center space-x-3"><div class="font-bold">Recarga aplicada</div><button id="checkoutToastClose" type="button" class="ml-4 text-white opacity-90">✕</button></div>
       </div>
 
-        <div class="p-8">
+        <div class="pp-card-body">
           <!-- Paso 1: Datos -->
           <div id="step-1" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Número de Celular</label>
-                <div class="flex items-stretch rounded-xl border border-gray-300 overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-                  <span class="px-4 flex items-center bg-gray-50 text-gray-500 font-bold select-none">+</span>
-                  <input type="tel" id="client-phone" inputmode="tel" pattern="\+?[0-9]*" placeholder="Ej: +50760000000 o +19171234567" class="w-full px-4 py-3 outline-none" autocomplete="tel" aria-label="Número de celular">
+                <label class="pp-label">Número de Celular</label>
+                <div class="pp-input-group">
+                  <span class="pp-input-prefix">+</span>
+                  <input type="tel" id="client-phone" inputmode="tel" pattern="\+?[0-9]*" placeholder="Ej: +50760000000 o +19171234567" class="pp-input-control" autocomplete="tel" aria-label="Número de celular">
                 </div>
                 <p class="mt-2 text-xs text-gray-500">Incluye el código de país. Ej: <span class="font-mono">+507</span>, <span class="font-mono">+1</span>, <span class="font-mono">+593</span>.</p>
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Monto USD</label>
-                <div class="flex items-stretch rounded-xl border border-gray-300 overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
-                  <span class="px-4 flex items-center bg-gray-50 text-gray-500 font-bold select-none">$</span>
-                  <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="w-full px-4 py-3 font-bold text-xl outline-none" autocomplete="off" aria-label="Monto USD">
+                <label class="pp-label">Monto USD</label>
+                <div class="pp-input-group">
+                  <span class="pp-input-prefix">$</span>
+                  <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="pp-input-control font-bold text-xl" autocomplete="off" aria-label="Monto USD">
                 </div>
                 <!-- fees preview -->
                 <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
@@ -166,7 +166,7 @@
             </div>
 
             <div class="flex justify-center md:justify-end">
-              <button type="button" onclick="event.preventDefault(); nextStep(2)" class="btn-primary text-white w-full md:w-auto px-10 py-4 rounded-xl font-bold shadow-lg">Continuar</button>
+              <button type="button" onclick="event.preventDefault(); nextStep(2)" class="pp-btn pp-btn-primary -full md:w-auto">Continuar</button>
             </div>
           </div>
 
@@ -189,8 +189,8 @@
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
             </div>
             <div class="flex space-x-4">
-              <button type="button" onclick="nextStep(1)" class="w-1/3 border-2 border-gray-200 text-gray-500 py-4 rounded-xl font-bold hover:bg-gray-50 transition">CORREGIR</button>
-              <button type="button" onclick="event.preventDefault(); processCashIn()" class="w-2/3 btn-primary text-white py-4 rounded-xl font-bold shadow-xl">CONFIRMAR Y PROCESAR</button>
+              <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary">Corregir</button>
+              <button type="button" onclick="event.preventDefault(); processCashIn()" class="w-2/3 pp-btn pp-btn-primary">Confirmar y procesar</button>
             </div>
           </div>
 
@@ -746,12 +746,12 @@
           const tab = document.getElementById(`tab-${s}`);
           if (s === section) {
             if(element) element.classList.remove('hidden');
-            if(tab) tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-active group";
+            if(tab) tab.className = "p-4 text-center transition group pp-tab pp-type tab-active";
             if(tab) tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 text-blue-600 transition`;
           } else {
             if(element) element.classList.add('hidden');
             if (tab) {
-              tab.className = "p-4 bg-white rounded-xl shadow hover:shadow-md transition text-center tab-inactive group";
+              tab.className = "p-4 text-center transition group pp-tab pp-type tab-inactive";
               tab.querySelector('i').className = `fas ${s === 'cashin' ? 'fa-money-bill-wave' : s === 'fondear' ? 'fa-university' : 'fa-file-invoice-dollar'} text-2xl mb-2 transition`;
             }
           }
