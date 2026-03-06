@@ -7,6 +7,8 @@
   <title>Punto Pago - Portal de Agentes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../auth.js"></script>
   <style>
     :root {
       --punto-pago-blue: #0047bb;
@@ -49,6 +51,20 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
+
+  <script>
+    // Require a valid session for this portal
+    (function(){
+      try {
+        const s = window.PPAuth && window.PPAuth.requireAuth ? window.PPAuth.requireAuth({ role: ['agent','employee','superadmin'] }) : null;
+        // session badge + logout
+        if (window.PPAuth && window.PPAuth.renderSessionBadge) window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+        if (window.PPAuth && window.PPAuth.ensureLogoutButton) window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+        // if superadmin accidentally lands here, take them to admin
+        if (s && s.role === 'superadmin') { location.href = '../admin/index.html'; }
+      } catch(e){ console.warn('auth guard failed', e); }
+    })();
+  </script>
 
   <!-- Header / Navbar -->
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40">
@@ -123,20 +139,11 @@
 
           <!-- Paso 1: Datos -->
           <div id="step-1" class="space-y-6">
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Número de Celular</label>
-                <div class="relative">
-                  <span class="absolute left-3 top-3 text-gray-400 font-bold">+507</span>
-                  <input type="tel" id="client-phone" inputmode="numeric" pattern="[0-9]*" placeholder="60000000" class="w-full pl-14 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none" maxlength="8" autocomplete="tel" aria-label="Número de celular">
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Monto USD</label>
-                <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-xl outline-none" autocomplete="off" aria-label="Monto USD">
-                <!-- fees preview -->
-                <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
-              </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Monto USD</label>
+              <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold text-xl outline-none" autocomplete="off" aria-label="Monto USD">
+              <!-- fees preview -->
+              <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
             </div>
             <div class="flex justify-end">
               <button type="button" onclick="event.preventDefault(); nextStep(2)" class="btn-primary text-white px-10 py-3 rounded-lg font-bold shadow-lg">Continuar</button>
@@ -148,8 +155,8 @@
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
               <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen del Depósito</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600">Cuenta de Destino:</span>
-                <span class="font-bold text-gray-800" id="summary-phone">6000-0000</span>
+                <span class="text-gray-600">Recarga a:</span>
+                <span class="font-bold text-gray-800" id="summary-phone">Tu cuenta</span>
               </div>
               <div class="flex justify-between mb-4">
                 <span class="text-gray-600">Titular estimado:</span>
@@ -589,26 +596,7 @@
         r.classList.remove('hidden');
       }
 
-      // ensure phone field always contains the +507 prefix
-    (function setupPhonePrefix(){
-      const ip = document.getElementById('client-phone');
-      if (!ip) return;
-      function normalize(){
-        let v = ip.value || '';
-        // remove non numeric except +
-        v = v.replace(/[^0-9\+]/g, '');
-        if (!v.startsWith('+507')) {
-          // strip existing leading digits
-          v = v.replace(/^\+?\d*/, '');
-          v = '+507' + v;
-        }
-        ip.value = v;
-      }
-      ip.addEventListener('focus', normalize);
-      ip.addEventListener('input', normalize);
-      ip.addEventListener('blur', normalize);
-    })();
-
+      
     // compute fees for cash-in amount
     function calculateFees(amount){
       const commission = Number((amount * 0.02 + 0.25).toFixed(2));
@@ -757,7 +745,7 @@
           // smooth scroll with nearest block to avoid overscrolling headers
           el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
         }
-        // if cashin selected, focus the phone input so iOS brings it into view
+  // if cashin selected, focus the amount input so iOS brings it into view
         if (section === 'cashin') {
           // calculate available vertical space and center the cashin panel on small screens
           try {
@@ -778,7 +766,7 @@
               }
             }
           } catch(e){ console.warn('center calc failed', e); }
-          setTimeout(()=>{ const ip = document.getElementById('client-phone'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
+          setTimeout(()=>{ const ip = document.getElementById('cashin-amount'); if(ip){ ip.focus(); setTimeout(()=>{ ip.scrollIntoView({behavior:'smooth', block:'center'}); },200); } },350);
         } else {
           // remove centering when other sections are active
           const cashEl = document.getElementById('section-cashin'); if (cashEl) { cashEl.classList.remove('section-center'); cashEl.style.minHeight=''; }
@@ -787,22 +775,17 @@
     }
 
     // Navegación de pasos en Cash In
-    function nextStep(step) {
-       const phone = document.getElementById('client-phone').value;
-       const amount = document.getElementById('cashin-amount').value;
+   function nextStep(step) {
+     const amount = document.getElementById('cashin-amount').value;
 
       if (step === 2) {
-        if (phone.length < 8) {
-          alert("Ingrese un número de celular válido (8 dígitos).");
-          return;
-        }
         if (!amount || parseFloat(amount) <= 0) {
           alert("Ingrese un monto válido para el depósito.");
           return;
         }
                 
         // Actualizar resumen de confirmación
-        document.getElementById('summary-phone').innerText = `+507 ${phone}`;
+        document.getElementById('summary-phone').innerText = `Tu cuenta`;
         document.getElementById('summary-total').innerText = `$${parseFloat(amount).toFixed(2)}`;
         // show fees breakdown
         try {
@@ -909,7 +892,7 @@
     }
 
     function resetFlow() {
-      document.getElementById('client-phone').value = "";
+  // phone removed from this flow
       document.getElementById('cashin-amount').value = "";
       nextStep(1);
     }
@@ -1092,7 +1075,7 @@
   <script>
     // Ensure the phone input is visible when focused on mobile: scroll into view then offset a bit
     (function(){
-      const inputs = ['client-phone','cashin-amount','ach-ref','ach-amount'];
+  const inputs = ['cashin-amount','ach-ref','ach-amount'];
 
       // Baseline viewport height used to detect keyboard appearance
       let baselineVH = window.innerHeight;
