@@ -167,7 +167,7 @@ img{max-width:100%;height:auto;display:block;-webkit-user-drag:none}
 
 /* Agent header quick fix: prevent the white logo pill from dominating small iPhones */
 @media (max-width: 380px){
-  nav .max-w-4xl .bg-white\/95{max-width:132px !important}
+  nav .max-w-4xl .bg-white\/95{max-width:120px !important}
 }
 
 .demo-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
