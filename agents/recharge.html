@@ -814,7 +814,13 @@
         const tab = document.getElementById(`tab-${s}`);
                 
         if (s === section) {
-          if (element) element.classList.remove('hidden');
+          if (element) {
+            element.classList.remove('hidden');
+            // Animate it
+            element.classList.remove('animate-section-slide');
+            void element.offsetWidth; // trigger reflow to reset animation
+            element.classList.add('animate-section-slide');
+          }
           if (tab) {
             tab.classList.add('tab-active');
             tab.classList.remove('tab-inactive');
@@ -1335,15 +1341,11 @@
           if (activeIndex === -1) return;
           
           if (dx < 0) {
-            // Swiped left => Next tab
-            if (activeIndex < sections.length - 1) {
-              showSection(sections[activeIndex + 1]);
-            }
+            // Swiped left => Next tab (wrap around if at the end)
+            showSection(sections[(activeIndex + 1) % sections.length]);
           } else {
-            // Swiped right => Prev tab
-            if (activeIndex > 0) {
-              showSection(sections[activeIndex - 1]);
-            }
+            // Swiped right => Prev tab (wrap around to the end if at the start)
+            showSection(sections[(activeIndex - 1 + sections.length) % sections.length]);
           }
         }
       }, { passive: true });

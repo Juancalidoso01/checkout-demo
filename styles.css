@@ -573,3 +573,11 @@ html, body { overscroll-behavior-y: contain; scroll-behavior: smooth; }
 .section-center.compact .p-8{padding:10px !important}
 .section-center.compact .bg-white{padding:8px !important}
 .section-center.compact .price-box{padding:8px}
+
+@keyframes slideSectionFade {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.animate-section-slide {
+  animation: slideSectionFade 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
