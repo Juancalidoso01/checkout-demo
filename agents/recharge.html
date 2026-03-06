@@ -1100,20 +1100,34 @@
       if (document.getElementById('comercios-modal')) return;
       const m = document.createElement('div');
       m.id = 'comercios-modal';
-      m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
+      m.className = 'fixed inset-0 bg-black/45 hidden z-60';
       m.innerHTML = `
-        <div class="pp-comercios-sheet bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-xl">
-          <div class="px-5 py-4 border-b flex items-center justify-between pp-comercios-head">
+        <div class="pp-comercios-backdrop" data-close-comercios></div>
+        <aside class="pp-comercios-sheet bg-white shadow-2xl">
+          <div class="px-5 py-5 border-b flex items-start justify-between gap-3 pp-comercios-head">
             <div class="min-w-0">
               <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Comercios</div>
-              <div class="text-lg font-extrabold truncate">Gestión rápida</div>
+              <div class="text-xl font-extrabold pp-type">Accesos rápidos</div>
+              <p class="text-sm text-gray-500 mt-1">Administra tus accesos y tu equipo desde aquí.</p>
             </div>
             <button type="button" id="comercios-close" class="pp-btn pp-btn-secondary">Cerrar</button>
           </div>
           <div class="p-5 space-y-4 pp-comercios-body">
-            <div class="grid grid-cols-2 gap-3">
-              <a href="../setup.html" class="pp-btn pp-btn-secondary w-full">Setup</a>
-              <button type="button" id="comercios-toggle-team" class="pp-btn pp-btn-primary w-full">Mi equipo</button>
+            <div class="pp-comercios-actions">
+              <a href="../setup.html" class="pp-comercios-action">
+                <span class="icon"><i class="fas fa-sliders-h"></i></span>
+                <span>
+                  <strong>Setup</strong>
+                  <small>Configuración general del comercio</small>
+                </span>
+              </a>
+              <button type="button" id="comercios-toggle-team" class="pp-comercios-action is-primary">
+                <span class="icon"><i class="fas fa-users"></i></span>
+                <span>
+                  <strong>Mi equipo</strong>
+                  <small>Usuarios, roles y permisos</small>
+                </span>
+              </button>
             </div>
 
             <div id="comercios-team-wrap" class="hidden">
@@ -1128,13 +1142,13 @@
               </div>
             </div>
           </div>
-        </div>`;
+        </aside>`;
       document.body.appendChild(m);
 
       function close(){ m.classList.add('hidden'); }
       function open(){ m.classList.remove('hidden'); }
       m.querySelector('#comercios-close').addEventListener('click', close);
-      m.addEventListener('click', (ev)=>{ if (ev.target === m) close(); });
+      m.querySelector('[data-close-comercios]').addEventListener('click', close);
       document.addEventListener('keydown', (ev)=>{ if (ev.key === 'Escape') close(); });
       const teamWrap = m.querySelector('#comercios-team-wrap');
       m.querySelector('#comercios-toggle-team').addEventListener('click', ()=>{ teamWrap.classList.toggle('hidden'); });
