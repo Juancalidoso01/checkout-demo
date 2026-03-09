@@ -456,20 +456,34 @@
         window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
         window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const langSel = document.getElementById('lang-selector');
-      if (langSel && window.I18N) {
-        langSel.value = window.I18N.currentLang;
-        langSel.addEventListener('change', (e) => {
-          window.I18N.setLanguage(e.target.value);
-        });
-        
-        // Listen to external changes just in case
-        document.addEventListener('languageChanged', (e) => {
-          langSel.value = e.detail.lang;
-        });
+    (function(){
+      function setupLangSelector() {
+        const langSel = document.getElementById('lang-selector');
+        if (langSel && window.I18N) {
+          // Asigna el valor inicial inmediatamente
+          langSel.value = window.I18N.currentLang;
+          
+          langSel.addEventListener('change', (e) => {
+            console.log("Selector de idioma cambiado a:", e.target.value);
+            window.I18N.setLanguage(e.target.value);
+          });
+          
+          // Escucha cambios externos por prevención
+          document.addEventListener('languageChanged', (e) => {
+            if (langSel.value !== e.detail.lang) {
+               langSel.value = e.detail.lang;
+            }
+          });
+        }
       }
-    });
+
+      // Ejecución robusta por si el DOM ya se cargó cuando llega aquí este script
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupLangSelector);
+      } else {
+        setupLangSelector();
+      }
+    })();
   </script>
 
 </body> catch(e){ console.warn('Auth guard failed', e); }

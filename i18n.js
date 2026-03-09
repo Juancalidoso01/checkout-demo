@@ -35,47 +35,42 @@ window.I18N = {
   currentLang: 'es', // Por defecto
 
   init: function() {
-    // 1. Revisar si el usuario ya escogió un idioma antes
     let savedLang = localStorage.getItem('pp_lang');
     
-    // 2. Si no, detectamos el del sistema
     if (!savedLang) {
       const browserLang = (navigator.language || navigator.userLanguage).slice(0, 2).toLowerCase();
-      // Validar si soportamos ese idioma (es, en, ru)
       if (['es', 'en', 'ru'].includes(browserLang)) {
         savedLang = browserLang;
       } else {
-        savedLang = 'es'; // Fallback a Español
+        savedLang = 'es';
       }
     }
     this.setLanguage(savedLang);
   },
 
   setLanguage: function(lang) {
+    if (!translations[lang]) lang = 'es'; // Fallback
+    console.log("I18N: Cambiando idioma a ->", lang);
+    
     this.currentLang = lang;
     localStorage.setItem('pp_lang', lang);
-    document.documentElement.lang = lang; // Actualiza la etiqueta <html>
+    document.documentElement.lang = lang; 
 
-    const dict = translations[lang] || translations['es'];
+    const dict = translations[lang];
 
-    // Buscar todos los elementos traducibles y reemplazarlos
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (dict[key]) {
-        // Soporte para placeholders en inputs si es necesario
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-          if (el.hasAttribute('placeholder')) {
              el.placeholder = dict[key];
-          }
-        } 
-        // Si tiene contenido HTML normal
-        else {
-          el.innerText = dict[key];
+        } else {
+          // Usamos innerHTML para mayor compatibilidad
+          el.innerHTML = dict[key];
         }
       }
     });
 
-    // Despachar un evento global por si otros scripts necesitan saber que el idioma cambió
+    // Evento manual por si otros componentes necesitan percatarse
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
   },
   
@@ -84,7 +79,9 @@ window.I18N = {
   }
 };
 
-// Se autoejecuta al cargarse
-document.addEventListener('DOMContentLoaded', () => {
+// Autoinicialización robusta
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.I18N.init());
+} else {
     window.I18N.init();
-});
+}
