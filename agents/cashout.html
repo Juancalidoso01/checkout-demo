@@ -55,20 +55,25 @@
       <div class="p-6">
         <!-- State: No bank account linked -->
         <div id="no-bank-state" class="text-center py-4">
-          <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
-            <i class="fas fa-plus"></i>
+          <div class="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+            <i class="fas fa-wallet"></i>
           </div>
-          <p class="text-gray-500 text-sm mb-4">Agrega una cuenta bancaria para poder retirar tus ganancias y saldo a favor.</p>
-          <button type="button" id="btn-add-bank" class="pp-btn w-full justify-center shadow-md bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors">
-            Registrar cuenta bancaria
-          </button>
+          <p class="text-gray-500 text-sm mb-5">Elige un método para retirar tus ganancias y saldo a favor.</p>
+          <div class="space-y-3">
+            <button type="button" id="btn-add-bank" class="w-full flex items-center justify-center border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 text-gray-800 font-bold py-3.5 rounded-xl transition-all">
+              <i class="fas fa-building-columns mr-2 text-blue-600"></i> Cuenta Bancaria
+            </button>
+            <button type="button" id="btn-add-card" class="w-full flex items-center justify-center border-2 border-gray-200 hover:border-orange-500 hover:bg-orange-50 text-gray-800 font-bold py-3.5 rounded-xl transition-all">
+              <i class="fas fa-credit-card mr-2 text-orange-500"></i> Tarjeta Punto Pago
+            </button>
+          </div>
         </div>
 
         <!-- State: Bank account exists -->
         <div id="has-bank-state" class="hidden">
-          <div class="flex items-center p-4 border border-blue-100 bg-blue-50/50 rounded-2xl">
-            <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 text-xl mr-4 shrink-0 border border-gray-100">
-              <i class="fas fa-piggy-bank"></i>
+          <div class="flex items-center p-4 border border-blue-100 bg-blue-50/50 rounded-2xl" id="method-container-bg">
+            <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 text-xl mr-4 shrink-0 border border-gray-100" id="method-icon-wrap">
+              <i class="fas fa-piggy-bank" id="method-icon"></i>
             </div>
             <div class="min-w-0 flex-1">
               <div class="font-bold text-gray-900 truncate" id="bank-name-display">Banco General</div>
@@ -147,6 +152,35 @@
     </div>
   </div>
 
+  <!-- ADD CARD MODAL (Overlay) -->
+  <div id="card-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" id="card-modal-bg"></div>
+    <div class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[90vh]" id="card-modal-sheet">
+      <div class="flex items-center justify-between p-6 border-b border-gray-100">
+        <h3 class="text-xl font-extrabold flex items-center gap-2"><i class="fas fa-credit-card text-orange-500"></i> Tarjeta Punto Pago</h3>
+        <button type="button" id="close-card-modal" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"><i class="fas fa-times"></i><span class="sr-only">Cerrar</span></button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Número de tarjeta</label>
+          <input type="text" id="input-card-number" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-bold tracking-widest outline-none" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Nombre en la tarjeta</label>
+          <input type="text" id="input-card-owner" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-medium outline-none" placeholder="Nombre completo">
+        </div>
+        <div class="w-1/2">
+          <label class="block text-sm font-bold text-gray-700 mb-1.5">Vencimiento</label>
+          <input type="text" id="input-card-expiry" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-medium outline-none" placeholder="MM/AA" maxlength="5">
+        </div>
+
+        <button type="button" id="save-card-btn" class="w-full mt-4 py-4 bg-gray-900 text-white font-bold rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors" disabled>
+          Vincular tarjeta
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function(){
       // Initialize basic state and display data
@@ -161,27 +195,47 @@
         bankNameDisp: document.getElementById('bank-name-display'),
         bankTypeDisp: document.getElementById('bank-type-display'),
         bankNumDisp: document.getElementById('bank-number-display'),
+        methodIcon: document.getElementById('method-icon'),
+        methodIconWrap: document.getElementById('method-icon-wrap'),
+        methodContainerBg: document.getElementById('method-container-bg'),
         cashoutSection: document.getElementById('cashout-action-section'),
         amountInput: document.getElementById('cashout-amount'),
         maxBtn: document.getElementById('btn-max-amount'),
         submitBtn: document.getElementById('btn-submit-cashout')
       };
 
-      let savedBank = null;
+      let savedMethod = null;
       try {
-        savedBank = JSON.parse(localStorage.getItem('pp_agent_bank_v1'));
+        savedMethod = JSON.parse(localStorage.getItem('pp_agent_cashout_method_v2'));
+        if (!savedMethod) {
+            // fallback
+            const oldBank = JSON.parse(localStorage.getItem('pp_agent_bank_v1'));
+            if (oldBank) savedMethod = { type: 'bank', data: oldBank };
+        }
       } catch(e){}
 
       function renderState() {
-        if (savedBank && savedBank.bankName) {
+        if (savedMethod && savedMethod.data) {
           els.noBank.classList.add('hidden');
           els.hasBank.classList.remove('hidden');
           els.cashoutSection.classList.remove('hidden');
           setTimeout(() => els.cashoutSection.classList.remove('opacity-0'), 50);
 
-          els.bankNameDisp.textContent = savedBank.bankName;
-          els.bankTypeDisp.textContent = savedBank.type;
-          els.bankNumDisp.textContent = savedBank.number.slice(-4);
+          if (savedMethod.type === 'card') {
+            els.bankNameDisp.textContent = "Tarjeta Punto Pago";
+            els.bankTypeDisp.textContent = "Prepagada";
+            els.bankNumDisp.textContent = savedMethod.data.number.slice(-4);
+            els.methodIcon.className = "fas fa-credit-card";
+            els.methodIconWrap.className = "w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-orange-500 text-xl mr-4 shrink-0 border border-gray-100";
+            els.methodContainerBg.className = "flex items-center p-4 border border-orange-100 bg-orange-50/50 rounded-2xl";
+          } else {
+            els.bankNameDisp.textContent = savedMethod.data.bankName;
+            els.bankTypeDisp.textContent = savedMethod.data.type;
+            els.bankNumDisp.textContent = savedMethod.data.number.slice(-4);
+            els.methodIcon.className = "fas fa-piggy-bank";
+            els.methodIconWrap.className = "w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 text-xl mr-4 shrink-0 border border-gray-100";
+            els.methodContainerBg.className = "flex items-center p-4 border border-blue-100 bg-blue-50/50 rounded-2xl";
+          }
         } else {
           els.noBank.classList.remove('hidden');
           els.hasBank.classList.add('hidden');
@@ -192,7 +246,7 @@
       }
 
       function validateAmount() {
-        if (!savedBank) return;
+        if (!savedMethod) return;
         const val = parseFloat(els.amountInput.value) || 0;
         if (val > 0 && val <= config.totalBalance) {
           els.submitBtn.disabled = false;
@@ -224,83 +278,173 @@
           // deduct offline for visual feedback
           document.getElementById('total-balance').textContent = '$' + (config.totalBalance - amt).toFixed(2);
           
+          let destName = savedMethod.type === 'card' ? "Tarjeta Punto Pago" : savedMethod.data.bankName;
+          
           setTimeout(() => {
-            alert(`Felicidades, se enviaron $${amt.toFixed(2)} a tu cuenta de ${savedBank.bankName} terminada en ${savedBank.number.slice(-4)}.\nTiempo estimado ACH: 1 a 2 días hábiles.`);
+            alert(`Felicidades, se enviaron $${amt.toFixed(2)} a tu ${destName} terminada en ${savedMethod.data.number.slice(-4)}.\nTiempo estimado: ${savedMethod.type === 'card' ? 'Inmediato' : '1 a 2 días hábiles'}.`);
             window.location.href = 'recharge.html';
           }, 1500);
         }, 2000);
       });
 
-      // MODAL LOGIC
-      const m = document.getElementById('bank-modal');
-      const mBg = document.getElementById('bank-modal-bg');
-      const mSheet = document.getElementById('bank-modal-sheet');
+      // MODAL LOGIC FOR BANK
+      const mBank = document.getElementById('bank-modal');
+      const mBankBg = document.getElementById('bank-modal-bg');
+      const mBankSheet = document.getElementById('bank-modal-sheet');
 
-      function openModal() {
-        m.classList.remove('hidden');
-        // read back values if exist
-        if (savedBank) {
-          document.getElementById('input-bank-name').value = savedBank.bankName || '';
-          document.getElementById('input-bank-number').value = savedBank.number || '';
-          document.getElementById('input-bank-owner').value = savedBank.owner || '';
+      function openBankModal() {
+        mBank.classList.remove('hidden');
+        if (savedMethod && savedMethod.type === 'bank') {
+          document.getElementById('input-bank-name').value = savedMethod.data.bankName || '';
+          document.getElementById('input-bank-number').value = savedMethod.data.number || '';
+          document.getElementById('input-bank-owner').value = savedMethod.data.owner || '';
           const radios = document.getElementsByName('bank-type');
-          for(let r of radios) { if(r.value === savedBank.type) r.checked = true; }
+          for(let r of radios) { if(r.value === savedMethod.data.type) r.checked = true; }
         }
-        validateModal();
-        // start animation
-        requestAnimationFrame(() => mSheet.classList.remove('translate-y-full'));
+        validateBankModal();
+        requestAnimationFrame(() => mBankSheet.classList.remove('translate-y-full'));
       }
       
-      function closeModal() {
-        mSheet.classList.add('translate-y-full');
-        setTimeout(() => m.classList.add('hidden'), 300);
+      function closeBankModal() {
+        mBankSheet.classList.add('translate-y-full');
+        setTimeout(() => mBank.classList.add('hidden'), 300);
       }
 
-      document.getElementById('btn-add-bank').addEventListener('click', openModal);
-      document.getElementById('btn-edit-bank').addEventListener('click', openModal);
-      document.getElementById('close-bank-modal').addEventListener('click', closeModal);
-      mBg.addEventListener('click', closeModal);
+      document.getElementById('btn-add-bank').addEventListener('click', openBankModal);
+      document.getElementById('close-bank-modal').addEventListener('click', closeBankModal);
+      mBankBg.addEventListener('click', closeBankModal);
 
-      // Validate inputs inside modal
-      const mInputs = ['input-bank-name', 'input-bank-number', 'input-bank-owner'];
-      const mSaveBtn = document.getElementById('save-bank-btn');
+      // Validate inputs inside bank modal
+      const mBankInputs = ['input-bank-name', 'input-bank-number', 'input-bank-owner'];
+      const mBankSaveBtn = document.getElementById('save-bank-btn');
       
-      function validateModal() {
+      function validateBankModal() {
         const name = document.getElementById('input-bank-name').value;
         const num = document.getElementById('input-bank-number').value;
         const own = document.getElementById('input-bank-owner').value;
         if (name && num.length > 4 && own.length > 3) {
-          mSaveBtn.disabled = false;
+          mBankSaveBtn.disabled = false;
         } else {
-          mSaveBtn.disabled = true;
+          mBankSaveBtn.disabled = true;
         }
       }
       
-      mInputs.forEach(id => document.getElementById(id).addEventListener('input', validateModal));
-      document.getElementById('input-bank-name').addEventListener('change', validateModal);
+      mBankInputs.forEach(id => document.getElementById(id).addEventListener('input', validateBankModal));
+      document.getElementById('input-bank-name').addEventListener('change', validateBankModal);
 
-      mSaveBtn.addEventListener('click', () => {
+      mBankSaveBtn.addEventListener('click', () => {
         let type = 'Ahorros';
         const radios = document.getElementsByName('bank-type');
         for(let r of radios){ if(r.checked) type = r.value; }
         
-        savedBank = {
-          bankName: document.getElementById('input-bank-name').value,
-          number: document.getElementById('input-bank-number').value,
-          owner: document.getElementById('input-bank-owner').value,
-          type: type
+        savedMethod = {
+          type: 'bank',
+          data: {
+            bankName: document.getElementById('input-bank-name').value,
+            number: document.getElementById('input-bank-number').value,
+            owner: document.getElementById('input-bank-owner').value,
+            type: type
+          }
         };
-        localStorage.setItem('pp_agent_bank_v1', JSON.stringify(savedBank));
+        localStorage.setItem('pp_agent_cashout_method_v2', JSON.stringify(savedMethod));
         
-        mSaveBtn.innerHTML = `<i class="fas fa-check"></i> Guardado`;
-        mSaveBtn.classList.replace('bg-gray-900', 'bg-emerald-600');
+        mBankSaveBtn.innerHTML = `<i class="fas fa-check"></i> Guardado`;
+        mBankSaveBtn.classList.replace('bg-gray-900', 'bg-emerald-600');
         
         setTimeout(() => {
-          mSaveBtn.innerHTML = `Guardar cuenta`;
-          mSaveBtn.classList.replace('bg-emerald-600', 'bg-gray-900');
-          closeModal();
+          mBankSaveBtn.innerHTML = `Guardar cuenta`;
+          mBankSaveBtn.classList.replace('bg-emerald-600', 'bg-gray-900');
+          closeBankModal();
           renderState();
         }, 600);
+      });
+
+      // MODAL LOGIC FOR CARD
+      const mCard = document.getElementById('card-modal');
+      const mCardBg = document.getElementById('card-modal-bg');
+      const mCardSheet = document.getElementById('card-modal-sheet');
+
+      function openCardModal() {
+        mCard.classList.remove('hidden');
+        if (savedMethod && savedMethod.type === 'card') {
+          document.getElementById('input-card-number').value = savedMethod.data.number || '';
+          document.getElementById('input-card-owner').value = savedMethod.data.owner || '';
+          document.getElementById('input-card-expiry').value = savedMethod.data.expiry || '';
+        }
+        validateCardModal();
+        requestAnimationFrame(() => mCardSheet.classList.remove('translate-y-full'));
+      }
+      
+      function closeCardModal() {
+        mCardSheet.classList.add('translate-y-full');
+        setTimeout(() => mCard.classList.add('hidden'), 300);
+      }
+
+      document.getElementById('btn-add-card').addEventListener('click', openCardModal);
+      document.getElementById('close-card-modal').addEventListener('click', closeCardModal);
+      mCardBg.addEventListener('click', closeCardModal);
+
+      // Simple formatting for card number
+      document.getElementById('input-card-number').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        v = v.replace(/(.{4})/g, '$1 ').trim();
+        e.target.value = v;
+        validateCardModal();
+      });
+
+      // Simple formatting for expiry date
+      document.getElementById('input-card-expiry').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+        e.target.value = v;
+        validateCardModal();
+      });
+      
+      const mCardInputs = ['input-card-number', 'input-card-owner', 'input-card-expiry'];
+      const mCardSaveBtn = document.getElementById('save-card-btn');
+      
+      function validateCardModal() {
+        const num = document.getElementById('input-card-number').value.replace(/\D/g, '');
+        const own = document.getElementById('input-card-owner').value;
+        const exp = document.getElementById('input-card-expiry').value;
+        if (num.length >= 15 && own.length > 3 && exp.length === 5) {
+          mCardSaveBtn.disabled = false;
+        } else {
+          mCardSaveBtn.disabled = true;
+        }
+      }
+      
+      document.getElementById('input-card-owner').addEventListener('input', validateCardModal);
+
+      mCardSaveBtn.addEventListener('click', () => {
+        savedMethod = {
+          type: 'card',
+          data: {
+            number: document.getElementById('input-card-number').value,
+            owner: document.getElementById('input-card-owner').value,
+            expiry: document.getElementById('input-card-expiry').value
+          }
+        };
+        localStorage.setItem('pp_agent_cashout_method_v2', JSON.stringify(savedMethod));
+        
+        mCardSaveBtn.innerHTML = `<i class="fas fa-check"></i> Vinculada`;
+        mCardSaveBtn.classList.replace('bg-gray-900', 'bg-orange-500');
+        
+        setTimeout(() => {
+          mCardSaveBtn.innerHTML = `Vincular tarjeta`;
+          mCardSaveBtn.classList.replace('bg-orange-500', 'bg-gray-900');
+          closeCardModal();
+          renderState();
+        }, 600);
+      });
+
+      document.getElementById('btn-edit-bank').addEventListener('click', () => {
+         // Determine which modal to open based on current method
+         if (savedMethod && savedMethod.type === 'card') {
+           openCardModal();
+         } else {
+           openBankModal();
+         }
       });
 
       renderState();
