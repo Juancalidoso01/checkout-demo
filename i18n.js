@@ -3,6 +3,7 @@ const translations = {
     "lang_es": "Español",
     "lang_en": "Inglés",
     "lang_ru": "Ruso",
+    "lang_zh": "Chino",
     "settings_title": "Ajustes",
     "settings_account": "Cuenta",
     "settings_security": "Seguridad",
@@ -13,6 +14,7 @@ const translations = {
     "lang_es": "Spanish",
     "lang_en": "English",
     "lang_ru": "Russian",
+    "lang_zh": "Chinese",
     "settings_title": "Settings",
     "settings_account": "Account",
     "settings_security": "Security",
@@ -23,11 +25,23 @@ const translations = {
     "lang_es": "Испанский",
     "lang_en": "Английский",
     "lang_ru": "Русский",
+    "lang_zh": "Китайский",
     "settings_title": "Настройки",
     "settings_account": "Аккаунт",
     "settings_security": "Безопасность",
     "settings_preferences": "Настройки",
     "settings_legal": "Правовая информация"
+  },
+  zh: {
+    "lang_es": "西班牙语",
+    "lang_en": "英语",
+    "lang_ru": "俄语",
+    "lang_zh": "中文 (Chino)",
+    "settings_title": "设置",
+    "settings_account": "账户",
+    "settings_security": "安全",
+    "settings_preferences": "偏好设置",
+    "settings_legal": "法律"
   }
 };
 
@@ -39,7 +53,7 @@ window.I18N = {
     
     if (!savedLang) {
       const browserLang = (navigator.language || navigator.userLanguage).slice(0, 2).toLowerCase();
-      if (['es', 'en', 'ru'].includes(browserLang)) {
+      if (['es', 'en', 'ru', 'zh'].includes(browserLang)) {
         savedLang = browserLang;
       } else {
         savedLang = 'es';
