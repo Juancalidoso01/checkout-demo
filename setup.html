@@ -455,29 +455,27 @@
         if (!session) return;
         window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
         window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+      } catch(e){ console.warn('Auth guard failed', e); }
+    })();
+  </script>
+
   <script>
     (function(){
       function setupLangSelector() {
         const langSel = document.getElementById('lang-selector');
         if (langSel && window.I18N) {
-          // Asigna el valor inicial inmediatamente
           langSel.value = window.I18N.currentLang;
           
           langSel.addEventListener('change', (e) => {
             console.log("Selector de idioma cambiado a:", e.target.value);
-            window.I18N.setLanguage(e.target.value);
-          });
-          
-          // Escucha cambios externos por prevención
-          document.addEventListener('languageChanged', (e) => {
-            if (langSel.value !== e.detail.lang) {
-               langSel.value = e.detail.lang;
-            }
+            // Guarda primero el valor
+            localStorage.setItem('pp_lang', e.target.value);
+            // Fuerza un recargo completo limpio de la web
+            window.location.reload();
           });
         }
       }
 
-      // Ejecución robusta por si el DOM ya se cargó cuando llega aquí este script
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', setupLangSelector);
       } else {
@@ -485,10 +483,5 @@
       }
     })();
   </script>
-
-</body> catch(e){ console.warn('Auth guard failed', e); }
-    })();
-  </script>
-
 </body>
 </html>
