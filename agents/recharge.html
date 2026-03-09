@@ -601,8 +601,7 @@
             const content = document.getElementById('receipt-body').innerHTML;
             const w = window.open('', 'Imprimir', 'width=600,height=600');
             if (!w) return alert('No es posible abrir ventana de impresión');
-            w.document.write(`<html><head><title>Recibo</title></head><body>${content}  <script src="../chat-widget.js"></script>
-</body></html>`);
+            w.document.write(`<html><head><title>Recibo</title></head><body>${content}</body></html>`);
             w.document.close();
             w.focus();
             setTimeout(()=>{ w.print(); }, 400);
