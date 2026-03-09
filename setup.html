@@ -3,220 +3,456 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Setup — Configuración de cuenta</title>
+  <title>Ajustes — Punto Pago</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <script src="auth.js"></script>
   <style>
     body { background: #f3f4f6; font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
-    .card { max-width: 880px; margin: 32px auto; }
+    .settings-container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+    .nav-header { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
+    
+    .settings-group { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 24px; border: 1px solid #f0f0f0; }
+    .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background 0.2s; }
+    .settings-item:active, .settings-item:hover { background: #f9fafb; }
+    .settings-item:last-child { border-bottom: none; }
+    .settings-item-title { font-weight: 600; color: #1f2937; font-size: 0.95rem; }
+    .settings-item-sub { color: #6b7280; font-size: 0.8rem; margin-top: 2px; }
+    .settings-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 14px; font-size: 14px; }
+    
+    .bg-blue-soft { background: #eff6ff; color: #3b82f6; }
+    .bg-indigo-soft { background: #e0e7ff; color: #4f46e5; }
+    .bg-purple-soft { background: #f3e8ff; color: #7c3aed; }
+    .bg-green-soft { background: #ecfdf5; color: #10b981; }
+    .bg-orange-soft { background: #fff7ed; color: #f59e0b; }
+    .bg-gray-soft { background: #f3f4f6; color: #6b7280; }
+    .bg-red-soft { background: #fef2f2; color: #ef4444; }
+
+    /* Accordion styles */
+    .accordion-content { display: none; padding: 16px; background: #fafafa; border-bottom: 1px solid #f3f4f6; }
+    .accordion-content.open { display: block; }
   </style>
 </head>
-<body>
-  <main class="card bg-white rounded-2xl shadow-xl p-8">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h1 class="text-2xl font-bold">Setup — Configuración de cuenta</h1>
-        <p class="text-sm text-gray-500">Edita los parámetros de la cuenta del agente y valores del sandbox.</p>
+<body class="min-h-screen">
+  
+  <nav class="bg-[#0047bb] text-white shadow-md sticky top-0 z-40 nav-header pb-3 px-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="agents/recharge.html" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="font-extrabold text-lg">Ajustes</h1>
       </div>
-      <div class="text-right">
-        <div class="flex items-center justify-end gap-2 mb-2">
-          <span class="text-xs text-gray-500">Sesión:</span>
-          <span class="text-xs font-bold" data-pp-session></span>
-          <a href="#" data-pp-logout class="pp-btn pp-btn-secondary">Salir</a>
+      <div class="hidden sm:block text-xs text-white/80">
+        <span data-pp-session></span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="settings-container">
+    
+    <!-- 1. Cuenta -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">1. Cuenta</h2>
+    <div class="settings-group">
+      <!-- Info Personal (Interactive) -->
+      <div class="settings-item" id="toggle-info-personal">
+        <div class="flex items-center">
+          <div class="settings-icon bg-blue-soft"><i class="fas fa-user"></i></div>
+          <div>
+            <div class="settings-item-title">Información personal</div>
+            <div class="settings-item-sub">Nombre, teléfono, email, ID</div>
+          </div>
         </div>
-        <a href="agents/recharge.html" class="pp-btn pp-btn-secondary" aria-label="Volver al portal">Volver al Portal de Agentes</a>
+        <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform" id="icon-info-personal"></i>
+      </div>
+      <div class="accordion-content" id="content-info-personal">
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Nombre completo</label>
+            <input id="agent-name" type="text" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Cédula / ID</label>
+            <input id="agent-id" type="text" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Correo electrónico</label>
+            <input id="agent-email" type="email" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Teléfono</label>
+            <input id="agent-phone" type="tel" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+          </div>
+          <button id="saveAgent" class="w-full bg-[#0047bb] text-white py-2.5 rounded-lg font-bold text-sm shadow mt-2">Guardar datos</button>
+        </div>
+      </div>
+
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-indigo-soft"><i class="fas fa-id-card"></i></div>
+          <div>
+            <div class="settings-item-title">Documento de identidad / verificación</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-purple-soft"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="settings-item-title">Dirección registrada</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-green-soft"><i class="fas fa-comment-dots"></i></div>
+          <div>
+            <div class="settings-item-title">Método de contacto preferido</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
       </div>
     </div>
 
-    <section class="grid gap-6 md:grid-cols-2">
-      <div class="p-4 border rounded-lg">
-        <h2 class="font-bold mb-3">Datos del Agente</h2>
+    <!-- 2. Seguridad -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">2. Seguridad</h2>
+    <div class="settings-group">
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-orange-soft"><i class="fas fa-key"></i></div>
+          <div>
+            <div class="settings-item-title">Cambiar contraseña</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-blue-soft"><i class="fas fa-shield-alt"></i></div>
+          <div>
+            <div class="settings-item-title">Autenticación en dos factores (2FA)</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-purple-soft"><i class="fas fa-fingerprint"></i></div>
+          <div>
+            <div class="settings-item-title">Biometría (Face ID / Huella)</div>
+          </div>
+        </div>
+        <div class="w-9 h-5 bg-blue-500 rounded-full flex items-center p-0.5 justify-end">
+           <div class="w-4 h-4 bg-white rounded-full shadow"></div>
+        </div>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-history"></i></div>
+          <div>
+            <div class="settings-item-title">Actividad e historial de seguridad</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-red-soft"><i class="fas fa-sign-out-alt"></i></div>
+          <div>
+            <div class="settings-item-title text-red-600">Cerrar sesiones activas</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 3. Preferencias -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">3. Preferencias</h2>
+    <div class="settings-group">
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-blue-soft"><i class="fas fa-globe"></i></div>
+          <div>
+            <div class="settings-item-title">Idioma</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">Español</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-green-soft"><i class="fas fa-coins"></i></div>
+          <div>
+            <div class="settings-item-title">Moneda</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">USD ($)</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-moon"></i></div>
+          <div>
+            <div class="settings-item-title">Tema (Modo oscuro / claro)</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">Sistema</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-orange-soft"><i class="fas fa-map"></i></div>
+          <div>
+            <div class="settings-item-title">Región o país</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">Panamá</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-indigo-soft"><i class="fas fa-user-shield"></i></div>
+          <div>
+            <div class="settings-item-title">Preferencias de privacidad</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 4. Legal -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">4. Legal</h2>
+    <div class="settings-group">
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-file-contract"></i></div>
+          <div>
+            <div class="settings-item-title">Términos y condiciones</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-user-secret"></i></div>
+          <div>
+            <div class="settings-item-title">Política de privacidad</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-file-signature"></i></div>
+          <div>
+            <div class="settings-item-title">Contratos del servicio</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-gavel"></i></div>
+          <div>
+            <div class="settings-item-title">Licencias o regulaciones</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 5. Herramientas de Sandbox (Dev) -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4 mt-8">Herramientas de Sandbox</h2>
+    <div class="settings-group">
+      <div class="settings-item" id="toggle-sandbox">
+        <div class="flex items-center">
+          <div class="settings-icon bg-indigo-soft"><i class="fas fa-laptop-code"></i></div>
+          <div>
+            <div class="settings-item-title">Ajustes del Sandbox</div>
+            <div class="settings-item-sub">Saldos, comisiones e importación</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform" id="icon-sandbox"></i>
+      </div>
+      <div class="accordion-content" id="content-sandbox">
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><div class="text-xs text-gray-500">Saldo</div><div id="balance-display" class="font-bold text-gray-800"></div></div>
+          <div><div class="text-xs text-gray-500">Caja / Comisiones</div><div class="font-bold text-gray-800"><span id="cash-display"></span> / <span id="gain-display"></span></div></div>
+        </div>
+        
         <div class="space-y-3">
-          <label class="pp-label">Nombre completo</label>
-          <input id="agent-name" type="text" class="pp-field">
-          <label class="pp-label">Cédula / ID</label>
-          <input id="agent-id" type="text" class="pp-field">
-          <label class="pp-label">Correo electrónico</label>
-          <input id="agent-email" type="email" class="pp-field">
-          <label class="pp-label">Teléfono</label>
-          <input id="agent-phone" type="tel" class="pp-field">
-          <div class="flex justify-end mt-3">
-            <button id="saveAgent" class="pp-btn pp-btn-primary" type="button">Guardar datos</button>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Ajustar Saldo (USD)</label>
+            <input id="balance-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg focus:ring-center bg-white text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Ajustar Efectivo/Caja (USD)</label>
+            <input id="cash-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg bg-white text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Ajustar Comisiones (USD)</label>
+            <input id="gain-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg bg-white text-sm">
+          </div>
+          <div class="flex gap-2 pt-2">
+            <button id="applyFin" class="flex-1 bg-[#0047bb] text-white py-2.5 rounded-lg font-bold text-sm">Aplicar</button>
+            <button id="resetSandbox" class="flex-1 bg-gray-200 text-gray-800 py-2.5 rounded-lg font-bold text-sm">Resetear</button>
+          </div>
+          <hr class="my-4">
+          <textarea id="importArea" rows="4" class="w-full p-2.5 border rounded-lg bg-white text-xs font-mono" placeholder='Pegar JSON para importar...'></textarea>
+          <div class="flex gap-2">
+            <button id="importBtn" class="flex-1 bg-gray-800 text-white py-2.5 rounded-lg font-bold text-sm">Importar</button>
+            <button id="clearAll" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg font-bold text-sm">Borrar Locales</button>
           </div>
         </div>
       </div>
-
-      <div class="p-4 border rounded-lg">
-        <h2 class="font-bold mb-3">Estado financiero (sandbox)</h2>
-        <div class="space-y-3">
-          <div class="flex justify-between items-center">
-            <div>
-              <div class="text-xs text-gray-500">Saldo disponible</div>
-              <div id="balance-display" class="text-lg font-bold">$0.00</div>
-            </div>
-            <div>
-              <div class="text-xs text-gray-500">Mi efectivo en caja</div>
-              <div id="cash-display" class="text-lg font-bold">$0.00</div>
-            </div>
-            <div>
-              <div class="text-xs text-gray-500">Comisiones</div>
-              <div id="gain-display" class="text-lg font-bold">$0.00</div>
-            </div>
-          </div>
-
-          <label class="pp-label">Ajustar Saldo (USD)</label>
-          <input id="balance-input" type="number" step="0.01" class="pp-field">
-          <label class="pp-label">Ajustar Caja (USD)</label>
-          <input id="cash-input" type="number" step="0.01" class="pp-field">
-          <label class="pp-label">Ajustar Comisiones (USD)</label>
-          <input id="gain-input" type="number" step="0.01" class="pp-field">
-
-          <div class="flex justify-between mt-3">
-            <div class="space-x-2">
-              <button id="applyFin" class="pp-btn pp-btn-primary" type="button">Aplicar ajustes</button>
-              <button id="resetSandbox" class="pp-btn pp-btn-secondary" type="button">Resetear sandbox</button>
-            </div>
-            <div>
-              <button id="exportBtn" class="pp-btn pp-btn-primary" type="button">Exportar JSON</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Histórico de transacciones se movió al portal del agente (carrusel) -->
-
-    <section class="mt-6 p-4 border rounded-lg">
-      <h2 class="font-bold mb-3">Importar / Estado bruto</h2>
-      <p class="text-sm text-gray-500 mb-3">Puedes pegar aquí un JSON exportado previamente para restaurar estado de la cuenta o del sandbox.</p>
-  <textarea id="importArea" rows="6" class="w-full px-3 py-2 border rounded mb-3 text-base" placeholder='{"pp_agent_info_v1":{...},"pp_agent_sandbox_v1":{...}}'></textarea>
-      <div class="flex justify-between">
-        <div class="space-x-2">
-          <button id="importBtn" class="pp-btn pp-btn-primary" type="button">Importar JSON</button>
-          <button id="clearAll" class="pp-btn pp-btn-secondary" type="button">Borrar datos locales</button>
-        </div>
-        <div class="text-sm text-gray-500">Local storage keys: <code>pp_agent_info_v1</code>, <code>pp_agent_sandbox_v1</code>, <code>pp_paid_services_v1</code></div>
-      </div>
-    </section>
-
-    <footer class="mt-6 text-right text-xs text-gray-500">Demo — datos guardados en localStorage del navegador.</footer>
+    </div>
+    
+    <div class="px-4 mt-6">
+      <a href="#" data-pp-logout class="w-full block text-center bg-red-50 text-red-600 font-bold py-3.5 rounded-xl border border-red-100 transition-colors hover:bg-red-100">
+        Cerrar sesión e ir al login
+      </a>
+    </div>
+    
   </main>
 
-<script>
-(function(){
-  const AGENT_INFO_KEY = 'pp_agent_info_v1';
-  const STORAGE_KEY = 'pp_agent_sandbox_v1';
+  <script>
+    // Accordion Logic
+    function setupAccordion(toggleId, contentId, iconId) {
+      const toggle = document.getElementById(toggleId);
+      const content = document.getElementById(contentId);
+      const icon = document.getElementById(iconId);
+      if(!toggle || !content) return;
+      toggle.addEventListener('click', () => {
+        const isOpen = content.classList.contains('open');
+        content.classList.toggle('open');
+        if(icon) {
+          icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+      });
+    }
+    setupAccordion('toggle-info-personal', 'content-info-personal', 'icon-info-personal');
+    setupAccordion('toggle-sandbox', 'content-sandbox', 'icon-sandbox');
 
-  const defaults = { name: 'Nombre Agente', id: '00000000', email: '', phone: '' };
-  const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
+    // Data Logic
+    (function(){
+      const AGENT_INFO_KEY = 'pp_agent_info_v1';
+      const STORAGE_KEY = 'pp_agent_sandbox_v1';
 
-  function loadAgent(){ try { return JSON.parse(localStorage.getItem(AGENT_INFO_KEY)) || defaults } catch(e){ return defaults } }
-  function saveAgent(a){ try { localStorage.setItem(AGENT_INFO_KEY, JSON.stringify(a)); } catch(e){} }
-  function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
-  function saveState(s){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){} }
+      const defaults = { name: 'Nombre Agente', id: '00000000', email: '', phone: '' };
+      const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
 
-  const nameEl = document.getElementById('agent-name');
-  const idEl = document.getElementById('agent-id');
-  const emailEl = document.getElementById('agent-email');
-  const phoneEl = document.getElementById('agent-phone');
-  const balanceDisplay = document.getElementById('balance-display');
-  const cashDisplay = document.getElementById('cash-display');
-  const gainDisplay = document.getElementById('gain-display');
-  const balanceInput = document.getElementById('balance-input');
-  const cashInput = document.getElementById('cash-input');
-  const gainInput = document.getElementById('gain-input');
-  const importArea = document.getElementById('importArea');
-  // tx history moved to agents/recharge.html
+      function loadAgent(){ try { return JSON.parse(localStorage.getItem(AGENT_INFO_KEY)) || defaults } catch(e){ return defaults } }
+      function saveAgent(a){ try { localStorage.setItem(AGENT_INFO_KEY, JSON.stringify(a)); } catch(e){} }
+      function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
+      function saveState(s){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){} }
+      
+      const nameEl = document.getElementById('agent-name');
+      const idEl = document.getElementById('agent-id');
+      const emailEl = document.getElementById('agent-email');
+      const phoneEl = document.getElementById('agent-phone');
+      
+      const balanceDisplay = document.getElementById('balance-display');
+      const cashDisplay = document.getElementById('cash-display');
+      const gainDisplay = document.getElementById('gain-display');
+      
+      const balanceInput = document.getElementById('balance-input');
+      const cashInput = document.getElementById('cash-input');
+      const gainInput = document.getElementById('gain-input');
+      const importArea = document.getElementById('importArea');
 
-  function fmt(v){ return '$' + Number(v||0).toFixed(2) }
+      function render(){
+        const a = loadAgent();
+        const s = loadState();
+        if(nameEl) nameEl.value = a.name || '';
+        if(idEl) idEl.value = a.id || '';
+        if(emailEl) emailEl.value = a.email || '';
+        if(phoneEl) phoneEl.value = a.phone || '';
+        
+        if(balanceDisplay) balanceDisplay.innerText = '$' + Number(s.balance||0).toFixed(2);
+        if(cashDisplay) cashDisplay.innerText = '$' + Number(s.cash||0).toFixed(2);
+        if(gainDisplay) gainDisplay.innerText = '$' + Number(s.gain||0).toFixed(2);
+        
+        if(balanceInput) balanceInput.value = Number(s.balance||0).toFixed(2);
+        if(cashInput) cashInput.value = Number(s.cash||0).toFixed(2);
+        if(gainInput) gainInput.value = Number(s.gain||0).toFixed(2);
+      }
 
-  function render(){
-    const a = loadAgent();
-    const s = loadState();
-    nameEl.value = a.name || '';
-    idEl.value = a.id || '';
-    emailEl.value = a.email || '';
-    phoneEl.value = a.phone || '';
-    balanceDisplay.innerText = '$' + Number(s.balance||0).toFixed(2);
-    cashDisplay.innerText = '$' + Number(s.cash||0).toFixed(2);
-    gainDisplay.innerText = '$' + Number(s.gain||0).toFixed(2);
-    balanceInput.value = Number(s.balance||0).toFixed(2);
-    cashInput.value = Number(s.cash||0).toFixed(2);
-    gainInput.value = Number(s.gain||0).toFixed(2);
-  }
+      document.getElementById('saveAgent')?.addEventListener('click', ()=>{
+        const a = { name: nameEl.value || defaults.name, id: idEl.value || defaults.id, email: emailEl.value||'', phone: phoneEl.value||'' };
+        saveAgent(a);
+        const s = loadState();
+        saveState(s);
+        alert('Datos de cuenta guardados con éxito');
+        render();
+      });
 
-  document.getElementById('saveAgent').addEventListener('click', ()=>{
-    const a = { name: nameEl.value || defaults.name, id: idEl.value || defaults.id, email: emailEl.value||'', phone: phoneEl.value||'' };
-    saveAgent(a);
-    // also update sandbox balance reference if agent id changed
-    const s = loadState();
-    saveState(s);
-    alert('Datos del agente guardados');
-    render();
-  });
+      document.getElementById('applyFin')?.addEventListener('click', ()=>{
+        const s = loadState();
+        s.balance = Number(Number(balanceInput.value||0).toFixed(2));
+        s.cash = Number(Number(cashInput.value||0).toFixed(2));
+        s.gain = Number(Number(gainInput.value||0).toFixed(2));
+        saveState(s);
+        alert('Ajustes sandbox aplicados');
+        render();
+      });
 
-  document.getElementById('applyFin').addEventListener('click', ()=>{
-    const s = loadState();
-    const b = Number(balanceInput.value) || 0;
-    const c = Number(cashInput.value) || 0;
-    const g = Number(gainInput.value) || 0;
-    s.balance = Number(b.toFixed(2)); s.cash = Number(c.toFixed(2)); s.gain = Number(g.toFixed(2));
-    saveState(s);
-    alert('Ajustes aplicados al sandbox');
-    render();
-  });
+      document.getElementById('resetSandbox')?.addEventListener('click', ()=>{
+        if (!confirm('¿Restablecer sandbox a valores por defecto?')) return;
+        saveState(defaultState);
+        alert('Sandbox reiniciado');
+        render();
+      });
 
-  document.getElementById('resetSandbox').addEventListener('click', ()=>{
-    if (!confirm('Resetear sandbox a valores por defecto?')) return;
-    saveState(defaultState);
-    alert('Sandbox reseteado');
-    render();
-  });
+      document.getElementById('importBtn')?.addEventListener('click', ()=>{
+        const txt = importArea.value.trim();
+        if (!txt) return alert('Pega un JSON válido');
+        try {
+          const obj = JSON.parse(txt);
+          if (obj[AGENT_INFO_KEY]) saveAgent(obj[AGENT_INFO_KEY]);
+          if (obj[STORAGE_KEY]) saveState(obj[STORAGE_KEY]);
+          alert('Importado correctamente');
+          render();
+        } catch(e){ alert('JSON inválido: ' + e.message); }
+      });
 
-  document.getElementById('exportBtn').addEventListener('click', ()=>{
-    const payload = {};
-    payload[AGENT_INFO_KEY] = loadAgent();
-    payload[STORAGE_KEY] = loadState();
-    const blob = new Blob([JSON.stringify(payload,null,2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'punto-pago-export.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  });
+      document.getElementById('clearAll')?.addEventListener('click', ()=>{
+        if (!confirm('¿Eliminar todos los datos locales (agent, sandbox, logs)?')) return;
+        try { 
+          localStorage.removeItem(AGENT_INFO_KEY); 
+          localStorage.removeItem(STORAGE_KEY); 
+          localStorage.removeItem('pp_paid_services_v1'); 
+          localStorage.removeItem('pp_agent_cashout_method_v2'); 
+          localStorage.removeItem('pp_agent_bank_v1'); 
+          alert('Limpieza profunda exitosa'); 
+          render(); 
+        } catch(e){ alert('Error: '+e.message); }
+      });
 
-  document.getElementById('importBtn').addEventListener('click', ()=>{
-    const txt = importArea.value.trim();
-    if (!txt) return alert('Pega un JSON válido');
-    try {
-      const obj = JSON.parse(txt);
-      if (obj[AGENT_INFO_KEY]) { saveAgent(obj[AGENT_INFO_KEY]); }
-      if (obj[STORAGE_KEY]) { saveState(obj[STORAGE_KEY]); }
-      alert('Importado correctamente');
       render();
-    } catch(e){ alert('JSON inválido: ' + e.message); }
-  });
+    })();
+  </script>
 
-  document.getElementById('clearAll').addEventListener('click', ()=>{
-    if (!confirm('Eliminar llaves locales (agent info, sandbox y paid map)?')) return;
-    try { localStorage.removeItem(AGENT_INFO_KEY); localStorage.removeItem(STORAGE_KEY); localStorage.removeItem('pp_paid_services_v1'); alert('Datos locales eliminados'); render(); } catch(e){ alert('No se pudo eliminar: '+e.message); }
-  });
-
-  // Initialize
-  render();
-})();
-
-</script>
-
-<script>
-  (function(){
-    try {
-      const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
-      if (!session) return;
-      window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
-      window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
-    } catch(e){ console.warn('Auth guard failed', e); }
-  })();
-</script>
+  <script>
+    (function(){
+      try {
+        const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
+        if (!session) return;
+        window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+        window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+      } catch(e){ console.warn('Auth guard failed', e); }
+    })();
+  </script>
 
 </body>
 </html>
