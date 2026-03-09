@@ -44,13 +44,13 @@
 
       <div class="price-box" aria-hidden="false">
         <div class="amount" id="price">USD 19.99</div>
-        <div class="small">Total a pagar</div>
+        <div class="small" data-i18n="checkout_total">Total a pagar</div>
       </div>
       <!-- Hero illustration (modern look) -->
       <div class="card-hero">
         <img src="assets/hero-illustration.svg" alt="Ilustración de pago">
         <div class="hero-text">
-          <h2>Pago seguro y rápido</h2>
+          <h2 data-i18n="checkout_secure">Pago seguro y rápido</h2>
           <p class="muted">Elige tu método preferido. Este demo no realiza cargos reales.</p>
         </div>
       </div>
@@ -443,7 +443,7 @@
           // no hay selección: ocultar todos los contenedores
           Object.keys(containers).forEach(k => { const el = containers[k]; if (el) { el.hidden = true; el.style.display = 'none'; }});
           checkoutBtn.disabled = true;
-          selectionHint.textContent = 'Selecciona un método de pago para continuar.';
+          selectionHint.textContent = '<span data-i18n="checkout_select_method">Selecciona un método de pago para continuar.</span>';
           return;
         }
   const selected = sel.value;
@@ -832,7 +832,7 @@
                 </div>
               </fieldset>
               <div class="justify-end mt-12">
-                <button type="button" class="btn secondary" id="recCancel">Cancelar</button>
+                <button type="button" class="btn secondary" id="recCancel" data-i18n="checkout_cancel">Cancelar</button>
                 <button type="button" class="btn" id="recConfirm">Confirmar</button>
               </div>
             </form>
@@ -972,7 +972,7 @@
         } else if (method === 'ppapp') {
           inner = `<div class="muted">Usa la app PuntoPago e ingresa tu ID o número vinculado</div><input class="delivery-input" placeholder="ID / Teléfono">`;
         }
-  wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery">Cancelar</button><button class="btn" id="sendDelivery">Enviar comprobante</button></div>`;
+  wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery" data-i18n="checkout_cancel">Cancelar</button><button class="btn" id="sendDelivery" data-i18n="invoice_send_btn">Enviar comprobante</button></div>`;
         container.appendChild(wrap);
 
         wrap.querySelector('#cancelDelivery').addEventListener('click', ()=>{ container.innerHTML = ''; });
@@ -1022,5 +1022,7 @@
       }
     })();
   </script>
+  <script src="i18n.js?v=5"></script>
+  <script src="chat-widget.js"></script>
 </body>
 </html>

@@ -40,7 +40,7 @@
         <div class="text-4xl font-black text-gray-900 tracking-tight" id="total-balance">$1,250.45</div>
         <div class="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold">
           <i class="fas fa-arrow-trend-up"></i>
-          <span>Ganancias por comisiones (Mes): <strong id="profit-calc">$42.80</strong></span>
+          <span><span data-i18n="cashout_profit_label">Ganancias por comisiones (Mes):</span> <strong id="profit-calc">$42.80</strong></span>
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
     <!-- Bank Account Section -->
     <div class="glass-panel rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
       <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between">
-        <h2 class="text-lg font-bold">Cuenta de destino</h2>
+        <h2 class="text-lg font-bold" data-i18n="cashout_target_account">Cuenta de destino</h2>
         <i class="fas fa-building-columns text-gray-300 text-xl"></i>
       </div>
       
@@ -58,12 +58,12 @@
           <div class="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
             <i class="fas fa-wallet"></i>
           </div>
-          <p class="text-gray-500 text-sm mb-5">Elige un método para retirar tus ganancias y saldo a favor.</p>
+          <p class="text-gray-500 text-sm mb-5"><span data-i18n="cashout_choose_method">Elige un método para retirar tus ganancias y saldo a favor.</span></p>
           <div class="space-y-3">
             <button type="button" id="btn-add-bank" class="w-full flex items-center justify-center border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 text-gray-800 font-bold py-3.5 rounded-xl transition-all">
               <i class="fas fa-building-columns mr-2 text-blue-600"></i><span data-i18n="cashout_origin_account">Cuenta Bancaria</span></button>
             <button type="button" id="btn-add-card" class="w-full flex items-center justify-center border-2 border-gray-200 hover:border-orange-500 hover:bg-orange-50 text-gray-800 font-bold py-3.5 rounded-xl transition-all">
-              <i class="fas fa-credit-card mr-2 text-orange-500"></i> Tarjeta Punto Pago
+              <i class="fas fa-credit-card mr-2 text-orange-500"></i> <span data-i18n="cashout_pp_card">Tarjeta Punto Pago</span>
             </button>
           </div>
         </div>
@@ -78,7 +78,7 @@
               <div class="font-bold text-gray-900 truncate" id="bank-name-display">Banco General</div>
               <div class="text-sm text-gray-500 truncate mt-0.5"><span id="bank-type-display">Ahorros</span> •••• <span id="bank-number-display">1234</span></div>
             </div>
-            <button id="btn-edit-bank" class="text-blue-600 hover:text-blue-800 p-2 font-bold text-sm">Cambiar</button>
+            <button id="btn-edit-bank" class="text-blue-600 hover:text-blue-800 p-2 font-bold text-sm" data-i18n="cashout_change_method">Cambiar</button>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@
       </div>
 
       <button id="btn-submit-cashout" class="w-full text-center py-4 bg-[#0047bb] text-white font-extrabold rounded-xl shadow-lg opacity-50 cursor-not-allowed transition-all" disabled data-i18n="cashout_transfer_funds">Transferir fondos a mi cuenta</button>
-      <p class="text-xs text-center text-gray-400 mt-3 font-medium"><i class="fas fa-info-circle mr-1"></i> Retiros ACH toman de 24 a 48 hs hábiles.</p>
+      <p class="text-xs text-center text-gray-400 mt-3 font-medium"><i class="fas fa-info-circle mr-1"></i> <span data-i18n="cashout_ach_info">Retiros ACH toman de 24 a 48 hs hábiles.</span></p>
     </div>
 
   </main>
@@ -104,14 +104,14 @@
     <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" id="bank-modal-bg"></div>
     <div class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[90vh]" id="bank-modal-sheet">
       <div class="flex items-center justify-between p-6 border-b border-gray-100">
-        <h3 class="text-xl font-extrabold">Datos Bancarios</h3>
+        <h3 class="text-xl font-extrabold" data-i18n="cashout_bank_data">Datos Bancarios</h3>
         <button type="button" id="close-bank-modal" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"><i class="fas fa-times"></i></button>
       </div>
       <div class="p-6 overflow-y-auto space-y-5">
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_destination_account">Banco de destino</label>
           <select id="input-bank-name" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 bg-white font-medium">
-            <option value="">Seleccione banco...</option>
+            <option value=""><option value="" data-i18n="cashout_select_bank">Seleccione banco...</option></option>
             <option value="Banco General">Banco General</option>
             <option value="Banistmo">Banistmo</option>
             <option value="BAC Credomatic">BAC Credomatic</option>
@@ -121,29 +121,29 @@
           </select>
         </div>
         <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1.5">Tipo de cuenta</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_account_type">Tipo de cuenta</label>
           <div class="grid grid-cols-2 gap-3">
             <label class="relative flex items-center justify-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(input:checked)]:border-blue-500 [&:has(input:checked)]:bg-blue-50/50">
               <input type="radio" name="bank-type" value="Ahorros" class="sr-only" checked>
-              <span class="font-semibold text-gray-700">Ahorros</span>
+              <span class="font-semibold text-gray-700" data-i18n="cashout_savings">Ahorros</span>
             </label>
             <label class="relative flex items-center justify-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(input:checked)]:border-blue-500 [&:has(input:checked)]:bg-blue-50/50">
               <input type="radio" name="bank-type" value="Corriente" class="sr-only" >
-              <span class="font-semibold text-gray-700">Corriente</span>
+              <span class="font-semibold text-gray-700" data-i18n="cashout_checking">Corriente</span>
             </label>
           </div>
         </div>
         <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1.5">Número de cuenta</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_account_number">Número de cuenta</label>
           <input type="number" id="input-bank-number" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 font-bold tracking-widest outline-none" placeholder="0000000000" inputmode="numeric">
         </div>
         <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1.5">Titular de la cuenta</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_account_owner">Titular de la cuenta</label>
           <input type="text" id="input-bank-owner" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 font-medium outline-none" placeholder="Nombre completo">
         </div>
 
         <button type="button" id="save-bank-btn" class="w-full mt-4 py-4 bg-gray-900 text-white font-bold rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors" disabled>
-          Guardar cuenta
+          <span data-i18n="cashout_save_account">Guardar cuenta</span>
         </button>
       </div>
     </div>
@@ -154,25 +154,25 @@
     <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" id="card-modal-bg"></div>
     <div class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[90vh]" id="card-modal-sheet">
       <div class="flex items-center justify-between p-6 border-b border-gray-100">
-        <h3 class="text-xl font-extrabold flex items-center gap-2"><i class="fas fa-credit-card text-orange-500"></i> Tarjeta Punto Pago</h3>
+        <h3 class="text-xl font-extrabold flex items-center gap-2"><i class="fas fa-credit-card text-orange-500"></i> <span data-i18n="cashout_pp_card">Tarjeta Punto Pago</span></h3>
         <button type="button" id="close-card-modal" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"><i class="fas fa-times"></i><span class="sr-only">Cerrar</span></button>
       </div>
       <div class="p-6 overflow-y-auto space-y-5">
         <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1.5">Número de tarjeta</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_card_number">Número de tarjeta</label>
           <input type="text" id="input-card-number" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-bold tracking-widest outline-none" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
         </div>
         <div>
-          <label class="block text-sm font-bold text-gray-700 mb-1.5">Nombre en la tarjeta</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_card_name">Nombre en la tarjeta</label>
           <input type="text" id="input-card-owner" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-medium outline-none" placeholder="Nombre completo">
         </div>
         <div class="w-1/2">
-          <label class="block text-sm font-bold text-gray-700 mb-1.5">Vencimiento</label>
+          <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_card_expiry">Vencimiento</label>
           <input type="text" id="input-card-expiry" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-medium outline-none" placeholder="MM/AA" maxlength="5">
         </div>
 
         <button type="button" id="save-card-btn" class="w-full mt-4 py-4 bg-gray-900 text-white font-bold rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors" disabled>
-          Vincular tarjeta
+          <span data-i18n="cashout_link_card">Vincular tarjeta</span>
         </button>
       </div>
     </div>
@@ -349,7 +349,7 @@
         mBankSaveBtn.classList.replace('bg-gray-900', 'bg-emerald-600');
         
         setTimeout(() => {
-          mBankSaveBtn.innerHTML = `Guardar cuenta`;
+          mBankSaveBtn.innerHTML = `<span data-i18n="cashout_save_account">Guardar cuenta</span>`;
           mBankSaveBtn.classList.replace('bg-emerald-600', 'bg-gray-900');
           closeBankModal();
           renderState();
@@ -428,7 +428,7 @@
         mCardSaveBtn.classList.replace('bg-gray-900', 'bg-orange-500');
         
         setTimeout(() => {
-          mCardSaveBtn.innerHTML = `Vincular tarjeta`;
+          mCardSaveBtn.innerHTML = `<span data-i18n="cashout_link_card">Vincular tarjeta</span>`;
           mCardSaveBtn.classList.replace('bg-orange-500', 'bg-gray-900');
           closeCardModal();
           renderState();
@@ -447,7 +447,7 @@
       renderState();
     })();
   </script>
-  <script src="../i18n.js?v=2"></script>
+  <script src="../i18n.js?v=5"></script>
   <script src="../chat-widget.js"></script>
 </body>
 </html>

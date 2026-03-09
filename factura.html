@@ -33,15 +33,15 @@
         <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
           <img src="assets/logo-header-v2.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
         </div>
-        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Factura</span>
+        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap" data-i18n="tab_invoice">Factura</span>
       </div>
       <div class="flex items-center gap-3">
         <div class="hidden md:flex flex-col items-end text-right">
-          <div class="text-[10px] opacity-85 font-semibold uppercase">Sesión</div>
+          <div class="text-[10px] opacity-85 font-semibold uppercase" data-i18n="common_session">Sesión</div>
           <div class="text-xs font-bold" data-pp-session></div>
         </div>
-        <a href="agents/recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Volver</a>
-        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Salir</a>
+        <a href="agents/recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]" data-i18n="common_back">Volver</a>
+        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]" data-i18n="common_logout">Salir</a>
       </div>
     </div>
   </nav>
@@ -52,11 +52,11 @@
       <section class="pp-top-tabs mb-6" aria-label="Acciones">
         <button type="button" id="loadLastTx" class="pp-top-tab -active">
           <span class="icon"><i class="fas fa-rotate"></i></span>
-          <span class="title">Cargar última operación</span>
+          <span class="title" data-i18n="invoice_load_last">Cargar última operación</span>
         </button>
         <button type="button" id="clearDraft" class="pp-top-tab">
           <span class="icon"><i class="fas fa-eraser"></i></span>
-          <span class="title">Limpiar</span>
+          <span class="title" data-i18n="invoice_clear">Limpiar</span>
         </button>
       </section>
 
@@ -65,57 +65,57 @@
         <!-- Datos de contacto -->
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
-            <h2 class="text-xl font-extrabold pp-type">Enviar comprobante</h2>
-            <p class="text-sm text-gray-500">Confirma los datos del cliente para compartir el recibo.</p>
+            <h2 class="text-xl font-extrabold pp-type" data-i18n="invoice_send_btn">Enviar comprobante</h2>
+            <p class="text-sm text-gray-500" data-i18n="invoice_subtitle">Confirma los datos del cliente para compartir el recibo.</p>
           </div>
           <div class="pp-card-body space-y-5">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="pp-label">Nombre (opcional)</label>
-                <input id="clientName" class="pp-field" type="text" placeholder="Ej: Juan Pérez" autocomplete="name">
+                <label class="pp-label" data-i18n="invoice_label_name">Nombre (opcional)</label>
+                <input id="clientName" class="pp-field" type="text" placeholder="Ej: Juan Pérez" data-i18n="invoice_ph_name" autocomplete="name">
               </div>
               <div>
-                <label class="pp-label">Documento / ID (opcional)</label>
-                <input id="clientId" class="pp-field" type="text" placeholder="Ej: 8-888-888" autocomplete="off">
+                <label class="pp-label" data-i18n="invoice_label_id">Documento / ID (opcional)</label>
+                <input id="clientId" class="pp-field" type="text" placeholder="Ej: 8-888-888" data-i18n="invoice_ph_id" autocomplete="off">
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="pp-label">WhatsApp (tel con país)</label>
+                <label class="pp-label" data-i18n="invoice_label_wa">WhatsApp (tel con país)</label>
                 <div class="pp-input-group">
                   <span class="pp-input-prefix">+</span>
-                  <input id="waPhone" class="pp-input-control" type="tel" inputmode="tel" placeholder="50760000000" autocomplete="tel">
+                  <input id="waPhone" class="pp-input-control" type="tel" inputmode="tel" placeholder="50760000000" data-i18n="invoice_ph_wa" autocomplete="tel">
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Formato sin espacios. Ej: 50760000000</p>
+                <p class="text-xs text-gray-500 mt-2" data-i18n="invoice_help_wa">Formato sin espacios. Ej: 50760000000</p>
               </div>
               <div>
-                <label class="pp-label">Correo electrónico</label>
-                <input id="email" class="pp-field" type="email" placeholder="cliente@correo.com" autocomplete="email">
+                <label class="pp-label" data-i18n="invoice_label_email">Correo electrónico</label>
+                <input id="email" class="pp-field" type="email" placeholder="cliente@correo.com" data-i18n="invoice_ph_email" autocomplete="email">
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="pp-label">Telegram (usuario o número)</label>
-                <input id="telegram" class="pp-field" type="text" placeholder="@usuario o 50760000000" autocomplete="off">
+                <label class="pp-label" data-i18n="invoice_label_tg">Telegram (usuario o número)</label>
+                <input id="telegram" class="pp-field" type="text" placeholder="@usuario o 50760000000" data-i18n="invoice_ph_tg" autocomplete="off">
               </div>
               <div>
-                <label class="pp-label">Mensaje (editable)</label>
-                <textarea id="message" class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-4" rows="4" placeholder="Mensaje para el cliente..."></textarea>
+                <label class="pp-label" data-i18n="invoice_label_msg">Mensaje (editable)</label>
+                <textarea id="message" class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-4" rows="4" placeholder="Mensaje para el cliente..." data-i18n="invoice_ph_msg"></textarea>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
               <button type="button" id="sendWhatsapp" class="pp-btn pp-btn-primary -full">
-                <i class="fab fa-whatsapp"></i> WhatsApp
+                <i class="fab fa-whatsapp"></i> <span data-i18n="invoice_btn_wa">WhatsApp</span>
               </button>
               <button type="button" id="sendTelegram" class="pp-btn pp-btn-primary -full">
-                <i class="fab fa-telegram"></i> Telegram
+                <i class="fab fa-telegram"></i> <span data-i18n="invoice_btn_tg">Telegram</span>
               </button>
               <button type="button" id="sendEmail" class="pp-btn pp-btn-primary -full">
-                <i class="fas fa-envelope"></i> Correo
+                <i class="fas fa-envelope"></i> <span data-i18n="invoice_btn_email">Correo</span>
               </button>
             </div>
 
@@ -126,19 +126,19 @@
         <!-- Preview de recibo -->
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
-            <h2 class="text-xl font-extrabold pp-type">Vista previa</h2>
-            <p class="text-sm text-gray-500">Así verá el recibo el cliente (texto).</p>
+            <h2 class="text-xl font-extrabold pp-type" data-i18n="invoice_preview_title">Vista previa</h2>
+            <p class="text-sm text-gray-500" data-i18n="invoice_preview_desc">Así verá el recibo el cliente (texto).</p>
           </div>
           <div class="pp-card-body">
             <div class="rounded-2xl border border-gray-200 bg-white p-5">
-              <div class="text-xs tracking-widest text-gray-500 font-bold uppercase">Punto Pago — Comprobante</div>
-              <div id="receiptTitle" class="mt-2 text-lg font-extrabold">Operación</div>
+              <div class="text-xs tracking-widest text-gray-500 font-bold uppercase" data-i18n="invoice_print">Punto Pago — Comprobante</div>
+              <div id="receiptTitle" class="mt-2 text-lg font-extrabold" data-i18n="invoice_op">Operación</div>
               <div id="receiptMeta" class="mt-2 text-sm text-gray-600"></div>
               <div class="mt-4 border-t pt-4">
-                <div class="flex justify-between text-sm"><span class="text-gray-500">Monto</span><span id="receiptAmount" class="font-extrabold">$0.00</span></div>
-                <div class="flex justify-between text-sm mt-2"><span class="text-gray-500">Referencia</span><span id="receiptRef" class="font-mono text-gray-700">—</span></div>
+                <div class="flex justify-between text-sm"><span class="text-gray-500" data-i18n="invoice_amount">Monto</span><span id="receiptAmount" class="font-extrabold">$0.00</span></div>
+                <div class="flex justify-between text-sm mt-2"><span class="text-gray-500" data-i18n="invoice_ref">Referencia</span><span id="receiptRef" class="font-mono text-gray-700">—</span></div>
               </div>
-              <div class="mt-4 text-xs text-gray-500">Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.</div>
+              <div class="mt-4 text-xs text-gray-500" data-i18n="invoice_preview_disclaimer">Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.</div>
             </div>
           </div>
         </section>
@@ -146,7 +146,7 @@
       </div>
 
       <footer class="mt-8 text-xs text-gray-500">
-        Demo — Los datos se guardan en <code>localStorage</code>. Fuente de operaciones: sandbox <code>pp_agent_sandbox_v1</code>.
+        <span data-i18n="invoice_demo_footer">Demo — Los datos se guardan en <code>localStorage</code>. Fuente de operaciones: sandbox <code>pp_agent_sandbox_v1</code>.</span>
       </footer>
 
     </div>
@@ -223,15 +223,17 @@
 
     function defaultMessage(receipt, clientName){
       const name = safeText(clientName);
-      const greet = name ? `Hola ${name},` : 'Hola,';
+      const dict = window.I18N ? window.I18N.getDict() : {};
+      const greetText = dict['invoice_greet'] || 'Hola';
+      const greet = name ? `${greetText} ${name},` : `${greetText},`;
       return [
         greet,
-        'Te compartimos tu comprobante de pago:',
+        dict['invoice_msg_body'] || 'Te compartimos tu comprobante de pago:',
         `${receipt.title}`,
         `${receipt.meta}`,
-        `Monto: ${receipt.amount}`,
-        `Referencia: ${receipt.ref}`,
-        'Gracias por usar Punto Pago.'
+        `${dict['invoice_amount'] || 'Monto'}: ${receipt.amount}`,
+        `${dict['invoice_ref'] || 'Referencia'}: ${receipt.ref}`,
+        dict['invoice_msg_footer'] || 'Gracias por usar Punto Pago.'
       ].join('\n');
     }
 
@@ -305,27 +307,27 @@
     function sendWhatsApp(){
       const phone = safeText(els.waPhone.value).replace(/[^0-9]/g,'');
       if (!phone){
-        setStatus('Ingresa el número de WhatsApp (con código de país, sin +).');
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_err_wa'] : null) || 'Ingresa el número de WhatsApp (con código de país, sin +).');
         els.waPhone.focus();
         return;
       }
       const msg = ensureMessage();
       const url = `https://wa.me/${encodeURIComponent(phone)}?text=${encodeURIComponent(msg)}`;
-      setStatus('Abriendo WhatsApp…');
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_wa'] : null) || 'Abriendo WhatsApp…');
       openUrl(url);
     }
 
     function sendEmail(){
       const email = safeText(els.email.value);
       if (!email){
-        setStatus('Ingresa un correo del cliente.');
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_err_email'] : null) || 'Ingresa un correo del cliente.');
         els.email.focus();
         return;
       }
       const msg = ensureMessage();
       const subject = 'Comprobante de pago — Punto Pago';
       const url = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
-      setStatus('Abriendo correo…');
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_email'] : null) || 'Abriendo correo…');
       openUrl(url);
     }
 
@@ -335,14 +337,14 @@
       if (!handle){
         // fallback: open t.me share
         const url = `https://t.me/share/url?url=&text=${encodeURIComponent(msg)}`;
-        setStatus('Abriendo Telegram (compartir)…');
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_status_tg_share'] : null) || 'Abriendo Telegram (compartir)…');
         openUrl(url);
         return;
       }
       // if user provided @username, open chat
       const clean = handle.replace(/^@/,'').trim();
       const url = `https://t.me/${encodeURIComponent(clean)}`;
-      setStatus('Abriendo Telegram… (luego pega el mensaje)');
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_tg'] : null) || 'Abriendo Telegram… (luego pega el mensaje)');
       openUrl(url);
     }
 
@@ -350,8 +352,9 @@
       const st = loadState();
       const txs = Array.isArray(st.txs) ? st.txs : [];
       if (!txs.length){
-        setStatus('No hay transacciones en el sandbox todavía. Realiza un Cash In o un pago primero.');
-        const blank = { title: 'Operación', meta: new Date().toLocaleString(), amount: '$0.00', ref: '—' };
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_err_no_tx'] : null) || 'No hay transacciones en el sandbox todavía. Realiza un Cash In o un pago primero.');
+        const dict = window.I18N ? window.I18N.getDict() : {};
+        const blank = { title: dict['invoice_op'] || 'Operación', meta: new Date().toLocaleString(), amount: '$0.00', ref: '—' };
         updatePreview(blank);
         els.message.value = '';
         persist();
@@ -361,7 +364,7 @@
       const receipt = buildReceiptFromTx(last);
       updatePreview(receipt);
       els.message.value = '';
-      setStatus('Última operación cargada. Completa los datos del cliente y elige el canal.');
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_loaded'] : null) || 'Última operación cargada. Completa los datos del cliente y elige el canal.');
       persist();
     }
 
@@ -418,5 +421,7 @@
     }, { passive: true });
   })();
   </script>
+  <script src="i18n.js?v=5"></script>
+  <script src="chat-widget.js"></script>
 </body>
 </html>
