@@ -123,7 +123,7 @@
         </button>
   <button type="button" onclick="showSection('cashin')" id="tab-cashin" class="pp-top-tab tab-active" aria-controls="section-cashin">
           <span class="icon"><i class="fas fa-credit-card"></i></span>
-          <span class="title">Recarga digital</span>
+          <span class="title" data-i18n="recharge_digital">Recarga digital</span>
         </button>
   <button type="button" onclick="showSection('fondear')" id="tab-fondear" class="pp-top-tab tab-inactive" aria-controls="section-fondear">
           <span class="icon"><i class="fas fa-university"></i></span>
@@ -186,7 +186,7 @@
     <div id="section-cashin" class="section-fade">
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
-          <h2 class="text-2xl font-bold pp-type">Recarga digital</h2>
+          <h2 class="text-2xl font-bold pp-type" data-i18n="recharge_digital">Recarga digital</h2>
           <p class="text-gray-500 pp-type">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
         </div>
 
@@ -601,7 +601,7 @@
             const content = document.getElementById('receipt-body').innerHTML;
             const w = window.open('', 'Imprimir', 'width=600,height=600');
             if (!w) return alert('No es posible abrir ventana de impresión');
-            w.document.write(`<html><head><title>Recibo</title></head><body>${content}  <script src="../i18n.js"></script>
+            w.document.write(`<html><head><title>Recibo</title></head><body>${content}  <script src="../i18n.js?v=2"></script>
 </body></html>`);
             w.document.close();
             w.focus();
@@ -1422,6 +1422,6 @@
       });
     })();
   </script>
-  <script src="../i18n.js"></script>
+  <script src="../i18n.js?v=2"></script>
 </body>
 </html>

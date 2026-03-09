@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+const html = `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
@@ -8,7 +10,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <script src="auth.js"></script>
-  <script src="i18n.js?v=2"></script>
   <style>
     body { background: #f3f4f6; font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
     .settings-container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
@@ -43,7 +44,7 @@
         <a href="agents/recharge.html" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
           <i class="fas fa-arrow-left"></i>
         </a>
-        <h1 class="font-extrabold text-lg" data-i18n="settings_title">Ajustes</h1>
+        <h1 class="font-extrabold text-lg">Ajustes</h1>
       </div>
       <div class="hidden sm:block text-xs text-white/80">
         <span data-pp-session></span>
@@ -54,7 +55,7 @@
   <main class="settings-container">
     
     <!-- 1. Cuenta -->
-    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_account">1. Cuenta</h2>
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">1. Cuenta</h2>
     <div class="settings-group">
       <!-- Info Personal (Interactive) -->
       <div class="settings-item" id="toggle-info-personal">
@@ -119,7 +120,7 @@
     </div>
 
     <!-- 2. Seguridad -->
-    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_security">2. Seguridad</h2>
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">2. Seguridad</h2>
     <div class="settings-group">
       <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
         <div class="flex items-center">
@@ -171,9 +172,9 @@
     </div>
 
     <!-- 3. Preferencias -->
-    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_preferences">3. Preferencias</h2>
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">3. Preferencias</h2>
     <div class="settings-group">
-      <div class="settings-item">
+      <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
         <div class="flex items-center">
           <div class="settings-icon bg-blue-soft"><i class="fas fa-globe"></i></div>
           <div>
@@ -181,13 +182,8 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <select id="lang-selector" class="text-sm text-gray-500 bg-transparent border-none outline-none cursor-pointer appearance-none text-right">
-            <option value="es" data-i18n="lang_es">Español</option>
-            <option value="en" data-i18n="lang_en">Inglés</option>
-            <option value="ru" data-i18n="lang_ru">Ruso</option>
-            <option value="zh" data-i18n="lang_zh">Chino</option>
-          </select>
-          <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
+          <span class="text-sm text-gray-500">Español</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
         </div>
       </div>
       <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
@@ -238,7 +234,7 @@
     </div>
 
     <!-- 4. Legal -->
-    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_legal">4. Legal</h2>
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4">4. Legal</h2>
     <div class="settings-group">
       <div class="settings-item" onclick="alert('Funcionalidad en desarrollo')">
         <div class="flex items-center">
@@ -460,29 +456,7 @@
     })();
   </script>
 
-  <script>
-    (function(){
-      function setupLangSelector() {
-        const langSel = document.getElementById('lang-selector');
-        if (langSel && window.I18N) {
-          langSel.value = window.I18N.currentLang;
-          
-          langSel.addEventListener('change', (e) => {
-            console.log("Selector de idioma cambiado a:", e.target.value);
-            // Guarda primero el valor
-            localStorage.setItem('pp_lang', e.target.value);
-            // Fuerza un recargo completo limpio de la web
-            window.location.reload();
-          });
-        }
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupLangSelector);
-      } else {
-        setupLangSelector();
-      }
-    })();
-  </script>
 </body>
-</html>
+</html>`
+
+fs.writeFileSync('/Users/juanpabloobregonjacome/Desktop/Checkout boton/setup.html', html);
