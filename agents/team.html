@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <title>Mi equipo — Empleados</title>
+  <title><span data-i18n="team_title">Mi equipo — Empleados</span></title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../styles.css">
@@ -33,15 +33,15 @@
         <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
           <img src="../assets/logo-header-v2.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
         </div>
-        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Mi equipo</span>
+        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap" data-i18n="team_title">Mi equipo</span>
       </div>
       <div class="flex items-center gap-3">
         <div class="hidden md:flex flex-col items-end text-right">
           <div class="text-[10px] opacity-85 font-semibold uppercase">Sesión</div>
           <div class="text-xs font-bold" data-pp-session></div>
         </div>
-        <a href="recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Volver</a>
-        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]">Salir</a>
+        <a href="recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]" data-i18n="btn_back">Volver</a>
+        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]" data-i18n="logout">Salir</a>
       </div>
     </div>
   </nav>
@@ -53,54 +53,54 @@
 
         <section class="pp-card -soft overflow-hidden lg:col-span-2">
           <div class="pp-card-head">
-            <h1 class="text-2xl font-extrabold pp-type">Empleados</h1>
-            <p class="text-sm text-gray-500">Crea y administra empleados asociados a tu cuenta de agente.</p>
+            <h1 class="text-2xl font-extrabold pp-type" data-i18n="team_employees">Empleados</h1>
+            <p class="text-sm text-gray-500"><span data-i18n="team_desc">Crea y administra empleados asociados a tu cuenta de agente.</span></p>
           </div>
           <div class="pp-card-body">
             <div class="overflow-x-auto">
               <table class="w-full text-sm">
                 <thead>
                   <tr class="text-gray-500">
-                    <th class="text-left py-2">Usuario</th>
-                    <th class="text-left py-2">Nombre</th>
-                    <th class="text-left py-2">Estado</th>
-                    <th class="text-right py-2">Acciones</th>
+                    <th class="text-left py-2" data-i18n="team_th_user">Usuario</th>
+                    <th class="text-left py-2" data-i18n="team_th_name">Nombre</th>
+                    <th class="text-left py-2" data-i18n="team_th_status">Estado</th>
+                    <th class="text-right py-2" data-i18n="team_th_actions">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="teamTable"></tbody>
               </table>
             </div>
-            <p class="text-xs text-gray-500 mt-3">Nota: demo con <code>localStorage</code>. Los cambios se reflejan al instante.</p>
+            <p class="text-xs text-gray-500 mt-3"><span data-i18n="team_note">Nota: demo con</span> <code>localStorage</code>. <span data-i18n="team_note_desc">Los cambios se reflejan al instante.</span></p>
           </div>
         </section>
 
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
-            <h2 class="text-xl font-extrabold pp-type">Crear / Editar empleado</h2>
-            <p class="text-sm text-gray-500">Solo usuarios con rol <strong>employee</strong>.</p>
+            <h2 class="text-xl font-extrabold pp-type"><span data-i18n="team_form_title">Crear / Editar empleado</span></h2>
+            <p class="text-sm text-gray-500"><span data-i18n="team_form_desc">Solo usuarios con rol</span> <strong>employee</strong>.</p>
           </div>
           <div class="pp-card-body">
             <form class="grid gap-3" onsubmit="return false;">
               <input id="editId" type="hidden">
 
               <div>
-                <label class="pp-label">Usuario</label>
+                <label class="pp-label" data-i18n="team_lbl_user">Usuario</label>
                 <input id="fUsername" type="text" class="pp-field" placeholder="empleado02" autocomplete="off">
               </div>
 
               <div>
-                <label class="pp-label">Nombre</label>
+                <label class="pp-label" data-i18n="team_lbl_name">Nombre</label>
                 <input id="fDisplayName" type="text" class="pp-field" placeholder="Empleado 02" autocomplete="off">
               </div>
 
               <div>
-                <label class="pp-label">Contraseña</label>
+                <label class="pp-label" data-i18n="team_lbl_pwd">Contraseña</label>
                 <input id="fPassword" type="password" class="pp-field" placeholder="1234" autocomplete="new-password">
               </div>
 
               <div class="flex gap-3">
-                <button id="saveBtn" type="button" class="pp-btn pp-btn-primary -full">Guardar</button>
-                <button id="resetBtn" type="button" class="pp-btn pp-btn-secondary -full">Limpiar</button>
+                <button id="saveBtn" type="button" class="pp-btn pp-btn-primary -full" data-i18n="btn_save">Guardar</button>
+                <button id="resetBtn" type="button" class="pp-btn pp-btn-secondary -full" data-i18n="btn_clear">Limpiar</button>
               </div>
 
               <button type="submit" class="hidden" aria-hidden="true" tabindex="-1">submit</button>
@@ -157,22 +157,22 @@
       function render(){
         const users = teamUsers();
         if (!users.length){
-          $table.innerHTML = '<tr class="border-t"><td colspan="4" class="py-4 text-gray-500">Aún no tienes empleados registrados.</td></tr>';
+          $table.innerHTML = '<tr class="border-t"><td colspan="4" class="py-4 text-gray-500"><span data-i18n=\'team_no_emp\'>Aún no tienes empleados registrados.</span></td></tr>';
           return;
         }
 
         $table.innerHTML = users.map(u => {
           const status = u.active
-            ? '<span class="px-2 py-1 rounded-full text-[10px] bg-green-100 text-green-700 font-bold">ACTIVO</span>'
-            : '<span class="px-2 py-1 rounded-full text-[10px] bg-gray-100 text-gray-600 font-bold">OFF</span>';
+            ? '<span class="px-2 py-1 rounded-full text-[10px] bg-green-100 text-green-700 font-bold" data-i18n=\'team_active\'>ACTIVO</span>'
+            : '<span class="px-2 py-1 rounded-full text-[10px] bg-gray-100 text-gray-600 font-bold" data-i18n=\'team_off\'>OFF</span>';
           return `
             <tr class="border-t">
               <td class="py-2 font-bold">${esc(u.username)}</td>
               <td class="py-2">${esc(u.displayName||'')}</td>
               <td class="py-2">${status}</td>
               <td class="py-2 text-right space-x-2">
-                <button data-act="edit" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;">Editar</button>
-                <button data-act="toggle" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;">${u.active ? 'Deshabilitar' : 'Habilitar'}</button>
+                <button data-act="edit" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;" data-i18n=\'team_edit\'>Editar</button>
+                <button data-act="toggle" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;"><span data-i18n=\'${u.active ? 'team_disable' : 'team_enable'}\'>${u.active ? 'Deshabilitar' : 'Habilitar'}</span></button>
               </td>
             </tr>`;
         }).join('');
@@ -206,13 +206,13 @@
         const displayName = ($n.value || '').trim();
         const password = ($p.value || '').toString();
 
-        if (!username) { $msg.textContent = 'Usuario requerido.'; return; }
-        if (!password) { $msg.textContent = 'Contraseña requerida.'; return; }
+        if (!username) { $msg.textContent = window.I18N ? window.I18N.getDict().team_err_user : 'Usuario requerido.'; return; }
+        if (!password) { $msg.textContent = window.I18N ? window.I18N.getDict().team_err_pwd : 'Contraseña requerida.'; return; }
 
         const users = getUsers();
         const unameLower = username.toLowerCase();
         const conflict = users.find(x => (x.username||'').toLowerCase() === unameLower && x.id !== id);
-        if (conflict) { $msg.textContent = 'Ese usuario ya existe.'; return; }
+        if (conflict) { $msg.textContent = window.I18N ? window.I18N.getDict().team_err_exists : 'Ese usuario ya existe.'; return; }
 
         if (!id){
           users.push({
@@ -227,15 +227,15 @@
             updatedAt: Date.now()
           });
           setUsers(users);
-          $msg.textContent = 'Empleado creado.';
+          $msg.textContent = window.I18N ? window.I18N.getDict().team_created : 'Empleado creado.';
           resetForm();
           render();
           return;
         }
 
         const idx = users.findIndex(x => x.id === id);
-        if (idx < 0) { $msg.textContent = 'No existe el empleado.'; return; }
-        if (users[idx].role !== 'employee' || users[idx].agentId !== session.agentId) { $msg.textContent = 'No autorizado.'; return; }
+        if (idx < 0) { $msg.textContent = window.I18N ? window.I18N.getDict().team_not_exist : 'No existe el empleado.'; return; }
+        if (users[idx].role !== 'employee' || users[idx].agentId !== session.agentId) { $msg.textContent = window.I18N ? window.I18N.getDict().team_not_auth : 'No autorizado.'; return; }
 
         users[idx] = {
           ...users[idx],
@@ -245,7 +245,7 @@
           updatedAt: Date.now()
         };
         setUsers(users);
-        $msg.textContent = 'Empleado actualizado.';
+        $msg.textContent = window.I18N ? window.I18N.getDict().team_updated : 'Empleado actualizado.';
         resetForm();
         render();
       }
@@ -261,9 +261,15 @@
         if (act === 'toggle') toggleActive(id);
       });
 
+      
+      document.addEventListener('languageChanged', (e) => {
+        render(); // re-render table to translate pure JS strings
+      });
+
       resetForm();
       render();
     })();
   </script>
+  <script src="../i18n.js?v=6"></script>
 </body>
 </html>
