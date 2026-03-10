@@ -266,12 +266,12 @@
         const amt = parseFloat(els.amountInput.value);
         const btn = els.submitBtn;
         btn.disabled = true;
-        btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Procesando retiro...`;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> <span data-i18n=\'cashout_processing\'><span data-i18n=\'cashout_processing\'>Procesando retiro...</span></span>`;
         
         // fake api call
         setTimeout(() => {
           btn.classList.replace('bg-[#0047bb]', 'bg-emerald-600');
-          btn.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ¡Retiro completado!`;
+          btn.innerHTML = `<i class="fas fa-check-circle mr-2"></i> <span data-i18n=\'cashout_completed\'><span data-i18n=\'cashout_completed\'>¡Retiro completado!</span></span>`;
           // deduct offline for visual feedback
           document.getElementById('total-balance').textContent = '$' + (config.totalBalance - amt).toFixed(2);
           
