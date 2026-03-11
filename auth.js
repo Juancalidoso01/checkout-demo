@@ -88,9 +88,9 @@
     const users = loadUsers();
 
     const user = users.find(x => (x.username || '').toLowerCase() === u);
-    if (!user) return { ok:false, error: 'Usuario o contraseña inválidos.' };
-    if (!user.active) return { ok:false, error: 'Usuario deshabilitado.' };
-    if ((user.password || '') !== p) return { ok:false, error: 'Usuario o contraseña inválidos.' };
+    if (!user) return { ok:false, errorKey: 'login_err_invalid', error: 'Usuario o contraseña inválidos.' };
+    if (!user.active) return { ok:false, errorKey: 'login_err_disabled', error: 'Usuario deshabilitado.' };
+    if ((user.password || '') !== p) return { ok:false, errorKey: 'login_err_invalid', error: 'Usuario o contraseña inválidos.' };
 
     const session = {
       userId: user.id,

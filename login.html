@@ -89,7 +89,19 @@
       function doLogin(){
         showError('');
         const res = window.PPAuth.signIn($u.value, $p.value);
-        if (!res.ok){ showError(res.error || window.I18N ? window.I18N.getDict().login_err_generic : window.I18N ? window.I18N.getDict().login_err_generic : 'No fue posible iniciar sesión.'); return; }
+        if (!res.ok){
+          // Prefer localized message via errorKey, then res.error, then generic fallback
+          let msg = '';
+          try {
+            const dict = window.I18N && window.I18N.getDict ? window.I18N.getDict() : null;
+            if (res.errorKey && dict && dict[res.errorKey]) msg = dict[res.errorKey];
+            else if (res.error) msg = res.error;
+            else if (dict && dict.login_err_generic) msg = dict.login_err_generic;
+          } catch(e){}
+          if (!msg) msg = 'No fue posible iniciar sesión.';
+          showError(msg);
+          return;
+        }
         window.PPAuth.redirectAfterLogin(next);
       }
 
