@@ -187,7 +187,7 @@
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
           <h2 class="text-2xl font-bold pp-type" data-i18n="recharge_digital">Recarga digital</h2>
-          <p class="text-gray-500 pp-type">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
+          <p class="text-gray-500 pp-type" data-i18n="recharge_digital_desc">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
         </div>
 
       <!-- Toast de confirmación desde Checkout -->
@@ -209,7 +209,7 @@
               </div>
 
               <div>
-                <label class="pp-label">Monto USD</label>
+                <label class="pp-label" data-i18n="recharge_cashin_amount">Monto USD</label>
                 <div class="pp-input-group">
                   <span class="pp-input-prefix">$</span>
                   <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="pp-input-control font-bold text-xl" autocomplete="off" aria-label="Monto USD">
@@ -217,10 +217,10 @@
                 <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
                 <div class="mt-3 p-3 rounded-xl border bg-gray-50">
                   <div class="flex items-center justify-between">
-                    <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Valor real a recargar (neto)</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold" data-i18n="recharge_cashin_net">Valor real a recargar (neto)</div>
                     <div id="cashin-net" class="text-lg font-extrabold text-gray-900">$0.00</div>
                   </div>
-                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint">Neto = Monto - Comisión - ITBMS</div>
+                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint" data-i18n="recharge_cashin_net_hint">Neto = Monto - Comisión - ITBMS</div>
                 </div>
               </div>
             </div>
@@ -233,25 +233,25 @@
           <!-- Paso 2: Confirmación -->
           <div id="step-2" class="hidden space-y-6">
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen de recarga digital</h3>
+              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest" data-i18n="recharge_cashin_summary_title">Resumen de recarga digital</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600">Cuenta (agente):</span>
+                <span class="text-gray-600" data-i18n="recharge_cashin_account">Cuenta (agente):</span>
                 <span class="font-bold text-gray-800" id="summary-phone">—</span>
               </div>
-              <div class="text-sm text-gray-600 mb-4">Serás redirigido al checkout para completar el pago con métodos digitales.</div>
+              <div class="text-sm text-gray-600 mb-4" data-i18n="recharge_cashin_redirect_msg">Serás redirigido al checkout para completar el pago con métodos digitales.</div>
               <div class="flex justify-between border-t border-blue-200 pt-4 items-center">
-                <span class="font-bold text-lg text-gray-800">Monto a recargar:</span>
+                <span class="font-bold text-lg text-gray-800" data-i18n="recharge_cashin_amount_to_recharge">Monto a recargar:</span>
                 <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
               </div>
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
               <div class="flex justify-between mt-3 items-center">
-                <span class="font-bold text-gray-800">Valor real a recargar:</span>
+                <span class="font-bold text-gray-800" data-i18n="recharge_cashin_real_value">Valor real a recargar:</span>
                 <span class="font-extrabold text-gray-900" id="summary-net">$0.00</span>
               </div>
             </div>
             <div class="flex space-x-4">
-              <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary">Corregir</button>
-              <button type="button" id="cashin-go-checkout" class="w-2/3 pp-btn pp-btn-primary">Ir al checkout</button>
+              <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary" data-i18n="recharge_cashin_correct">Corregir</button>
+              <button type="button" id="cashin-go-checkout" class="w-2/3 pp-btn pp-btn-primary" data-i18n="recharge_cashin_go_checkout">Ir al checkout</button>
             </div>
           </div>
 
@@ -260,9 +260,9 @@
             <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <i class="fas fa-check text-4xl"></i>
             </div>
-            <h3 class="text-3xl font-bold text-gray-800 mb-2">¡Depósito Exitoso!</h3>
-            <p class="text-gray-500">El saldo se ha acreditado instantáneamente.</p>
-                        <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
+            <h3 class="text-3xl font-bold text-gray-800 mb-2" data-i18n="recharge_cashin_success_title">¡Depósito Exitoso!</h3>
+            <p class="text-gray-500" data-i18n="recharge_cashin_success_msg">El saldo se ha acreditado instantáneamente.</p>
+                        <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800" data-i18n="recharge_cashin_another">Realizar otro depósito</button>
           </div>
         </div>
       </div>
@@ -273,8 +273,8 @@
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-blue-600">
         <div class="p-6 border-b flex justify-between items-center bg-gray-50">
           <div>
-            <h2 class="text-2xl font-bold text-gray-800">Alertar Pago por ACH</h2>
-            <p class="text-gray-500 text-sm">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
+            <h2 class="text-2xl font-bold text-gray-800" data-i18n="recharge_ach_title">Alertar Pago por ACH</h2>
+            <p class="text-gray-500 text-sm" data-i18n="recharge_ach_desc">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
           </div>
           <i class="fas fa-university text-3xl text-blue-200"></i>
         </div>
@@ -282,32 +282,32 @@
         <div class="p-8 space-y-6">
           <div class="grid md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2">Tu Banco (Emisor)</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_bank">Tu Banco (Emisor)</label>
               <select id="ach-bank" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition bg-white">
-                <option value="">Seleccione banco</option>
-                <option value="general">Banco General</option>
-                <option value="banistmo">Banistmo</option>
-                <option value="bac">BAC Credomatic</option>
-                <option value="otros">Otros bancos</option>
+                <option value="" data-i18n="recharge_ach_bank_ph">Seleccione banco</option>
+                <option value="general" data-i18n="recharge_ach_bank_gen">Banco General</option>
+                <option value="banistmo" data-i18n="recharge_ach_bank_ban">Banistmo</option>
+                <option value="bac" data-i18n="recharge_ach_bank_bac">BAC Credomatic</option>
+                <option value="otros" data-i18n="recharge_ach_bank_oth">Otros bancos</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2">Número de Referencia</label>
-              <input type="text" id="ach-ref" placeholder="Ej: 0012345" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_ref">Número de Referencia</label>
+              <input type="text" id="ach-ref" placeholder="Ej: 0012345" data-i18n="recharge_ach_ref_ph" data-i18n="recharge_ach_ref_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2">Monto de la Transferencia</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_amount">Monto de la Transferencia</label>
               <div class="relative">
                 <span class="absolute left-3 top-3 text-gray-400 font-bold">$</span>
                 <input type="number" id="ach-amount" placeholder="0.00" class="w-full pl-8 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold outline-none">
               </div>
             </div>
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2">Cargar Comprobante</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_proof">Cargar Comprobante</label>
             <div class="flex items-center justify-center w-full h-12 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
                 <div class="flex items-center space-x-2">
                   <i class="fas fa-camera text-gray-400"></i>
-                  <span class="text-xs text-gray-500">Subir foto o PDF</span>
+                  <span class="text-xs text-gray-500" data-i18n="recharge_ach_upload">Subir foto o PDF</span>
                 </div>
                 <input type="file" class="hidden">
               </div>
@@ -317,28 +317,28 @@
           <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 flex space-x-3">
             <i class="fas fa-info-circle text-orange-500 mt-1"></i>
             <p class="text-xs text-orange-700 leading-relaxed">
-              <strong>Aviso:</strong> Las transferencias ACH de otros bancos pueden demorar en ser procesadas por el sistema bancario. Al alertar aquí, nuestro equipo financiero verificará su depósito prioritariamente.
+              <strong data-i18n="recharge_ach_notice_title">Aviso:</strong> <span data-i18n="recharge_ach_notice_desc"><span data-i18n="recharge_ach_notice_desc">Las transferencias ACH de otros bancos pueden demorar en ser procesadas por el sistema bancario. Al alertar aquí, nuestro equipo financiero verificará su depósito prioritariamente.</span></span>
             </p>
           </div>
 
           <button type="button" onclick="submitACH()" class="w-full bg-gray-800 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg flex items-center justify-center space-x-2">
             <i class="fas fa-paper-plane"></i>
-            <span>NOTIFICAR TRANSFERENCIA</span>
+            <span data-i18n="recharge_ach_btn_send">NOTIFICAR TRANSFERENCIA</span>
           </button>
         </div>
       </div>
 
       <!-- Tabla de historial de notificaciones -->
       <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
-        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider border-b pb-2">Estado de recargas enviadas</h3>
+        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider border-b pb-2" data-i18n="recharge_ach_history_title">Estado de recargas enviadas</h3>
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left">
             <thead>
               <tr class="text-gray-400 uppercase text-[10px]">
-                <th class="pb-4">Fecha</th>
-                <th class="pb-4">Referencia</th>
-                <th class="pb-4 text-center">Monto</th>
-                <th class="pb-4 text-right">Estado</th>
+                <th class="pb-4" data-i18n="recharge_ach_history_date">Fecha</th>
+                <th class="pb-4" data-i18n="recharge_ach_history_ref">Referencia</th>
+                <th class="pb-4 text-center" data-i18n="recharge_ach_history_amount">Monto</th>
+                <th class="pb-4 text-right" data-i18n="recharge_ach_history_status">Estado</th>
               </tr>
             </thead>
             <tbody id="ach-history">
@@ -347,7 +347,7 @@
                 <td class="py-4 font-bold text-gray-700">ACH-88219</td>
                 <td class="py-4 text-center font-bold text-gray-800">$250.00</td>
                 <td class="py-4 text-right">
-                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold">RECARGADO</span>
+                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="recharge_ach_status_recharged">RECARGADO</span>
                 </td>
               </tr>
             </tbody>
@@ -358,16 +358,16 @@
 
     <!-- SECCIÓN: PAGOS -->
     <div id="section-pagos" class="hidden bg-white rounded-2xl shadow-xl section-fade border-b-4 border-gray-300 max-w-4xl mx-auto p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-2">Pago de servicios</h2>
-      <p class="text-gray-500 mb-4">Busca al cliente por cédula, pasaporte o número de servicio para ver su portafolio y saldos.</p>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2" data-i18n="pay_services_title">Pago de servicios</h2>
+      <p class="text-gray-500 mb-4" data-i18n="pay_services_desc">Busca al cliente por cédula, pasaporte o número de servicio para ver su portafolio y saldos.</p>
 
       <div class="grid md:grid-cols-3 gap-4 mb-4">
         <div class="md:col-span-2">
-          <label class="block text-sm font-bold text-gray-700 mb-2">Cédula / Pasaporte / Nº de servicio</label>
-          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+          <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="pay_services_search_label">Cédula / Pasaporte / Nº de servicio</label>
+          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" data-i18n="pay_services_search_ph" data-i18n="pay_services_search_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <div class="flex items-end">
-          <button id="customer-search-btn" type="button" class="btn-primary w-full py-3 rounded-lg text-white">Buscar Cliente</button>
+          <button id="customer-search-btn" type="button" class="btn-primary w-full py-3 rounded-lg text-white" data-i18n="pay_services_search_btn">Buscar Cliente</button>
         </div>
       </div>
 
@@ -425,17 +425,17 @@
       function renderCustomerResults(list){
         const out = document.getElementById('customer-results');
         out.innerHTML = '';
-        if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">No se encontraron coincidencias para el cliente.</div>'; return; }
+        if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_search_empty : "No se encontraron coincidencias para el cliente."}</div>'; return; }
         list.forEach(c=>{
           const wrap = document.createElement('div'); wrap.className = 'p-4 border rounded-lg';
           const rows = c.portfolio.map(p => {
             const paid = isServicePaidForClient(c.cid, p.svcId);
             if (paid) {
-              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">PAGADO</span></td></tr>`;
+              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_status_paid : "PAGADO"}</span></td></tr>`;
             }
-            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">Cobrar</button></td></tr>`;
+            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_btn_collect : "Cobrar"}</button></td></tr>`;
           }).join('');
-          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">ID: ${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} servicios</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
+          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_lbl_id : "ID: "}${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} ${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_lbl_services : "servicios"}</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
           out.appendChild(wrap);
         });
 
@@ -456,11 +456,11 @@
       document.getElementById('customer-search-btn').addEventListener('click', async ()=>{
         const q = document.getElementById('customer-id').value || '';
         const out = document.getElementById('customer-results');
-        out.innerHTML = '<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">Buscando cliente&hellip;</div></div>';
+        out.innerHTML = '<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_searching : "Buscando cliente&hellip;"}</div></div>';
         try {
           const found = await lookupCustomerAsync(q);
           renderCustomerResults(found);
-        } catch(e){ out.innerHTML = '<div class="p-4 bg-red-50 border border-red-100 rounded">Error al buscar cliente.</div>'; }
+        } catch(e){ out.innerHTML = '<div class="p-4 bg-red-50 border border-red-100 rounded">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_search_error : "Error al buscar cliente."}</div>'; }
       });
 
       // Charge modal (replace prompt) -------------------------------------------------
