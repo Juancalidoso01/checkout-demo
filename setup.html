@@ -311,14 +311,14 @@
             <input id="gain-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg bg-white text-sm">
           </div>
           <div class="flex gap-2 pt-2">
-            <button id="applyFin" class="flex-1 bg-[#0047bb] text-white py-2.5 rounded-lg font-bold text-sm">Aplicar</button>
-            <button id="resetSandbox" class="flex-1 bg-gray-200 text-gray-800 py-2.5 rounded-lg font-bold text-sm">Resetear</button>
+            <button id="applyFin" class="flex-1 bg-[#0047bb] text-white py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_apply" data-i18n="setup_btn_apply">Aplicar</button>
+            <button id="resetSandbox" class="flex-1 bg-gray-200 text-gray-800 py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_reset" data-i18n="setup_btn_reset">Resetear</button>
           </div>
           <hr class="my-4">
           <textarea id="importArea" rows="4" class="w-full p-2.5 border rounded-lg bg-white text-xs font-mono" placeholder='Pegar JSON para importar...'></textarea>
           <div class="flex gap-2">
-            <button id="importBtn" class="flex-1 bg-gray-800 text-white py-2.5 rounded-lg font-bold text-sm">Importar</button>
-            <button id="clearAll" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg font-bold text-sm">Borrar Locales</button>
+            <button id="importBtn" class="flex-1 bg-gray-800 text-white py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_import" data-i18n="setup_btn_import">Importar</button>
+            <button id="clearAll" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_clear" data-i18n="setup_btn_clear">Borrar Locales</button>
           </div>
         </div>
       </div>
@@ -399,7 +399,7 @@
         saveAgent(a);
         const s = loadState();
         saveState(s);
-        alert('Datos de cuenta guardados con éxito');
+        alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_msg_success : 'Datos de cuenta guardados con éxito');
         render();
       });
 

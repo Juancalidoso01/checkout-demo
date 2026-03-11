@@ -167,7 +167,7 @@
           <div id="cardContainer" hidden>
             <div class="card-field">
               <label for="cardName" class="muted">Nombre en la tarjeta</label>
-              <input id="cardName" name="cardName" type="text" placeholder="Nombre Apellido" autocomplete="cc-name" required>
+              <input id="cardName" name="cardName" type="text" placeholder="Nombre Apellido" data-i18n="checkout_ph_name" data-i18n="checkout_ph_name" autocomplete="cc-name" required>
             </div>
             <div class="card-field">
               <label for="cardNumber" class="muted">Número de tarjeta</label>
@@ -190,7 +190,7 @@
             <p class="muted">Se abrirá el flujo de Yappy. Ingresa tu celular o escanea el QR en la app.</p>
             <div class="small-note">
               <label for="yappyPhone" class="muted">Teléfono asociado</label>
-              <input id="yappyPhone" type="tel" inputmode="tel" pattern="[0-9+ ]*" placeholder="+593 9XXXXXXXX" autocomplete="tel" aria-label="Teléfono Yappy">
+              <input id="yappyPhone" type="tel" inputmode="tel" pattern="[0-9+ ]*" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" data-i18n="checkout_ph_phone" autocomplete="tel" aria-label="Teléfono Yappy">
             </div>
           </div>
 
@@ -214,7 +214,7 @@
             <p class="muted">Ingresa tu número de documento y la clave para autorizar el pago.</p>
             <div class="small-note">
               <label for="docNumber" class="muted">Documento</label>
-              <input id="docNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Cédula / ID" autocomplete="off">
+              <input id="docNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Cédula / ID" data-i18n="checkout_ph_id" data-i18n="checkout_ph_id" autocomplete="off">
             </div>
             <div class="small-note">
               <label for="claveInput" class="muted">Clave</label>
@@ -226,7 +226,7 @@
         <div class="sim-panel" id="simPanel">
           <div class="sim-steps" id="simSteps">
             <div class="sim-step" data-step="validating"><span class="dot"></span> Validando</div>
-            <div class="sim-step" data-step="processing"><span class="dot"></span> Procesando</div>
+            <div class="sim-step" data-step="processing"><span class="dot"></span data-i18n="checkout_processing" data-i18n="checkout_processing"> Procesando</div>
             <div class="sim-step" data-step="final"><span class="dot"></span> Resultado</div>
           </div>
         </div>
@@ -235,8 +235,8 @@
           <div id="message" class="msg" role="status" aria-live="polite"></div>
           <div id="busyStatus" class="sr-only" aria-live="assertive"></div>
           <div class="footer-actions">
-            <button id="backAgentBtn" class="btn secondary hidden mr-2" type="button">Volver al agente</button>
-            <button id="checkoutBtn" class="btn" type="button" aria-label="Pagar ahora por USD 19.99"><span id="btnLabel">Pagar ahora</span></button>
+            <button id="backAgentBtn" class="btn secondary hidden mr-2" type="button" data-i18n="checkout_back_agent" data-i18n="checkout_back_agent">Volver al agente</button>
+            <button id="checkoutBtn" class="btn" type="button" aria-label="Pagar ahora por USD 19.99"><span id="btnLabel" data-i18n="checkout_pay_now">Pagar ahora</span></button>
           </div>
         </div>
           <!-- Hidden submit to satisfy accessibility/linter and allow Enter key to submit -->
@@ -569,11 +569,11 @@
           btnLabel.appendChild(spinner);
           const text = document.createElement('span');
           text.style.marginLeft = '8px';
-          text.textContent = 'Procesando…';
+          text.textContent = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_processing : "Procesando…";
           btnLabel.appendChild(text);
           busyStatus.textContent = 'Procesando pago…';
         } else {
-          btnLabel.textContent = 'Pagar ahora';
+          btnLabel.textContent = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_pay_now : "Pagar ahora";
           busyStatus.textContent = '';
         }
         // reset sim steps when toggling off
@@ -592,7 +592,7 @@
   clearMessage();
   const selRadio = document.querySelector('input[name="payMethod"]:checked');
   if (!selRadio) {
-    showMessage({ type: 'error', text: 'Selecciona un método de pago antes de continuar.' });
+    showMessage({ type: 'error', text: window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_err_method : 'Selecciona un método de pago antes de continuar.' });
     return;
   }
   let method = selRadio.value;
@@ -833,7 +833,7 @@
               </fieldset>
               <div class="justify-end mt-12">
                 <button type="button" class="btn secondary" id="recCancel" data-i18n="checkout_cancel" data-i18n=\'checkout_cancel\' data-i18n=\'checkout_cancel\'>Cancelar</button>
-                <button type="button" class="btn" id="recConfirm">Confirmar</button>
+                <button type="button" class="btn" id="recConfirm" data-i18n="common_confirm">Confirmar</button>
               </div>
             </form>
           </div>`;
@@ -934,7 +934,7 @@
             </div>
             <div id="deliveryDetails" class="delivery-details"></div>
             <div class="justify-end mt-12">
-              <button id="closeDelivery" class="btn secondary ml-8">Cerrar</button>
+              <button id="closeDelivery" class="btn secondary ml-8" data-i18n="common_close">Cerrar</button>
             </div>
           </div>`;
 
@@ -964,7 +964,7 @@
         wrap.className = 'delivery-input-wrap';
         let inner = '';
         if (method === 'whatsapp' || method === 'sms') {
-          inner = `<label class="muted">Número de teléfono</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" type="tel">`;
+          inner = `<label class="muted">Número de teléfono</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" data-i18n="checkout_ph_phone" type="tel">`;
         } else if (method === 'telegram') {
           inner = `<label class="muted">Usuario de Telegram</label><input class="delivery-input" placeholder="@usuario">`;
         } else if (method === 'email') {
@@ -1017,7 +1017,7 @@
             }
           });
 
-          doneBtn.addEventListener('click', ()=>{ closeDeliveryModal(); showMessage({ type:'success', text: 'Comprobante enviado. Gracias por tu pago.' }); });
+          doneBtn.addEventListener('click', ()=>{ closeDeliveryModal(); showMessage({ type:'success', text: window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_receipt_sent : 'Comprobante enviado. Gracias por tu pago.' }); });
         });
       }
     })();
