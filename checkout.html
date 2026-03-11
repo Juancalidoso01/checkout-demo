@@ -17,7 +17,7 @@
       @keyframes fadeIn { from { opacity:0; transform:translateY(6px);} to {opacity:1; transform:translateY(0);} }
     </style>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-[100dvh] flex flex-col overflow-x-hidden">
 
     <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
       <div class="mx-auto flex justify-between items-center w-full">
@@ -167,7 +167,7 @@
           <div id="cardContainer" hidden>
             <div class="card-field">
               <label for="cardName" class="muted">Nombre en la tarjeta</label>
-              <input id="cardName" name="cardName" type="text" placeholder="Nombre Apellido" data-i18n="checkout_ph_name" data-i18n="checkout_ph_name" autocomplete="cc-name" required>
+              <input id="cardName" name="cardName" type="text" placeholder="Nombre Apellido" data-i18n="checkout_ph_name" autocomplete="cc-name" required>
             </div>
             <div class="card-field">
               <label for="cardNumber" class="muted">Número de tarjeta</label>
@@ -190,7 +190,7 @@
             <p class="muted">Se abrirá el flujo de Yappy. Ingresa tu celular o escanea el QR en la app.</p>
             <div class="small-note">
               <label for="yappyPhone" class="muted">Teléfono asociado</label>
-              <input id="yappyPhone" type="tel" inputmode="tel" pattern="[0-9+ ]*" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" data-i18n="checkout_ph_phone" autocomplete="tel" aria-label="Teléfono Yappy">
+              <input id="yappyPhone" type="tel" inputmode="tel" pattern="[0-9+ ]*" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" autocomplete="tel" aria-label="Teléfono Yappy">
             </div>
           </div>
 
@@ -214,7 +214,7 @@
             <p class="muted">Ingresa tu número de documento y la clave para autorizar el pago.</p>
             <div class="small-note">
               <label for="docNumber" class="muted">Documento</label>
-              <input id="docNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Cédula / ID" data-i18n="checkout_ph_id" data-i18n="checkout_ph_id" autocomplete="off">
+              <input id="docNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Cédula / ID" data-i18n="checkout_ph_id" autocomplete="off">
             </div>
             <div class="small-note">
               <label for="claveInput" class="muted">Clave</label>
@@ -226,7 +226,7 @@
         <div class="sim-panel" id="simPanel">
           <div class="sim-steps" id="simSteps">
             <div class="sim-step" data-step="validating"><span class="dot"></span> Validando</div>
-            <div class="sim-step" data-step="processing"><span class="dot"></span data-i18n="checkout_processing" data-i18n="checkout_processing"> Procesando</div>
+            <div class="sim-step" data-step="processing"><span class="dot"></span data-i18n="checkout_processing"> Procesando</div>
             <div class="sim-step" data-step="final"><span class="dot"></span> Resultado</div>
           </div>
         </div>
@@ -235,7 +235,7 @@
           <div id="message" class="msg" role="status" aria-live="polite"></div>
           <div id="busyStatus" class="sr-only" aria-live="assertive"></div>
           <div class="footer-actions">
-            <button id="backAgentBtn" class="btn secondary hidden mr-2" type="button" data-i18n="checkout_back_agent" data-i18n="checkout_back_agent">Volver al agente</button>
+            <button id="backAgentBtn" class="btn secondary hidden mr-2" type="button" data-i18n="checkout_back_agent">Volver al agente</button>
             <button id="checkoutBtn" class="btn" type="button" aria-label="Pagar ahora por USD 19.99"><span id="btnLabel" data-i18n="checkout_pay_now">Pagar ahora</span></button>
           </div>
         </div>
@@ -820,19 +820,19 @@
         modal.className = 'overlay-backdrop active';
         modal.innerHTML = `
           <div class="overlay-note recurrence-card" role="dialog" aria-modal="true" aria-labelledby="recurrenceTitle">
-            <h3 id="recurrenceTitle" class="mb-8 blue-600"><span data-i18n=\'config_recurring\'><span data-i18n=\'config_recurring\'>Configurar cobro recurrente</span></span></h3>
-            <p class="muted mb-8"><span data-i18n=\'config_recurring_desc\'><span data-i18n=\'config_recurring_desc\'>Puedes autorizar cobros mensuales o permitir que PuntoPago cobre cuando el operador facture.</span> permitir que PuntoPago cobre cuando el operador facture.</span> permitir que PuntoPago cobre cuando el operador facture.</p>
+            <h3 id="recurrenceTitle" class="mb-8 blue-600"><span data-i18n="config_recurring"><span data-i18n="config_recurring">Configurar cobro recurrente</span></span></h3>
+            <p class="muted mb-8"><span data-i18n="config_recurring_desc"><span data-i18n="config_recurring_desc">Puedes autorizar cobros mensuales o permitir que PuntoPago cobre cuando el operador facture.</span> permitir que PuntoPago cobre cuando el operador facture.</span> permitir que PuntoPago cobre cuando el operador facture.</p>
             <form id="recurrenceForm">
               <fieldset class="mb-8">
-                <label class="mb-8 block"><input type="radio" name="recurrence" value="monthly" checked> <strong><span data-i18n=\'recurring_monthly\'><span data-i18n=\'recurring_monthly\'>Cobro mensual</span></span></strong> <span data-i18n=\'recurring_monthly_desc\'><span data-i18n=\'recurring_monthly_desc\'>— elegir día del mes</span></span></label>
-                <div id="monthlyPicker" class="ml-10 mb-8"><label class="muted"><span data-i18n=\'recurring_day\'><span data-i18n=\'recurring_day\'>Día del mes:</span></span> <input id="dayOfMonth" type="number" min="1" max="28" value="1" class="small-input-width"></label></div>
-                <label class="mb-8 block"><input type="radio" name="recurrence" value="on_invoice"> <strong><span data-i18n=\'recurring_invoice\'><span data-i18n=\'recurring_invoice\'>Autorizar en factura</span></span></strong> <span data-i18n=\'recurring_invoice_desc\'><span data-i18n=\'recurring_invoice_desc\'>— PuntoPago podrá cobrar cuando el operador facture</span></span></label>
+                <label class="mb-8 block"><input type="radio" name="recurrence" value="monthly" checked> <strong><span data-i18n="recurring_monthly"><span data-i18n="recurring_monthly">Cobro mensual</span></span></strong> <span data-i18n="recurring_monthly_desc"><span data-i18n="recurring_monthly_desc">— elegir día del mes</span></span></label>
+                <div id="monthlyPicker" class="ml-10 mb-8"><label class="muted"><span data-i18n="recurring_day"><span data-i18n="recurring_day">Día del mes:</span></span> <input id="dayOfMonth" type="number" min="1" max="28" value="1" class="small-input-width"></label></div>
+                <label class="mb-8 block"><input type="radio" name="recurrence" value="on_invoice"> <strong><span data-i18n="recurring_invoice"><span data-i18n="recurring_invoice">Autorizar en factura</span></span></strong> <span data-i18n="recurring_invoice_desc"><span data-i18n="recurring_invoice_desc">— PuntoPago podrá cobrar cuando el operador facture</span></span></label>
                 <div id="onInvoiceAuth" class="ml-10 muted hidden">
-                  <label><input type="checkbox" id="authOnInvoice"> <span data-i18n=\'recurring_auth_desc\'><span data-i18n=\'recurring_auth_desc\'>Autorizo a PuntoPago a cobrar en mi nombre cuando el operador facture.</span></span></label>
+                  <label><input type="checkbox" id="authOnInvoice"> <span data-i18n="recurring_auth_desc"><span data-i18n="recurring_auth_desc">Autorizo a PuntoPago a cobrar en mi nombre cuando el operador facture.</span></span></label>
                 </div>
               </fieldset>
               <div class="justify-end mt-12">
-                <button type="button" class="btn secondary" id="recCancel" data-i18n="checkout_cancel" data-i18n=\'checkout_cancel\' data-i18n=\'checkout_cancel\'>Cancelar</button>
+                <button type="button" class="btn secondary" id="recCancel" data-i18n="checkout_cancel">Cancelar</button>
                 <button type="button" class="btn" id="recConfirm" data-i18n="common_confirm">Confirmar</button>
               </div>
             </form>
@@ -908,8 +908,8 @@
         modal.className = 'overlay-backdrop active';
         modal.innerHTML = `
           <div class="overlay-note" role="dialog" aria-modal="true" aria-labelledby="deliveryTitle">
-            <h3 id="deliveryTitle" class="mb-8 blue-600"><span data-i18n=\'delivery_title\'><span data-i18n=\'delivery_title\'>¿Cómo quieres recibir el comprobante?</span></span></h3>
-            <p class="muted mb-8"><span data-i18n=\'delivery_desc\'><span data-i18n=\'delivery_desc\'>Elige uno de los canales disponibles y completa la información.</span></span></p>
+            <h3 id="deliveryTitle" class="mb-8 blue-600"><span data-i18n="delivery_title"><span data-i18n="delivery_title">¿Cómo quieres recibir el comprobante?</span></span></h3>
+            <p class="muted mb-8"><span data-i18n="delivery_desc"><span data-i18n="delivery_desc">Elige uno de los canales disponibles y completa la información.</span></span></p>
             <div class="channel-grid" aria-hidden="false">
               <button class="channel-btn" data-method="whatsapp" aria-label="Enviar por WhatsApp">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M21 12.1a9 9 0 10-2.6 6.1L22 22l-2.1-0.6A9 9 0 0021 12.1z" stroke="#25D366" stroke-width="1.2" fill="#E6FFF4"/><path d="M17.5 13.5c-.3-.2-1.7-.9-2-.9s-.5-.1-.7.2-.8.9-.9 1.1-.3.3-.6.1c-.5-.3-1-1-1.4-1.6-.3-.5 0-.7.1-.9.1-.2.2-.4.3-.6.1-.2 0-.4-.1-.6s-.7-1.7-1-2.3c-.3-.6-.6-.5-.9-.5s-.6 0-.9 0c-.3 0-.7.1-1 .5s-1 1.1-1 2.6 1 3 1.1 3.2c.1.2 1.9 2.9 4.6 3.9 2.7 1 2.7.7 3.2.7.5 0 1.6-.7 1.8-1.3.2-.6.2-1.2.1-1.3s-.3-.2-.6-.4z" fill="#25D366"/></svg>
@@ -964,7 +964,7 @@
         wrap.className = 'delivery-input-wrap';
         let inner = '';
         if (method === 'whatsapp' || method === 'sms') {
-          inner = `<label class="muted">Número de teléfono</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" data-i18n="checkout_ph_phone" type="tel">`;
+          inner = `<label class="muted">Número de teléfono</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" type="tel">`;
         } else if (method === 'telegram') {
           inner = `<label class="muted">Usuario de Telegram</label><input class="delivery-input" placeholder="@usuario">`;
         } else if (method === 'email') {
@@ -972,7 +972,7 @@
         } else if (method === 'ppapp') {
           inner = `<div class="muted">Usa la app PuntoPago e ingresa tu ID o número vinculado</div><input class="delivery-input" placeholder="ID / Teléfono">`;
         }
-  wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery" data-i18n="checkout_cancel" data-i18n=\'checkout_cancel\' data-i18n=\'checkout_cancel\'>Cancelar</button><button class="btn" id="sendDelivery" data-i18n="invoice_send_btn">Enviar comprobante</button></div>`;
+  wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery" data-i18n="checkout_cancel">Cancelar</button><button class="btn" id="sendDelivery" data-i18n="invoice_send_btn">Enviar comprobante</button></div>`;
         container.appendChild(wrap);
 
         wrap.querySelector('#cancelDelivery').addEventListener('click', ()=>{ container.innerHTML = ''; });
@@ -989,11 +989,11 @@
           confirmCard.className = 'confirm-card';
           const amount = document.getElementById('price').textContent;
           confirmCard.innerHTML = `
-            <div class="confirm-hed"><strong><span data-i18n=\'confirm_title\'><span data-i18n=\'confirm_title\'>Pago confirmado</span></span></strong><div class="muted">ID: ${paymentId}</div></div>
-            <div class="confirm-body"><span data-i18n=\'confirm_thanks\'><span data-i18n=\'confirm_thanks\'>Gracias por tu pago de</span></span> <strong>${amount}</strong>. <span data-i18n=\'confirm_sent_via\'><span data-i18n=\'confirm_sent_via\'>Se envió el comprobante vía</span></span> <strong>${method.toUpperCase()}</strong> a <span class="mono">${val}</span>.</div>
+            <div class="confirm-hed"><strong><span data-i18n="confirm_title"><span data-i18n="confirm_title">Pago confirmado</span></span></strong><div class="muted">ID: ${paymentId}</div></div>
+            <div class="confirm-body"><span data-i18n="confirm_thanks"><span data-i18n="confirm_thanks">Gracias por tu pago de</span></span> <strong>${amount}</strong>. <span data-i18n="confirm_sent_via"><span data-i18n="confirm_sent_via">Se envió el comprobante vía</span></span> <strong>${method.toUpperCase()}</strong> a <span class="mono">${val}</span>.</div>
             <div class="confirm-actions">
-              <button class="btn" id="shareBtn" data-i18n=\'confirm_share\' data-i18n=\'confirm_share\'>Compartir</button>
-              <button class="btn secondary" id="doneBtn" data-i18n=\'confirm_done\' data-i18n=\'confirm_done\'>Listo</button>
+              <button class="btn" id="shareBtn" data-i18n="confirm_share">Compartir</button>
+              <button class="btn secondary" id="doneBtn" data-i18n="confirm_done">Listo</button>
             </div>
             <div class="share-hint muted mt-8">Desde tu teléfono puedes usar el botón "Compartir" para enviar el comprobante por otra app.</div>
           `;

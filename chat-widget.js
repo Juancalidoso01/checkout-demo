@@ -1,7 +1,10 @@
 (function() {
   function initChatWidget() {
     // Si ya existe, no duplicar
-    if (document.getElementById('pp-chat-widget')) return;
+    const existing = document.getElementById('pp-chat-widget');
+    if (existing) existing.remove();
+    window._ppChatWidgetInited = true;
+    window._ppChatWidgetInited = true;
 
     // 1. Estilos del widget mock visual
     const style = document.createElement('style');

@@ -50,7 +50,7 @@
     nav { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-[100dvh] flex flex-col overflow-x-hidden">
 
   <script>
     // Require a valid session for this portal
@@ -72,7 +72,7 @@
       <div class="flex items-center justify-between gap-3">
         <!-- Brand / Menu Toggle -->
         <div class="flex items-center min-w-0 shrink">
-          <a id="storeIcon" href="../setup.html" class="h-10 w-10 md:h-11 md:w-11 bg-white/10 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition shadow-sm mr-2 md:mr-3 shrink-0" title="<span data-i18n=\'menu_title\'>Menú</span> de Comercio">
+          <a id="storeIcon" href="../setup.html" class="h-10 w-10 md:h-11 md:w-11 bg-white/10 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition shadow-sm mr-2 md:mr-3 shrink-0" title="<span data-i18n="menu_title">Menú</span> de Comercio">
             <i class="fas fa-bars text-lg"></i>
             <span class="sr-only">Abrir menú</span>
           </a>
@@ -293,7 +293,7 @@
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_ref">Número de Referencia</label>
-              <input type="text" id="ach-ref" placeholder="Ej: 0012345" data-i18n="recharge_ach_ref_ph" data-i18n="recharge_ach_ref_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+              <input type="text" id="ach-ref" placeholder="Ej: 0012345" data-i18n="recharge_ach_ref_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div>
               <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_amount">Monto de la Transferencia</label>
@@ -364,7 +364,7 @@
       <div class="grid md:grid-cols-3 gap-4 mb-4">
         <div class="md:col-span-2">
           <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="pay_services_search_label">Cédula / Pasaporte / Nº de servicio</label>
-          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" data-i18n="pay_services_search_ph" data-i18n="pay_services_search_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" data-i18n="pay_services_search_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <div class="flex items-end">
           <button id="customer-search-btn" type="button" class="btn-primary w-full py-3 rounded-lg text-white" data-i18n="pay_services_search_btn">Buscar Cliente</button>
@@ -471,16 +471,16 @@
         modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
         modal.innerHTML = `
           <div class="bg-white rounded-2xl p-6 max-w-md w-full">
-            <h3 class="text-lg font-bold mb-2"><span data-i18n=\'charge_title\'>Cobrar servicio</span></h3>
+            <h3 class="text-lg font-bold mb-2"><span data-i18n="charge_title">Cobrar servicio</span></h3>
             <div class="mb-4">
               <div class="text-sm text-gray-600" id="charge-client"></div>
               <div class="text-sm text-gray-600" id="charge-service"></div>
             </div>
-            <label class="muted"><span data-i18n=\'charge_amount_label\'>Monto a cobrar</span></label>
+            <label class="muted"><span data-i18n="charge_amount_label">Monto a cobrar</span></label>
             <input id="charge-amount" type="number" step="0.01" class="w-full px-3 py-2 border rounded mt-2 mb-4" />
             <div class="flex justify-end gap-3">
               <button id="charge-cancel" type="button" class="btn secondary" data-i18n="checkout_cancel">Cancelar</button>
-              <button id="charge-confirm" type="button" class="btn"><span data-i18n=\'charge_confirm\'>Confirmar cobro</span></button>
+              <button id="charge-confirm" type="button" class="btn"><span data-i18n="charge_confirm">Confirmar cobro</span></button>
             </div>
           </div>`;
         document.body.appendChild(modal);
@@ -511,8 +511,8 @@
       function openChargeModal({ cid, clientName, svc, svcName, balance }){
         const modal = document.getElementById('charge-modal'); if(!modal) return alert('No modal');
         modal._meta = { cid, svc };
-        document.getElementById('charge-client').innerText = `<span data-i18n=\'charge_client\'>Cliente:</span> ${clientName} (${cid})`;
-        document.getElementById('charge-service').innerText = `<span data-i18n=\'charge_service\'>Servicio:</span> ${svcName} — <span data-i18n=\'charge_balance\'>Saldo:</span> ${fmt(balance)}`;
+        document.getElementById('charge-client').innerText = `<span data-i18n="charge_client">Cliente:</span> ${clientName} (${cid})`;
+        document.getElementById('charge-service').innerText = `<span data-i18n="charge_service">Servicio:</span> ${svcName} — <span data-i18n="charge_balance">Saldo:</span> ${fmt(balance)}`;
         const inp = document.getElementById('charge-amount'); inp.value = (balance || 0).toFixed(2);
         modal.classList.remove('hidden');
         setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 120);
@@ -526,11 +526,11 @@
         m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
         m.innerHTML = `
           <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
-            <h3 class="text-lg font-bold mb-2"><span data-i18n=\'pay_method_title\'>Método de pago</span></h3>
-            <p class="text-sm text-gray-600 mb-4"><span data-i18n=\'pay_method_subtitle\'>¿Cómo recibiste el pago?</span></p>
+            <h3 class="text-lg font-bold mb-2"><span data-i18n="pay_method_title">Método de pago</span></h3>
+            <p class="text-sm text-gray-600 mb-4"><span data-i18n="pay_method_subtitle">¿Cómo recibiste el pago?</span></p>
             <div class="grid gap-3 mb-4">
-              <button id="pay-cash" type="button" class="btn-primary py-3" data-i18n=\'pay_method_cash\'>Efectivo (recibí dinero)</button>
-              <button id="pay-other" type="button" class="btn secondary py-3" data-i18n=\'pay_method_other\'>Otro medio (tarjeta, Yappy, etc.)</button>
+              <button id="pay-cash" type="button" class="btn-primary py-3" data-i18n="pay_method_cash">Efectivo (recibí dinero)</button>
+              <button id="pay-other" type="button" class="btn secondary py-3" data-i18n="pay_method_other">Otro medio (tarjeta, Yappy, etc.)</button>
             </div>
             <div class="flex justify-end"><button id="pay-cancel" type="button" class="btn secondary" data-i18n="checkout_cancel">Cancelar</button></div>
           </div>`;
@@ -589,7 +589,7 @@
             <div class="flex gap-3 mb-3">
               <button id="share-whatsapp" type="button" class="btn">WhatsApp</button>
               <button id="share-email" type="button" class="btn">Email</button>
-              <button id="print-receipt" type="button" class="btn secondary" data-i18n=\'receipt_print\'>Imprimir</button>
+              <button id="print-receipt" type="button" class="btn secondary" data-i18n="receipt_print">Imprimir</button>
             </div>
             <div class="flex justify-end"><button id="receipt-close" class="btn secondary">Cerrar</button></div>
           </div>`;
@@ -630,10 +630,10 @@
           <div style="font-family:system-ui, -apple-system, sans-serif">
             <div style="font-weight:700;font-size:18px;margin-bottom:8px">Punto Pago - Recibo</div>
             <div style="font-size:13px;color:#374151">Fecha: ${when.toLocaleString()}</div>
-            <div style="margin-top:8px"><strong><span data-i18n=\'charge_client\'>Cliente:</span></strong> ${clientName || ''} (${clientId || ''})</div>
-            <div><strong><span data-i18n=\'charge_service\'>Servicio:</span></strong> ${svcName || svc || ''}</div>
+            <div style="margin-top:8px"><strong><span data-i18n="charge_client">Cliente:</span></strong> ${clientName || ''} (${clientId || ''})</div>
+            <div><strong><span data-i18n="charge_service">Servicio:</span></strong> ${svcName || svc || ''}</div>
             <div style="margin-top:8px;font-size:16px"><strong>Monto:</strong> ${fmt(amount)}</div>
-            <div style="margin-top:8px;font-size:12px;color:#6b7280"><span data-i18n=\'receipt_footer\'>Recibo generado por Punto Pago</span></div>
+            <div style="margin-top:8px;font-size:12px;color:#6b7280"><span data-i18n="receipt_footer">Recibo generado por Punto Pago</span></div>
           </div>`;
         document.getElementById('receipt-body').innerHTML = body;
         r.classList.remove('hidden');
@@ -1137,7 +1137,7 @@
     // initial render
     render();
 
-    // Comercios modal (<span data-i18n=\'menu_team\'>Mi equipo</span> vive aquí ahora)
+    // Comercios modal (<span data-i18n="menu_team">Mi equipo</span> vive aquí ahora)
     (function createComerciosModal(){
       if (document.getElementById('comercios-modal')) return;
       const m = document.createElement('div');
@@ -1148,8 +1148,8 @@
         <aside class="pp-comercios-sheet shadow-2xl">
           <div class="px-6 py-8 flex items-start justify-between gap-3 pp-comercios-head bg-white">
             <div class="min-w-0 pt-2">
-              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight"><span data-i18n=\'menu_title\'>Menú</span></div>
-              <p class="text-sm text-gray-500 mt-2 font-medium"><span data-i18n=\'menu_subtitle\'>Personaliza tu terminal y equipo</span></p>
+              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight"><span data-i18n="menu_title">Menú</span></div>
+              <p class="text-sm text-gray-500 mt-2 font-medium"><span data-i18n="menu_subtitle">Personaliza tu terminal y equipo</span></p>
             </div>
             <button type="button" id="comercios-close" class="rounded-full w-11 h-11 flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
                <i class="fas fa-times text-lg"></i>
@@ -1162,8 +1162,8 @@
                 <i class="fas fa-money-bill-transfer"></i>
               </div>
               <div>
-                <strong class="!text-emerald-900 !text-lg !mb-0"><span data-i18n=\'menu_cashout\'>Retirar fondos</span></strong>
-                <span class="!text-emerald-700 font-medium"><span data-i18n=\'menu_banks\'>Bancos y ganancias</span></span>
+                <strong class="!text-emerald-900 !text-lg !mb-0"><span data-i18n="menu_cashout">Retirar fondos</span></strong>
+                <span class="!text-emerald-700 font-medium"><span data-i18n="menu_banks">Bancos y ganancias</span></span>
               </div>
               <i class="fas fa-chevron-right ml-auto text-emerald-300"></i>
             </a>
@@ -1173,26 +1173,26 @@
                 <div class="icon-wrap bg-blue-50 text-blue-600">
                   <i class="fas fa-cog"></i>
                 </div>
-                <strong><span data-i18n=\'menu_setup\'>Setup</span></strong>
-                <span><span data-i18n=\'menu_setup_desc\'>Ajustes del comercio</span></span>
+                <strong><span data-i18n="menu_setup">Setup</span></strong>
+                <span><span data-i18n="menu_setup_desc">Ajustes del comercio</span></span>
               </a>
               <button type="button" id="comercios-toggle-team" class="pp-comercios-card">
                 <div class="icon-wrap bg-purple-50 text-purple-600">
                   <i class="fas fa-user-friends"></i>
                 </div>
-                <strong><span data-i18n=\'menu_team\'>Mi equipo</span></strong>
-                <span><span data-i18n=\'menu_team_desc\'>Accesos y roles</span></span>
+                <strong><span data-i18n="menu_team">Mi equipo</span></strong>
+                <span><span data-i18n="menu_team_desc">Accesos y roles</span></span>
               </button>
             </div>
 
             <div id="comercios-team-wrap" class="hidden animate-section-slide">
               <div class="pp-card -soft overflow-hidden !border-none !shadow-xl">
                 <div class="pp-card-head bg-white !pb-4">
-                  <h3 class="text-xl font-extrabold pp-type"><span data-i18n=\'menu_team_users\'>Usuarios</span></h2>
-                  <p class="text-gray-500 text-sm mt-1"><span data-i18n=\'menu_team_users_desc\'>Gestiona accesos al portal</span></p>
+                  <h3 class="text-xl font-extrabold pp-type"><span data-i18n="menu_team_users">Usuarios</span></h2>
+                  <p class="text-gray-500 text-sm mt-1"><span data-i18n="menu_team_users_desc">Gestiona accesos al portal</span></p>
                 </div>
                 <div class="pp-card-body p-0">
-                  <iframe src="team.html?embed=1" title="<span data-i18n=\'menu_team\'>Mi equipo</span>" class="pp-embed-frame" style="min-height: 480px;"></iframe>
+                  <iframe src="team.html?embed=1" title="<span data-i18n="menu_team">Mi equipo</span>" class="pp-embed-frame" style="min-height: 480px;"></iframe>
                 </div>
               </div>
             </div>

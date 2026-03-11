@@ -89,7 +89,7 @@ const translations = {
     "pay_services_btn_collect": "Cobrar",
     "pay_services_lbl_services": "servicios",
     "pay_services_lbl_id": "ID: "
-
+,
     "login_header": "Acceso",
     "login_demo_badge": "Demo de banca en línea (roles)",
     "login_title": "Iniciar sesión",
@@ -133,14 +133,12 @@ const translations = {
     "agent_th_details": "Detalles",
     "agent_th_amount": "Monto",
     "agent_btn_pay": "Pagar",
-
-    login_err_invalid: "Usuario o contraseña inválidos.",
-    login_err_disabled: "Usuario deshabilitado.",
-    login_err_generic: "No fue posible iniciar sesión.",
-
-    login_err_invalid: "Usuario o contraseña inválidos.",
-    login_err_disabled: "Usuario deshabilitado.",
-    login_err_generic: "No fue posible iniciar sesión.",
+    "login_err_invalid": "Usuario o contraseña inválidos.",
+    "login_err_disabled": "Usuario deshabilitado.",
+    "login_err_generic": "No fue posible iniciar sesión.",
+    "login_err_invalid": "Usuario o contraseña inválidos.",
+    "login_err_disabled": "Usuario deshabilitado.",
+    "login_err_generic": "No fue posible iniciar sesión.",
 
     "lang_es": "Español",
     "lang_en": "Inglés",
@@ -726,7 +724,7 @@ const translations = {
     "pay_services_btn_collect": "收取",
     "pay_services_lbl_services": "服务",
     "pay_services_lbl_id": "ID: "
-
+,
     "login_header": "访问",
     "login_demo_badge": "在线银行演示（角色）",
     "login_title": "登录",
@@ -812,14 +810,12 @@ const translations = {
     "agent_th_details": "详细信息",
     "agent_th_amount": "金额",
     "agent_btn_pay": "支付",
-
-    login_err_invalid: "用户名或密码无效。",
-    login_err_disabled: "用户已禁用。",
-    login_err_generic: "无法登录。",
-
-    login_err_invalid: "用户名或密码无效。",
-    login_err_disabled: "用户已禁用。",
-    login_err_generic: "无法登录。",
+    "login_err_invalid": "用户名或密码无效。",
+    "login_err_disabled": "用户已禁用。",
+    "login_err_generic": "无法登录。",
+    "login_err_invalid": "用户名或密码无效。",
+    "login_err_disabled": "用户已禁用。",
+    "login_err_generic": "无法登录。",
 
     "lang_es": "西班牙语",
     "lang_en": "英语",
@@ -915,9 +911,8 @@ const translations = {
 
 
 window.I18N = {
-  currentLang: 'es', // Por defecto
-
-  init: function() {
+    "currentLang": 'es', // Por defecto
+    "init": function() {
     let savedLang = localStorage.getItem('pp_lang');
     
     if (!savedLang) {
@@ -930,8 +925,7 @@ window.I18N = {
     }
     this.setLanguage(savedLang);
   },
-
-  setLanguage: function(lang) {
+    "setLanguage": function(lang) {
     if (!translations[lang]) lang = 'es'; // Fallback
     console.log("I18N: Cambiando idioma a ->", lang);
     
@@ -964,8 +958,7 @@ window.I18N = {
     // Evento manual por si otros componentes necesitan percatarse
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
   },
-  
-  getDict: function() {
+    "getDict": function() {
       return translations[this.currentLang] || translations['es'];
   }
 };
