@@ -1,9 +1,13 @@
 (function() {
   function initChatWidget() {
-    // Si ya existe, no duplicar
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const isEmbedded = params.get('embed') === '1' || window.self !== window.top || document.body.classList.contains('pp-embed');
+      if (isEmbedded) return;
+    } catch (e) {}
+
     const existing = document.getElementById('pp-chat-widget');
     if (existing) existing.remove();
-    window._ppChatWidgetInited = true;
     window._ppChatWidgetInited = true;
 
     // 1. Estilos del widget mock visual
@@ -15,6 +19,7 @@
         right: 24px;
         z-index: 99999;
         font-family: system-ui, -apple-system, sans-serif;
+        max-width: calc(100vw - 24px);
       }
       #pp-chat-bubble {
         width: 60px;
@@ -50,6 +55,7 @@
         opacity: 0;
         transform: translateY(20px);
         transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        overscroll-behavior: contain;
       }
       #pp-chat-window.open {
         display: flex;
@@ -149,6 +155,66 @@
         text-align: center;
         padding: 8px;
         background: #f9fafb;
+      }
+
+      @media (max-width: 640px) {
+        #pp-chat-widget {
+          right: 12px;
+          bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+        }
+        #pp-chat-bubble {
+          width: 56px;
+          height: 56px;
+          border-radius: 28px;
+          box-shadow: 0 8px 22px rgba(0, 71, 187, 0.32);
+        }
+        #pp-chat-window {
+          position: fixed;
+          right: 12px;
+          left: 12px;
+          bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+          width: auto;
+          height: min(70vh, 560px);
+          max-width: none;
+          max-height: min(70vh, 560px);
+          border-radius: 18px;
+        }
+        #pp-chat-header {
+          padding: 18px 16px;
+        }
+        #pp-chat-header-title {
+          font-size: 16px;
+        }
+        #pp-chat-header-subtitle {
+          font-size: 12px;
+          padding-right: 18px;
+        }
+        #pp-chat-messages {
+          padding: 14px;
+          gap: 10px;
+        }
+        .pp-chat-msg {
+          max-width: 92%;
+          font-size: 13px;
+          padding: 10px 13px;
+        }
+        #pp-chat-input-area {
+          padding: 12px;
+          gap: 8px;
+        }
+        #pp-chat-input {
+          padding: 11px 14px;
+          font-size: 13px;
+        }
+        #pp-chat-send {
+          width: 40px;
+          height: 40px;
+          flex: 0 0 40px;
+        }
+        .intercom-dev-note {
+          font-size: 10px;
+          padding: 7px 10px;
+        }
       }
     `;
     document.head.appendChild(style);

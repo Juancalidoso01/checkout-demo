@@ -22,6 +22,23 @@
     try { return raw ? JSON.parse(raw) : fallback; } catch(e){ return fallback; }
   }
 
+  function getAppBasePath(){
+    const path = (location && location.pathname) || '/';
+    const loginIdx = path.lastIndexOf('/login.html');
+    if (loginIdx >= 0) return path.slice(0, loginIdx + 1);
+    const agentsIdx = path.indexOf('/agents/');
+    if (agentsIdx >= 0) return path.slice(0, agentsIdx + 1);
+    const adminIdx = path.indexOf('/admin/');
+    if (adminIdx >= 0) return path.slice(0, adminIdx + 1);
+    const lastSlash = path.lastIndexOf('/');
+    return lastSlash >= 0 ? path.slice(0, lastSlash + 1) : '/';
+  }
+
+  function buildAppUrl(relativePath){
+    const clean = (relativePath || '').replace(/^\/+/, '');
+    return `${location.origin}${getAppBasePath()}${clean}`;
+  }
+
   function loadUsers(){
     const users = safeJsonParse(localStorage.getItem(USERS_KEY), null);
     if (users && Array.isArray(users)) return users;
@@ -111,7 +128,7 @@
 
     if (!session){
       const next = encodeURIComponent(location.pathname + location.search);
-      location.href = `${location.origin}${location.pathname.replace(/\/[^\/]*$/, '')}/login.html?next=${next}`;
+      location.href = `${buildAppUrl('login.html')}?next=${next}`;
       return null;
     }
 
@@ -119,8 +136,8 @@
       const allowed = Array.isArray(role) ? role : [role];
       if (allowed.indexOf(session.role) < 0){
         // If user lacks permissions, bounce to their appropriate home
-        if (session.role === 'superadmin') location.href = '../admin/index.html';
-        else location.href = 'agents/recharge.html';
+        if (session.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
+        else location.href = buildAppUrl('agents/recharge.html');
         return null;
       }
     }
@@ -137,8 +154,8 @@
       } catch(e) {}
     }
     const s = getSession();
-    if (s?.role === 'superadmin') location.href = 'admin/index.html';
-    else location.href = 'agents/recharge.html';
+    if (s?.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
+    else location.href = buildAppUrl('agents/recharge.html');
   }
 
   function ensureLogoutButton({ selector }){
@@ -147,7 +164,7 @@
     el.addEventListener('click', (e)=>{
       e.preventDefault();
       signOut();
-      location.href = '../login.html';
+      location.href = buildAppUrl('login.html');
     });
   }
 
