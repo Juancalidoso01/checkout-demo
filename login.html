@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <title>Iniciar sesión — Punto Pago</title>
+  <title>Punto Pago</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
@@ -39,12 +39,12 @@
 
             <div>
               <label class="pp-label" data-i18n="login_lbl_user">Usuario</label>
-              <input id="username" type="text" class="pp-field" autocomplete="username" placeholder="Ej: agente01">
+              <input id="username" type="text" class="pp-field" autocomplete="username" placeholder="Ej: agente01" data-i18n-ph="login_ph_user">
             </div>
 
             <div>
               <label class="pp-label" data-i18n="login_lbl_pwd">Contraseña</label>
-              <input id="password" type="password" class="pp-field" autocomplete="current-password" placeholder="••••">
+              <input id="password" type="password" class="pp-field" autocomplete="current-password" placeholder="••••" data-i18n-ph="login_ph_pwd">
             </div>
 
             <button id="loginBtn" type="button" class="pp-btn pp-btn-primary -full" data-i18n="login_btn_enter">Entrar</button>
@@ -98,7 +98,7 @@
             else if (res.error) msg = res.error;
             else if (dict && dict.login_err_generic) msg = dict.login_err_generic;
           } catch(e){}
-          if (!msg) msg = 'No fue posible iniciar sesión.';
+          if (!msg) msg = (window.I18N && window.I18N.getDict && window.I18N.getDict().login_err_generic) || 'No fue posible iniciar sesión.';
           showError(msg);
           return;
         }
@@ -108,6 +108,16 @@
       $btn.addEventListener('click', doLogin);
       [$u,$p].forEach(el => el.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ doLogin(); } }));
       setTimeout(()=>{ try { $u.focus(); } catch(e){} }, 100);
+
+      function syncTitle(){
+        try {
+          const dict = window.I18N && window.I18N.getDict ? window.I18N.getDict() : null;
+          document.title = `${(dict && dict.login_title) || 'Iniciar sesión'} — Punto Pago`;
+        } catch(e){}
+      }
+
+      syncTitle();
+      document.addEventListener('languageChanged', syncTitle);
     })();
   </script>
   <script src="i18n.js?v=7"></script>

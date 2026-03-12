@@ -226,7 +226,7 @@
         <div class="sim-panel" id="simPanel">
           <div class="sim-steps" id="simSteps">
             <div class="sim-step" data-step="validating"><span class="dot"></span> Validando</div>
-            <div class="sim-step" data-step="processing"><span class="dot"></span data-i18n="checkout_processing"> Procesando</div>
+            <div class="sim-step" data-step="processing"><span class="dot"></span><span data-i18n="checkout_processing">Procesando</span></div>
             <div class="sim-step" data-step="final"><span class="dot"></span> Resultado</div>
           </div>
         </div>
@@ -443,7 +443,8 @@
           // no hay selección: ocultar todos los contenedores
           Object.keys(containers).forEach(k => { const el = containers[k]; if (el) { el.hidden = true; el.style.display = 'none'; }});
           checkoutBtn.disabled = true;
-          selectionHint.textContent = '<span data-i18n="checkout_select_method">Selecciona un método de pago para continuar.</span>';
+          selectionHint.innerHTML = '<span data-i18n="checkout_select_method">Selecciona un método de pago para continuar.</span>';
+          if (window.I18N && window.I18N.updateDOM) window.I18N.updateDOM();
           return;
         }
   const selected = sel.value;
@@ -571,7 +572,7 @@
           text.style.marginLeft = '8px';
           text.textContent = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_processing : "Procesando…";
           btnLabel.appendChild(text);
-          busyStatus.textContent = 'Procesando pago…';
+          busyStatus.textContent = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_busy_processing : 'Procesando pago…';
         } else {
           btnLabel.textContent = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_pay_now : "Pagar ahora";
           busyStatus.textContent = '';
@@ -622,7 +623,7 @@
             await delay(900);
             const res = await processPaymentDemo('paypal');
             updateSimSteps('final', true);
-            showMessage({ type: 'success', text: 'Pago completado con PayPal. ID: ' + res.id });
+            showMessage({ type: 'success', text: (window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_paypal_success : 'Pago completado con PayPal. ID: ') + res.id });
             // If originating from agent flow, record recharge and return
             if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), 'paypal', res.id)) return;
             // show back button for convenience
@@ -636,7 +637,10 @@
             await delay(800);
             const res = await processPaymentDemo(method);
             updateSimSteps('final', true);
-            showMessage({ type: 'success', text: `Pago completado con ${method === 'gpay' ? 'Google Pay' : 'Apple Pay'}. ID: ${res.id}` });
+            const walletMsg = window.I18N && window.I18N.getDict()
+              ? (method === 'gpay' ? window.I18N.getDict().checkout_wallet_success_gpay : window.I18N.getDict().checkout_wallet_success_apple)
+              : (method === 'gpay' ? 'Pago completado con Google Pay. ID: ' : 'Pago completado con Apple Pay. ID: ');
+            showMessage({ type: 'success', text: `${walletMsg}${res.id}` });
             if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, res.id)) return;
             showReturnButton();
             openRecurrenceWindow(res);
@@ -656,7 +660,8 @@
 
           const result = await processPaymentDemo(method, payload);
           updateSimSteps('final', true);
-          showMessage({ type: 'success', text: `Pago realizado correctamente (${result.method}). ID: ${result.id}` });
+          const paymentSuccess = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_payment_success : 'Pago realizado correctamente';
+          showMessage({ type: 'success', text: `${paymentSuccess} (${result.method}). ID: ${result.id}` });
           // If coming from agent flow, register the recharge and redirect
           if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, result.id)) return;
           showReturnButton();
@@ -665,7 +670,7 @@
           updateSimSteps('final', false);
           console.error('Error en pago:', err);
           const reason = err && err.message ? err.message : 'Error desconocido';
-          showMessage({ type: 'error', text: 'Pago falló: ' + reason });
+          showMessage({ type: 'error', text: (window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_payment_failed : 'Pago falló: ') + reason });
         } finally {
           await delay(800);
           setProcessing(false);
@@ -801,8 +806,8 @@
             dbgCard.textContent = 'card.hidden: ' + (cardEl ? !!cardEl.hidden : 'nocard');
           }
           refresh.addEventListener('click', refreshState);
-          run.addEventListener('click', ()=>{ try { handleCheckoutClick(); } catch(e){ console.error('run debug failed', e); alert('Error en run: '+e.message); } });
-          clr.addEventListener('click', ()=>{ removeStrayOverlays(); alert('Overlays eliminados'); });
+          run.addEventListener('click', ()=>{ try { handleCheckoutClick(); } catch(e){ console.error('run debug failed', e); alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_error_run : 'Error en run: ') + e.message); } });
+          clr.addEventListener('click', ()=>{ removeStrayOverlays(); alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_overlays_removed : 'Overlays eliminados'); });
           setInterval(refreshState, 700);
         } catch(e){ console.warn('No se pudo crear debug overlay', e); }
       })();
@@ -858,9 +863,10 @@
           // provide feedback and close
           closeRecurrenceModal();
           if (sel === 'monthly') {
-            showMessage({ type: 'success', text: `Has autorizado cobros mensuales (día ${day}).` });
+            const t = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_recurrence_monthly_success : 'Has autorizado cobros mensuales (día ${day}).';
+            showMessage({ type: 'success', text: t.replace('{day}', day) });
           } else {
-            showMessage({ type: 'success', text: 'Has autorizado a PuntoPago cobrar cuando el operador facture.' + (authorized ? ' (autorización registrada)' : '') });
+            showMessage({ type: 'success', text: (window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_recurrence_invoice_success : 'Has autorizado a PuntoPago cobrar cuando el operador facture.') + (authorized ? ' (autorización registrada)' : '') });
           }
           // proceed to delivery modal
           openDeliveryModal(_lastPaymentResultId || ('txn_' + Date.now()), sel, day);
@@ -886,10 +892,11 @@
           setTimeout(()=>{ if (ov.parentNode) ov.parentNode.removeChild(ov); }, 300);
         }
         if (choice === 'monthly') {
-          showMessage({ type: 'success', text: `Has autorizado cobros mensuales (día ${day}).` });
+          const monthlyMsg = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_recurrence_monthly_success : 'Has autorizado cobros mensuales (día ${day}).';
+          showMessage({ type: 'success', text: monthlyMsg.replace('{day}', day) });
         } else if (choice === 'on_invoice') {
           const authorizedMonthly = ev.data.authorizedMonthly ? ' y autorizaste cobros mensuales' : '';
-          showMessage({ type: 'success', text: 'Has autorizado a PuntoPago cobrar cuando el operador facture.' + authorizedMonthly });
+          showMessage({ type: 'success', text: (window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_recurrence_invoice_success : 'Has autorizado a PuntoPago cobrar cuando el operador facture.') + authorizedMonthly });
         }
         // Aquí podrías enviar la preferencia al backend via fetch
         console.log('Recurrence choice received:', choice, day);
@@ -964,13 +971,13 @@
         wrap.className = 'delivery-input-wrap';
         let inner = '';
         if (method === 'whatsapp' || method === 'sms') {
-          inner = `<label class="muted">Número de teléfono</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" type="tel">`;
+          inner = `<label class="muted">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_delivery_phone : 'Número de teléfono'}</label><input class="delivery-input" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" type="tel">`;
         } else if (method === 'telegram') {
-          inner = `<label class="muted">Usuario de Telegram</label><input class="delivery-input" placeholder="@usuario">`;
+          inner = `<label class="muted">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_delivery_telegram_user : 'Usuario de Telegram'}</label><input class="delivery-input" placeholder="@usuario">`;
         } else if (method === 'email') {
-          inner = `<label class="muted">Correo electrónico</label><input class="delivery-input" type="email" placeholder="tu@correo.com">`;
+          inner = `<label class="muted">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_delivery_email : 'Correo electrónico'}</label><input class="delivery-input" type="email" placeholder="tu@correo.com">`;
         } else if (method === 'ppapp') {
-          inner = `<div class="muted">Usa la app PuntoPago e ingresa tu ID o número vinculado</div><input class="delivery-input" placeholder="ID / Teléfono">`;
+          inner = `<div class="muted">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_delivery_ppapp_hint : 'Usa la app PuntoPago e ingresa tu ID o número vinculado'}</div><input class="delivery-input" placeholder="${window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_delivery_ppapp_placeholder : 'ID / Teléfono'}">`;
         }
   wrap.innerHTML = inner + `<div class="mt-12 flex-row gap-8 justify-end"><button class="btn secondary" id="cancelDelivery" data-i18n="checkout_cancel">Cancelar</button><button class="btn" id="sendDelivery" data-i18n="invoice_send_btn">Enviar comprobante</button></div>`;
         container.appendChild(wrap);
@@ -981,7 +988,7 @@
           const val = input ? input.value.trim() : '';
           if (!val) { input.focus(); input.style.borderColor = 'var(--error)'; return; }
           // Simular envío
-          wrap.innerHTML = '<div class="muted">Enviando comprobante&hellip;</div>';
+          wrap.innerHTML = `<div class="muted">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_sending_receipt : 'Enviando comprobante&hellip;'}</div>`;
           await delay(900);
           // mostrar tarjeta de confirmación con opciones para compartir
           container.innerHTML = '';
@@ -1006,12 +1013,12 @@
             // intenta usar Web Share API si está disponible
             const shareData = { title: 'Comprobante de pago', text: `Pago ${amount} - ID: ${paymentId}`, url: location.href };
             if (navigator.share) {
-              try { await navigator.share(shareData); } catch (e) { alert('Compartir cancelado o no disponible.'); }
+              try { await navigator.share(shareData); } catch (e) { alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().confirm_share_unavailable : 'Compartir cancelado o no disponible.'); }
             } else {
               // fallback: mostrar enlaces para copiar o compartir manualmente
               const fallback = document.createElement('div');
               fallback.className = 'muted';
-              fallback.innerHTML = 'Tu navegador no soporta compartir. Copia este texto:' +
+              fallback.innerHTML = (window.I18N && window.I18N.getDict() ? window.I18N.getDict().confirm_share_fallback : 'Tu navegador no soporta compartir. Copia este texto:') +
                 `<div class="mono-box">Pago ${amount} - ID: ${paymentId}</div>`;
               confirmCard.appendChild(fallback);
             }

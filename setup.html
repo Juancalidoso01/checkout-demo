@@ -399,7 +399,7 @@
         saveAgent(a);
         const s = loadState();
         saveState(s);
-        alert('Datos de cuenta guardados con éxito');
+  alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_msg_success : 'Datos de cuenta guardados con éxito');
         render();
       });
 
@@ -409,27 +409,27 @@
         s.cash = Number(Number(cashInput.value||0).toFixed(2));
         s.gain = Number(Number(gainInput.value||0).toFixed(2));
         saveState(s);
-        alert('Ajustes sandbox aplicados');
+  alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_sandbox_applied : 'Ajustes sandbox aplicados');
         render();
       });
 
       document.getElementById('resetSandbox')?.addEventListener('click', ()=>{
-        if (!confirm('¿Restablecer sandbox a valores por defecto?')) return;
+  if (!confirm(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_restore_defaults_confirm : '¿Restablecer sandbox a valores por defecto?')) return;
         saveState(defaultState);
-        alert('Sandbox reiniciado');
+  alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_sandbox_reset : 'Sandbox reiniciado');
         render();
       });
 
       document.getElementById('importBtn')?.addEventListener('click', ()=>{
         const txt = importArea.value.trim();
-        if (!txt) return alert('Pega un JSON válido');
+  if (!txt) return alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_paste_valid_json : 'Pega un JSON válido');
         try {
           const obj = JSON.parse(txt);
           if (obj[AGENT_INFO_KEY]) saveAgent(obj[AGENT_INFO_KEY]);
           if (obj[STORAGE_KEY]) saveState(obj[STORAGE_KEY]);
-          alert('Importado correctamente');
+          alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_import_success : 'Importado correctamente');
           render();
-        } catch(e){ alert('JSON inválido: ' + e.message); }
+        } catch(e){ alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_invalid_json : 'JSON inválido: ') + e.message); }
       });
 
       document.getElementById('clearAll')?.addEventListener('click', ()=>{
@@ -440,9 +440,9 @@
           localStorage.removeItem('pp_paid_services_v1'); 
           localStorage.removeItem('pp_agent_cashout_method_v2'); 
           localStorage.removeItem('pp_agent_bank_v1'); 
-          alert('Limpieza profunda exitosa'); 
+          alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_deep_clean_success : 'Limpieza profunda exitosa'); 
           render(); 
-        } catch(e){ alert('Error: '+e.message); }
+        } catch(e){ alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_error_prefix : 'Error: ') + e.message); }
       });
 
       render();

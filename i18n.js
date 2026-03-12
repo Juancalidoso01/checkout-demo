@@ -100,7 +100,9 @@ const translations = {
     "login_demo_users": "Usuarios demo",
     "login_err_invalid": "Usuario o contraseña inválidos.",
     "login_err_disabled": "Usuario deshabilitado.",
-    "login_err_generic": "No fue posible iniciar sesión.",
+  "login_err_generic": "No fue posible iniciar sesión.",
+  "login_ph_user": "Ej: agente01",
+  "login_ph_pwd": "••••",
     "entry_header": "Inicia tu pago",
     "entry_desc": "Elige el tipo de flujo desde donde se inicia el pago. Esto es solo un selector conceptual; al elegir se abrirá el checkout.",
     "entry_kiosk": "Kioscos / Punto físico",
@@ -132,7 +134,21 @@ const translations = {
     "agent_th_type": "Tipo",
     "agent_th_details": "Detalles",
     "agent_th_amount": "Monto",
-    "agent_btn_pay": "Pagar",
+  "agent_btn_pay": "Pagar",
+  "agent_store_menu": "Menú de Comercio",
+  "agent_open_menu": "Abrir menú",
+  "agent_my_store": "Mi tienda",
+  "agent_store_subtitle": "Agente Punto Pago",
+  "agent_cash_label": "Efectivo",
+  "agent_swipe_more": "Desliza para ver más opciones · « »",
+  "invoice_subtitle_embed": "Enviar comprobante y compartir recibo.",
+  "recharge_history_desc": "Se actualiza cuando haces recargas o pagos (sandbox).",
+  "agent_store_menu_label": "Menú",
+  "agent_store_menu_desc": "Personaliza tu terminal y equipo",
+  "agent_cashout_desc": "Bancos y ganancias",
+  "agent_store_settings_desc": "Ajustes del comercio",
+  "team_access_roles": "Accesos y roles",
+  "team_desc_portal": "Gestiona accesos al portal",
     "login_err_invalid": "Usuario o contraseña inválidos.",
     "login_err_disabled": "Usuario deshabilitado.",
     "login_err_generic": "No fue posible iniciar sesión.",
@@ -191,10 +207,54 @@ const translations = {
     "cashout_card_number": "Número de tarjeta",
     "cashout_card_name": "Nombre en la tarjeta",
     "cashout_card_expiry": "Vencimiento",
-    "cashout_link_card": "Vincular tarjeta",
+  "cashout_link_card": "Vincular tarjeta",
+  "cashout_prepaid": "Prepagada",
+  "cashout_processing": "Procesando retiro...",
+  "cashout_done": "¡Retiro completado!",
+  "cashout_alert_sent": "Felicidades, se enviaron",
+  "cashout_alert_to": "a tu",
+  "cashout_alert_ending": "terminada en",
+  "cashout_alert_eta": "Tiempo estimado",
+  "cashout_eta_instant": "Inmediato",
+  "cashout_eta_bank": "1 a 2 días hábiles",
+  "cashout_saved": "Guardado",
+  "cashout_linked": "Vinculada",
     "common_back": "Volver",
     "common_logout": "Salir",
-    "common_session": "Sesión",
+  "common_session": "Sesión",
+  "team_ph_user": "empleado02",
+  "team_ph_name": "Empleado 02",
+  "team_ph_pwd": "1234",
+  "admin_brand": "Super Admin",
+  "admin_agent_portal": "Portal agentes",
+  "admin_users_title": "Usuarios",
+  "admin_users_desc": "Crea agentes y empleados. Asigna empleados a un agente.",
+  "admin_th_user": "Usuario",
+  "admin_th_name": "Nombre",
+  "admin_th_role": "Rol",
+  "admin_th_parent": "Agente padre",
+  "admin_th_status": "Estado",
+  "admin_th_actions": "Acciones",
+  "admin_form_title": "Crear / Editar",
+  "admin_form_desc": "Demo: credenciales en",
+  "admin_form_desc_end": "(no usar así en producción).",
+  "admin_lbl_user": "Usuario",
+  "admin_lbl_name": "Nombre",
+  "admin_lbl_role": "Rol",
+  "admin_lbl_parent": "Agente padre (solo employee)",
+  "admin_lbl_pwd": "Contraseña",
+  "admin_role_agent": "Agente",
+  "admin_role_employee": "Empleado",
+  "admin_ph_user": "agente02",
+  "admin_ph_name": "Agente 02",
+  "admin_ph_pwd": "1234",
+  "admin_footer_note": "Nota: Esto es un demo con",
+  "admin_footer_note_end": "Producción requiere backend, hash de contraseñas y autorización real.",
+  "admin_no_agents": "(no hay agentes)",
+  "admin_err_parent": "Selecciona agente padre.",
+  "admin_msg_created": "Usuario creado.",
+  "admin_msg_missing": "No existe el usuario.",
+  "admin_msg_updated": "Usuario actualizado.",
     "invoice_load_last": "Cargar última operación",
     "invoice_clear": "Limpiar",
     "invoice_subtitle": "Confirma los datos del cliente para compartir el recibo.",
@@ -430,7 +490,21 @@ const translations = {
     "agent_services": "Available services",
     "entry_qr": "Recharge / QR",
     "login_err_invalid": "Invalid user or password.",
-    "agent_history": "History"
+  "agent_history": "History",
+  "agent_store_menu": "Store menu",
+  "agent_open_menu": "Open menu",
+  "agent_my_store": "My store",
+  "agent_store_subtitle": "Punto Pago Agent",
+  "agent_cash_label": "Cash",
+  "agent_swipe_more": "Swipe to see more options · « »",
+  "invoice_subtitle_embed": "Send proof and share receipt.",
+  "recharge_history_desc": "Updates when you make top-ups or payments (sandbox).",
+  "agent_store_menu_label": "Menu",
+  "agent_store_menu_desc": "Customize your terminal and team",
+  "agent_cashout_desc": "Banks and earnings",
+  "agent_store_settings_desc": "Store settings",
+  "team_access_roles": "Access and roles",
+  "team_desc_portal": "Manage portal access"
   },
   "ru": {
     "lang_es": "Испанский",
@@ -632,7 +706,21 @@ const translations = {
     "agent_services": "Доступные услуги",
     "entry_qr": "Пополнение / QR",
     "login_err_invalid": "Неверный пользователь или пароль.",
-    "agent_history": "История"
+  "agent_history": "История",
+  "agent_store_menu": "Меню магазина",
+  "agent_open_menu": "Открыть меню",
+  "agent_my_store": "Мой магазин",
+  "agent_store_subtitle": "Агент Punto Pago",
+  "agent_cash_label": "Наличные",
+  "agent_swipe_more": "Смахните, чтобы увидеть больше опций · « »",
+  "invoice_subtitle_embed": "Отправьте подтверждение и поделитесь чеком.",
+  "recharge_history_desc": "Обновляется, когда вы делаете пополнения или платежи (sandbox).",
+  "agent_store_menu_label": "Меню",
+  "agent_store_menu_desc": "Настройте свой терминал и команду",
+  "agent_cashout_desc": "Банки и доходы",
+  "agent_store_settings_desc": "Настройки магазина",
+  "team_access_roles": "Доступы и роли",
+  "team_desc_portal": "Управляйте доступом к порталу"
   },
   "zh": {
     "common_error": "错误： ",
@@ -891,7 +979,21 @@ const translations = {
     "invoice_preview_title": "预览",
     "invoice_preview_desc": "这是客户将看到的收据（文本）。",
     "invoice_preview_disclaimer": "此演示会打开应用/链接进行分享。在生产环境中，这会来自后端的真实发送。",
-    "invoice_demo_footer": "演示 — 数据保存在 localStorage 中。操作来源：沙盒 pp_agent_sandbox_v1。",
+  "invoice_demo_footer": "演示 — 数据保存在 localStorage 中。操作来源：沙盒 pp_agent_sandbox_v1。",
+  "agent_store_menu": "商店菜单",
+  "agent_open_menu": "打开菜单",
+  "agent_my_store": "我的店铺",
+  "agent_store_subtitle": "Punto Pago 代理",
+  "agent_cash_label": "现金",
+  "agent_swipe_more": "滑动查看更多选项 · « »",
+  "invoice_subtitle_embed": "发送凭证并分享收据。",
+  "recharge_history_desc": "当你进行充值或付款时会更新（沙盒）。",
+  "agent_store_menu_label": "菜单",
+  "agent_store_menu_desc": "自定义你的终端和团队",
+  "agent_cashout_desc": "银行和收益",
+  "agent_store_settings_desc": "商户设置",
+  "team_access_roles": "访问和角色",
+  "team_desc_portal": "管理门户访问",
     "invoice_btn_wa": "WhatsApp",
     "invoice_btn_tg": "Telegram",
     "invoice_btn_email": "电邮",
@@ -905,7 +1007,65 @@ const translations = {
     "invoice_status_tg_share": "正在打开Telegram（分享）…",
     "invoice_status_tg": "正在打开Telegram…（然后粘贴消息）",
     "invoice_err_no_tx": "尚无交易。请先进行充值或付款。",
-    "invoice_status_loaded": "最后操作已加载。填写客户数据并选择渠道。"
+    "invoice_status_loaded": "最后操作已加载。填写客户数据并选择渠道。",
+    "checkout_busy_processing": "正在处理付款…",
+    "checkout_paypal_success": "PayPal 付款成功。ID: ",
+    "checkout_wallet_success_gpay": "Google Pay 付款成功。ID: ",
+    "checkout_wallet_success_apple": "Apple Pay 付款成功。ID: ",
+    "checkout_payment_success": "付款成功",
+    "checkout_payment_failed": "付款失败: ",
+    "checkout_error_run": "运行错误: ",
+    "checkout_overlays_removed": "遮罩层已移除",
+    "checkout_recurrence_monthly_success": "您已授权每月扣款（日: {day}）。",
+    "checkout_recurrence_invoice_success": "您已授权 PuntoPago 在运营商出账时扣费。",
+    "checkout_delivery_phone": "电话号码",
+    "checkout_delivery_telegram_user": "Telegram 用户名",
+    "checkout_delivery_email": "电子邮件",
+    "checkout_delivery_ppapp_hint": "使用 PuntoPago APP 并输入您的关联 ID 或号码",
+    "checkout_delivery_ppapp_placeholder": "ID / 电话",
+    "checkout_sending_receipt": "正在发送凭证…",
+    "confirm_share_unavailable": "分享已取消或不可用。",
+    "confirm_share_fallback": "您的浏览器不支持分享。请复制此文本：",
+    "recharge_customer_not_found": "未找到客户匹配项。",
+    "recharge_customer_searching": "正在查找客户…",
+    "recharge_customer_search_error": "查找客户时出错。",
+    "recharge_charge_service": "收取服务费",
+    "recharge_charge_amount": "收取金额",
+    "recharge_confirm_charge": "确认收费",
+    "recharge_invalid_amount": "请输入有效金额",
+    "recharge_process_error": "处理时出错",
+    "recharge_no_modal": "模态窗口不可用",
+    "recharge_client_label": "客户",
+    "recharge_service_label": "服务",
+    "recharge_balance_label": "余额",
+    "recharge_payment_method": "付款方式",
+    "recharge_payment_question": "您是如何收到付款的？",
+    "recharge_payment_cash": "现金（已收款）",
+    "recharge_payment_other": "其他方式（卡、Yappy 等）",
+    "recharge_receipt_title": "收据",
+    "recharge_receipt_print": "打印",
+    "recharge_receipt_close": "关闭",
+    "recharge_receipt_whatsapp": "WhatsApp",
+    "recharge_receipt_email": "电子邮件",
+    "recharge_receipt_generated": "收据由 Punto Pago 生成",
+    "recharge_print_window_error": "无法打开打印窗口",
+    "recharge_amount_required": "请输入有效金额",
+    "recharge_redirect_error": "准备跳转时出错: ",
+    "recharge_amount_invalid": "金额无效",
+    "recharge_ach_received": "ACH 提醒已接收",
+    "recharge_ach_received_desc": "我们的团队将验证转账。转账处理中时将显示为 ACH PENDIENTE。",
+    "recharge_continue_operating": "继续操作",
+    "recharge_enter_valid_amount": "请输入有效的充值金额。",
+    "recharge_confirm_delete_history": "删除沙盒交易历史？",
+    "recharge_no_transactions": "暂无交易记录。",
+    "setup_sandbox_applied": "沙盒设置已应用",
+    "setup_sandbox_reset": "沙盒已重置",
+    "setup_paste_valid_json": "请粘贴有效的 JSON",
+    "setup_import_success": "导入成功",
+    "setup_invalid_json": "JSON 无效: ",
+    "setup_deep_clean_success": "深度清理成功",
+    "setup_error_prefix": "错误: ",
+    "setup_restore_defaults_confirm": "是否将沙盒恢复为默认值？"
   }
 };
 
@@ -941,22 +1101,29 @@ window.I18N = {
     }
     document.documentElement.lang = lang; 
 
-    const dict = translations[lang];
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (dict[key]) {
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-             el.placeholder = dict[key];
-        } else {
-          // Usamos innerHTML para mayor compatibilidad
-          el.innerHTML = dict[key];
-        }
-      }
-    });
+    this.updateDOM();
 
     // Evento manual por si otros componentes necesitan percatarse
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
+  },
+    "updateDOM": function() {
+    const dict = translations[this.currentLang] || translations['es'];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (!key || !dict[key]) return;
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = dict[key];
+      } else {
+        el.innerHTML = dict[key];
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      if (!key || !dict[key]) return;
+      el.setAttribute('placeholder', dict[key]);
+    });
   },
     "getDict": function() {
       return translations[this.currentLang] || translations['es'];

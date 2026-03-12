@@ -72,22 +72,22 @@
       <div class="flex items-start md:items-center justify-between gap-3 md:gap-4">
         <!-- Brand / Menu Toggle -->
         <div class="flex items-center min-w-0 flex-1 max-w-[52%] sm:max-w-[58%] md:max-w-none">
-          <a id="storeIcon" href="../setup.html" class="h-10 w-10 md:h-11 md:w-11 bg-white/10 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition shadow-sm mr-2 md:mr-3 shrink-0 self-start" title="Menú de Comercio">
+          <a id="storeIcon" href="../setup.html" class="h-10 w-10 md:h-11 md:w-11 bg-white/10 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition shadow-sm mr-2 md:mr-3 shrink-0 self-start" title="Menú de Comercio" data-i18n-title="agent_store_menu">
             <i class="fas fa-bars text-lg"></i>
-            <span class="sr-only">Abrir menú</span>
+            <span class="sr-only" data-i18n="agent_open_menu">Abrir menú</span>
           </a>
           <div class="flex flex-col min-w-0 flex-1 overflow-hidden pt-0.5">
-            <div class="font-extrabold text-[13px] sm:text-[15px] md:text-base leading-tight tracking-wide truncate">MI TIENDA</div>
-            <div class="text-[8px] sm:text-[9px] md:text-[10px] text-white/70 font-medium tracking-[0.12em] uppercase truncate">AGENTE PUNTO PAGO</div>
+            <div class="font-extrabold text-[13px] sm:text-[15px] md:text-base leading-tight tracking-wide truncate" data-i18n="agent_my_store">MI TIENDA</div>
+            <div class="text-[8px] sm:text-[9px] md:text-[10px] text-white/70 font-medium tracking-[0.12em] uppercase truncate" data-i18n="agent_store_subtitle">AGENTE PUNTO PAGO</div>
           </div>
         </div>
 
         <!-- Right: balance + actions -->
   <div class="flex items-start md:items-center gap-2 md:gap-4 shrink-0 ml-auto">
           <div class="text-right leading-tight min-w-0">
-            <div class="text-[9px] md:text-xs opacity-85 font-extrabold uppercase tracking-wide">Saldo</div>
+            <div class="text-[9px] md:text-xs opacity-85 font-extrabold uppercase tracking-wide" data-i18n="agent_balance">Saldo</div>
             <div class="text-[15px] sm:text-[18px] md:text-xl font-extrabold whitespace-nowrap" id="balance-display">$1,250.45</div>
-            <div class="hidden sm:block text-[10px] md:text-xs text-white/90">Efectivo: <span id="cash-in-header" class="font-semibold">$342.10</span></div>
+            <div class="hidden sm:block text-[10px] md:text-xs text-white/90"><span data-i18n="agent_cash_label">Efectivo</span>: <span id="cash-in-header" class="font-semibold">$342.10</span></div>
           </div>
 
           <!-- ACH badge -->
@@ -95,13 +95,13 @@
             <i class="fas fa-clock mr-1"></i> ACH
           </div>
 
-          <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-10 md:h-[42px] rounded-[16px] px-3 sm:px-4 md:px-5 text-sm md:text-base whitespace-nowrap">Salir</a>
+          <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-10 md:h-[42px] rounded-[16px] px-3 sm:px-4 md:px-5 text-sm md:text-base whitespace-nowrap" data-i18n="common_logout">Salir</a>
         </div>
       </div>
 
       <!-- Desktop-only session label -->
       <div class="hidden md:flex justify-end mt-2">
-        <div class="text-xs text-white/85">Sesión: <span class="font-semibold" data-pp-session></span></div>
+  <div class="text-xs text-white/85"><span data-i18n="common_session">Sesión</span>: <span class="font-semibold" data-pp-session></span></div>
       </div>
     </div>
   </nav>
@@ -131,7 +131,7 @@
         </button>
       </section>
 
-      <div class="md:hidden -mt-3 mb-4 text-center text-[11px] text-gray-500">
+      <div class="md:hidden -mt-3 mb-4 text-center text-[11px] text-gray-500" data-i18n="agent_swipe_more">
         Desliza para ver más opciones · « »
       </div>
 
@@ -140,7 +140,7 @@
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
           <h2 class="text-2xl font-bold pp-type" data-i18n="tab_invoice">Factura</h2>
-          <p class="text-gray-500 pp-type">Enviar comprobante y compartir recibo.</p>
+          <p class="text-gray-500 pp-type" data-i18n="invoice_subtitle_embed">Enviar comprobante y compartir recibo.</p>
         </div>
         <div class="pp-card-body p-0">
           <iframe
@@ -159,7 +159,7 @@
           <div class="flex items-start justify-between gap-3">
             <div>
               <h2 class="text-2xl font-bold pp-type" data-i18n="recharge_history_title">Histórico de transacciones</h2>
-              <p class="text-gray-500 pp-type">Se actualiza cuando haces recargas o pagos (sandbox).</p>
+              <p class="text-gray-500 pp-type" data-i18n="recharge_history_desc">Se actualiza cuando haces recargas o pagos (sandbox).</p>
             </div>
             <button id="clearTxs" class="pp-btn pp-btn-secondary" type="button">Borrar</button>
           </div>
@@ -187,7 +187,7 @@
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
           <h2 class="text-2xl font-bold pp-type" data-i18n="recharge_digital">Recarga digital</h2>
-          <p class="text-gray-500 pp-type">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
+          <p class="text-gray-500 pp-type" data-i18n="recharge_digital_desc">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
         </div>
 
       <!-- Toast de confirmación desde Checkout -->
@@ -233,19 +233,19 @@
           <!-- Paso 2: Confirmación -->
           <div id="step-2" class="hidden space-y-6">
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen de recarga digital</h3>
+              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest" data-i18n="recharge_cashin_summary_title">Resumen de recarga digital</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600">Cuenta (agente):</span>
+                <span class="text-gray-600" data-i18n="recharge_cashin_account">Cuenta (agente):</span>
                 <span class="font-bold text-gray-800" id="summary-phone">—</span>
               </div>
-              <div class="text-sm text-gray-600 mb-4">Serás redirigido al checkout para completar el pago con métodos digitales.</div>
+              <div class="text-sm text-gray-600 mb-4" data-i18n="recharge_cashin_redirect_msg">Serás redirigido al checkout para completar el pago con métodos digitales.</div>
               <div class="flex justify-between border-t border-blue-200 pt-4 items-center">
-                <span class="font-bold text-lg text-gray-800">Monto a recargar:</span>
+                <span class="font-bold text-lg text-gray-800" data-i18n="recharge_cashin_amount_to_recharge">Monto a recargar:</span>
                 <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
               </div>
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
               <div class="flex justify-between mt-3 items-center">
-                <span class="font-bold text-gray-800">Valor real a recargar:</span>
+                <span class="font-bold text-gray-800" data-i18n="recharge_cashin_real_value">Valor real a recargar:</span>
                 <span class="font-extrabold text-gray-900" id="summary-net">$0.00</span>
               </div>
             </div>
@@ -261,7 +261,7 @@
               <i class="fas fa-check text-4xl"></i>
             </div>
             <h3 class="text-3xl font-bold text-gray-800 mb-2">¡Depósito Exitoso!</h3>
-            <p class="text-gray-500">El saldo se ha acreditado instantáneamente.</p>
+            <p class="text-gray-500" data-i18n="recharge_cashin_success_msg">El saldo se ha acreditado instantáneamente.</p>
                         <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
           </div>
         </div>
@@ -274,7 +274,7 @@
         <div class="p-6 border-b flex justify-between items-center bg-gray-50">
           <div>
             <h2 class="text-2xl font-bold text-gray-800">Alertar Pago por ACH</h2>
-            <p class="text-gray-500 text-sm">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
+            <p class="text-gray-500 text-sm" data-i18n="recharge_ach_desc">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
           </div>
           <i class="fas fa-university text-3xl text-blue-200"></i>
         </div>
@@ -425,17 +425,17 @@
       function renderCustomerResults(list){
         const out = document.getElementById('customer-results');
         out.innerHTML = '';
-        if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">No se encontraron coincidencias para el cliente.</div>'; return; }
+        if(!list || list.length===0){ out.innerHTML = `<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_customer_not_found : 'No se encontraron coincidencias para el cliente.'}</div>`; return; }
         list.forEach(c=>{
           const wrap = document.createElement('div'); wrap.className = 'p-4 border rounded-lg';
           const rows = c.portfolio.map(p => {
             const paid = isServicePaidForClient(c.cid, p.svcId);
             if (paid) {
-              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">PAGADO</span></td></tr>`;
+              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_status_paid : 'PAGADO'}</span></td></tr>`;
             }
-            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">Cobrar</button></td></tr>`;
+            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_btn_collect : 'Cobrar'}</button></td></tr>`;
           }).join('');
-          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">ID: ${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} servicios</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
+          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_lbl_id : 'ID: '}${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} ${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_lbl_services : 'servicios'}</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
           out.appendChild(wrap);
         });
 
@@ -456,11 +456,11 @@
       document.getElementById('customer-search-btn').addEventListener('click', async ()=>{
         const q = document.getElementById('customer-id').value || '';
         const out = document.getElementById('customer-results');
-        out.innerHTML = '<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">Buscando cliente&hellip;</div></div>';
+        out.innerHTML = `<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_customer_searching : 'Buscando cliente&hellip;'}</div></div>`;
         try {
           const found = await lookupCustomerAsync(q);
           renderCustomerResults(found);
-        } catch(e){ out.innerHTML = '<div class="p-4 bg-red-50 border border-red-100 rounded">Error al buscar cliente.</div>'; }
+        } catch(e){ out.innerHTML = `<div class="p-4 bg-red-50 border border-red-100 rounded">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_customer_search_error : 'Error al buscar cliente.'}</div>`; }
       });
 
       // Charge modal (replace prompt) -------------------------------------------------
@@ -489,7 +489,7 @@
         modal.querySelector('#charge-confirm').addEventListener('click', ()=>{
           try {
             const amt = Number(document.getElementById('charge-amount').value);
-            if (!amt || isNaN(amt) || amt <= 0) return alert('Ingresa un monto válido');
+            if (!amt || isNaN(amt) || amt <= 0) return alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_invalid_amount : 'Ingresa un monto válido');
             // read hidden state
             const meta = modal._meta || {};
             // record local intent in agent sandbox txs
@@ -503,13 +503,13 @@
             // Instead of redirecting immediately, ask for payment method
             openPaymentMethodModal({ cid: meta.cid, svc: meta.svc, svcName: meta.svcName, clientName: meta.clientName, amount: amt });
             modal.classList.add('hidden');
-          } catch(e){ console.warn(e); alert('Error al procesar'); }
+          } catch(e){ console.warn(e); alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_process_error : 'Error al procesar'); }
         });
 
       })();
 
       function openChargeModal({ cid, clientName, svc, svcName, balance }){
-        const modal = document.getElementById('charge-modal'); if(!modal) return alert('No modal');
+        const modal = document.getElementById('charge-modal'); if(!modal) return alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_no_modal : 'No modal');
         modal._meta = { cid, svc };
         document.getElementById('charge-client').innerText = `Cliente: ${clientName} (${cid})`;
         document.getElementById('charge-service').innerText = `Servicio: ${svcName} — Saldo: ${fmt(balance)}`;
@@ -552,7 +552,7 @@
           try {
             const meta = m._meta || {};
             const amt = Number(meta.amount) || 0;
-            if (!amt || isNaN(amt) || amt <= 0) { alert('Monto inválido'); return; }
+            if (!amt || isNaN(amt) || amt <= 0) { alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_amount_invalid : 'Monto inválido'); return; }
             // register immediate cash recharge: update balance and cash
             state.balance = Number((Number(state.balance) + amt).toFixed(2));
             state.cash = Number((Number(state.cash) + amt).toFixed(2));
@@ -600,7 +600,7 @@
             // open a small printable window
             const content = document.getElementById('receipt-body').innerHTML;
             const w = window.open('', 'Imprimir', 'width=600,height=600');
-            if (!w) return alert('No es posible abrir ventana de impresión');
+            if (!w) return alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_print_window_error : 'No es posible abrir ventana de impresión');
             w.document.write(`<html><head><title>Recibo</title></head><body>${content}</body></html>`);
             w.document.close();
             w.focus();
@@ -772,7 +772,7 @@
 
       if (!txs.length){
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td colspan="4" class="py-4 text-gray-500">No hay transacciones registradas.</td>`;
+        tr.innerHTML = `<td colspan="4" class="py-4 text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_no_transactions : 'No hay transacciones registradas.'}</td>`;
         txHistoryBody.appendChild(tr);
         return;
       }
@@ -797,7 +797,7 @@
     const clearTxsBtn = document.getElementById('clearTxs');
     if (clearTxsBtn) {
       clearTxsBtn.addEventListener('click', ()=>{
-        if (!confirm('Borrar el histórico de transacciones del sandbox?')) return;
+        if (!confirm(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_confirm_delete_history : 'Borrar el histórico de transacciones del sandbox?')) return;
         const s = loadState();
         s.txs = [];
         saveState(s);
@@ -981,7 +981,7 @@
       if (go) go.addEventListener('click', (e)=>{
         e.preventDefault();
         const amount = parseFloat(document.getElementById('cashin-amount').value || '0');
-        if (!amount || amount <= 0) { alert('Ingresa un monto válido'); return; }
+        if (!amount || amount <= 0) { alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_amount_required : 'Ingresa un monto válido'); return; }
         const agentNumber = (document.getElementById('agent-number')?.value || '').trim();
         try {
           const url = new URL('../checkout.html', location.href);
@@ -991,7 +991,7 @@
           if (agentNumber) url.searchParams.set('clientId', agentNumber);
           location.href = url.href;
         } catch (err) {
-          alert('Error preparando la redirección: ' + err.message);
+          alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_redirect_error : 'Error preparando la redirección: ') + err.message);
         }
       });
     })();
@@ -1001,7 +1001,7 @@
 
       if (step === 2) {
         if (!amount || parseFloat(amount) <= 0) {
-          alert("Ingrese un monto válido para la recarga.");
+          alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_enter_valid_amount : "Ingrese un monto válido para la recarga.");
           return;
         }
                 
@@ -1047,7 +1047,7 @@
     // Procesar la transacción: redirigir a checkout para que procese el pago
     function processCashIn() {
       const amount = parseFloat(document.getElementById('cashin-amount').value);
-      if (!amount || isNaN(amount) || amount <= 0) { alert('Ingresa un monto válido'); return; }
+      if (!amount || isNaN(amount) || amount <= 0) { alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_amount_required : 'Ingresa un monto válido'); return; }
       if (amount > state.balance) { alert('Su saldo operativo es insuficiente para realizar esta recarga.'); return; }
       try {
         const url = new URL('../checkout.html', location.href);
@@ -1059,7 +1059,7 @@
         // navigate to checkout where the payment will be completed
         location.href = url.href;
       } catch (err) {
-        alert('Error preparando la redirección: ' + err.message);
+        alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_redirect_error : 'Error preparando la redirección: ') + err.message);
       }
     }
 
@@ -1148,8 +1148,8 @@
         <aside class="pp-comercios-sheet shadow-2xl">
           <div class="px-6 py-8 flex items-start justify-between gap-3 pp-comercios-head bg-white">
             <div class="min-w-0 pt-2">
-              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight">Menú</div>
-              <p class="text-sm text-gray-500 mt-2 font-medium">Personaliza tu terminal y equipo</p>
+              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight" data-i18n="agent_store_menu_label">Menú</div>
+              <p class="text-sm text-gray-500 mt-2 font-medium" data-i18n="agent_store_menu_desc">Personaliza tu terminal y equipo</p>
             </div>
             <button type="button" id="comercios-close" class="rounded-full w-11 h-11 flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
                <i class="fas fa-times text-lg"></i>
@@ -1162,8 +1162,8 @@
                 <i class="fas fa-money-bill-transfer"></i>
               </div>
               <div>
-                <strong class="!text-emerald-900 !text-lg !mb-0">Retirar fondos</strong>
-                <span class="!text-emerald-700 font-medium">Bancos y ganancias</span>
+                <strong class="!text-emerald-900 !text-lg !mb-0" data-i18n="cashout_title">Retirar fondos</strong>
+                <span class="!text-emerald-700 font-medium" data-i18n="agent_cashout_desc">Bancos y ganancias</span>
               </div>
               <i class="fas fa-chevron-right ml-auto text-emerald-300"></i>
             </a>
@@ -1173,23 +1173,23 @@
                 <div class="icon-wrap bg-blue-50 text-blue-600">
                   <i class="fas fa-cog"></i>
                 </div>
-                <strong>Setup</strong>
-                <span>Ajustes del comercio</span>
+                <strong data-i18n="settings_title">Setup</strong>
+                <span data-i18n="agent_store_settings_desc">Ajustes del comercio</span>
               </a>
               <button type="button" id="comercios-toggle-team" class="pp-comercios-card">
                 <div class="icon-wrap bg-purple-50 text-purple-600">
                   <i class="fas fa-user-friends"></i>
                 </div>
-                <strong>Mi equipo</strong>
-                <span>Accesos y roles</span>
+                <strong data-i18n="team_title">Mi equipo</strong>
+                <span data-i18n="team_access_roles">Accesos y roles</span>
               </button>
             </div>
 
             <div id="comercios-team-wrap" class="hidden animate-section-slide">
               <div class="pp-card -soft overflow-hidden !border-none !shadow-xl">
                 <div class="pp-card-head bg-white !pb-4">
-                  <h3 class="text-xl font-extrabold pp-type">Usuarios</h2>
-                  <p class="text-gray-500 text-sm mt-1">Gestiona accesos al portal</p>
+                  <h3 class="text-xl font-extrabold pp-type" data-i18n="admin_users_title">Usuarios</h2>
+                  <p class="text-gray-500 text-sm mt-1" data-i18n="team_desc_portal">Gestiona accesos al portal</p>
                 </div>
                 <div class="pp-card-body p-0">
                   <iframe src="team.html?embed=1" title="Mi equipo" class="pp-embed-frame" style="min-height: 480px;"></iframe>
@@ -1222,6 +1222,7 @@
       const icon = document.getElementById('storeIcon');
       if (!icon) return;
       icon.addEventListener('click', (ev)=>{
+
         ev.preventDefault();
         ev.stopPropagation();
         if (typeof window.__ppOpenComercios === 'function') window.__ppOpenComercios();
