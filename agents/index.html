@@ -25,18 +25,18 @@
 <body>
   <main class="agent-wrap">
     <h1 data-i18n="agent_module">Sandbox Agente</h1>
-    <p class="muted" data-i18n="agent_module_desc_dev" data-i18n="agent_module_desc_dev">Esta versión es la copia de trabajo del módulo de agente para desarrollo. Puedes editar este archivo y ver cambios directamente en /agents/.</p>
+    <p class="muted" data-i18n="agent_module_desc_dev">Esta versión es la copia de trabajo del módulo de agente para desarrollo. Puedes editar este archivo y ver cambios directamente en /agents/.</p>
 
     <div class="agent-row mb-12">
   <div class="agent-col agent-card flex-0-320">
         <h3 data-i18n="agent_balance">Saldo</h3>
         <div id="balance" class="balance">$0.00</div>
-        <div class="muted small" data-i18n="agent_balance_desc" data-i18n="agent_balance_desc">Saldo disponible para pagar servicios o retirar</div>
+        <div class="muted small" data-i18n="agent_balance_desc">Saldo disponible para pagar servicios o retirar</div>
         <div class="spaced">
           <input id="topup-amount" type="number" placeholder="Monto a recargar" class="full-width" />
           <div class="two-button-row spaced">
-            <button id="btn-topup" class="agent-btn full-width" type="button" data-i18n="agent_btn_recharge" data-i18n="agent_btn_recharge">Recargar saldo (demo)</button>
-            <button id="btn-recharge-portal" class="agent-btn full-width" type="button" data-i18n="agent_btn_recharge_portal" data-i18n="agent_btn_recharge_portal">Recargar</button>
+            <button id="btn-topup" class="agent-btn full-width" type="button" data-i18n="agent_btn_recharge">Recargar saldo (demo)</button>
+            <button id="btn-recharge-portal" class="agent-btn full-width" type="button" data-i18n="agent_btn_recharge_portal">Recargar</button>
           </div>
         </div>
       </div>
@@ -52,14 +52,14 @@
     <div class="agent-row spaced">
   <div class="agent-col agent-card flex-1-420">
         <h3 data-i18n="agent_dashboard">Dashboard</h3>
-        <p class="muted" data-i18n="agent_dash_desc" data-i18n="agent_dash_desc">Ganancias acumuladas y métricas rápidas</p>
+        <p class="muted" data-i18n="agent_dash_desc">Ganancias acumuladas y métricas rápidas</p>
         <div class="flex-gap spaced">
           <div class="card-compact flex-1">
-            <div class="muted" data-i18n="agent_total_gain" data-i18n="agent_total_gain">Ganancia total (demo)</div>
+            <div class="muted" data-i18n="agent_total_gain">Ganancia total (demo)</div>
             <div id="total-gain" class="gain">$0.00</div>
           </div>
           <div class="card-compact flex-1">
-            <div class="muted" data-i18n="agent_tx_count" data-i18n="agent_tx_count">Transacciones</div>
+            <div class="muted" data-i18n="agent_tx_count">Transacciones</div>
             <div id="tx-count">0</div>
           </div>
         </div>
@@ -67,7 +67,7 @@
 
       <div class="col card">
         <h3 data-i18n="agent_history">Histórico</h3>
-        <p class="muted" data-i18n="agent_history_desc" data-i18n="agent_history_desc">Últimas transacciones</p>
+        <p class="muted" data-i18n="agent_history_desc">Últimas transacciones</p>
         <div class="scrollbox spaced">
           <table id="history"><thead><tr><th data-i18n="agent_th_date">Fecha</th><th data-i18n="agent_th_type">Tipo</th><th data-i18n="agent_th_details">Detalles</th><th data-i18n="agent_th_amount">Monto</th></tr></thead><tbody></tbody></table>
         </div>
@@ -119,7 +119,7 @@
 
     services.forEach(s => {
       const d = document.createElement('div'); d.className='svc';
-      d.innerHTML = `<div style="font-weight:700">${s.name}</div><div class="muted">Precio: ${fmt(s.price)}</div><div style="margin-top:8px"><button class="btn small" data-id="${s.id}" type="button" data-i18n="agent_btn_pay" data-i18n="agent_btn_pay">Pagar</button></div>`;
+      d.innerHTML = `<div style="font-weight:700">${s.name}</div><div class="muted">Precio: ${fmt(s.price)}</div><div style="margin-top:8px"><button class="btn small" data-id="${s.id}" type="button" data-i18n="agent_btn_pay">Pagar</button></div>`;
       $services.appendChild(d);
     });
 

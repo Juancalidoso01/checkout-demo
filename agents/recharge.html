@@ -50,7 +50,7 @@
     nav { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
   </style>
 </head>
-<body class="min-h-[100dvh] flex flex-col overflow-x-hidden">
+<body class="min-h-screen flex flex-col">
 
   <script>
     // Require a valid session for this portal
@@ -69,24 +69,24 @@
   <!-- Header / Navbar -->
   <nav class="bg-punto-pago text-white shadow-lg sticky top-0 z-40">
     <div class="mx-auto w-full max-w-4xl px-4 py-3 md:py-4">
-      <div class="flex items-center justify-between gap-3">
+      <div class="flex items-start md:items-center justify-between gap-3 md:gap-4">
         <!-- Brand / Menu Toggle -->
-        <div class="flex items-center min-w-0 shrink">
-          <a id="storeIcon" href="../setup.html" class="h-10 w-10 md:h-11 md:w-11 bg-white/10 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition shadow-sm mr-2 md:mr-3 shrink-0" title="<span data-i18n="menu_title">Menú</span> de Comercio">
+        <div class="flex items-center min-w-0 flex-1 max-w-[52%] sm:max-w-[58%] md:max-w-none">
+          <a id="storeIcon" href="../setup.html" class="h-10 w-10 md:h-11 md:w-11 bg-white/10 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition shadow-sm mr-2 md:mr-3 shrink-0 self-start" title="Menú de Comercio">
             <i class="fas fa-bars text-lg"></i>
             <span class="sr-only">Abrir menú</span>
           </a>
-          <div class="flex flex-col truncate">
-            <div class="font-extrabold text-[15px] md:text-base leading-tight tracking-wide truncate mt-0.5">MI TIENDA</div>
-            <div class="text-[9px] md:text-[10px] text-white/70 font-medium tracking-wide uppercase truncate">AGENTE PUNTO PAGO</div>
+          <div class="flex flex-col min-w-0 flex-1 overflow-hidden pt-0.5">
+            <div class="font-extrabold text-[13px] sm:text-[15px] md:text-base leading-tight tracking-wide truncate">MI TIENDA</div>
+            <div class="text-[8px] sm:text-[9px] md:text-[10px] text-white/70 font-medium tracking-[0.12em] uppercase truncate">AGENTE PUNTO PAGO</div>
           </div>
         </div>
 
         <!-- Right: balance + actions -->
-  <div class="flex items-center gap-2 md:gap-4 shrink-0">
-          <div class="text-right leading-tight">
-            <div class="text-[10px] md:text-xs opacity-85 font-extrabold uppercase tracking-wide">Saldo</div>
-            <div class="text-[18px] md:text-xl font-extrabold" id="balance-display">$1,250.45</div>
+  <div class="flex items-start md:items-center gap-2 md:gap-4 shrink-0 ml-auto">
+          <div class="text-right leading-tight min-w-0">
+            <div class="text-[9px] md:text-xs opacity-85 font-extrabold uppercase tracking-wide">Saldo</div>
+            <div class="text-[15px] sm:text-[18px] md:text-xl font-extrabold whitespace-nowrap" id="balance-display">$1,250.45</div>
             <div class="hidden sm:block text-[10px] md:text-xs text-white/90">Efectivo: <span id="cash-in-header" class="font-semibold">$342.10</span></div>
           </div>
 
@@ -95,7 +95,7 @@
             <i class="fas fa-clock mr-1"></i> ACH
           </div>
 
-          <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-10 md:h-[42px] rounded-[16px] px-4 md:px-5">Salir</a>
+          <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-10 md:h-[42px] rounded-[16px] px-3 sm:px-4 md:px-5 text-sm md:text-base whitespace-nowrap">Salir</a>
         </div>
       </div>
 
@@ -187,7 +187,7 @@
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
           <h2 class="text-2xl font-bold pp-type" data-i18n="recharge_digital">Recarga digital</h2>
-          <p class="text-gray-500 pp-type" data-i18n="recharge_digital_desc">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
+          <p class="text-gray-500 pp-type">Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.</p>
         </div>
 
       <!-- Toast de confirmación desde Checkout -->
@@ -209,7 +209,7 @@
               </div>
 
               <div>
-                <label class="pp-label" data-i18n="recharge_cashin_amount">Monto USD</label>
+                <label class="pp-label">Monto USD</label>
                 <div class="pp-input-group">
                   <span class="pp-input-prefix">$</span>
                   <input type="number" id="cashin-amount" inputmode="decimal" step="0.01" placeholder="0.00" class="pp-input-control font-bold text-xl" autocomplete="off" aria-label="Monto USD">
@@ -217,10 +217,10 @@
                 <div id="cashin-fees" class="mt-2 text-xs text-gray-500"></div>
                 <div class="mt-3 p-3 rounded-xl border bg-gray-50">
                   <div class="flex items-center justify-between">
-                    <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold" data-i18n="recharge_cashin_net">Valor real a recargar (neto)</div>
+                    <div class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Valor real a recargar (neto)</div>
                     <div id="cashin-net" class="text-lg font-extrabold text-gray-900">$0.00</div>
                   </div>
-                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint" data-i18n="recharge_cashin_net_hint">Neto = Monto - Comisión - ITBMS</div>
+                  <div class="mt-1 text-[11px] text-gray-500" id="cashin-net-hint">Neto = Monto - Comisión - ITBMS</div>
                 </div>
               </div>
             </div>
@@ -233,25 +233,25 @@
           <!-- Paso 2: Confirmación -->
           <div id="step-2" class="hidden space-y-6">
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
-              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest" data-i18n="recharge_cashin_summary_title">Resumen de recarga digital</h3>
+              <h3 class="font-bold text-blue-800 mb-4 uppercase text-xs tracking-widest">Resumen de recarga digital</h3>
               <div class="flex justify-between mb-2">
-                <span class="text-gray-600" data-i18n="recharge_cashin_account">Cuenta (agente):</span>
+                <span class="text-gray-600">Cuenta (agente):</span>
                 <span class="font-bold text-gray-800" id="summary-phone">—</span>
               </div>
-              <div class="text-sm text-gray-600 mb-4" data-i18n="recharge_cashin_redirect_msg">Serás redirigido al checkout para completar el pago con métodos digitales.</div>
+              <div class="text-sm text-gray-600 mb-4">Serás redirigido al checkout para completar el pago con métodos digitales.</div>
               <div class="flex justify-between border-t border-blue-200 pt-4 items-center">
-                <span class="font-bold text-lg text-gray-800" data-i18n="recharge_cashin_amount_to_recharge">Monto a recargar:</span>
+                <span class="font-bold text-lg text-gray-800">Monto a recargar:</span>
                 <span class="font-bold text-blue-700 text-2xl" id="summary-total">$0.00</span>
               </div>
               <div class="mt-2 text-sm text-gray-600" id="summary-fees"></div>
               <div class="flex justify-between mt-3 items-center">
-                <span class="font-bold text-gray-800" data-i18n="recharge_cashin_real_value">Valor real a recargar:</span>
+                <span class="font-bold text-gray-800">Valor real a recargar:</span>
                 <span class="font-extrabold text-gray-900" id="summary-net">$0.00</span>
               </div>
             </div>
             <div class="flex space-x-4">
-              <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary" data-i18n="recharge_cashin_correct">Corregir</button>
-              <button type="button" id="cashin-go-checkout" class="w-2/3 pp-btn pp-btn-primary" data-i18n="recharge_cashin_go_checkout">Ir al checkout</button>
+              <button type="button" onclick="nextStep(1)" class="w-1/3 pp-btn pp-btn-secondary">Corregir</button>
+              <button type="button" id="cashin-go-checkout" class="w-2/3 pp-btn pp-btn-primary">Ir al checkout</button>
             </div>
           </div>
 
@@ -260,9 +260,9 @@
             <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <i class="fas fa-check text-4xl"></i>
             </div>
-            <h3 class="text-3xl font-bold text-gray-800 mb-2" data-i18n="recharge_cashin_success_title">¡Depósito Exitoso!</h3>
-            <p class="text-gray-500" data-i18n="recharge_cashin_success_msg">El saldo se ha acreditado instantáneamente.</p>
-                        <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800" data-i18n="recharge_cashin_another">Realizar otro depósito</button>
+            <h3 class="text-3xl font-bold text-gray-800 mb-2">¡Depósito Exitoso!</h3>
+            <p class="text-gray-500">El saldo se ha acreditado instantáneamente.</p>
+                        <button type="button" onclick="resetFlow()" class="mt-8 text-blue-600 font-bold underline hover:text-blue-800">Realizar otro depósito</button>
           </div>
         </div>
       </div>
@@ -273,8 +273,8 @@
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-blue-600">
         <div class="p-6 border-b flex justify-between items-center bg-gray-50">
           <div>
-            <h2 class="text-2xl font-bold text-gray-800" data-i18n="recharge_ach_title">Alertar Pago por ACH</h2>
-            <p class="text-gray-500 text-sm" data-i18n="recharge_ach_desc">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
+            <h2 class="text-2xl font-bold text-gray-800">Alertar Pago por ACH</h2>
+            <p class="text-gray-500 text-sm">Notifica tu transferencia de otros bancos para fondear tu saldo.</p>
           </div>
           <i class="fas fa-university text-3xl text-blue-200"></i>
         </div>
@@ -282,32 +282,32 @@
         <div class="p-8 space-y-6">
           <div class="grid md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_bank">Tu Banco (Emisor)</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Tu Banco (Emisor)</label>
               <select id="ach-bank" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition bg-white">
-                <option value="" data-i18n="recharge_ach_bank_ph">Seleccione banco</option>
-                <option value="general" data-i18n="recharge_ach_bank_gen">Banco General</option>
-                <option value="banistmo" data-i18n="recharge_ach_bank_ban">Banistmo</option>
-                <option value="bac" data-i18n="recharge_ach_bank_bac">BAC Credomatic</option>
-                <option value="otros" data-i18n="recharge_ach_bank_oth">Otros bancos</option>
+                <option value="">Seleccione banco</option>
+                <option value="general">Banco General</option>
+                <option value="banistmo">Banistmo</option>
+                <option value="bac">BAC Credomatic</option>
+                <option value="otros">Otros bancos</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_ref">Número de Referencia</label>
-              <input type="text" id="ach-ref" placeholder="Ej: 0012345" data-i18n="recharge_ach_ref_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-sm font-bold text-gray-700 mb-2">Número de Referencia</label>
+              <input type="text" id="ach-ref" placeholder="Ej: 0012345" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_amount">Monto de la Transferencia</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Monto de la Transferencia</label>
               <div class="relative">
                 <span class="absolute left-3 top-3 text-gray-400 font-bold">$</span>
                 <input type="number" id="ach-amount" placeholder="0.00" class="w-full pl-8 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 font-bold outline-none">
               </div>
             </div>
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="recharge_ach_proof">Cargar Comprobante</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Cargar Comprobante</label>
             <div class="flex items-center justify-center w-full h-12 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
                 <div class="flex items-center space-x-2">
                   <i class="fas fa-camera text-gray-400"></i>
-                  <span class="text-xs text-gray-500" data-i18n="recharge_ach_upload">Subir foto o PDF</span>
+                  <span class="text-xs text-gray-500">Subir foto o PDF</span>
                 </div>
                 <input type="file" class="hidden">
               </div>
@@ -317,28 +317,28 @@
           <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 flex space-x-3">
             <i class="fas fa-info-circle text-orange-500 mt-1"></i>
             <p class="text-xs text-orange-700 leading-relaxed">
-              <strong data-i18n="recharge_ach_notice_title">Aviso:</strong> <span data-i18n="recharge_ach_notice_desc"><span data-i18n="recharge_ach_notice_desc">Las transferencias ACH de otros bancos pueden demorar en ser procesadas por el sistema bancario. Al alertar aquí, nuestro equipo financiero verificará su depósito prioritariamente.</span></span>
+              <strong>Aviso:</strong> Las transferencias ACH de otros bancos pueden demorar en ser procesadas por el sistema bancario. Al alertar aquí, nuestro equipo financiero verificará su depósito prioritariamente.
             </p>
           </div>
 
           <button type="button" onclick="submitACH()" class="w-full bg-gray-800 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg flex items-center justify-center space-x-2">
             <i class="fas fa-paper-plane"></i>
-            <span data-i18n="recharge_ach_btn_send">NOTIFICAR TRANSFERENCIA</span>
+            <span>NOTIFICAR TRANSFERENCIA</span>
           </button>
         </div>
       </div>
 
       <!-- Tabla de historial de notificaciones -->
       <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
-        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider border-b pb-2" data-i18n="recharge_ach_history_title">Estado de recargas enviadas</h3>
+        <h3 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider border-b pb-2">Estado de recargas enviadas</h3>
         <div class="overflow-x-auto">
           <table class="w-full text-sm text-left">
             <thead>
               <tr class="text-gray-400 uppercase text-[10px]">
-                <th class="pb-4" data-i18n="recharge_ach_history_date">Fecha</th>
-                <th class="pb-4" data-i18n="recharge_ach_history_ref">Referencia</th>
-                <th class="pb-4 text-center" data-i18n="recharge_ach_history_amount">Monto</th>
-                <th class="pb-4 text-right" data-i18n="recharge_ach_history_status">Estado</th>
+                <th class="pb-4">Fecha</th>
+                <th class="pb-4">Referencia</th>
+                <th class="pb-4 text-center">Monto</th>
+                <th class="pb-4 text-right">Estado</th>
               </tr>
             </thead>
             <tbody id="ach-history">
@@ -347,7 +347,7 @@
                 <td class="py-4 font-bold text-gray-700">ACH-88219</td>
                 <td class="py-4 text-center font-bold text-gray-800">$250.00</td>
                 <td class="py-4 text-right">
-                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold" data-i18n="recharge_ach_status_recharged">RECARGADO</span>
+                  <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold">RECARGADO</span>
                 </td>
               </tr>
             </tbody>
@@ -358,16 +358,16 @@
 
     <!-- SECCIÓN: PAGOS -->
     <div id="section-pagos" class="hidden bg-white rounded-2xl shadow-xl section-fade border-b-4 border-gray-300 max-w-4xl mx-auto p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-2" data-i18n="pay_services_title">Pago de servicios</h2>
-      <p class="text-gray-500 mb-4" data-i18n="pay_services_desc">Busca al cliente por cédula, pasaporte o número de servicio para ver su portafolio y saldos.</p>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">Pago de servicios</h2>
+      <p class="text-gray-500 mb-4">Busca al cliente por cédula, pasaporte o número de servicio para ver su portafolio y saldos.</p>
 
       <div class="grid md:grid-cols-3 gap-4 mb-4">
         <div class="md:col-span-2">
-          <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="pay_services_search_label">Cédula / Pasaporte / Nº de servicio</label>
-          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" data-i18n="pay_services_search_ph" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
+          <label class="block text-sm font-bold text-gray-700 mb-2">Cédula / Pasaporte / Nº de servicio</label>
+          <input id="customer-id" type="text" placeholder="Ej: 8-123-4567 | P1234567 | 001234567" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <div class="flex items-end">
-          <button id="customer-search-btn" type="button" class="btn-primary w-full py-3 rounded-lg text-white" data-i18n="pay_services_search_btn">Buscar Cliente</button>
+          <button id="customer-search-btn" type="button" class="btn-primary w-full py-3 rounded-lg text-white">Buscar Cliente</button>
         </div>
       </div>
 
@@ -425,17 +425,17 @@
       function renderCustomerResults(list){
         const out = document.getElementById('customer-results');
         out.innerHTML = '';
-        if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_search_empty : "No se encontraron coincidencias para el cliente."}</div>'; return; }
+        if(!list || list.length===0){ out.innerHTML = '<div class="p-4 bg-yellow-50 border border-yellow-100 rounded">No se encontraron coincidencias para el cliente.</div>'; return; }
         list.forEach(c=>{
           const wrap = document.createElement('div'); wrap.className = 'p-4 border rounded-lg';
           const rows = c.portfolio.map(p => {
             const paid = isServicePaidForClient(c.cid, p.svcId);
             if (paid) {
-              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_status_paid : "PAGADO"}</span></td></tr>`;
+              return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(0)}</td><td class="py-2 text-right"><span class="px-3 py-1 text-[12px] bg-green-100 text-green-700 rounded-full font-bold">PAGADO</span></td></tr>`;
             }
-            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_btn_collect : "Cobrar"}</button></td></tr>`;
+            return `<tr class="border-b last:border-0"><td class="py-2 font-medium">${p.name}</td><td class="py-2 text-right font-bold">${fmt(p.balance)}</td><td class="py-2 text-right"><button type="button" data-cid="${c.cid}" data-cname="${encodeURIComponent(c.name)}" data-svc="${p.svcId}" data-svcname="${encodeURIComponent(p.name)}" data-amt="${p.balance}" class="btn secondary collect-btn">Cobrar</button></td></tr>`;
           }).join('');
-          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_lbl_id : "ID: "}${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} ${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_lbl_services : "servicios"}</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
+          wrap.innerHTML = `<div class="flex justify-between items-center"><div><div class="font-bold">${c.name}</div><div class="text-xs text-gray-500">ID: ${c.cid}</div></div><div class="text-sm text-gray-500">${c.portfolio.length} servicios</div></div><div class="mt-3 overflow-x-auto"><table class="w-full text-sm"><tbody>${rows}</tbody></table></div>`;
           out.appendChild(wrap);
         });
 
@@ -456,11 +456,11 @@
       document.getElementById('customer-search-btn').addEventListener('click', async ()=>{
         const q = document.getElementById('customer-id').value || '';
         const out = document.getElementById('customer-results');
-        out.innerHTML = '<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_searching : "Buscando cliente&hellip;"}</div></div>';
+        out.innerHTML = '<div class="p-4 text-center"><div class="animate-spin border-t-4 border-blue-500 rounded-full w-8 h-8 mx-auto mb-3"></div><div class="text-sm text-gray-500">Buscando cliente&hellip;</div></div>';
         try {
           const found = await lookupCustomerAsync(q);
           renderCustomerResults(found);
-        } catch(e){ out.innerHTML = '<div class="p-4 bg-red-50 border border-red-100 rounded">${window.I18N && window.I18N.getDict() ? window.I18N.getDict().pay_services_search_error : "Error al buscar cliente."}</div>'; }
+        } catch(e){ out.innerHTML = '<div class="p-4 bg-red-50 border border-red-100 rounded">Error al buscar cliente.</div>'; }
       });
 
       // Charge modal (replace prompt) -------------------------------------------------
@@ -471,16 +471,16 @@
         modal.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
         modal.innerHTML = `
           <div class="bg-white rounded-2xl p-6 max-w-md w-full">
-            <h3 class="text-lg font-bold mb-2"><span data-i18n="charge_title">Cobrar servicio</span></h3>
+            <h3 class="text-lg font-bold mb-2">Cobrar servicio</h3>
             <div class="mb-4">
               <div class="text-sm text-gray-600" id="charge-client"></div>
               <div class="text-sm text-gray-600" id="charge-service"></div>
             </div>
-            <label class="muted"><span data-i18n="charge_amount_label">Monto a cobrar</span></label>
+            <label class="muted">Monto a cobrar</label>
             <input id="charge-amount" type="number" step="0.01" class="w-full px-3 py-2 border rounded mt-2 mb-4" />
             <div class="flex justify-end gap-3">
               <button id="charge-cancel" type="button" class="btn secondary" data-i18n="checkout_cancel">Cancelar</button>
-              <button id="charge-confirm" type="button" class="btn"><span data-i18n="charge_confirm">Confirmar cobro</span></button>
+              <button id="charge-confirm" type="button" class="btn">Confirmar cobro</button>
             </div>
           </div>`;
         document.body.appendChild(modal);
@@ -511,8 +511,8 @@
       function openChargeModal({ cid, clientName, svc, svcName, balance }){
         const modal = document.getElementById('charge-modal'); if(!modal) return alert('No modal');
         modal._meta = { cid, svc };
-        document.getElementById('charge-client').innerText = `<span data-i18n="charge_client">Cliente:</span> ${clientName} (${cid})`;
-        document.getElementById('charge-service').innerText = `<span data-i18n="charge_service">Servicio:</span> ${svcName} — <span data-i18n="charge_balance">Saldo:</span> ${fmt(balance)}`;
+        document.getElementById('charge-client').innerText = `Cliente: ${clientName} (${cid})`;
+        document.getElementById('charge-service').innerText = `Servicio: ${svcName} — Saldo: ${fmt(balance)}`;
         const inp = document.getElementById('charge-amount'); inp.value = (balance || 0).toFixed(2);
         modal.classList.remove('hidden');
         setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 120);
@@ -526,11 +526,11 @@
         m.className = 'fixed inset-0 bg-black/60 hidden items-center justify-center z-60 p-4';
         m.innerHTML = `
           <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
-            <h3 class="text-lg font-bold mb-2"><span data-i18n="pay_method_title">Método de pago</span></h3>
-            <p class="text-sm text-gray-600 mb-4"><span data-i18n="pay_method_subtitle">¿Cómo recibiste el pago?</span></p>
+            <h3 class="text-lg font-bold mb-2">Método de pago</h3>
+            <p class="text-sm text-gray-600 mb-4">¿Cómo recibiste el pago?</p>
             <div class="grid gap-3 mb-4">
-              <button id="pay-cash" type="button" class="btn-primary py-3" data-i18n="pay_method_cash">Efectivo (recibí dinero)</button>
-              <button id="pay-other" type="button" class="btn secondary py-3" data-i18n="pay_method_other">Otro medio (tarjeta, Yappy, etc.)</button>
+              <button id="pay-cash" type="button" class="btn-primary py-3">Efectivo (recibí dinero)</button>
+              <button id="pay-other" type="button" class="btn secondary py-3">Otro medio (tarjeta, Yappy, etc.)</button>
             </div>
             <div class="flex justify-end"><button id="pay-cancel" type="button" class="btn secondary" data-i18n="checkout_cancel">Cancelar</button></div>
           </div>`;
@@ -589,7 +589,7 @@
             <div class="flex gap-3 mb-3">
               <button id="share-whatsapp" type="button" class="btn">WhatsApp</button>
               <button id="share-email" type="button" class="btn">Email</button>
-              <button id="print-receipt" type="button" class="btn secondary" data-i18n="receipt_print">Imprimir</button>
+              <button id="print-receipt" type="button" class="btn secondary">Imprimir</button>
             </div>
             <div class="flex justify-end"><button id="receipt-close" class="btn secondary">Cerrar</button></div>
           </div>`;
@@ -630,10 +630,10 @@
           <div style="font-family:system-ui, -apple-system, sans-serif">
             <div style="font-weight:700;font-size:18px;margin-bottom:8px">Punto Pago - Recibo</div>
             <div style="font-size:13px;color:#374151">Fecha: ${when.toLocaleString()}</div>
-            <div style="margin-top:8px"><strong><span data-i18n="charge_client">Cliente:</span></strong> ${clientName || ''} (${clientId || ''})</div>
-            <div><strong><span data-i18n="charge_service">Servicio:</span></strong> ${svcName || svc || ''}</div>
+            <div style="margin-top:8px"><strong>Cliente:</strong> ${clientName || ''} (${clientId || ''})</div>
+            <div><strong>Servicio:</strong> ${svcName || svc || ''}</div>
             <div style="margin-top:8px;font-size:16px"><strong>Monto:</strong> ${fmt(amount)}</div>
-            <div style="margin-top:8px;font-size:12px;color:#6b7280"><span data-i18n="receipt_footer">Recibo generado por Punto Pago</span></div>
+            <div style="margin-top:8px;font-size:12px;color:#6b7280">Recibo generado por Punto Pago</div>
           </div>`;
         document.getElementById('receipt-body').innerHTML = body;
         r.classList.remove('hidden');
@@ -1137,7 +1137,7 @@
     // initial render
     render();
 
-    // Comercios modal (<span data-i18n="menu_team">Mi equipo</span> vive aquí ahora)
+    // Comercios modal (Mi equipo vive aquí ahora)
     (function createComerciosModal(){
       if (document.getElementById('comercios-modal')) return;
       const m = document.createElement('div');
@@ -1148,8 +1148,8 @@
         <aside class="pp-comercios-sheet shadow-2xl">
           <div class="px-6 py-8 flex items-start justify-between gap-3 pp-comercios-head bg-white">
             <div class="min-w-0 pt-2">
-              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight"><span data-i18n="menu_title">Menú</span></div>
-              <p class="text-sm text-gray-500 mt-2 font-medium"><span data-i18n="menu_subtitle">Personaliza tu terminal y equipo</span></p>
+              <div class="text-3xl font-extrabold pp-type text-gray-900 tracking-tight">Menú</div>
+              <p class="text-sm text-gray-500 mt-2 font-medium">Personaliza tu terminal y equipo</p>
             </div>
             <button type="button" id="comercios-close" class="rounded-full w-11 h-11 flex items-center justify-center bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
                <i class="fas fa-times text-lg"></i>
@@ -1162,8 +1162,8 @@
                 <i class="fas fa-money-bill-transfer"></i>
               </div>
               <div>
-                <strong class="!text-emerald-900 !text-lg !mb-0"><span data-i18n="menu_cashout">Retirar fondos</span></strong>
-                <span class="!text-emerald-700 font-medium"><span data-i18n="menu_banks">Bancos y ganancias</span></span>
+                <strong class="!text-emerald-900 !text-lg !mb-0">Retirar fondos</strong>
+                <span class="!text-emerald-700 font-medium">Bancos y ganancias</span>
               </div>
               <i class="fas fa-chevron-right ml-auto text-emerald-300"></i>
             </a>
@@ -1173,26 +1173,26 @@
                 <div class="icon-wrap bg-blue-50 text-blue-600">
                   <i class="fas fa-cog"></i>
                 </div>
-                <strong><span data-i18n="menu_setup">Setup</span></strong>
-                <span><span data-i18n="menu_setup_desc">Ajustes del comercio</span></span>
+                <strong>Setup</strong>
+                <span>Ajustes del comercio</span>
               </a>
               <button type="button" id="comercios-toggle-team" class="pp-comercios-card">
                 <div class="icon-wrap bg-purple-50 text-purple-600">
                   <i class="fas fa-user-friends"></i>
                 </div>
-                <strong><span data-i18n="menu_team">Mi equipo</span></strong>
-                <span><span data-i18n="menu_team_desc">Accesos y roles</span></span>
+                <strong>Mi equipo</strong>
+                <span>Accesos y roles</span>
               </button>
             </div>
 
             <div id="comercios-team-wrap" class="hidden animate-section-slide">
               <div class="pp-card -soft overflow-hidden !border-none !shadow-xl">
                 <div class="pp-card-head bg-white !pb-4">
-                  <h3 class="text-xl font-extrabold pp-type"><span data-i18n="menu_team_users">Usuarios</span></h2>
-                  <p class="text-gray-500 text-sm mt-1"><span data-i18n="menu_team_users_desc">Gestiona accesos al portal</span></p>
+                  <h3 class="text-xl font-extrabold pp-type">Usuarios</h2>
+                  <p class="text-gray-500 text-sm mt-1">Gestiona accesos al portal</p>
                 </div>
                 <div class="pp-card-body p-0">
-                  <iframe src="team.html?embed=1" title="<span data-i18n="menu_team">Mi equipo</span>" class="pp-embed-frame" style="min-height: 480px;"></iframe>
+                  <iframe src="team.html?embed=1" title="Mi equipo" class="pp-embed-frame" style="min-height: 480px;"></iframe>
                 </div>
               </div>
             </div>

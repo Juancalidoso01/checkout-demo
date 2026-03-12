@@ -157,22 +157,22 @@
       function render(){
         const users = teamUsers();
         if (!users.length){
-          $table.innerHTML = '<tr class="border-t"><td colspan="4" class="py-4 text-gray-500"><span data-i18n=\'team_no_emp\'>Aún no tienes empleados registrados.</span></td></tr>';
+          $table.innerHTML = '<tr class="border-t"><td colspan="4" class="py-4 text-gray-500"><span data-i18n="team_no_emp">Aún no tienes empleados registrados.</span></td></tr>';
           return;
         }
 
         $table.innerHTML = users.map(u => {
           const status = u.active
-            ? '<span class="px-2 py-1 rounded-full text-[10px] bg-green-100 text-green-700 font-bold" data-i18n=\'team_active\'>ACTIVO</span>'
-            : '<span class="px-2 py-1 rounded-full text-[10px] bg-gray-100 text-gray-600 font-bold" data-i18n=\'team_off\'>OFF</span>';
+            ? '<span class="px-2 py-1 rounded-full text-[10px] bg-green-100 text-green-700 font-bold" data-i18n="team_active">ACTIVO</span>'
+            : '<span class="px-2 py-1 rounded-full text-[10px] bg-gray-100 text-gray-600 font-bold" data-i18n="team_off">OFF</span>';
           return `
             <tr class="border-t">
               <td class="py-2 font-bold">${esc(u.username)}</td>
               <td class="py-2">${esc(u.displayName||'')}</td>
               <td class="py-2">${status}</td>
               <td class="py-2 text-right space-x-2">
-                <button data-act="edit" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;" data-i18n=\'team_edit\'>Editar</button>
-                <button data-act="toggle" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;"><span data-i18n=\'${u.active ? 'team_disable' : 'team_enable'}\'>${u.active ? 'Deshabilitar' : 'Habilitar'}</span></button>
+                <button data-act="edit" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;" data-i18n="team_edit">Editar</button>
+                <button data-act="toggle" data-id="${esc(u.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;"><span data-i18n="${u.active ? 'team_disable' : 'team_enable'}">${u.active ? 'Deshabilitar' : 'Habilitar'}</span></button>
               </td>
             </tr>`;
         }).join('');
