@@ -484,6 +484,7 @@
             </div>
           </div>`;
         document.body.appendChild(modal);
+  if (window.I18N && typeof window.I18N.updateDOM === 'function') window.I18N.updateDOM();
 
         modal.querySelector('#charge-cancel').addEventListener('click', ()=>{ modal.classList.add('hidden'); });
         modal.querySelector('#charge-confirm').addEventListener('click', ()=>{
@@ -515,6 +516,7 @@
   document.getElementById('charge-client').innerText = `${(dict && dict.recharge_client_label) || 'Cliente'}: ${clientName} (${cid})`;
   document.getElementById('charge-service').innerText = `${(dict && dict.recharge_service_label) || 'Servicio'}: ${svcName} — ${(dict && dict.recharge_balance_label) || 'Saldo'}: ${fmt(balance)}`;
         const inp = document.getElementById('charge-amount'); inp.value = (balance || 0).toFixed(2);
+        if (window.I18N && typeof window.I18N.updateDOM === 'function') window.I18N.updateDOM();
         modal.classList.remove('hidden');
         setTimeout(()=>{ try{ inp.focus(); }catch(e){} }, 120);
       }
@@ -536,6 +538,7 @@
             <div class="flex justify-end"><button id="pay-cancel" type="button" class="btn secondary" data-i18n="checkout_cancel">Cancelar</button></div>
           </div>`;
         document.body.appendChild(m);
+  if (window.I18N && typeof window.I18N.updateDOM === 'function') window.I18N.updateDOM();
         m.querySelector('#pay-cancel').addEventListener('click', ()=> m.classList.add('hidden'));
         m.querySelector('#pay-other').addEventListener('click', ()=>{
           try {
@@ -575,6 +578,7 @@
         // copy some fields to meta for pay-other
         m._meta.svcName = meta.svcName || '';
         m._meta.clientName = meta.clientName || '';
+        if (window.I18N && typeof window.I18N.updateDOM === 'function') window.I18N.updateDOM();
         m.classList.remove('hidden');
       }
 
@@ -595,14 +599,18 @@
             <div class="flex justify-end"><button id="receipt-close" class="btn secondary" data-i18n="recharge_receipt_close">Cerrar</button></div>
           </div>`;
         document.body.appendChild(r);
+        if (window.I18N && typeof window.I18N.updateDOM === 'function') window.I18N.updateDOM();
         r.querySelector('#receipt-close').addEventListener('click', ()=> r.classList.add('hidden'));
         r.querySelector('#print-receipt').addEventListener('click', ()=>{
           try {
             // open a small printable window
+            const dict = window.I18N && window.I18N.getDict ? window.I18N.getDict() : null;
             const content = document.getElementById('receipt-body').innerHTML;
-            const w = window.open('', 'Imprimir', 'width=600,height=600');
+            const printWindowName = (dict && dict.receipt_print) || 'Imprimir';
+            const receiptTitle = (dict && dict.receipt_title) || 'Recibo';
+            const w = window.open('', printWindowName, 'width=600,height=600');
             if (!w) return alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().recharge_print_window_error : 'No es posible abrir ventana de impresión');
-            w.document.write(`<html><head><title>Recibo</title></head><body>${content}</body></html>`);
+            w.document.write(`<html><head><title>${receiptTitle}</title></head><body>${content}</body></html>`);
             w.document.close();
             w.focus();
             setTimeout(()=>{ w.print(); }, 400);
@@ -638,6 +646,7 @@
             <div style="margin-top:8px;font-size:12px;color:#6b7280">${(dict && dict.receipt_footer) || (dict && dict.recharge_receipt_generated) || 'Recibo generado por Punto Pago'}</div>
           </div>`;
         document.getElementById('receipt-body').innerHTML = body;
+        if (window.I18N && typeof window.I18N.updateDOM === 'function') window.I18N.updateDOM();
         r.classList.remove('hidden');
       }
 
