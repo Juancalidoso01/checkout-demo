@@ -160,7 +160,8 @@
 
   function ensureLogoutButton({ selector }){
     const el = document.querySelector(selector || '[data-pp-logout]');
-    if (!el) return;
+    if (!el || el.dataset.ppLogoutBound === '1') return;
+    el.dataset.ppLogoutBound = '1';
     el.addEventListener('click', (e)=>{
       e.preventDefault();
       signOut();

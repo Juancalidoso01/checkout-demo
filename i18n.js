@@ -168,6 +168,9 @@ const translations = {
   "agent_store_settings_desc": "Ajustes del comercio",
   "team_access_roles": "Accesos y roles",
   "team_desc_portal": "Gestiona accesos al portal",
+  "setup_back_agents": "Volver al portal de agentes",
+  "setup_feature_in_dev": "Funcionalidad en desarrollo",
+  "setup_currency_usd": "USD ($)",
   "setup_legal_licenses": "Licencias o regulaciones",
   "setup_sandbox_tools": "Herramientas de Sandbox",
   "setup_sandbox_title": "Ajustes del Sandbox",
@@ -608,6 +611,9 @@ const translations = {
   "agent_store_settings_desc": "Store settings",
   "team_access_roles": "Access and roles",
   "team_desc_portal": "Manage portal access"
+  ,"setup_back_agents": "Back to agent portal"
+  ,"setup_feature_in_dev": "Feature in development"
+  ,"setup_currency_usd": "USD ($)"
   ,"setup_legal_licenses": "Licenses or regulations"
   ,"setup_sandbox_tools": "Sandbox tools"
   ,"setup_sandbox_title": "Sandbox settings"
@@ -878,6 +884,9 @@ const translations = {
   "agent_store_settings_desc": "Настройки магазина",
   "team_access_roles": "Доступы и роли",
   "team_desc_portal": "Управляйте доступом к порталу"
+  ,"setup_back_agents": "Вернуться в портал агентов"
+  ,"setup_feature_in_dev": "Функция в разработке"
+  ,"setup_currency_usd": "USD ($)"
   ,"setup_legal_licenses": "Лицензии или регулирование"
   ,"setup_sandbox_tools": "Инструменты песочницы"
   ,"setup_sandbox_title": "Настройки песочницы"
@@ -1208,6 +1217,9 @@ const translations = {
   "agent_store_settings_desc": "商户设置",
   "team_access_roles": "访问和角色",
   "team_desc_portal": "管理门户访问",
+  "setup_back_agents": "返回代理门户",
+  "setup_feature_in_dev": "功能开发中",
+  "setup_currency_usd": "USD ($)",
   "setup_legal_licenses": "许可证或监管",
   "setup_sandbox_tools": "沙盒工具",
   "setup_sandbox_title": "沙盒设置",
@@ -1339,8 +1351,14 @@ window.I18N = {
       if (!key || !dict[key]) return;
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = dict[key];
+      } else if (el.children.length > 0) {
+        el.childNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+            node.textContent = dict[key];
+          }
+        });
       } else {
-        el.innerHTML = dict[key];
+        el.textContent = dict[key];
       }
     });
 
@@ -1349,6 +1367,16 @@ window.I18N = {
       if (!key || !dict[key]) return;
       el.setAttribute('placeholder', dict[key]);
     });
+
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+      const key = el.getAttribute('data-i18n-aria-label');
+      if (!key || !dict[key]) return;
+      el.setAttribute('aria-label', dict[key]);
+    });
+
+    if (window.PPAuth && typeof window.PPAuth.ensureLogoutButton === 'function') {
+      window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+    }
   },
     "getDict": function() {
       return translations[this.currentLang] || translations['es'];

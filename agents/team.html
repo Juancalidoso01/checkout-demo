@@ -116,7 +116,7 @@
 
   <script>
     (function(){
-      const session = window.PPAuth.requireAuth({ anyRole: ['agent','superadmin'] });
+  const session = window.PPAuth.requireAuth({ role: ['agent','superadmin'] });
       if (!session) return;
 
       // Superadmin can view team page but it doesn't make sense without an agent context

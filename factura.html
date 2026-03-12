@@ -156,7 +156,7 @@
   (function(){
     // Auth guard (agent + employee) ----------------------------------------
     try {
-      const session = window.PPAuth && window.PPAuth.requireAuth({ anyRole: ['agent','employee','superadmin'] });
+  const session = window.PPAuth && window.PPAuth.requireAuth({ role: ['agent','employee','superadmin'] });
       if (!session) return;
       window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
       window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });

@@ -61,25 +61,25 @@
           </div>
           <p class="text-gray-500 text-sm mb-5"><span data-i18n="cashout_choose_method">Elige un método para retirar tus ganancias y saldo a favor.</span></p>
           <div class="space-y-3">
-            <button type="button" id="btn-add-bank" class="w-full flex items-center justify-center border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 text-gray-800 font-bold py-3.5 rounded-xl transition-all">
-              <i class="fas fa-building-columns mr-2 text-blue-600"></i><span data-i18n="cashout_origin_account">Cuenta Bancaria</span></button>
-            <button type="button" id="btn-add-card" class="w-full flex items-center justify-center border-2 border-gray-200 hover:border-orange-500 hover:bg-orange-50 text-gray-800 font-bold py-3.5 rounded-xl transition-all">
-              <i class="fas fa-credit-card mr-2 text-orange-500"></i> <span data-i18n="cashout_pp_card">Tarjeta Punto Pago</span>
+            <button type="button" id="btn-add-bank" class="pp-btn pp-btn-secondary w-full justify-center border border-[rgba(84,98,230,.18)] bg-white text-[var(--pp-text)] hover:border-[rgba(84,98,230,.38)] hover:bg-[rgba(84,98,230,.06)] rounded-[24px] px-5 py-3.5 shadow-sm transition-all">
+              <i class="fas fa-building-columns text-[var(--pp-primary)]"></i><span data-i18n="cashout_origin_account">Cuenta Bancaria</span></button>
+            <button type="button" id="btn-add-card" class="pp-btn pp-btn-secondary w-full justify-center border border-[rgba(84,98,230,.18)] bg-white text-[var(--pp-text)] hover:border-[rgba(84,98,230,.38)] hover:bg-[rgba(84,98,230,.06)] rounded-[24px] px-5 py-3.5 shadow-sm transition-all">
+              <i class="fas fa-credit-card text-[var(--pp-primary)]"></i> <span data-i18n="cashout_pp_card">Tarjeta Punto Pago</span>
             </button>
           </div>
         </div>
 
         <!-- State: Bank account exists -->
         <div id="has-bank-state" class="hidden">
-          <div class="flex items-center p-4 border border-blue-100 bg-blue-50/50 rounded-2xl" id="method-container-bg">
-            <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 text-xl mr-4 shrink-0 border border-gray-100" id="method-icon-wrap">
+          <div class="flex items-center p-4 border border-[rgba(84,98,230,.14)] bg-[rgba(84,98,230,.08)] rounded-[24px]" id="method-container-bg">
+            <div class="w-12 h-12 bg-white rounded-[18px] shadow-sm flex items-center justify-center text-[var(--pp-primary)] text-xl mr-4 shrink-0 border border-gray-100" id="method-icon-wrap">
               <i class="fas fa-piggy-bank" id="method-icon"></i>
             </div>
             <div class="min-w-0 flex-1">
               <div class="font-bold text-gray-900 truncate" id="bank-name-display">Banco General</div>
               <div class="text-sm text-gray-500 truncate mt-0.5"><span id="bank-type-display">Ahorros</span> •••• <span id="bank-number-display">1234</span></div>
             </div>
-            <button id="btn-edit-bank" type="button" class="text-blue-600 hover:text-blue-800 p-2 font-bold text-sm" data-i18n="cashout_change_method">Cambiar</button>
+            <button id="btn-edit-bank" type="button" class="pp-btn pp-btn-secondary h-10 rounded-[18px] px-3 text-sm font-bold" data-i18n="cashout_change_method">Cambiar</button>
           </div>
         </div>
       </div>
@@ -91,10 +91,10 @@
       <div class="relative mb-6">
         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-xl">$</span>
   <input type="number" id="cashout-amount" class="w-full pl-9 pr-4 py-4 rounded-[24px] border-2 border-gray-200 focus:border-[color:var(--pp-primary)] focus:ring-4 focus:ring-[rgba(84,98,230,.14)] font-black text-2xl outline-none transition-all" placeholder="0.00" step="0.01">
-  <button id="btn-max-amount" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-200">MAX</button>
+  <button id="btn-max-amount" type="button" class="pp-btn pp-btn-secondary absolute right-3 top-1/2 h-9 -translate-y-1/2 rounded-[14px] bg-gray-100 px-3 py-0 text-xs font-bold text-gray-600 hover:bg-gray-200">MAX</button>
       </div>
 
-  <button id="btn-submit-cashout" type="button" class="w-full text-center py-4 bg-[color:var(--pp-primary)] text-white font-extrabold rounded-[24px] shadow-lg opacity-50 cursor-not-allowed transition-all" disabled data-i18n="cashout_transfer_funds">Transferir fondos a mi cuenta</button>
+  <button id="btn-submit-cashout" type="button" class="pp-btn pp-btn-primary -full justify-center py-4 text-center font-extrabold shadow-lg opacity-50 cursor-not-allowed transition-all" disabled data-i18n="cashout_transfer_funds">Transferir fondos a mi cuenta</button>
       <p class="text-xs text-center text-gray-400 mt-3 font-medium"><i class="fas fa-info-circle mr-1"></i> <span data-i18n="cashout_ach_info">Retiros ACH toman de 24 a 48 hs hábiles.</span></p>
     </div>
 
@@ -111,7 +111,7 @@
       <div class="p-6 overflow-y-auto space-y-5">
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_destination_account">Banco de destino</label>
-          <select id="input-bank-name" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 bg-white font-medium">
+          <select id="input-bank-name" class="pp-field h-auto min-h-[54px] px-4 py-3.5 font-medium">
             <option value="" data-i18n="cashout_select_bank">Seleccione banco...</option>
             <option value="Banco General">Banco General</option>
             <option value="Banistmo">Banistmo</option>
@@ -124,11 +124,11 @@
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_account_type">Tipo de cuenta</label>
           <div class="grid grid-cols-2 gap-3">
-            <label class="relative flex items-center justify-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(input:checked)]:border-blue-500 [&:has(input:checked)]:bg-blue-50/50">
+            <label class="relative flex items-center justify-center rounded-[20px] border-2 border-gray-200 p-3 cursor-pointer transition-colors hover:bg-gray-50 [&:has(input:checked)]:border-[color:var(--pp-primary)] [&:has(input:checked)]:bg-[rgba(84,98,230,.08)]">
               <input type="radio" name="bank-type" value="Ahorros" class="sr-only" checked>
               <span class="font-semibold text-gray-700" data-i18n="cashout_savings">Ahorros</span>
             </label>
-            <label class="relative flex items-center justify-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors [&:has(input:checked)]:border-blue-500 [&:has(input:checked)]:bg-blue-50/50">
+            <label class="relative flex items-center justify-center rounded-[20px] border-2 border-gray-200 p-3 cursor-pointer transition-colors hover:bg-gray-50 [&:has(input:checked)]:border-[color:var(--pp-primary)] [&:has(input:checked)]:bg-[rgba(84,98,230,.08)]">
               <input type="radio" name="bank-type" value="Corriente" class="sr-only" >
               <span class="font-semibold text-gray-700" data-i18n="cashout_checking">Corriente</span>
             </label>
@@ -136,14 +136,14 @@
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_account_number">Número de cuenta</label>
-          <input type="number" id="input-bank-number" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 font-bold tracking-widest outline-none" placeholder="0000000000" inputmode="numeric">
+          <input type="number" id="input-bank-number" class="pp-field h-auto min-h-[54px] px-4 py-3.5 font-bold tracking-widest" placeholder="0000000000" inputmode="numeric">
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_account_owner">Titular de la cuenta</label>
-          <input type="text" id="input-bank-owner" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 font-medium outline-none" placeholder="Nombre completo" data-i18n-ph="cashout_ph_name">
+          <input type="text" id="input-bank-owner" class="pp-field h-auto min-h-[54px] px-4 py-3.5 font-medium" placeholder="Nombre completo" data-i18n-ph="cashout_ph_name">
         </div>
 
-        <button type="button" id="save-bank-btn" class="w-full mt-4 py-4 bg-gray-900 text-white font-bold rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors" disabled>
+        <button type="button" id="save-bank-btn" class="pp-btn pp-btn-primary -full mt-4 justify-center py-4 shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
           <span data-i18n="cashout_save_account">Guardar cuenta</span>
         </button>
       </div>
@@ -155,24 +155,24 @@
     <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" id="card-modal-bg"></div>
     <div class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[90vh]" id="card-modal-sheet">
       <div class="flex items-center justify-between p-6 border-b border-gray-100">
-        <h3 class="text-xl font-extrabold flex items-center gap-2"><i class="fas fa-credit-card text-orange-500"></i> <span data-i18n="cashout_pp_card">Tarjeta Punto Pago</span></h3>
+  <h3 class="text-xl font-extrabold flex items-center gap-2"><i class="fas fa-credit-card text-[var(--pp-primary)]"></i> <span data-i18n="cashout_pp_card">Tarjeta Punto Pago</span></h3>
         <button type="button" id="close-card-modal" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200"><i class="fas fa-times"></i><span class="sr-only">Cerrar</span></button>
       </div>
       <div class="p-6 overflow-y-auto space-y-5">
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_card_number">Número de tarjeta</label>
-          <input type="text" id="input-card-number" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-bold tracking-widest outline-none" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
+          <input type="text" id="input-card-number" class="pp-field h-auto min-h-[54px] px-4 py-3.5 font-bold tracking-widest" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
         </div>
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_card_name">Nombre en la tarjeta</label>
-          <input type="text" id="input-card-owner" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-medium outline-none" placeholder="Nombre completo" data-i18n-ph="cashout_ph_name">
+          <input type="text" id="input-card-owner" class="pp-field h-auto min-h-[54px] px-4 py-3.5 font-medium" placeholder="Nombre completo" data-i18n-ph="cashout_ph_name">
         </div>
         <div class="w-1/2">
           <label class="block text-sm font-bold text-gray-700 mb-1.5" data-i18n="cashout_card_expiry">Vencimiento</label>
-          <input type="text" id="input-card-expiry" class="w-full px-4 py-3.5 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 font-medium outline-none" placeholder="MM/AA" maxlength="5">
+          <input type="text" id="input-card-expiry" class="pp-field h-auto min-h-[54px] px-4 py-3.5 font-medium" placeholder="MM/AA" maxlength="5">
         </div>
 
-        <button type="button" id="save-card-btn" class="w-full mt-4 py-4 bg-gray-900 text-white font-bold rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors" disabled>
+        <button type="button" id="save-card-btn" class="pp-btn pp-btn-primary -full mt-4 justify-center py-4 shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
           <span data-i18n="cashout_link_card">Vincular tarjeta</span>
         </button>
       </div>
@@ -232,15 +232,15 @@
             els.bankTypeDisp.textContent = t('cashout_prepaid', 'Prepagada');
             els.bankNumDisp.textContent = savedMethod.data.number.slice(-4);
             els.methodIcon.className = "fas fa-credit-card";
-            els.methodIconWrap.className = "w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-orange-500 text-xl mr-4 shrink-0 border border-gray-100";
-            els.methodContainerBg.className = "flex items-center p-4 border border-orange-100 bg-orange-50/50 rounded-2xl";
+            els.methodIconWrap.className = "w-12 h-12 bg-white rounded-[18px] shadow-sm flex items-center justify-center text-[var(--pp-primary)] text-xl mr-4 shrink-0 border border-gray-100";
+            els.methodContainerBg.className = "flex items-center p-4 border border-[rgba(84,98,230,.14)] bg-[rgba(84,98,230,.08)] rounded-[24px]";
           } else {
             els.bankNameDisp.textContent = savedMethod.data.bankName;
             els.bankTypeDisp.textContent = savedMethod.data.type;
             els.bankNumDisp.textContent = savedMethod.data.number.slice(-4);
             els.methodIcon.className = "fas fa-piggy-bank";
-            els.methodIconWrap.className = "w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 text-xl mr-4 shrink-0 border border-gray-100";
-            els.methodContainerBg.className = "flex items-center p-4 border border-blue-100 bg-blue-50/50 rounded-2xl";
+            els.methodIconWrap.className = "w-12 h-12 bg-white rounded-[18px] shadow-sm flex items-center justify-center text-[var(--pp-primary)] text-xl mr-4 shrink-0 border border-gray-100";
+            els.methodContainerBg.className = "flex items-center p-4 border border-[rgba(84,98,230,.14)] bg-[rgba(84,98,230,.08)] rounded-[24px]";
           }
         } else {
           els.noBank.classList.remove('hidden');
@@ -257,11 +257,11 @@
         if (val > 0 && val <= config.totalBalance) {
           els.submitBtn.disabled = false;
           els.submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-          els.submitBtn.classList.add('hover:bg-blue-800', 'hover:shadow-xl');
+          els.submitBtn.classList.add('hover:brightness-[1.02]', 'hover:shadow-xl');
         } else {
           els.submitBtn.disabled = true;
           els.submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-          els.submitBtn.classList.remove('hover:bg-blue-800', 'hover:shadow-xl');
+          els.submitBtn.classList.remove('hover:brightness-[1.02]', 'hover:shadow-xl');
         }
       }
 
@@ -355,11 +355,11 @@
         localStorage.setItem('pp_agent_cashout_method_v2', JSON.stringify(savedMethod));
         
   mBankSaveBtn.innerHTML = `<i class="fas fa-check"></i> ${t('cashout_saved', 'Guardado')}`;
-        mBankSaveBtn.classList.replace('bg-gray-900', 'bg-emerald-600');
+  mBankSaveBtn.classList.replace('bg-[color:var(--pp-primary)]', 'bg-emerald-600');
         
         setTimeout(() => {
           mBankSaveBtn.innerHTML = `<span data-i18n="cashout_save_account">Guardar cuenta</span>`;
-          mBankSaveBtn.classList.replace('bg-emerald-600', 'bg-gray-900');
+          mBankSaveBtn.classList.replace('bg-emerald-600', 'bg-[color:var(--pp-primary)]');
           closeBankModal();
           renderState();
         }, 600);
@@ -434,11 +434,11 @@
         localStorage.setItem('pp_agent_cashout_method_v2', JSON.stringify(savedMethod));
         
   mCardSaveBtn.innerHTML = `<i class="fas fa-check"></i> ${t('cashout_linked', 'Vinculada')}`;
-        mCardSaveBtn.classList.replace('bg-gray-900', 'bg-orange-500');
+  mCardSaveBtn.classList.replace('bg-[color:var(--pp-primary)]', 'bg-emerald-600');
         
         setTimeout(() => {
           mCardSaveBtn.innerHTML = `<span data-i18n="cashout_link_card">Vincular tarjeta</span>`;
-          mCardSaveBtn.classList.replace('bg-orange-500', 'bg-gray-900');
+          mCardSaveBtn.classList.replace('bg-emerald-600', 'bg-[color:var(--pp-primary)]');
           closeCardModal();
           renderState();
         }, 600);
