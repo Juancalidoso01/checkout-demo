@@ -3,31 +3,34 @@
 <head>
     <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0047bb">
-    <title>Demo Checkout - Botón</title>
+  <meta name="theme-color" content="#5462e6">
+  <title data-i18n="checkout_title">Demo Checkout - Botón</title>
     <meta name="description" content="Demo de botón de checkout con manejo de estados y accesibilidad">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
-      :root { --punto-pago-blue: #0047bb; }
-      .bg-punto-pago { background-color: var(--punto-pago-blue); }
-      .tab-active { border-bottom: 4px solid var(--punto-pago-blue); }
+      :root { --punto-pago-blue: var(--pp-primary); }
+      body { background: var(--pp-page, #ffffff); font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
+      .bg-punto-pago { background: linear-gradient(135deg, var(--pp-primary), var(--pp-primary-900)); }
+      .tab-active { border-bottom: 4px solid var(--pp-primary); }
       .section-fade { animation: fadeIn 0.25s ease-in-out; }
+      .checkout-shell { width: 100%; max-width: 960px; margin: 0 auto; }
+      .checkout-surface { background: var(--pp-bg); border: 1px solid rgba(0,0,0,.06); border-radius: var(--pp-radius-md); box-shadow: var(--pp-shadow-card); }
       @keyframes fadeIn { from { opacity:0; transform:translateY(6px);} to {opacity:1; transform:translateY(0);} }
     </style>
   </head>
   <body class="min-h-[100dvh] flex flex-col overflow-x-hidden">
 
-    <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
-      <div class="mx-auto flex justify-between items-center w-full">
+    <nav class="bg-punto-pago text-white px-4 py-4 shadow-lg sticky top-0 z-40 pp-type">
+      <div class="checkout-shell flex justify-between items-center w-full">
         <div class="flex items-center space-x-2">
-          <div class="bg-white p-1 rounded-md"><i class="fas fa-wallet text-blue-600 text-xl"></i></div>
-          <span class="text-xl font-bold tracking-tight uppercase">Punto Pago — Checkout</span>
+          <div class="bg-white/95 p-2 rounded-2xl shadow-sm"><i class="fas fa-wallet text-[color:var(--pp-primary)] text-xl"></i></div>
+          <span class="text-lg md:text-xl font-extrabold tracking-tight" data-i18n="checkout_nav_title">Punto Pago — Checkout</span>
         </div>
         <div class="flex items-center space-x-6">
           <div class="text-right hidden md:block">
-            <p class="text-xs opacity-80 font-semibold uppercase">Saldo Disponible</p>
+            <p class="text-xs opacity-80 font-semibold uppercase" data-i18n="checkout_available_balance">Saldo Disponible</p>
             <p class="text-lg font-bold" id="balance-display">$0.00</p>
           </div>
           <div class="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
@@ -37,10 +40,10 @@
       </div>
     </nav>
 
-  <main class="demo-container mx-auto py-8 px-4 flex-grow">
-      <section class="bg-white rounded-2xl shadow-xl p-8 section-fade" aria-labelledby="headline">
-        <h1 id="headline" class="text-2xl font-bold mb-2">Pagar pedido</h1>
-        <p class="lead text-gray-600 mb-4">Precio total:</p>
+  <main class="demo-container py-8 px-4 flex-grow">
+    <section class="checkout-shell checkout-surface p-6 md:p-8 section-fade" aria-labelledby="headline">
+  <h1 id="headline" class="text-2xl font-bold mb-2" data-i18n="checkout_heading">Pagar pedido</h1>
+  <p class="lead text-gray-600 mb-4" data-i18n="checkout_price_total">Precio total:</p>
 
       <div class="price-box" aria-hidden="false">
         <div class="amount" id="price">USD 19.99</div>
@@ -51,7 +54,7 @@
         <img src="assets/hero-illustration.svg" alt="Ilustración de pago">
         <div class="hero-text">
           <h2 data-i18n="checkout_secure">Pago seguro y rápido</h2>
-          <p class="muted">Elige tu método preferido. Este demo no realiza cargos reales.</p>
+          <p class="muted" data-i18n="checkout_hero_desc">Elige tu método preferido. Este demo no realiza cargos reales.</p>
         </div>
       </div>
 
@@ -62,7 +65,7 @@
       </div>
       <!-- Demo mode: permite cualquier dato para pruebas -->
       <div class="demo-toggle">
-        <label><input type="checkbox" id="demoMode" checked> Modo demo: aceptar cualquier dato</label>
+  <label><input type="checkbox" id="demoMode" checked> <span data-i18n="checkout_demo_mode_label">Modo demo: aceptar cualquier dato</span></label>
       </div>
 
         <!-- PuntoPago APP registration removed: all methods available, no restrictions -->
@@ -72,12 +75,12 @@
       <form id="checkoutForm" novalidate>
         <!-- Información del pedido -->
         <div class="row">
-          <div class="muted" id="orderLabel">Pedido: ENSA prepago</div>
+          <div class="muted" id="orderLabel" data-i18n="checkout_order_label">Pedido: ENSA prepago</div>
         </div>
 
         <!-- Selección de método de pago -->
         <fieldset>
-          <legend class="muted">Selecciona el método de pago</legend>
+          <legend class="muted" data-i18n="checkout_select_method_legend">Selecciona el método de pago</legend>
           <div class="row col radio-list">
             <label>
               <input type="radio" name="payMethod" value="card">
@@ -94,7 +97,7 @@
                   </g>
                 </svg>
               </span>
-              Tarjeta — Visa / Mastercard
+              <span data-i18n="checkout_card_option">Tarjeta — Visa / Mastercard</span>
             </label>
 
             <label>
@@ -106,7 +109,7 @@
                   <text x="8" y="18" font-size="9" font-family="Arial, Helvetica, sans-serif" fill="#0b6cff">CLAVE</text>
                 </svg>
               </span>
-              Clave (tarjeta Panamá)
+              <span data-i18n="checkout_clave_option">Clave (tarjeta Panamá)</span>
             </label>
 
             <label>
@@ -118,7 +121,7 @@
                   <rect x="9" y="7" width="6" height="2" rx="1" fill="#0b6cff" />
                 </svg>
               </span>
-              Yappy
+              <span data-i18n="checkout_yappy_option">Yappy</span>
             </label>
 
             <label>
@@ -166,11 +169,11 @@
           <!-- Tarjeta -->
           <div id="cardContainer" hidden>
             <div class="card-field">
-              <label for="cardName" class="muted">Nombre en la tarjeta</label>
+              <label for="cardName" class="muted" data-i18n="checkout_card_name_label">Nombre en la tarjeta</label>
               <input id="cardName" name="cardName" type="text" placeholder="Nombre Apellido" data-i18n="checkout_ph_name" autocomplete="cc-name" required>
             </div>
             <div class="card-field">
-              <label for="cardNumber" class="muted">Número de tarjeta</label>
+              <label for="cardNumber" class="muted" data-i18n="checkout_card_number_label">Número de tarjeta</label>
               <input id="cardNumber" name="cardNumber" inputmode="numeric" pattern="[0-9 ]*" type="text" maxlength="19" placeholder="4242 4242 4242 4242" autocomplete="cc-number" required>
             </div>
             <div class="row card-row-gap">
@@ -187,9 +190,9 @@
 
           <!-- Yappy -->
           <div id="yappyContainer" hidden>
-            <p class="muted">Se abrirá el flujo de Yappy. Ingresa tu celular o escanea el QR en la app.</p>
+            <p class="muted" data-i18n="checkout_yappy_desc">Se abrirá el flujo de Yappy. Ingresa tu celular o escanea el QR en la app.</p>
             <div class="small-note">
-              <label for="yappyPhone" class="muted">Teléfono asociado</label>
+              <label for="yappyPhone" class="muted" data-i18n="checkout_associated_phone">Teléfono asociado</label>
               <input id="yappyPhone" type="tel" inputmode="tel" pattern="[0-9+ ]*" placeholder="+593 9XXXXXXXX" data-i18n="checkout_ph_phone" autocomplete="tel" aria-label="Teléfono Yappy">
             </div>
           </div>
@@ -211,13 +214,13 @@
 
           <!-- Clave -->
           <div id="claveContainer" hidden>
-            <p class="muted">Ingresa tu número de documento y la clave para autorizar el pago.</p>
+            <p class="muted" data-i18n="checkout_clave_desc">Ingresa tu número de documento y la clave para autorizar el pago.</p>
             <div class="small-note">
-              <label for="docNumber" class="muted">Documento</label>
+              <label for="docNumber" class="muted" data-i18n="checkout_document_label">Documento</label>
               <input id="docNumber" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Cédula / ID" data-i18n="checkout_ph_id" autocomplete="off">
             </div>
             <div class="small-note">
-              <label for="claveInput" class="muted">Clave</label>
+              <label for="claveInput" class="muted" data-i18n="checkout_clave_label">Clave</label>
                 <input id="claveInput" type="password" placeholder="******" autocomplete="current-password">
             </div>
           </div>
@@ -225,9 +228,9 @@
 
         <div class="sim-panel" id="simPanel">
           <div class="sim-steps" id="simSteps">
-            <div class="sim-step" data-step="validating"><span class="dot"></span> Validando</div>
+            <div class="sim-step" data-step="validating"><span class="dot"></span><span data-i18n="checkout_sim_validating">Validando</span></div>
             <div class="sim-step" data-step="processing"><span class="dot"></span><span data-i18n="checkout_processing">Procesando</span></div>
-            <div class="sim-step" data-step="final"><span class="dot"></span> Resultado</div>
+            <div class="sim-step" data-step="final"><span class="dot"></span><span data-i18n="checkout_sim_result">Resultado</span></div>
           </div>
         </div>
 
@@ -240,10 +243,10 @@
           </div>
         </div>
           <!-- Hidden submit to satisfy accessibility/linter and allow Enter key to submit -->
-          <button type="submit" class="sr-only">Enviar</button>
+          <button type="submit" class="sr-only" data-i18n="checkout_submit">Enviar</button>
         </form>
 
-        <p class="muted demo-note mt-6">Esto es una demo local. Reemplaza la lógica en <code>processPayment()</code> para integrar con tu API o proveedor de pagos.</p>
+  <p class="muted demo-note mt-6" data-i18n="checkout_demo_note">Esto es una demo local. Reemplaza la lógica en <code>processPayment()</code> para integrar con tu API o proveedor de pagos.</p>
         </section>
       </main>
 

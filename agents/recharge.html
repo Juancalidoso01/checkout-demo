@@ -11,16 +11,17 @@
   <script src="../auth.js"></script>
   <style>
     :root {
-      --punto-pago-blue: #0047bb;
-      --punto-pago-cyan: #00adef;
-      --punto-pago-dark: #1a1a1a;
+      --punto-pago-blue: var(--pp-primary);
+      --punto-pago-cyan: var(--pp-primary-900);
+      --punto-pago-dark: var(--pp-text);
     }
     body {
-      background-color: #f3f4f6;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--pp-page, #ffffff);
+      font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
+      color: var(--pp-text, #171717);
     }
-    .bg-punto-pago { background-color: var(--punto-pago-blue); }
-    .text-punto-pago { color: var(--punto-pago-blue); }
+    .bg-punto-pago { background: linear-gradient(135deg, var(--pp-primary), var(--pp-primary-900)); }
+    .text-punto-pago { color: var(--pp-primary); }
     .btn-primary {
       background: linear-gradient(135deg, var(--punto-pago-blue), var(--punto-pago-cyan));
       transition: all 0.3s ease;
@@ -30,8 +31,8 @@
       transform: translateY(-1px);
     }
     .tab-active {
-      border-bottom: 4px solid var(--punto-pago-blue);
-      color: var(--punto-pago-blue);
+      border-bottom: 4px solid var(--pp-primary);
+      color: var(--pp-primary);
     }
     .tab-inactive {
       border-bottom: 4px solid transparent;
@@ -67,7 +68,7 @@
   </script>
 
   <!-- Header / Navbar -->
-  <nav class="bg-punto-pago text-white shadow-lg sticky top-0 z-40">
+  <nav class="bg-punto-pago text-white shadow-lg sticky top-0 z-40 pp-type">
     <div class="mx-auto w-full max-w-4xl px-4 py-3 md:py-4">
       <div class="flex items-start md:items-center justify-between gap-3 md:gap-4">
         <!-- Brand / Menu Toggle -->
@@ -77,16 +78,16 @@
             <span class="sr-only" data-i18n="agent_open_menu">Abrir menú</span>
           </a>
           <div class="flex flex-col min-w-0 flex-1 overflow-hidden pt-0.5">
-            <div class="font-extrabold text-[13px] sm:text-[15px] md:text-base leading-tight tracking-wide truncate" data-i18n="agent_my_store">MI TIENDA</div>
-            <div class="text-[8px] sm:text-[9px] md:text-[10px] text-white/70 font-medium tracking-[0.12em] uppercase truncate" data-i18n="agent_store_subtitle">AGENTE PUNTO PAGO</div>
+            <div class="font-extrabold text-sm sm:text-[15px] md:text-base leading-tight tracking-tight truncate" data-i18n="agent_my_store">MI TIENDA</div>
+            <div class="text-[10px] md:text-[11px] text-white/70 font-semibold tracking-[0.12em] uppercase truncate" data-i18n="agent_store_subtitle">AGENTE PUNTO PAGO</div>
           </div>
         </div>
 
         <!-- Right: balance + actions -->
   <div class="flex items-start md:items-center gap-2 md:gap-4 shrink-0 ml-auto">
           <div class="text-right leading-tight min-w-0">
-            <div class="text-[9px] md:text-xs opacity-85 font-extrabold uppercase tracking-wide" data-i18n="agent_balance">Saldo</div>
-            <div class="text-[15px] sm:text-[18px] md:text-xl font-extrabold whitespace-nowrap" id="balance-display">$1,250.45</div>
+            <div class="text-[10px] md:text-xs opacity-85 font-extrabold uppercase tracking-wide" data-i18n="agent_balance">Saldo</div>
+            <div class="text-base sm:text-[18px] md:text-xl font-extrabold whitespace-nowrap" id="balance-display">$1,250.45</div>
             <div class="hidden sm:block text-[10px] md:text-xs text-white/90"><span data-i18n="agent_cash_label">Efectivo</span>: <span id="cash-in-header" class="font-semibold">$342.10</span></div>
           </div>
 

@@ -10,17 +10,18 @@
   <script src="auth.js"></script>
   <script src="i18n.js?v=5"></script>
   <style>
-    body { background: #f3f4f6; font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
-    .settings-container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+    body { background: var(--pp-page, #ffffff); font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
+    .settings-container { max-width: 720px; margin: 0 auto; padding: 24px 20px 80px; }
     .nav-header { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
+    .pp-header-gradient { background: linear-gradient(135deg, var(--pp-primary), var(--pp-primary-900)); }
     
-    .settings-group { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 24px; border: 1px solid #f0f0f0; }
+    .settings-group { background: var(--pp-bg); border-radius: var(--pp-radius-md); overflow: hidden; box-shadow: var(--pp-shadow-card); margin-bottom: 24px; border: 1px solid rgba(0,0,0,.06); }
     .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background 0.2s; }
     .settings-item:active, .settings-item:hover { background: #f9fafb; }
     .settings-item:last-child { border-bottom: none; }
-    .settings-item-title { font-weight: 600; color: #1f2937; font-size: 0.95rem; }
-    .settings-item-sub { color: #6b7280; font-size: 0.8rem; margin-top: 2px; }
-    .settings-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 14px; font-size: 14px; }
+    .settings-item-title { font-weight: 700; color: var(--pp-text); font-size: 0.98rem; letter-spacing: -.01em; }
+    .settings-item-sub { color: #6b7280; font-size: 0.82rem; margin-top: 2px; }
+    .settings-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 14px; font-size: 14px; }
     
     .bg-blue-soft { background: #eff6ff; color: #3b82f6; }
     .bg-indigo-soft { background: #e0e7ff; color: #4f46e5; }
@@ -37,13 +38,13 @@
 </head>
 <body class="min-h-screen">
   
-  <nav class="bg-[#0047bb] text-white shadow-md sticky top-0 z-40 nav-header pb-3 px-4">
+  <nav class="pp-header-gradient text-white shadow-lg sticky top-0 z-40 nav-header pb-3 px-4">
     <div class="max-w-4xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="agents/recharge.html" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+        <a href="agents/recharge.html" class="w-10 h-10 flex items-center justify-center rounded-2xl bg-white/10 hover:bg-white/20 transition-colors border border-white/15" aria-label="Volver al portal de agentes">
           <i class="fas fa-arrow-left"></i>
         </a>
-        <h1 class="font-extrabold text-lg" data-i18n="settings_title">Ajustes</h1>
+        <h1 class="font-extrabold text-lg tracking-tight" data-i18n="settings_title">Ajustes</h1>
       </div>
       <div class="hidden sm:block text-xs text-white/80">
         <span data-pp-session></span>
@@ -71,21 +72,21 @@
         <div class="space-y-3">
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_fullname">Nombre completo</label>
-            <input id="agent-name" type="text" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+            <input id="agent-name" type="text" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_id">Cédula / ID</label>
-            <input id="agent-id" type="text" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+            <input id="agent-id" type="text" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_email">Correo electrónico</label>
-            <input id="agent-email" type="email" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+            <input id="agent-email" type="email" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_phone">Teléfono</label>
-            <input id="agent-phone" type="tel" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
+            <input id="agent-phone" type="tel" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
-          <button id="saveAgent" class="w-full bg-[#0047bb] text-white py-2.5 rounded-lg font-bold text-sm shadow mt-2" data-i18n="setup_save">Guardar datos</button>
+          <button id="saveAgent" type="button" class="pp-btn pp-btn-primary -full mt-2" data-i18n="setup_save">Guardar datos</button>
         </div>
       </div>
 
@@ -230,7 +231,7 @@
         <div class="flex items-center">
           <div class="settings-icon bg-indigo-soft"><i class="fas fa-user-shield"></i></div>
           <div>
-            <div class="settings-item-title">Preferencias de privacidad</div>
+            <div class="settings-item-title" data-i18n="setup_privacy_preferences">Preferencias de privacidad</div>
           </div>
         </div>
         <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
@@ -244,7 +245,7 @@
         <div class="flex items-center">
           <div class="settings-icon bg-gray-soft"><i class="fas fa-file-contract"></i></div>
           <div>
-            <div class="settings-item-title">Términos y condiciones</div>
+            <div class="settings-item-title" data-i18n="setup_terms_conditions">Términos y condiciones</div>
           </div>
         </div>
         <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
@@ -253,7 +254,7 @@
         <div class="flex items-center">
           <div class="settings-icon bg-gray-soft"><i class="fas fa-user-secret"></i></div>
           <div>
-            <div class="settings-item-title">Política de privacidad</div>
+            <div class="settings-item-title" data-i18n="setup_privacy_policy">Política de privacidad</div>
           </div>
         </div>
         <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
@@ -262,7 +263,7 @@
         <div class="flex items-center">
           <div class="settings-icon bg-gray-soft"><i class="fas fa-file-signature"></i></div>
           <div>
-            <div class="settings-item-title">Contratos del servicio</div>
+            <div class="settings-item-title" data-i18n="setup_service_contracts">Contratos del servicio</div>
           </div>
         </div>
         <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
@@ -300,25 +301,25 @@
         <div class="space-y-3">
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_adjust_balance">Ajustar Saldo (USD)</label>
-            <input id="balance-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg focus:ring-center bg-white text-sm">
+            <input id="balance-input" type="number" step="0.01" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_adjust_cash">Ajustar Efectivo/Caja (USD)</label>
-            <input id="cash-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg bg-white text-sm">
+            <input id="cash-input" type="number" step="0.01" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_adjust_gain">Ajustar Comisiones (USD)</label>
-            <input id="gain-input" type="number" step="0.01" class="w-full p-2.5 border rounded-lg bg-white text-sm">
+            <input id="gain-input" type="number" step="0.01" class="pp-field h-auto min-h-[46px] text-sm px-4">
           </div>
           <div class="flex gap-2 pt-2">
-            <button id="applyFin" class="flex-1 bg-[#0047bb] text-white py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_apply">Aplicar</button>
-            <button id="resetSandbox" class="flex-1 bg-gray-200 text-gray-800 py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_reset">Resetear</button>
+            <button id="applyFin" type="button" class="pp-btn pp-btn-primary flex-1" data-i18n="setup_btn_apply">Aplicar</button>
+            <button id="resetSandbox" type="button" class="pp-btn pp-btn-secondary flex-1 !bg-gray-100 !text-gray-800 rounded-[16px]" data-i18n="setup_btn_reset">Resetear</button>
           </div>
           <hr class="my-4">
-          <textarea id="importArea" rows="4" class="w-full p-2.5 border rounded-lg bg-white text-xs font-mono" placeholder="Pegar JSON para importar..." data-i18n-ph="setup_import_placeholder"></textarea>
+          <textarea id="importArea" rows="4" class="w-full p-4 border rounded-[20px] bg-white text-xs font-mono border-[color:var(--pp-border)] focus:outline-none focus:ring-4 focus:ring-[rgba(84,98,230,.12)]" placeholder="Pegar JSON para importar..." data-i18n-ph="setup_import_placeholder"></textarea>
           <div class="flex gap-2">
-            <button id="importBtn" class="flex-1 bg-gray-800 text-white py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_import">Importar</button>
-            <button id="clearAll" class="flex-1 bg-red-100 text-red-600 py-2.5 rounded-lg font-bold text-sm" data-i18n="setup_btn_clear">Borrar Locales</button>
+            <button id="importBtn" type="button" class="pp-btn flex-1 justify-center rounded-[16px] bg-gray-900 text-white py-3 font-bold text-sm" data-i18n="setup_btn_import">Importar</button>
+            <button id="clearAll" type="button" class="pp-btn flex-1 justify-center rounded-[16px] bg-red-100 text-red-600 py-3 font-bold text-sm" data-i18n="setup_btn_clear">Borrar Locales</button>
           </div>
         </div>
       </div>
