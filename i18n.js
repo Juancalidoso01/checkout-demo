@@ -1359,12 +1359,21 @@ window.I18N = {
       if (!key || !dict[key]) return;
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = dict[key];
+      } else if (el.tagName === 'OPTION') {
+        el.textContent = dict[key];
+      } else if (el.children.length > 0 && el.childNodes.length === 1) {
+        el.textContent = dict[key];
       } else if (el.children.length > 0) {
+        let replaced = false;
         el.childNodes.forEach(node => {
           if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
             node.textContent = dict[key];
+            replaced = true;
           }
         });
+        if (!replaced) {
+          el.textContent = dict[key];
+        }
       } else {
         el.textContent = dict[key];
       }

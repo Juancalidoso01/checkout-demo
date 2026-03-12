@@ -13,13 +13,11 @@
     .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
     .login-lang-select{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:14px;padding:.6rem 2.2rem .6rem .85rem;appearance:none;-webkit-appearance:none;-moz-appearance:none;font-size:.875rem;font-weight:700;line-height:1.2;outline:none}
     .login-lang-select option{color:#111827}
-    .login-brand-chip{background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.5);box-shadow:0 14px 34px rgba(55,56,171,.16)}
     .login-hero{background:linear-gradient(180deg, rgba(84,98,230,.08), rgba(255,255,255,0) 220px)}
     @media (max-width: 640px){
       .login-nav-wrap{display:flex;flex-direction:column;align-items:stretch;gap:.85rem}
       .login-nav-main{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-width:0}
       .login-nav-title{font-size:1rem;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-      .login-nav-logo{display:none}
       .login-nav-actions{display:flex;justify-content:flex-end}
       .login-lang-select{width:100%;min-width:132px;padding:.62rem 2rem .62rem .8rem;font-size:.8125rem}
       .login-welcome-badge{display:none}
@@ -32,9 +30,6 @@
     <div class="mx-auto w-full max-w-5xl px-4 login-nav-wrap">
       <div class="login-nav-main">
         <div class="flex items-center gap-3 min-w-0">
-        <div class="login-brand-chip login-nav-logo rounded-2xl flex items-center justify-center w-[172px] h-12 md:h-[54px] px-4">
-          <img src="assets/logo-header.png" alt="Punto Pago" class="h-8 md:h-9 w-auto max-w-[148px] object-contain">
-        </div>
         <span class="login-nav-title text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap" data-i18n="login_header">Acceso</span>
         </div>
         <div class="login-nav-actions flex items-center gap-3 shrink-0">
