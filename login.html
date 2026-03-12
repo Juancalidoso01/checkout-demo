@@ -10,7 +10,11 @@
   <link rel="stylesheet" href="styles.css">
   <style>
     body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
-    .bg-punto-pago{background:#0047bb}
+    .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
+    .login-lang-select{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:14px;padding:.6rem 2.2rem .6rem .85rem;appearance:none;-webkit-appearance:none;-moz-appearance:none;font-size:.875rem;font-weight:700;line-height:1.2;outline:none}
+    .login-lang-select option{color:#111827}
+    .login-brand-chip{background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.5);box-shadow:0 14px 34px rgba(55,56,171,.16)}
+    .login-hero{background:linear-gradient(180deg, rgba(84,98,230,.08), rgba(255,255,255,0) 220px)}
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -18,20 +22,43 @@
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
     <div class="mx-auto flex justify-between items-center w-full max-w-5xl px-4">
       <div class="flex items-center gap-3 min-w-0">
-        <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
-          <img src="assets/logo-header-v2.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
+        <div class="login-brand-chip rounded-2xl flex items-center justify-center w-[172px] h-12 md:h-[54px] px-4">
+          <img src="assets/logo-header.png" alt="Punto Pago" class="h-8 md:h-9 w-auto max-w-[148px] object-contain">
         </div>
         <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap" data-i18n="login_header">Acceso</span>
       </div>
-      <div class="text-xs text-white/80 hidden md:block" data-i18n="login_demo_badge">Demo de banca en línea (roles)</div>
+      <div class="flex items-center gap-3 shrink-0">
+        <label for="lang-selector-login" class="sr-only" data-i18n="setup_language">Idioma</label>
+        <div class="relative">
+          <select id="lang-selector-login" class="login-lang-select">
+            <option value="es" data-i18n="lang_es">Español</option>
+            <option value="en" data-i18n="lang_en">Inglés</option>
+            <option value="ru" data-i18n="lang_ru">Ruso</option>
+            <option value="zh" data-i18n="lang_zh">Chino</option>
+          </select>
+          <i class="fas fa-chevron-down text-xs text-white/80 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"></i>
+        </div>
+        <div class="text-xs text-white/80 hidden md:block" data-i18n="login_demo_badge">Demo de banca en línea (roles)</div>
+      </div>
     </div>
   </nav>
 
-  <main class="pp-page flex-grow">
+  <main class="pp-page login-hero flex-grow">
     <div class="pp-shell">
       <div class="max-w-md mx-auto">
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
+            <div class="mb-4 rounded-[28px] border border-[rgba(84,98,230,.12)] bg-[rgba(84,98,230,.05)] px-4 py-4">
+              <div class="flex items-center gap-3">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm border border-[rgba(84,98,230,.12)]">
+                  <img src="assets/logo.png" alt="Punto Pago" class="h-7 w-7 object-contain">
+                </div>
+                <div>
+                  <div class="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--pp-primary)]">Punto Pago</div>
+                  <div class="text-sm text-gray-500" data-i18n="login_demo_badge">Demo de banca en línea (roles)</div>
+                </div>
+              </div>
+            </div>
             <h1 class="text-2xl font-extrabold pp-type" data-i18n="login_title">Iniciar sesión</h1>
             <p class="text-sm text-gray-500" data-i18n="login_subtitle">Ingresa tus credenciales para continuar.</p>
           </div>
@@ -116,7 +143,21 @@
         } catch(e){}
       }
 
+      function setupLangSelector(){
+        const langSel = document.getElementById('lang-selector-login');
+        if (!langSel || !window.I18N) return;
+        langSel.value = window.I18N.currentLang || localStorage.getItem('pp_lang') || 'es';
+        langSel.addEventListener('change', (e) => {
+          window.I18N.setLanguage(e.target.value);
+          syncTitle();
+        });
+        document.addEventListener('languageChanged', () => {
+          langSel.value = window.I18N.currentLang || 'es';
+        });
+      }
+
       syncTitle();
+      setupLangSelector();
       document.addEventListener('languageChanged', syncTitle);
     })();
   </script>
