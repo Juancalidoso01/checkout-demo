@@ -110,6 +110,7 @@
   </main>
 
   <script src="auth.js"></script>
+  <script src="i18n.js?v=7"></script>
   <script>
     (function(){
       const params = new URLSearchParams(location.search);
@@ -161,7 +162,7 @@
 
       function setupLangSelector(){
         const langSel = document.getElementById('lang-selector-login');
-        if (!langSel || !window.I18N) return;
+        if (!langSel || !window.I18N || typeof window.I18N.setLanguage !== 'function') return false;
         langSel.value = window.I18N.currentLang || localStorage.getItem('pp_lang') || 'es';
         langSel.addEventListener('change', (e) => {
           window.I18N.setLanguage(e.target.value);
@@ -170,13 +171,15 @@
         document.addEventListener('languageChanged', () => {
           langSel.value = window.I18N.currentLang || 'es';
         });
+        return true;
       }
 
       syncTitle();
-      setupLangSelector();
+      if (!setupLangSelector()) {
+        window.addEventListener('load', setupLangSelector, { once: true });
+      }
       document.addEventListener('languageChanged', syncTitle);
     })();
   </script>
-  <script src="i18n.js?v=7"></script>
 </body>
 </html>
