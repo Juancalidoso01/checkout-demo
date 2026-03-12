@@ -14,6 +14,12 @@
     .login-lang-select{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:14px;padding:.6rem 2.2rem .6rem .85rem;appearance:none;-webkit-appearance:none;-moz-appearance:none;font-size:.875rem;font-weight:700;line-height:1.2;outline:none}
     .login-lang-select option{color:#111827}
     .login-hero{background:linear-gradient(180deg, rgba(84,98,230,.08), rgba(255,255,255,0) 220px)}
+    .login-visual{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(84,98,230,.12);background:linear-gradient(135deg, rgba(84,98,230,.08), rgba(255,255,255,.92));min-height:180px}
+    .login-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,255,255,.94) 0%, rgba(255,255,255,.72) 38%, rgba(255,255,255,.18) 100%)}
+    .login-visual-media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;filter:saturate(.95) contrast(1.02)}
+    .login-visual-copy{position:relative;z-index:1;max-width:60%;padding:22px 20px}
+    .login-visual-kicker{font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--pp-primary,#5462e6);margin-bottom:.45rem}
+    .login-visual-text{font-size:.95rem;line-height:1.45;color:#4b5563}
     @media (max-width: 640px){
       .login-nav-wrap{display:flex;flex-direction:column;align-items:stretch;gap:.85rem}
       .login-nav-main{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-width:0}
@@ -21,6 +27,11 @@
       .login-nav-actions{display:flex;justify-content:flex-end}
       .login-lang-select{width:100%;min-width:132px;padding:.62rem 2rem .62rem .8rem;font-size:.8125rem}
       .login-welcome-badge{display:none}
+      .login-visual{min-height:148px}
+      .login-visual::after{background:linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.84) 45%, rgba(255,255,255,.32) 100%)}
+      .login-visual-copy{max-width:100%;padding:18px 16px 72px}
+      .login-visual-text{font-size:.88rem;max-width:18rem}
+      .login-visual-media{object-position:center}
     }
   </style>
 </head>
@@ -54,15 +65,11 @@
       <div class="max-w-md mx-auto">
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
-            <div class="mb-4 rounded-[28px] border border-[rgba(84,98,230,.12)] bg-[rgba(84,98,230,.05)] px-4 py-4">
-              <div class="flex items-center gap-3">
-                <div class="hidden sm:flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm border border-[rgba(84,98,230,.12)]">
-                  <img src="assets/hero-illustration.svg" alt="Punto Pago" class="h-7 w-7 object-contain">
-                </div>
-                <div>
-                  <div class="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--pp-primary)]">Punto Pago</div>
-                  <div class="text-sm text-gray-500" data-i18n="login_demo_badge">Demo de banca en línea (roles)</div>
-                </div>
+            <div class="login-visual mb-4">
+              <img src="https://puntopago.net/assets/headline/3@1.5x.jpg" alt="Punto Pago" class="login-visual-media">
+              <div class="login-visual-copy">
+                <div class="login-visual-kicker">Punto Pago</div>
+                <div class="login-visual-text" data-i18n="login_demo_badge">Demo de banca en línea (roles)</div>
               </div>
             </div>
             <h1 class="text-2xl font-extrabold pp-type" data-i18n="login_title">Iniciar sesión</h1>
