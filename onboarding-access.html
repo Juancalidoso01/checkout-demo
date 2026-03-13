@@ -40,9 +40,10 @@
   .hero-grid{display:grid;grid-template-columns:1fr;gap:20px;align-items:center}
   .hero-kicker{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;background:rgba(84,98,230,.08);border:1px solid rgba(84,98,230,.10);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-primary);transform:translateY(0);transition:transform .25s ease,box-shadow .25s ease}
   .hero-kicker:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(84,98,230,.12)}
-  .hero-title{font-size:clamp(2.3rem,4.25vw,4.7rem);line-height:.98;letter-spacing:-.09em;font-weight:900;color:#111827;margin:18px 0 14px;max-width:13.2ch;text-wrap:balance}
+  .hero-title{font-size:clamp(2.34rem,4.35vw,4.88rem);line-height:1.01;letter-spacing:-.098em;font-weight:900;color:#111827;margin:18px 0 14px;max-width:15.5ch;text-wrap:balance}
   .hero-title .hero-accent{color:#5a67f5}
   .hero-title .hero-dark{color:#111111}
+  .hero-title .hero-line{display:block}
   .hero-copy{font-size:16px;line-height:1.62;color:#475569;max-width:560px}
   .hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
   .hero-primary{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#586af4,#4454db);color:#fff;font-size:14px;font-weight:800;text-decoration:none;box-shadow:0 16px 34px rgba(84,98,230,.24);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
@@ -65,7 +66,7 @@
   .pp-card,.wait-box,.status-box{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
   .pp-card:hover,.wait-box:hover,.status-box:hover{box-shadow:0 18px 38px rgba(15,23,42,.06)}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
-  @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3.08rem);line-height:1.01;letter-spacing:-.075em;max-width:12ch}.hero-cta-row{margin-top:18px} }
+  @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3.08rem);line-height:1.02;letter-spacing:-.078em;max-width:12.5ch}.hero-cta-row{margin-top:18px} }
   @media (max-width: 640px){ .gate-shell{padding-top:16px} }
   @media (hover:hover) and (pointer:fine){ body{cursor:auto} a,button,input,label,.pp-card,.wait-box,.status-box,.next-step-card{cursor:auto} }
   </style>
@@ -78,7 +79,7 @@
         <div class="hero-grid">
           <div>
             <div class="hero-kicker"><i class="fa-solid fa-sparkles"></i><span>Punto Pago</span></div>
-            <h1 class="hero-title"><span class="hero-accent">Tu acceso</span> <span class="hero-dark">comercial</span> <span class="hero-dark">empieza aquí</span></h1>
+            <h1 class="hero-title"><span class="hero-line"><span class="hero-accent">Tu acceso</span> <span class="hero-dark">comercial</span></span><span class="hero-line hero-dark">empieza aquí</span></h1>
             <p class="hero-copy">Validamos tu acceso y te guiamos al siguiente paso correcto.</p>
             <div class="hero-cta-row">
               <a href="#validateBtn" class="hero-primary"><i class="fa-regular fa-circle-check"></i><span>Comenzar validación</span></a>
