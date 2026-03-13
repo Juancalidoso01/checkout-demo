@@ -1,3 +1,97 @@
+/* Revolut-style horizontal prep blocks */
+.prep-steps.revolut-style {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.prep-block {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #000;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  min-height: 220px;
+  margin: 0;
+  width: 100%;
+}
+.prep-block-img {
+  flex: 0 0 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  background: #000;
+}
+.prep-block-img img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  border-radius: 0;
+  box-shadow: none;
+}
+.prep-block-content {
+  flex: 1 1 0%;
+  padding: 0 0 0 40px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.prep-block-content h3 {
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+.prep-block-content p {
+  color: #e5e7eb;
+  font-size: 1.18rem;
+  line-height: 1.6;
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .prep-block-img {
+    flex: 0 0 180px;
+    height: 140px;
+  }
+  .prep-block-content {
+    padding-left: 18px;
+  }
+  .prep-block-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .prep-block-content p {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .prep-block {
+    flex-direction: column;
+    min-height: unset;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .prep-block-img {
+    width: 100%;
+    height: 120px;
+    flex: none;
+    justify-content: flex-start;
+  }
+  .prep-block-content {
+    padding: 0;
+  }
+  .prep-block-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+  .prep-block-content p {
+    font-size: 0.97rem;
+  }
+}
 /* Sección negra de preparación para onboarding */
 .onboarding-prep-section {
   background: #23242a;
