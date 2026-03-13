@@ -19,15 +19,21 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 Acceso interno del prototipo:
 
-- Portal oculto de credenciales: abrir directamente `admin/credentials.html`
-- Entrada dedicada para admin: `admin-login.html`
-- Entrada discreta para compartir por GitHub Pages: `pp-admin-entry.html`
+- Entrada oficial para admin por GitHub Pages: `pp-admin-entry.html`
+- Entrada alternativa para admin: `admin-login.html`
+- Portal de credenciales de agentes: `admin/credentials.html`
 - Requiere iniciar sesión como `superadmin`
 
 Si publicas este repo con GitHub Pages, las rutas quedarían así:
 
-- `https://juancalidoso01.github.io/checkout-demo/admin-login.html`
 - `https://juancalidoso01.github.io/checkout-demo/pp-admin-entry.html`
+- `https://juancalidoso01.github.io/checkout-demo/admin-login.html`
 - `https://juancalidoso01.github.io/checkout-demo/admin/credentials.html`
+
+Flujo recomendado:
+
+1. Abrir `https://juancalidoso01.github.io/checkout-demo/pp-admin-entry.html`
+2. Iniciar sesión como `superadmin`
+3. Revisar y administrar las credenciales de agentes en `admin/credentials.html`
 
 Licencia: uso para demostración y pruebas.
