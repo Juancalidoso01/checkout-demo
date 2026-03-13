@@ -11,25 +11,10 @@
   <style>
     body{background:linear-gradient(180deg,#f8fbff 0%,#f3f6fb 28%,#eef2f8 100%);font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
     .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
-    .site-header{position:sticky;top:0;z-index:40;backdrop-filter:blur(16px);background:rgba(255,255,255,.78);border-bottom:1px solid rgba(148,163,184,.16)}
-    .site-header-inner{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-  .site-brand{display:flex;align-items:center;gap:14px;text-decoration:none}
-  .site-brand-mark{display:block;width:168px;height:auto;max-width:168px;max-height:none;object-fit:contain;object-position:left center;flex:0 0 auto}
-    .site-brand-copy{display:flex;flex-direction:column}
-    .site-brand-copy strong{font-size:15px;line-height:1.1;color:#0f172a}
-    .site-brand-copy span{font-size:12px;color:#64748b}
-  .site-header-actions{display:flex;align-items:center;gap:14px}
-    .site-header-visual{display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(84,98,230,.10),rgba(59,130,246,.08));border:1px solid rgba(84,98,230,.10);overflow:hidden;box-shadow:0 10px 24px rgba(84,98,230,.10)}
-    .site-header-visual img{width:36px;height:36px;object-fit:contain;animation:headerFloat 5.4s ease-in-out infinite}
-    .site-link{color:#475569;font-size:14px;font-weight:700;text-decoration:none;transition:color .22s ease,transform .22s ease}
-    .site-link:hover{color:var(--pp-primary);transform:translateY(-1px)}
-    .site-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#5b6df6,#4050d8);color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 34px rgba(84,98,230,.22);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
-    .site-action:hover{transform:translateY(-1px);box-shadow:0 20px 40px rgba(84,98,230,.26);filter:saturate(1.04)}
-  .site-header-actions > *{position:relative;z-index:2}
   .cursor-ring{position:fixed;top:0;left:0;width:18px;height:18px;border-radius:999px;border:1.5px solid rgba(15,23,42,.72);background:rgba(15,23,42,.92);pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .18s ease,height .18s ease,opacity .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
   .cursor-ring.-visible{opacity:1}
   .cursor-ring.-active{width:42px;height:42px;background:rgba(15,23,42,.08);border-color:rgba(15,23,42,.88);box-shadow:0 0 0 6px rgba(15,23,42,.08)}
-    .gate-shell{max-width:1180px;margin:0 auto;padding:28px 16px 72px}
+  .gate-shell{max-width:1180px;margin:0 auto;padding:20px 16px 72px}
     .gate-hero{position:relative;overflow:hidden;border:1px solid rgba(84,98,230,.10);background:radial-gradient(circle at top left,rgba(97,113,255,.14),transparent 28%),linear-gradient(135deg,#ffffff 0%,#eef3ff 44%,#ffffff 100%);box-shadow:0 34px 80px rgba(15,23,42,.08)}
   .gate-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px}
   .status-box{border-radius:24px;padding:18px;border:1px solid rgba(0,0,0,.06);background:rgba(255,255,255,.92);box-shadow:0 16px 34px rgba(15,23,42,.05)}
@@ -100,32 +85,14 @@
     .pp-card,.wait-box,.status-box,.next-step-card{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
     .pp-card:hover,.wait-box:hover,.status-box:hover,.next-step-card:hover{box-shadow:0 18px 38px rgba(15,23,42,.06)}
   @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-  @keyframes headerFloat{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}50%{transform:translate3d(0,-4px,0) rotate(-4deg)}}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
-  @media (max-width: 900px){ .site-header-inner{padding:14px 16px}.site-brand-mark{width:144px;max-width:144px}.site-brand-copy span{display:none}.site-header-visual{display:none}.gate-layout{grid-template-columns:1fr}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:auto}.hero-card{width:100%;max-width:none}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3rem);max-width:none}.hero-cta-row{margin-top:18px} }
-    @media (max-width: 640px){ .site-header-actions .site-link{display:none}.site-brand-mark{width:132px;max-width:132px}.site-action{min-height:42px;padding:0 14px;font-size:13px}.gate-shell{padding-top:18px}.hero-flow{gap:10px} }
+  @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:auto}.hero-card{width:100%;max-width:none}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3rem);max-width:none}.hero-cta-row{margin-top:18px} }
+    @media (max-width: 640px){ .gate-shell{padding-top:16px}.hero-flow{gap:10px} }
     @media (hover:hover) and (pointer:fine){ body{cursor:none} a,button,input,label,.pp-card,.wait-box,.status-box,.next-step-card{cursor:none} }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
   <div id="cursorRing" class="cursor-ring" aria-hidden="true"></div>
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="site-brand" href="https://puntopago.net/" target="_blank" rel="noreferrer">
-        <img class="site-brand-mark" src="assets/logo-header-v2.png" alt="Punto Pago">
-        <div class="site-brand-copy">
-          <strong>Punto Pago</strong>
-          <span>Portal comercial</span>
-        </div>
-      </a>
-      <div class="site-header-actions">
-        <div class="site-header-visual" aria-hidden="true"><img src="assets/hero-illustration.svg" alt=""></div>
-        <a class="site-link" href="https://puntopago.net/" target="_blank" rel="noreferrer">Sitio principal</a>
-        <a href="login.html" class="site-action">Portal de agentes</a>
-      </div>
-    </div>
-  </header>
-
   <main class="pp-page flex-grow">
     <div class="gate-shell">
       <div class="pp-card gate-hero rounded-[24px] p-5 mb-5">
