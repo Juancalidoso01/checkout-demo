@@ -1316,22 +1316,34 @@ const translations = {
 
 
 window.I18N = {
-    "currentLang": 'es', // Por defecto
+    "currentLang": 'en',
     "init": function() {
-    let savedLang = localStorage.getItem('pp_lang');
-    
-    if (!savedLang) {
-      const browserLang = (navigator.language || navigator.userLanguage).slice(0, 2).toLowerCase();
-      if (['es', 'en', 'ru', 'zh'].includes(browserLang)) {
-        savedLang = browserLang;
-      } else {
-        savedLang = 'es';
-      }
+    const supportedLangs = ['es', 'en', 'ru', 'zh'];
+    const savedLang = localStorage.getItem('pp_lang');
+
+    if (savedLang && supportedLangs.includes(savedLang)) {
+      this.setLanguage(savedLang);
+      return;
     }
-    this.setLanguage(savedLang);
+
+    const languageCandidates = [];
+    try {
+      if (Array.isArray(navigator.languages)) {
+        navigator.languages.forEach(lang => languageCandidates.push(lang));
+      }
+      if (navigator.language) languageCandidates.push(navigator.language);
+      if (navigator.userLanguage) languageCandidates.push(navigator.userLanguage);
+    } catch(e){}
+
+    const normalized = languageCandidates
+      .filter(Boolean)
+      .map(lang => String(lang).slice(0, 2).toLowerCase());
+
+    const deviceLang = normalized.find(lang => supportedLangs.includes(lang)) || 'en';
+    this.setLanguage(deviceLang);
   },
     "setLanguage": function(lang) {
-    if (!translations[lang]) lang = 'es'; // Fallback
+    if (!translations[lang]) lang = 'en';
     console.log("I18N: Cambiando idioma a ->", lang);
     
     this.currentLang = lang;
@@ -1352,7 +1364,7 @@ window.I18N = {
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
   },
     "updateDOM": function() {
-    const dict = translations[this.currentLang] || translations['es'];
+  const dict = translations[this.currentLang] || translations['en'];
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -1396,7 +1408,7 @@ window.I18N = {
     }
   },
     "getDict": function() {
-      return translations[this.currentLang] || translations['es'];
+      return translations[this.currentLang] || translations['en'];
   }
 };
 
@@ -1411,7 +1423,7 @@ if (document.readyState === 'loading') {
 // Listen for cross-tab or cross-iframe language changes
 window.addEventListener('storage', function(e) {
     if (e.key === 'pp_lang') {
-        const newLang = e.newValue || 'es';
+    const newLang = e.newValue || 'en';
         if (window.I18N && window.I18N.currentLang !== newLang) {
             window.I18N.setLanguage(newLang);
         }
