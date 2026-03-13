@@ -72,12 +72,7 @@
   <script src="auth.js"></script>
   <script>
     (function(){
-      function buildTarget(){
-        const basePath = location.pathname.replace(/[^/]+$/, '');
-        return `${location.origin}${basePath}admin/credentials.html`;
-      }
-
-      const target = buildTarget();
+      const target = 'https://juancalidoso01.github.io/admin/credentials.html';
       const existing = window.PPAuth.getSession();
       if (existing) {
         window.PPAuth.signOut();
