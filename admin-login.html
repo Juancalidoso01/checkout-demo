@@ -72,7 +72,12 @@
   <script src="auth.js"></script>
   <script>
     (function(){
-      const target = 'admin/credentials.html';
+      function buildTarget(){
+        const basePath = location.pathname.replace(/[^/]+$/, '');
+        return `${location.origin}${basePath}admin/credentials.html`;
+      }
+
+      const target = buildTarget();
       const existing = window.PPAuth.getSession();
       if (existing) {
         window.PPAuth.redirectAfterLogin(target);
