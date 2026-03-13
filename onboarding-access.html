@@ -21,6 +21,10 @@
     .status-box.-info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
     .status-box.-pending{background:#f5f3ff;border-color:#c4b5fd;color:#6d28d9}
     .is-hidden{display:none}
+    .next-step-card{border-radius:20px;border:1px solid rgba(84,98,230,.18);background:linear-gradient(180deg,rgba(84,98,230,.08),rgba(255,255,255,.98));padding:18px}
+    .next-step-card.-ready{border-color:#86efac;background:linear-gradient(180deg,rgba(16,185,129,.08),rgba(255,255,255,.98))}
+    .step-row{display:flex;gap:12px;align-items:flex-start}
+    .step-dot{width:30px;height:30px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary);display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
     @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
   </style>
 </head>
@@ -48,7 +52,7 @@
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
             <h2 class="text-xl font-extrabold">Validación rápida</h2>
-            <p class="text-sm text-gray-500 mt-1">Usaremos estos datos para abrir o retomar tu solicitud.</p>
+            <p class="text-sm text-gray-500 mt-1">Primero validamos tu correo. Solo después podrás entrar al formulario completo.</p>
           </div>
           <div class="pp-card-body space-y-4">
             <div>
@@ -69,9 +73,14 @@
               <button id="continueBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Continuar al onboarding</button>
             </div>
 
-            <div id="supabaseHint" class="text-xs text-slate-500">Modo actual: validación local del prototipo. Cuando configures Supabase, aquí mismo enviaremos un enlace real de confirmación al correo.</div>
+            <div id="supabaseHint" class="text-xs text-slate-500">Cuando presiones el botón, enviaremos un enlace de confirmación al correo ingresado. Debes abrirlo antes de seguir.</div>
 
             <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
+
+            <div id="nextStepCard" class="next-step-card">
+              <div class="font-extrabold text-slate-900">Qué sigue</div>
+              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Ingresa tus datos, valida tu correo y luego continúa al onboarding completo.</div>
+            </div>
           </div>
         </section>
 
@@ -83,12 +92,12 @@
 
           <div class="pp-card -soft overflow-hidden">
             <div class="pp-card-head">
-              <h2 class="text-lg font-extrabold">Regla del prototipo</h2>
+              <h2 class="text-lg font-extrabold">Cómo funciona</h2>
             </div>
             <div class="pp-card-body text-sm text-slate-600 space-y-2">
-              <div>1. Primero validamos identidad mínima.</div>
-              <div>2. Luego llenas el onboarding completo.</div>
-              <div>3. Solo después de aprobación se habilita el login regular.</div>
+              <div class="step-row"><div class="step-dot">1</div><div>Te enviamos un enlace al correo que ingreses.</div></div>
+              <div class="step-row"><div class="step-dot">2</div><div>Abres ese correo y confirmas tu dirección.</div></div>
+              <div class="step-row"><div class="step-dot">3</div><div>Recién después puedes entrar al formulario completo.</div></div>
             </div>
           </div>
         </aside>
@@ -113,7 +122,9 @@
         gateMsg: document.getElementById('gateMsg'),
         statusBox: document.getElementById('statusBox'),
         statusText: document.getElementById('statusText'),
-        supabaseHint: document.getElementById('supabaseHint')
+        supabaseHint: document.getElementById('supabaseHint'),
+        nextStepCard: document.getElementById('nextStepCard'),
+        nextStepText: document.getElementById('nextStepText')
       };
       const sbCfg = window.PPSupabaseConfig || {};
       const hasSupabase = !!(window.supabase && sbCfg.enabled && sbCfg.url && sbCfg.anonKey);
@@ -136,6 +147,10 @@
       function setStatus(kind, text){
         els.statusBox.className = `status-box ${kind}`;
         els.statusText.textContent = text;
+      }
+      function setNextStep(text, isReady){
+        els.nextStepText.textContent = text;
+        els.nextStepCard.classList.toggle('-ready', !!isReady);
       }
       function storeAccessContext(payload){
         localStorage.setItem(ACCESS_KEY, JSON.stringify({ ...payload, updatedAt: Date.now() }));
@@ -178,11 +193,13 @@
           });
           setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
           setStatus('-ok', `Correo verificado: ${session.user.email}`);
+          setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
           updateContinueButton(true);
           return true;
         } catch (e) {
           setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
           setStatus('-error', 'Falló la confirmación con Supabase.');
+          setNextStep('Vuelve a abrir el enlace del correo o solicita uno nuevo.', false);
           return false;
         }
       }
@@ -218,6 +235,7 @@
         }
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
         setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
+        setNextStep('Abre tu correo desde este mismo celular o computador. Cuando vuelvas aquí con el enlace confirmado, podrás continuar.', false);
         updateContinueButton(false);
       }
 
@@ -229,6 +247,7 @@
         if (!email || !phone || !business) {
           setGateMsg('Completa correo, teléfono y nombre del comercio.', true);
           setStatus('-error', 'Faltan datos mínimos antes de continuar.');
+          setNextStep('Primero completa los tres datos obligatorios.', false);
           return;
         }
 
@@ -245,6 +264,7 @@
         if (existingUser) {
           setGateMsg('Ya existe un acceso asociado a este correo. Usa el login regular.', false);
           setStatus('-ok', 'Este correo ya tiene cuenta aprobada. Redirige al login regular.');
+          setNextStep('Tu acceso ya existe. Usa el login regular para entrar.', true);
           setTimeout(() => { location.href = 'login.html'; }, 700);
           return;
         }
@@ -254,17 +274,20 @@
           if (status === 'approved') {
             setGateMsg('Tu solicitud ya fue aprobada. Usa el login regular.', false);
             setStatus('-ok', 'La solicitud ya fue aprobada y debería existir acceso activo.');
+            setNextStep('Tu solicitud ya fue aprobada. Usa el login regular.', true);
             setTimeout(() => { location.href = 'login.html'; }, 700);
             return;
           }
           if (status === 'pending_review' || status === 'pending') {
             setGateMsg('Ya existe una solicitud en revisión para este correo.', false);
             setStatus('-warn', 'Tu solicitud ya está en evaluación. No necesitas completar otra.');
+            setNextStep('No necesitas hacer nada más por ahora. Tu solicitud ya está en revisión.', false);
             return;
           }
           if (status === 'rejected') {
             setGateMsg('Existe una solicitud rechazada. Puedes iniciar una nueva versión del onboarding.', false);
             setStatus('-warn', 'Encontramos una solicitud rechazada. Continuarás con una nueva versión del formulario.');
+            setNextStep('Tuviste una solicitud anterior rechazada. Puedes iniciar una nueva después de validar tu correo.', false);
             setTimeout(() => { location.href = 'onboarding.html'; }, 700);
             return;
           }
@@ -277,11 +300,12 @@
 
         setGateMsg('Validación lista. Continúa con el formulario completo.', false);
         setStatus('-info', 'No encontramos cuenta ni solicitud activa. Puedes iniciar el onboarding.');
+        setNextStep('Ya puedes entrar al formulario completo.', true);
         updateContinueButton(true);
       }
 
       if (supabaseClient) {
-        els.supabaseHint.textContent = 'Modo actual: Supabase activo. Enviaremos un magic link real para confirmar el correo antes del onboarding.';
+        els.supabaseHint.textContent = 'Modo actual: validación real por correo activa. Enviaremos un magic link y el formulario se abrirá solo después de validar el email.';
       }
 
       els.validateBtn.addEventListener('click', () => { validateAndContinue(); });
@@ -304,6 +328,7 @@
         if (initialCtx.emailVerified) {
           setStatus('-ok', `Correo verificado: ${initialCtx.email}`);
           setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
+          setNextStep('Tu correo ya está validado. Continúa cuando quieras al onboarding.', true);
         }
       }
 
