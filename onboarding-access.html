@@ -27,6 +27,14 @@
     .step-dot{width:30px;height:30px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary);display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
     .wait-box{border-radius:20px;border:1px solid rgba(84,98,230,.18);background:#fff;padding:16px}
     .countdown{font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--pp-primary)}
+    .mini-badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:rgba(84,98,230,.10);color:var(--pp-primary);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+    .helper-list{display:grid;gap:10px}
+    .helper-item{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:#fff;border:1px solid rgba(0,0,0,.06)}
+    .helper-icon{width:28px;height:28px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .mail-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;background:#f8fafc;border:1px solid rgba(0,0,0,.06);font-size:13px;color:#334155;word-break:break-all}
+    .pulse-dot{width:10px;height:10px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.55);animation:pulse 1.8s infinite}
+    .waiting-emphasis{background:linear-gradient(180deg,rgba(84,98,230,.08),rgba(255,255,255,1));border:1px solid rgba(84,98,230,.2);border-radius:18px;padding:14px}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
     @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
   </style>
 </head>
@@ -46,15 +54,16 @@
   <main class="pp-page flex-grow">
     <div class="gate-shell">
       <div class="pp-card gate-hero rounded-[24px] p-5 mb-5">
+        <div class="mini-badge mb-3"><i class="fa-solid fa-shield-check"></i><span>Validación segura</span></div>
         <h1 class="text-2xl font-extrabold">Antes de empezar tu onboarding</h1>
-        <p class="text-sm text-slate-600 mt-2 max-w-3xl">Validamos correo y datos básicos para evitar solicitudes duplicadas. Si ya tienes acceso o una solicitud en proceso, te lo mostraremos antes de seguir.</p>
+        <p class="text-sm text-slate-600 mt-2 max-w-3xl">Primero confirmamos tu correo y tus datos básicos. Así evitamos duplicados y nos aseguramos de no abrir un onboarding con un email no validado.</p>
       </div>
 
       <div class="gate-layout">
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
             <h2 class="text-xl font-extrabold">Validación rápida</h2>
-            <p class="text-sm text-gray-500 mt-1">Primero validamos tu correo. Solo después podrás entrar al formulario completo.</p>
+            <p class="text-sm text-gray-500 mt-1">Te tomará menos de un minuto. Validas tu correo primero y luego se habilita el formulario completo.</p>
           </div>
           <div class="pp-card-body space-y-4">
             <div>
@@ -76,27 +85,43 @@
             </div>
 
             <div id="waitingRoom" class="wait-box is-hidden">
-              <div class="font-extrabold text-slate-900">Estamos esperando tu confirmación</div>
-              <p class="text-sm text-slate-600 mt-2">Te enviamos un enlace al correo ingresado. Abre ese mensaje y vuelve a esta misma pantalla desde el enlace.</p>
+              <div class="waiting-emphasis">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <div class="pulse-dot"></div>
+                  <div class="font-extrabold text-slate-900">Estamos esperando tu confirmación</div>
+                </div>
+                <p class="text-sm text-slate-600 mt-2">Ya enviamos el enlace de validación. Abre ese correo y vuelve a esta misma pantalla usando el botón del mensaje.</p>
+                <div id="emailPreview" class="mail-chip mt-3 is-hidden"></div>
+              </div>
               <div class="mt-4 flex items-end gap-3 flex-wrap">
                 <div>
-                  <div class="text-xs uppercase tracking-[0.16em] text-slate-400 font-extrabold">Tiempo sugerido</div>
+                  <div class="text-xs uppercase tracking-[0.16em] text-slate-400 font-extrabold">Ventana sugerida</div>
                   <div id="countdown" class="countdown">05:00</div>
                 </div>
-                <div class="text-sm text-slate-500 max-w-xs">Si no confirmas dentro de este tiempo, puedes solicitar un enlace nuevo.</div>
+                <div class="text-sm text-slate-500 max-w-xs">Si no ves el correo enseguida, revisa también spam o promociones. Cuando expire el tiempo podrás pedir uno nuevo.</div>
+              </div>
+              <div class="helper-list mt-4">
+                <div class="helper-item">
+                  <div class="helper-icon"><i class="fa-regular fa-envelope"></i></div>
+                  <div class="text-sm text-slate-600">Busca un mensaje de <strong>Punto Pago</strong> con tu enlace de confirmación.</div>
+                </div>
+                <div class="helper-item">
+                  <div class="helper-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                  <div class="text-sm text-slate-600">Si estás en el celular, abre el correo en este mismo dispositivo para continuar más fácil.</div>
+                </div>
               </div>
               <div class="mt-4 flex gap-3 flex-wrap">
                 <button id="resendBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Enviar enlace nuevamente</button>
               </div>
             </div>
 
-            <div id="supabaseHint" class="text-xs text-slate-500">Cuando presiones el botón, enviaremos un enlace de confirmación al correo ingresado. Debes abrirlo antes de seguir.</div>
+            <div id="supabaseHint" class="text-xs text-slate-500">Cuando presiones el botón, enviaremos un enlace de confirmación al correo ingresado. El formulario seguirá bloqueado hasta validar ese correo.</div>
 
             <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
 
             <div id="nextStepCard" class="next-step-card">
               <div class="font-extrabold text-slate-900">Qué sigue</div>
-              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Ingresa tus datos, valida tu correo y luego continúa al onboarding completo.</div>
+              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Completa tus datos, confirma tu correo y después entra al onboarding completo.</div>
             </div>
           </div>
         </section>
@@ -104,7 +129,7 @@
         <aside class="space-y-4">
           <div id="statusBox" class="status-box -info">
             <div class="font-extrabold">Resultado</div>
-            <div id="statusText" class="text-sm mt-2">Ingresa tu correo y los datos básicos para validar si ya existe una solicitud o una cuenta aprobada.</div>
+            <div id="statusText" class="text-sm mt-2">Ingresa tu correo y tus datos básicos para revisar si ya tienes una solicitud o un acceso existente.</div>
           </div>
 
           <div class="pp-card -soft overflow-hidden">
@@ -135,11 +160,12 @@
         phone: document.getElementById('accessPhone'),
         business: document.getElementById('accessBusiness'),
         validateBtn: document.getElementById('validateBtn'),
-    continueBtn: document.getElementById('continueBtn'),
-    formActions: document.getElementById('formActions'),
-    waitingRoom: document.getElementById('waitingRoom'),
-    countdown: document.getElementById('countdown'),
-    resendBtn: document.getElementById('resendBtn'),
+        continueBtn: document.getElementById('continueBtn'),
+        formActions: document.getElementById('formActions'),
+        waitingRoom: document.getElementById('waitingRoom'),
+        countdown: document.getElementById('countdown'),
+        resendBtn: document.getElementById('resendBtn'),
+        emailPreview: document.getElementById('emailPreview'),
         gateMsg: document.getElementById('gateMsg'),
         statusBox: document.getElementById('statusBox'),
         statusText: document.getElementById('statusText'),
@@ -150,9 +176,9 @@
       const sbCfg = window.PPSupabaseConfig || {};
       const hasSupabase = !!(window.supabase && sbCfg.enabled && sbCfg.url && sbCfg.anonKey);
       const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey) : null;
-  let waitUntil = 0;
-  let countdownTimer = null;
-  let pollingTimer = null;
+    let waitUntil = 0;
+    let countdownTimer = null;
+    let pollingTimer = null;
 
       function readApplications(){
         try {
@@ -198,6 +224,15 @@
       function updateContinueButton(show){
         els.continueBtn.classList.toggle('is-hidden', !show);
       }
+      function setWaitingEmail(email){
+        if (!email) {
+          els.emailPreview.classList.add('is-hidden');
+          els.emailPreview.textContent = '';
+          return;
+        }
+        els.emailPreview.innerHTML = `<i class="fa-regular fa-envelope"></i><span>${email}</span>`;
+        els.emailPreview.classList.remove('is-hidden');
+      }
       function setWaitingMode(waiting){
         els.waitingRoom.classList.toggle('is-hidden', !waiting);
         els.validateBtn.classList.toggle('is-hidden', waiting);
@@ -219,12 +254,14 @@
         if (expired) {
           stopTimers();
           setStatus('-warn', 'La ventana sugerida expiró. Puedes solicitar un nuevo enlace.');
+          setGateMsg('Tu enlace ya puede haberse vencido. Si todavía no confirmaste, envía uno nuevo.', true);
           setNextStep('Si no validaste el correo, solicita un nuevo enlace para continuar.', false);
         }
       }
-      function startWaitingWindow(){
+      function startWaitingWindow(email){
         waitUntil = Date.now() + (5 * 60 * 1000);
         setWaitingMode(true);
+        setWaitingEmail(email);
         renderCountdown();
         stopTimers();
         countdownTimer = setInterval(renderCountdown, 1000);
@@ -249,6 +286,7 @@
           });
           stopTimers();
           setWaitingMode(false);
+          setWaitingEmail(session.user.email);
           setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
           setStatus('-ok', `Correo verificado: ${session.user.email}`);
           setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
@@ -296,7 +334,7 @@
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
         setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
         setNextStep('Abre tu correo desde este mismo celular o computador. Cuando vuelvas aquí con el enlace confirmado, podrás continuar.', false);
-        startWaitingWindow();
+        startWaitingWindow(email);
         updateContinueButton(false);
       }
 
@@ -393,6 +431,7 @@
         updateContinueButton(true);
         if (initialCtx.emailVerified) {
           setWaitingMode(false);
+          setWaitingEmail(initialCtx.email);
           setStatus('-ok', `Correo verificado: ${initialCtx.email}`);
           setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
           setNextStep('Tu correo ya está validado. Continúa cuando quieras al onboarding.', true);
