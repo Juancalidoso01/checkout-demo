@@ -9,61 +9,170 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <style>
-    body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
+    body{background:linear-gradient(180deg,#f8fbff 0%,#f3f6fb 28%,#eef2f8 100%);font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
     .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
-    .gate-shell{max-width:960px;margin:0 auto;padding:24px 16px 72px}
-    .gate-hero{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
-    .gate-layout{display:grid;grid-template-columns:1fr 320px;gap:18px}
-    .status-box{border-radius:20px;padding:16px;border:1px solid rgba(0,0,0,.06)}
+    .site-header{position:sticky;top:0;z-index:40;backdrop-filter:blur(16px);background:rgba(255,255,255,.78);border-bottom:1px solid rgba(148,163,184,.16)}
+    .site-header-inner{max-width:1180px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .site-brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .site-brand img{height:34px;width:auto}
+    .site-brand-copy{display:flex;flex-direction:column}
+    .site-brand-copy strong{font-size:15px;line-height:1.1;color:#0f172a}
+    .site-brand-copy span{font-size:12px;color:#64748b}
+    .site-header-actions{display:flex;align-items:center;gap:12px}
+    .site-link{color:#475569;font-size:14px;font-weight:700;text-decoration:none;transition:color .22s ease,transform .22s ease}
+    .site-link:hover{color:var(--pp-primary);transform:translateY(-1px)}
+    .site-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#5b6df6,#4050d8);color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 34px rgba(84,98,230,.22);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
+    .site-action:hover{transform:translateY(-1px);box-shadow:0 20px 40px rgba(84,98,230,.26);filter:saturate(1.04)}
+    .gate-shell{max-width:1180px;margin:0 auto;padding:28px 16px 72px}
+    .gate-hero{position:relative;overflow:hidden;border:1px solid rgba(84,98,230,.10);background:radial-gradient(circle at top left,rgba(97,113,255,.14),transparent 28%),linear-gradient(135deg,#ffffff 0%,#eef3ff 44%,#ffffff 100%);box-shadow:0 34px 80px rgba(15,23,42,.08)}
+  .gate-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px}
+  .status-box{border-radius:24px;padding:18px;border:1px solid rgba(0,0,0,.06);background:rgba(255,255,255,.92);box-shadow:0 16px 34px rgba(15,23,42,.05)}
     .status-box.-ok{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
     .status-box.-warn{background:#fff7ed;border-color:#fdba74;color:#9a3412}
     .status-box.-error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
     .status-box.-info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
     .status-box.-pending{background:#f5f3ff;border-color:#c4b5fd;color:#6d28d9}
     .is-hidden{display:none}
-    .next-step-card{border-radius:20px;border:1px solid rgba(84,98,230,.18);background:linear-gradient(180deg,rgba(84,98,230,.08),rgba(255,255,255,.98));padding:18px}
-    .next-step-card.-ready{border-color:#86efac;background:linear-gradient(180deg,rgba(16,185,129,.08),rgba(255,255,255,.98))}
+  .next-step-card{border-radius:24px;border:1px solid rgba(84,98,230,.16);background:linear-gradient(180deg,rgba(84,98,230,.08),rgba(255,255,255,.98));padding:18px 18px 20px}
+  .next-step-card.-ready{border-color:#86efac;background:linear-gradient(180deg,rgba(16,185,129,.08),rgba(255,255,255,.98))}
     .step-row{display:flex;gap:12px;align-items:flex-start}
     .step-dot{width:30px;height:30px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary);display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
-    .wait-box{border-radius:20px;border:1px solid rgba(84,98,230,.18);background:#fff;padding:16px}
+  .wait-box{border-radius:24px;border:1px solid rgba(84,98,230,.14);background:#fff;padding:16px 16px 18px}
     .countdown{font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--pp-primary)}
     .mini-badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:rgba(84,98,230,.10);color:var(--pp-primary);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
     .helper-list{display:grid;gap:10px}
-    .helper-item{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:#fff;border:1px solid rgba(0,0,0,.06)}
+  .helper-item{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid rgba(0,0,0,.06)}
     .helper-icon{width:28px;height:28px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-    .mail-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;background:#f8fafc;border:1px solid rgba(0,0,0,.06);font-size:13px;color:#334155;word-break:break-all}
+  .mail-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:16px;background:#f8fafc;border:1px solid rgba(0,0,0,.06);font-size:13px;color:#334155;word-break:break-all}
     .pulse-dot{width:10px;height:10px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 0 rgba(34,197,94,.55);animation:pulse 1.8s infinite}
     .waiting-emphasis{background:linear-gradient(180deg,rgba(84,98,230,.08),rgba(255,255,255,1));border:1px solid rgba(84,98,230,.2);border-radius:18px;padding:14px}
+    .gate-hero::before{content:'';position:absolute;inset:auto auto -40px -40px;width:200px;height:200px;border-radius:999px;background:rgba(84,98,230,.10);filter:blur(18px)}
+    .gate-hero::after{content:'';position:absolute;inset:-50px -30px auto auto;width:240px;height:240px;border-radius:999px;background:rgba(59,130,246,.10);filter:blur(24px)}
+  .hero-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:34px;align-items:center}
+  .hero-kicker{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;background:rgba(84,98,230,.08);border:1px solid rgba(84,98,230,.10);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-primary);transform:translateY(0);transition:transform .25s ease,box-shadow .25s ease}
+  .hero-kicker:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(84,98,230,.12)}
+  .hero-title{font-size:clamp(2.4rem,4.1vw,4.6rem);line-height:.95;letter-spacing:-.07em;font-weight:900;color:#0f172a;margin:18px 0 16px;max-width:8.5ch}
+  .hero-copy{font-size:17px;line-height:1.72;color:#475569;max-width:620px}
+  .hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .hero-primary{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#586af4,#4454db);color:#fff;font-size:14px;font-weight:800;text-decoration:none;box-shadow:0 16px 34px rgba(84,98,230,.24);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
+  .hero-primary:hover{transform:translateY(-1px);box-shadow:0 20px 40px rgba(84,98,230,.28);filter:saturate(1.05)}
+  .hero-secondary{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:rgba(255,255,255,.82);border:1px solid rgba(148,163,184,.18);color:#334155;font-size:14px;font-weight:800;text-decoration:none;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+  .hero-secondary:hover{transform:translateY(-1px);border-color:rgba(84,98,230,.24);box-shadow:0 18px 34px rgba(15,23,42,.06)}
+  .hero-flow{display:grid;gap:12px;margin-top:24px}
+  .hero-flow-item{display:flex;gap:12px;align-items:flex-start;padding:15px 16px;border-radius:20px;background:rgba(255,255,255,.76);border:1px solid rgba(148,163,184,.14);box-shadow:0 18px 34px rgba(15,23,42,.05);transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+  .hero-flow-item:hover{transform:translateY(-2px);box-shadow:0 22px 40px rgba(15,23,42,.08);border-color:rgba(84,98,230,.18)}
+  .hero-flow-icon{width:36px;height:36px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(84,98,230,.14),rgba(59,130,246,.14));color:var(--pp-primary);flex:0 0 auto}
+  .hero-flow-item strong{display:block;font-size:14px;color:#0f172a}
+  .hero-flow-item span{display:block;font-size:13px;line-height:1.5;color:#64748b;margin-top:2px}
+  .hero-visual{position:relative;min-height:320px;display:flex;align-items:center;justify-content:center}
+    .hero-orb{position:absolute;border-radius:999px;filter:blur(6px);opacity:.9}
+  .hero-orb.-one{width:220px;height:220px;background:rgba(84,98,230,.14);top:-26px;right:4px}
+  .hero-orb.-two{width:120px;height:120px;background:rgba(59,130,246,.10);bottom:8px;left:36px}
+  .hero-card{position:relative;width:min(100%,410px);border-radius:34px;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);box-shadow:0 30px 80px rgba(84,98,230,.16);padding:20px 20px 22px;animation:floatCard 7s ease-in-out infinite}
+    .hero-brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .hero-brand img{height:30px;width:auto}
+  .hero-line{height:1px;background:linear-gradient(90deg,rgba(84,98,230,.18),rgba(84,98,230,0));margin:14px 0}
+  .hero-note{font-size:13px;line-height:1.6;color:#64748b}
+    .hero-illustration{width:100%;max-width:250px;height:auto;display:block;margin:14px auto 0;filter:drop-shadow(0 10px 24px rgba(84,98,230,.14))}
+  .hero-card-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;margin-top:14px;border-top:1px solid rgba(148,163,184,.14)}
+    .hero-card-foot strong{display:block;font-size:14px;color:#0f172a}
+    .hero-card-foot span{display:block;font-size:12px;color:#64748b}
+    .hero-chip{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:#f8fafc;border:1px solid rgba(148,163,184,.16);font-size:12px;font-weight:800;color:#334155}
+  .aside-card{border-radius:24px;border:1px solid rgba(148,163,184,.14);background:rgba(255,255,255,.92);box-shadow:0 18px 36px rgba(15,23,42,.05)}
+  .aside-steps{display:grid;gap:12px}
+  .aside-step{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(148,163,184,.12)}
+  .aside-step:last-child{border-bottom:0;padding-bottom:0}
+  .aside-step-badge{width:30px;height:30px;border-radius:999px;background:linear-gradient(135deg,rgba(84,98,230,.16),rgba(59,130,246,.12));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--pp-primary);flex:0 0 auto}
+  .aside-step strong{display:block;color:#0f172a;font-size:14px}
+  .aside-step p{margin:3px 0 0;font-size:13px;line-height:1.55;color:#64748b}
+  .validating-panel{position:relative;overflow:hidden}
+  .validating-panel::after{content:'';position:absolute;inset:auto -30px -30px auto;width:90px;height:90px;border-radius:999px;background:rgba(84,98,230,.08);filter:blur(8px)}
+    .pp-btn{transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
+    .pp-btn:hover{transform:translateY(-1px);filter:saturate(1.03)}
+    .pp-field{transition:border-color .22s ease,box-shadow .22s ease,transform .22s ease}
+    .pp-field:focus{transform:translateY(-1px)}
+    .pp-card,.wait-box,.status-box,.next-step-card{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+    .pp-card:hover,.wait-box:hover,.status-box:hover,.next-step-card:hover{box-shadow:0 18px 38px rgba(15,23,42,.06)}
+    @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
-    @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
+  @media (max-width: 900px){ .site-header-inner{padding:14px 16px}.site-brand-copy span{display:none}.gate-layout{grid-template-columns:1fr}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:auto}.hero-card{width:100%;max-width:none}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3rem);max-width:none}.hero-cta-row{margin-top:18px} }
+    @media (max-width: 640px){ .site-header-actions .site-link{display:none}.site-action{min-height:42px;padding:0 14px;font-size:13px}.gate-shell{padding-top:18px}.hero-flow{gap:10px} }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
-  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
-    <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
-      <div class="min-w-0">
-        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Validación previa</div>
-        <div class="text-xs text-white/80">Paso corto antes del onboarding</div>
-      </div>
-      <div class="flex items-center gap-3">
-        <a href="login.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Login regular</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="https://puntopago.net/" target="_blank" rel="noreferrer">
+        <img src="assets/logo-header-v2.png" alt="Punto Pago">
+        <div class="site-brand-copy">
+          <strong>Punto Pago</strong>
+          <span>Portal comercial y onboarding</span>
+        </div>
+      </a>
+      <div class="site-header-actions">
+        <a class="site-link" href="https://puntopago.net/" target="_blank" rel="noreferrer">Sitio principal</a>
+        <a href="login.html" class="site-action">Portal de agentes</a>
       </div>
     </div>
-  </nav>
+  </header>
 
   <main class="pp-page flex-grow">
     <div class="gate-shell">
       <div class="pp-card gate-hero rounded-[24px] p-5 mb-5">
-        <div class="mini-badge mb-3"><i class="fa-solid fa-shield-check"></i><span>Validación segura</span></div>
-        <h1 class="text-2xl font-extrabold">Antes de empezar tu onboarding</h1>
-        <p class="text-sm text-slate-600 mt-2 max-w-3xl">Primero confirmamos tu correo y tus datos básicos. Así evitamos duplicados y nos aseguramos de no abrir un onboarding con un email no validado.</p>
+        <div class="hero-grid">
+          <div>
+            <div class="hero-kicker"><i class="fa-solid fa-sparkles"></i><span>Punto Pago</span></div>
+            <h1 class="hero-title">Tu acceso comercial empieza aquí</h1>
+            <p class="hero-copy">Si eres un comercio nuevo, validamos tu correo primero y luego habilitamos tu formulario de onboarding. Si ya tienes acceso, te llevamos al portal regular de agentes.</p>
+            <div class="hero-cta-row">
+              <a href="#validateBtn" class="hero-primary"><i class="fa-regular fa-circle-check"></i><span>Comenzar validación</span></a>
+              <a href="login.html" class="hero-secondary"><i class="fa-solid fa-arrow-right-to-bracket"></i><span>Ya tengo acceso</span></a>
+            </div>
+            <div class="hero-flow">
+              <div class="hero-flow-item">
+                <div class="hero-flow-icon"><i class="fa-regular fa-envelope"></i></div>
+                <div>
+                  <strong>Usuario nuevo</strong>
+                  <span>Confirmamos tu correo y, si está correcto, continúas al formulario completo.</span>
+                </div>
+              </div>
+              <div class="hero-flow-item">
+                <div class="hero-flow-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
+                <div>
+                  <strong>Usuario existente</strong>
+                  <span>Si tu cuenta ya existe, te redirigimos al acceso habitual del portal de agentes.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="hero-orb -one"></div>
+            <div class="hero-orb -two"></div>
+            <div class="hero-card">
+              <div class="hero-brand">
+                <img src="assets/logo-header-v2.png" alt="Punto Pago">
+                <div class="mini-badge"><i class="fa-solid fa-circle-check"></i><span>Seguro</span></div>
+              </div>
+              <div class="hero-note">Valida tu correo para habilitar el siguiente paso del proceso.</div>
+              <div class="hero-line"></div>
+              <img class="hero-illustration" src="assets/hero-illustration.svg" alt="">
+              <div class="hero-card-foot">
+                <div>
+                  <strong>Onboarding guiado</strong>
+                  <span>Acceso simple, seguro y ordenado.</span>
+                </div>
+                <div class="hero-chip"><i class="fa-solid fa-shield-heart"></i><span>Verificación previa</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="gate-layout">
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
             <h2 class="text-xl font-extrabold">Validación rápida</h2>
-            <p class="text-sm text-gray-500 mt-1">Te tomará menos de un minuto. Validas tu correo primero y luego se habilita el formulario completo.</p>
+            <p class="text-sm text-gray-500 mt-1">Ingresa tus datos base para identificar si continúas como onboarding nuevo o si debes entrar por tu portal regular.</p>
           </div>
           <div class="pp-card-body space-y-4">
             <div>
@@ -115,31 +224,49 @@
               </div>
             </div>
 
-            <div id="supabaseHint" class="text-xs text-slate-500">Cuando presiones el botón, enviaremos un enlace de confirmación al correo ingresado. El formulario seguirá bloqueado hasta validar ese correo.</div>
+            <div id="supabaseHint" class="text-xs text-slate-500">Para usuarios nuevos, enviaremos un enlace de confirmación al correo ingresado. El formulario seguirá bloqueado hasta validar ese correo.</div>
 
             <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
 
             <div id="nextStepCard" class="next-step-card">
               <div class="font-extrabold text-slate-900">Qué sigue</div>
-              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Completa tus datos, confirma tu correo y después entra al onboarding completo.</div>
+              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Revisamos tu estado. Si eres nuevo, validas correo y avanzas al formulario; si ya existes, entras al portal regular.</div>
             </div>
           </div>
         </section>
 
         <aside class="space-y-4">
-          <div id="statusBox" class="status-box -info">
+          <div id="statusBox" class="status-box -info validating-panel">
             <div class="font-extrabold">Resultado</div>
-            <div id="statusText" class="text-sm mt-2">Ingresa tu correo y tus datos básicos para revisar si ya tienes una solicitud o un acceso existente.</div>
+            <div id="statusText" class="text-sm mt-2">Ingresa tu correo y tus datos básicos para revisar si corresponde onboarding nuevo o acceso existente.</div>
           </div>
 
-          <div class="pp-card -soft overflow-hidden">
+          <div class="pp-card -soft overflow-hidden aside-card">
             <div class="pp-card-head">
-              <h2 class="text-lg font-extrabold">Cómo funciona</h2>
+              <h2 class="text-lg font-extrabold">Ruta de acceso</h2>
             </div>
-            <div class="pp-card-body text-sm text-slate-600 space-y-2">
-              <div class="step-row"><div class="step-dot">1</div><div>Te enviamos un enlace al correo que ingreses.</div></div>
-              <div class="step-row"><div class="step-dot">2</div><div>Abres ese correo y confirmas tu dirección.</div></div>
-              <div class="step-row"><div class="step-dot">3</div><div>Recién después puedes entrar al formulario completo.</div></div>
+            <div class="pp-card-body aside-steps">
+              <div class="aside-step">
+                <div class="aside-step-badge">1</div>
+                <div>
+                  <strong>Revisión inicial</strong>
+                  <p>Identificamos si tu correo corresponde a un onboarding nuevo o a una cuenta ya existente.</p>
+                </div>
+              </div>
+              <div class="aside-step">
+                <div class="aside-step-badge">2</div>
+                <div>
+                  <strong>Correo verificado</strong>
+                  <p>Los nuevos comercios validan primero su correo antes de desbloquear el formulario comercial.</p>
+                </div>
+              </div>
+              <div class="aside-step">
+                <div class="aside-step-badge">3</div>
+                <div>
+                  <strong>Portal regular</strong>
+                  <p>Si tu usuario ya existe, continúas directamente por el portal habitual de agentes.</p>
+                </div>
+              </div>
             </div>
           </div>
         </aside>
