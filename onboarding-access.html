@@ -103,7 +103,7 @@
             <p class="hero-copy">Validamos tu acceso y te guiamos al siguiente paso correcto.</p>
             <div class="hero-cta-row">
               <a href="#validateBtn" class="hero-primary"><i class="fa-regular fa-circle-check"></i><span>Comenzar validación</span></a>
-              <a href="login.html" class="hero-secondary"><i class="fa-solid fa-arrow-right-to-bracket"></i><span>Ya tengo acceso</span></a>
+              <a href="login.html" id="existingPortalLink" class="hero-secondary"><i class="fa-solid fa-arrow-right-to-bracket"></i><span>Ya tengo acceso al portal</span></a>
             </div>
             <div class="hero-flow">
               <div class="hero-flow-item">
@@ -117,7 +117,7 @@
                 <div class="hero-flow-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
                 <div>
                   <strong>Usuario existente</strong>
-                  <span>Ingresas por el portal regular de agentes.</span>
+                  <span>Ingresas con tu usuario y contraseña en el login regular del portal de agentes.</span>
                 </div>
               </div>
             </div>
@@ -265,6 +265,7 @@
         email: document.getElementById('accessEmail'),
         phone: document.getElementById('accessPhone'),
         business: document.getElementById('accessBusiness'),
+        existingPortalLink: document.getElementById('existingPortalLink'),
         validateBtn: document.getElementById('validateBtn'),
         continueBtn: document.getElementById('continueBtn'),
         formActions: document.getElementById('formActions'),
@@ -318,6 +319,20 @@
         document.querySelectorAll('a, button, input, .pp-card, .wait-box, .status-box, .next-step-card').forEach((node) => {
           node.addEventListener('mouseenter', () => cursorRing.classList.add('-active'));
           node.addEventListener('mouseleave', () => cursorRing.classList.remove('-active'));
+        });
+      }
+
+      if (els.existingPortalLink) {
+        els.existingPortalLink.addEventListener('click', function(){
+          try {
+            if (window.PPAuth && typeof window.PPAuth.signOut === 'function') {
+              window.PPAuth.signOut();
+            } else {
+              localStorage.removeItem('pp_auth_session_v1');
+            }
+          } catch (e) {
+            try { localStorage.removeItem('pp_auth_session_v1'); } catch (_) {}
+          }
         });
       }
 
@@ -502,9 +517,9 @@
         storeAccessContext({ email, phone, businessName: business });
 
         if (existingUser) {
-          setGateMsg('Ya existe un acceso asociado a este correo. Usa el login regular.', false);
-          setStatus('-ok', 'Este correo ya tiene cuenta aprobada. Redirige al login regular.');
-          setNextStep('Tu acceso ya existe. Usa el login regular para entrar.', true);
+          setGateMsg('Ya existe un acceso asociado a este correo. Usa el login regular del portal de agentes.', false);
+          setStatus('-ok', 'Este correo ya tiene cuenta aprobada. Redirige al login regular del portal de agentes.');
+          setNextStep('Tu acceso ya existe. Usa tu usuario y contraseña en el login regular para entrar.', true);
           setTimeout(() => { location.href = 'login.html'; }, 700);
           return;
         }
@@ -512,9 +527,9 @@
         if (existingApp) {
           const status = (existingApp.status || 'draft').toString();
           if (status === 'approved') {
-            setGateMsg('Tu solicitud ya fue aprobada. Usa el login regular.', false);
+            setGateMsg('Tu solicitud ya fue aprobada. Usa el login regular del portal de agentes.', false);
             setStatus('-ok', 'La solicitud ya fue aprobada y debería existir acceso activo.');
-            setNextStep('Tu solicitud ya fue aprobada. Usa el login regular.', true);
+            setNextStep('Tu solicitud ya fue aprobada. Ingresa con tu usuario y contraseña en el portal regular.', true);
             setTimeout(() => { location.href = 'login.html'; }, 700);
             return;
           }
