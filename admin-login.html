@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Acceso admin — Punto Pago</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
+    .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
+    .admin-login-hero{background:linear-gradient(180deg, rgba(84,98,230,.08), rgba(255,255,255,0) 220px)}
+    .admin-login-note{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
+    .admin-login-kicker{font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-primary,#5462e6)}
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+    <div class="mx-auto flex justify-between items-center w-full max-w-5xl px-4 gap-4">
+      <div class="min-w-0">
+        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Acceso admin</div>
+        <div class="text-xs text-white/80">Ruta interna del prototipo</div>
+      </div>
+      <a href="login.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Login general</a>
+    </div>
+  </nav>
+
+  <main class="pp-page admin-login-hero flex-grow">
+    <div class="pp-shell">
+      <div class="max-w-md mx-auto">
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head space-y-4">
+            <div>
+              <div class="admin-login-kicker">Punto Pago</div>
+              <h1 class="text-2xl font-extrabold pp-type mt-2">Portal privado de credenciales</h1>
+              <p class="text-sm text-gray-500 mt-2">Este acceso está separado del flujo principal y redirige directo al portal oculto para administración de agentes.</p>
+            </div>
+            <div class="admin-login-note rounded-[18px] p-4 text-sm text-slate-600">
+              Solo el rol <strong>superadmin</strong> puede continuar. Si inicias con otro rol, el sistema te enviará a tu portal correspondiente.
+            </div>
+          </div>
+
+          <div class="pp-card-body space-y-4">
+            <div>
+              <label class="pp-label">Usuario</label>
+              <input id="username" type="text" class="pp-field" autocomplete="username" placeholder="Ej: superadmin">
+            </div>
+
+            <div>
+              <label class="pp-label">Contraseña</label>
+              <input id="password" type="password" class="pp-field" autocomplete="current-password" placeholder="••••">
+            </div>
+
+            <button id="loginBtn" type="button" class="pp-btn pp-btn-primary -full">Entrar al portal oculto</button>
+
+            <p id="error" class="text-sm text-red-600 hidden"></p>
+
+            <details class="text-xs text-gray-500">
+              <summary class="cursor-pointer">Credencial demo</summary>
+              <div class="mt-2 space-y-1">
+                <div><strong>superadmin</strong> / <code>admin123</code></div>
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    (function(){
+      const target = '/admin/credentials.html';
+      const existing = window.PPAuth.getSession();
+      if (existing) {
+        window.PPAuth.redirectAfterLogin(target);
+        return;
+      }
+
+      const $u = document.getElementById('username');
+      const $p = document.getElementById('password');
+      const $btn = document.getElementById('loginBtn');
+      const $err = document.getElementById('error');
+
+      function showError(msg){
+        $err.textContent = msg || '';
+        $err.classList.toggle('hidden', !msg);
+      }
+
+      function doLogin(){
+        showError('');
+        const res = window.PPAuth.signIn($u.value, $p.value);
+        if (!res.ok){
+          showError(res.error || 'No fue posible iniciar sesión.');
+          return;
+        }
+        window.PPAuth.redirectAfterLogin(target);
+      }
+
+      $btn.addEventListener('click', doLogin);
+      [$u, $p].forEach(el => el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') doLogin();
+      }));
+
+      setTimeout(() => {
+        try { $u.focus(); } catch (e) {}
+      }, 100);
+    })();
+  </script>
+</body>
+</html>
