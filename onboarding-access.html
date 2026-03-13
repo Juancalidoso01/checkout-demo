@@ -19,6 +19,7 @@
     .status-box.-warn{background:#fff7ed;border-color:#fdba74;color:#9a3412}
     .status-box.-error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
     .status-box.-info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+    .status-box.-pending{background:#f5f3ff;border-color:#c4b5fd;color:#6d28d9}
     @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
   </style>
 </head>
@@ -67,6 +68,8 @@
               <a href="onboarding.html" class="pp-btn pp-btn-secondary">Ir directo al formulario</a>
             </div>
 
+            <div id="supabaseHint" class="text-xs text-slate-500">Modo actual: validación local del prototipo. Cuando configures Supabase, aquí mismo enviaremos un enlace real de confirmación al correo.</div>
+
             <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
           </div>
         </section>
@@ -93,10 +96,13 @@
   </main>
 
   <script src="auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script>
     (function(){
       const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
       const ACCESS_KEY = 'pp_onboarding_access_v1';
+      const SUPABASE_SESSION_KEY = 'pp_onboarding_supabase_session_v1';
       const els = {
         email: document.getElementById('accessEmail'),
         phone: document.getElementById('accessPhone'),
@@ -104,8 +110,12 @@
         validateBtn: document.getElementById('validateBtn'),
         gateMsg: document.getElementById('gateMsg'),
         statusBox: document.getElementById('statusBox'),
-        statusText: document.getElementById('statusText')
+        statusText: document.getElementById('statusText'),
+        supabaseHint: document.getElementById('supabaseHint')
       };
+      const sbCfg = window.PPSupabaseConfig || {};
+      const hasSupabase = !!(window.supabase && sbCfg.enabled && sbCfg.url && sbCfg.anonKey);
+      const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey) : null;
 
       function readApplications(){
         try {
@@ -128,8 +138,71 @@
       function storeAccessContext(payload){
         localStorage.setItem(ACCESS_KEY, JSON.stringify({ ...payload, updatedAt: Date.now() }));
       }
+      function storeVerifiedSession(payload){
+        localStorage.setItem(SUPABASE_SESSION_KEY, JSON.stringify({ ...payload, updatedAt: Date.now() }));
+      }
+      function getAccessContext(){
+        try {
+          const raw = localStorage.getItem(ACCESS_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+      function continueToOnboarding(extra){
+        const current = getAccessContext() || {};
+        storeAccessContext({ ...current, ...(extra || {}) });
+        location.href = 'onboarding.html';
+      }
 
-      function validateAndContinue(){
+      async function handleSupabaseReturn(){
+        if (!supabaseClient) return false;
+        try {
+          const { data, error } = await supabaseClient.auth.getSession();
+          if (error) throw error;
+          const session = data && data.session;
+          if (!session || !session.user || !session.user.email) return false;
+          const ctx = getAccessContext();
+          storeVerifiedSession({ email: session.user.email, provider: 'supabase_magic_link' });
+          setGateMsg('Correo confirmado correctamente. Continuando al onboarding.', false);
+          setStatus('-ok', `Correo verificado: ${session.user.email}`);
+          setTimeout(() => {
+            continueToOnboarding({ email: session.user.email, emailVerified: true, verificationMethod: 'supabase_magic_link', supabaseUserId: session.user.id, phone: ctx && ctx.phone, businessName: ctx && ctx.businessName });
+          }, 500);
+          return true;
+        } catch (e) {
+          setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
+          setStatus('-error', 'Falló la confirmación con Supabase.');
+          return false;
+        }
+      }
+
+      async function sendMagicLink(email, phone, business){
+        storeAccessContext({ email, phone, businessName: business, emailVerified: false, verificationMethod: 'pending_magic_link' });
+        setStatus('-pending', 'Enviando enlace de confirmación al correo...');
+        setGateMsg('Estamos enviando el enlace de confirmación.', false);
+        const { error } = await supabaseClient.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: sbCfg.redirectTo || location.href,
+            shouldCreateUser: true,
+            data: {
+              phone,
+              businessName: business,
+              onboardingFlow: 'agent_onboarding'
+            }
+          }
+        });
+        if (error) {
+          setGateMsg(error.message || 'No pudimos enviar el correo de confirmación.', true);
+          setStatus('-error', 'Falló el envío del magic link. Revisa la configuración de Supabase.');
+          return;
+        }
+        setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
+        setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
+      }
+
+      async function validateAndContinue(){
         const email = normalize(els.email.value);
         const phone = (els.phone.value || '').trim();
         const business = (els.business.value || '').trim();
@@ -178,15 +251,26 @@
           }
         }
 
+        if (supabaseClient) {
+          await sendMagicLink(email, phone, business);
+          return;
+        }
+
         setGateMsg('Validación lista. Continúa con el formulario completo.', false);
         setStatus('-info', 'No encontramos cuenta ni solicitud activa. Puedes iniciar el onboarding.');
         setTimeout(() => { location.href = 'onboarding.html'; }, 500);
       }
 
-      els.validateBtn.addEventListener('click', validateAndContinue);
+      if (supabaseClient) {
+        els.supabaseHint.textContent = 'Modo actual: Supabase activo. Enviaremos un magic link real para confirmar el correo antes del onboarding.';
+      }
+
+      els.validateBtn.addEventListener('click', () => { validateAndContinue(); });
       [els.email, els.phone, els.business].forEach(el => el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') validateAndContinue();
       }));
+
+      handleSupabaseReturn();
     })();
   </script>
 </body>
