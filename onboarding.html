@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Onboarding aliado — Punto Pago</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
+    .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
+    .ob-shell{max-width:1180px;margin:0 auto;padding:24px 16px 72px}
+    .ob-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .ob-sidebar{position:sticky;top:96px;height:fit-content}
+    .ob-step{display:flex;align-items:flex-start;gap:12px;padding:14px 12px;border-radius:18px;border:1px solid rgba(0,0,0,.06);background:#fff;color:#374151}
+    .ob-step.-active{border-color:rgba(84,98,230,.35);box-shadow:0 12px 30px rgba(84,98,230,.12)}
+    .ob-step-index{width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.1);color:var(--pp-primary);font-weight:800;font-size:13px;flex:0 0 auto}
+    .ob-hero{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
+    .ob-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .ob-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .pp-field.-area{height:auto;min-height:116px;padding:14px 16px;resize:vertical}
+    .pp-field.-select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#6b7280 50%),linear-gradient(135deg,#6b7280 50%,transparent 50%);background-position:calc(100% - 20px) 24px,calc(100% - 14px) 24px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+    .ob-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .ob-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:700}
+    .ob-summary dl{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:10px 18px}
+    .ob-summary dt{font-size:12px;color:#6b7280;text-transform:uppercase;font-weight:800;letter-spacing:.08em}
+    .ob-summary dd{margin:0;font-size:14px;color:#111827}
+    .is-hidden{display:none}
+    @media (max-width: 980px){
+      .ob-layout{grid-template-columns:1fr}
+      .ob-sidebar{position:relative;top:auto}
+    }
+    @media (max-width: 720px){
+      .ob-grid,.ob-grid-3{grid-template-columns:1fr}
+      .ob-summary dl{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+    <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
+      <div class="min-w-0">
+        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Onboarding aliado</div>
+        <div class="text-xs text-white/80">Formulario exhaustivo · prototipo interno</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="pp-admin-entry.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Portal credenciales</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pp-page flex-grow">
+    <div class="ob-shell">
+      <div class="pp-card ob-hero rounded-[24px] p-5 mb-5">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div class="ob-chip"><i class="fa-solid fa-file-signature"></i> Solicitud previa a activación</div>
+            <h1 class="text-2xl font-extrabold mt-3">Registro completo de nuevo aliado</h1>
+            <p class="text-sm text-slate-600 mt-2 max-w-3xl">Esta pantalla reemplaza temporalmente el formulario externo para el prototipo. Guarda la información en <code>localStorage</code>, deja el caso en revisión y luego el superadmin podrá aprobarlo antes de crear o pegar las credenciales definitivas.</p>
+          </div>
+          <div class="text-sm text-slate-500">
+            <div><strong>Estado por defecto:</strong> pendiente de revisión</div>
+            <div><strong>Siguiente paso:</strong> validación documental + aprobación comercial</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-layout">
+        <aside class="ob-sidebar space-y-3">
+          <div class="pp-card -soft overflow-hidden">
+            <div class="pp-card-head">
+              <h2 class="text-lg font-extrabold">Etapas</h2>
+              <p class="text-sm text-gray-500 mt-1">Completa los datos mínimos para pasar a evaluación.</p>
+            </div>
+            <div class="pp-card-body space-y-3" id="stepIndicator"></div>
+          </div>
+
+          <div class="pp-card -soft overflow-hidden">
+            <div class="pp-card-head">
+              <h2 class="text-lg font-extrabold">Estado del registro</h2>
+            </div>
+            <div class="pp-card-body text-sm text-slate-600 space-y-2">
+              <div><strong>ID temporal:</strong> <span id="applicationCode">—</span></div>
+              <div><strong>Guardado:</strong> <span id="draftStatus">Sin guardar</span></div>
+              <div><strong>Destino:</strong> cola de onboarding pendiente</div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="space-y-5">
+          <form id="onboardingForm" class="space-y-5" novalidate>
+            <section class="pp-card -soft overflow-hidden form-step" data-step="0">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">1. Identificación del comercio</h2>
+                <p class="text-sm text-gray-500 mt-1">Datos principales del aliado y su operación.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">Razón social *</label>
+                    <input name="businessLegalName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Nombre comercial *</label>
+                    <input name="businessTradeName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">RUT / NIT / identificación tributaria *</label>
+                    <input name="taxId" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Tipo de empresa *</label>
+                    <select name="businessType" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option>Persona natural</option>
+                      <option>Persona jurídica</option>
+                      <option>Sociedad SPA</option>
+                      <option>Limitada</option>
+                      <option>SAS</option>
+                      <option>Otra</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">Industria / rubro *</label>
+                    <input name="industry" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Años operando *</label>
+                    <input name="yearsOperating" class="pp-field" type="number" min="0" step="1" required>
+                  </div>
+                </div>
+                <div>
+                  <label class="pp-label">Descripción del negocio *</label>
+                  <textarea name="businessDescription" class="pp-field -area" required placeholder="Describe productos, flujo de ventas, ticket promedio, canales principales..."></textarea>
+                </div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">2. Representante y contactos</h2>
+                <p class="text-sm text-gray-500 mt-1">Quién firma y quién operará el canal.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">Nombre completo del representante *</label>
+                    <input name="repName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Cargo *</label>
+                    <input name="repRole" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Correo del representante *</label>
+                    <input name="repEmail" class="pp-field" type="email" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Teléfono del representante *</label>
+                    <input name="repPhone" class="pp-field" type="tel" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Contacto operativo *</label>
+                    <input name="opsContactName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Correo operativo *</label>
+                    <input name="opsContactEmail" class="pp-field" type="email" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Contacto técnico</label>
+                    <input name="techContactName" class="pp-field" type="text">
+                  </div>
+                  <div>
+                    <label class="pp-label">Correo técnico</label>
+                    <input name="techContactEmail" class="pp-field" type="email">
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">3. Dirección y operación comercial</h2>
+                <p class="text-sm text-gray-500 mt-1">Ubicación, cobertura y estimados de uso.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">País *</label>
+                    <input name="country" class="pp-field" type="text" required value="Chile">
+                  </div>
+                  <div>
+                    <label class="pp-label">Región / estado *</label>
+                    <input name="region" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Ciudad *</label>
+                    <input name="city" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Comuna / municipio</label>
+                    <input name="district" class="pp-field" type="text">
+                  </div>
+                </div>
+                <div>
+                  <label class="pp-label">Dirección comercial *</label>
+                  <textarea name="businessAddress" class="pp-field -area" required></textarea>
+                </div>
+                <div class="ob-grid-3">
+                  <div>
+                    <label class="pp-label">Ventas mensuales estimadas *</label>
+                    <select name="estimatedMonthlySales" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option>Menos de 100 transacciones</option>
+                      <option>100 - 500 transacciones</option>
+                      <option>500 - 2.000 transacciones</option>
+                      <option>Más de 2.000 transacciones</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">Ticket promedio *</label>
+                    <input name="averageTicket" class="pp-field" type="text" required placeholder="Ej: CLP 18.000">
+                  </div>
+                  <div>
+                    <label class="pp-label">Canal principal *</label>
+                    <select name="channelType" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option>Presencial</option>
+                      <option>Online</option>
+                      <option>Mixto</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="3">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">4. Datos bancarios y compliance</h2>
+                <p class="text-sm text-gray-500 mt-1">Para evaluación y futura liquidación.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">Banco *</label>
+                    <input name="bankName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Tipo de cuenta *</label>
+                    <select name="bankAccountType" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option>Cuenta corriente</option>
+                      <option>Cuenta vista</option>
+                      <option>Cuenta de ahorro</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">Número de cuenta *</label>
+                    <input name="bankAccountNumber" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Titular de la cuenta *</label>
+                    <input name="bankAccountHolder" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Correo para liquidaciones *</label>
+                    <input name="settlementEmail" class="pp-field" type="email" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Beneficiario final *</label>
+                    <input name="beneficialOwner" class="pp-field" type="text" required>
+                  </div>
+                </div>
+                <div class="ob-grid">
+                  <label class="flex items-start gap-3 text-sm text-slate-700">
+                    <input name="acceptTerms" type="checkbox" class="mt-1" required>
+                    <span>Confirmo que la información entregada es verídica y autorizo su revisión para evaluación comercial y cumplimiento.</span>
+                  </label>
+                  <label class="flex items-start gap-3 text-sm text-slate-700">
+                    <input name="needsApiIntegration" type="checkbox" class="mt-1">
+                    <span>Requerimos integración técnica / API y acompañamiento de implementación.</span>
+                  </label>
+                </div>
+                <div>
+                  <label class="pp-label">Comentarios adicionales</label>
+                  <textarea name="additionalNotes" class="pp-field -area" placeholder="Adjuntos pendientes, particularidades del comercio, requerimientos especiales..."></textarea>
+                </div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="4">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">5. Resumen y envío</h2>
+                <p class="text-sm text-gray-500 mt-1">Revisa antes de dejar el comercio en evaluación.</p>
+              </div>
+              <div class="pp-card-body space-y-5">
+                <div class="pp-card rounded-[20px] p-4 ob-summary bg-slate-50/70">
+                  <dl id="summaryList"></dl>
+                </div>
+                <div class="pp-card rounded-[20px] p-4 bg-amber-50 border border-amber-200 text-sm text-amber-900">
+                  Al enviar, el registro se guardará como <strong>pending_review</strong>. Todavía no se crearán las credenciales finales del cliente; eso ocurre solo cuando el superadmin apruebe el caso desde el portal administrativo.
+                </div>
+              </div>
+            </section>
+
+            <div class="ob-actions">
+              <div class="flex gap-3 flex-wrap">
+                <button id="prevBtn" type="button" class="pp-btn pp-btn-secondary">Anterior</button>
+                <button id="nextBtn" type="button" class="pp-btn pp-btn-secondary">Siguiente</button>
+              </div>
+              <div class="flex gap-3 flex-wrap">
+                <button id="saveDraftBtn" type="button" class="pp-btn pp-btn-secondary">Guardar borrador</button>
+                <button id="submitBtn" type="submit" class="pp-btn pp-btn-primary">Enviar a revisión</button>
+              </div>
+            </div>
+
+            <p id="formMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    (function(){
+      const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
+      const steps = [
+        { title: 'Comercio', desc: 'Identificación legal y descripción' },
+        { title: 'Contactos', desc: 'Representante, operativo y técnico' },
+        { title: 'Operación', desc: 'Dirección, alcance y volumen' },
+        { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
+        { title: 'Resumen', desc: 'Confirmación para revisión' }
+      ];
+
+      const stepEls = Array.from(document.querySelectorAll('.form-step'));
+      const indicator = document.getElementById('stepIndicator');
+      const form = document.getElementById('onboardingForm');
+      const formMsg = document.getElementById('formMsg');
+      const summaryList = document.getElementById('summaryList');
+      const applicationCodeEl = document.getElementById('applicationCode');
+      const draftStatusEl = document.getElementById('draftStatus');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const saveDraftBtn = document.getElementById('saveDraftBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      let currentStep = 0;
+      let applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
+
+      function now(){ return Date.now(); }
+      function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+      function readApplications(){
+        try {
+          const raw = localStorage.getItem(APPLICATIONS_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          return [];
+        }
+      }
+      function writeApplications(items){
+        localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items || []));
+      }
+      function readFormData(){
+        const fd = new FormData(form);
+        const data = {};
+        for (const [key, value] of fd.entries()) {
+          if (data[key] !== undefined) continue;
+          data[key] = value;
+        }
+        data.acceptTerms = form.elements.acceptTerms.checked;
+        data.needsApiIntegration = form.elements.needsApiIntegration.checked;
+        return data;
+      }
+      function setMsg(msg, isError){
+        formMsg.textContent = msg || '';
+        formMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
+      }
+      function renderIndicator(){
+        indicator.innerHTML = steps.map((step, idx) => `
+          <div class="ob-step ${idx === currentStep ? '-active' : ''}">
+            <div class="ob-step-index">${idx + 1}</div>
+            <div>
+              <div class="font-extrabold text-sm">${esc(step.title)}</div>
+              <div class="text-xs text-slate-500 mt-1">${esc(step.desc)}</div>
+            </div>
+          </div>`).join('');
+      }
+      function renderSteps(){
+        stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
+        prevBtn.disabled = currentStep === 0;
+        nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
+        submitBtn.classList.toggle('is-hidden', currentStep !== stepEls.length - 1);
+        if (currentStep === stepEls.length - 1) renderSummary();
+        renderIndicator();
+      }
+      function getStepFields(stepIndex){
+        return Array.from(stepEls[stepIndex].querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
+      }
+      function validateStep(stepIndex){
+        const fields = getStepFields(stepIndex);
+        for (const field of fields) {
+          if (!field.checkValidity()) {
+            field.reportValidity();
+            return false;
+          }
+        }
+        return true;
+      }
+      function goNext(){
+        if (!validateStep(currentStep)) return;
+        currentStep = Math.min(currentStep + 1, stepEls.length - 1);
+        renderSteps();
+        setMsg('');
+      }
+      function goPrev(){
+        currentStep = Math.max(currentStep - 1, 0);
+        renderSteps();
+        setMsg('');
+      }
+      function renderSummary(){
+        const data = readFormData();
+        const items = [
+          ['Razón social', data.businessLegalName],
+          ['Nombre comercial', data.businessTradeName],
+          ['RUT / NIT', data.taxId],
+          ['Industria', data.industry],
+          ['Representante', `${data.repName || ''} · ${data.repEmail || ''}`],
+          ['Contacto operativo', `${data.opsContactName || ''} · ${data.opsContactEmail || ''}`],
+          ['Ubicación', [data.country, data.region, data.city, data.district].filter(Boolean).join(' / ')],
+          ['Canal principal', data.channelType],
+          ['Ventas estimadas', data.estimatedMonthlySales],
+          ['Banco / cuenta', [data.bankName, data.bankAccountType, data.bankAccountNumber].filter(Boolean).join(' · ')],
+          ['Integración API', data.needsApiIntegration ? 'Sí' : 'No'],
+          ['Notas', data.additionalNotes || '—']
+        ];
+        summaryList.innerHTML = items.map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value || '—')}</dd>`).join('');
+      }
+      function buildApplication(status){
+        const data = readFormData();
+        return {
+          id: applicationId,
+          type: 'agent_onboarding',
+          status: status || 'draft',
+          submittedAt: status === 'pending_review' ? now() : null,
+          updatedAt: now(),
+          createdAt: now(),
+          review: {
+            state: status === 'pending_review' ? 'pending' : 'draft',
+            approvedBy: null,
+            approvedAt: null,
+            rejectionReason: ''
+          },
+          credentials: {
+            username: '',
+            temporaryPassword: '',
+            linkedAgentId: null,
+            linkedUserId: null
+          },
+          onboarding: data
+        };
+      }
+      function persist(status){
+        const items = readApplications();
+        const payload = buildApplication(status);
+        const idx = items.findIndex(item => item.id === applicationId);
+        if (idx >= 0) {
+          payload.createdAt = items[idx].createdAt || payload.createdAt;
+          payload.credentials = items[idx].credentials || payload.credentials;
+          items[idx] = payload;
+        } else {
+          items.unshift(payload);
+        }
+        writeApplications(items);
+        applicationCodeEl.textContent = applicationId;
+        draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : 'Borrador guardado';
+        return payload;
+      }
+      function resetFormAfterSubmit(){
+        form.reset();
+        currentStep = 0;
+        applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
+        applicationCodeEl.textContent = applicationId;
+        draftStatusEl.textContent = 'Sin guardar';
+        renderSteps();
+      }
+
+      prevBtn.addEventListener('click', goPrev);
+      nextBtn.addEventListener('click', goNext);
+      saveDraftBtn.addEventListener('click', () => {
+        persist('draft');
+        setMsg('Borrador guardado en la cola local de onboarding.');
+      });
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        for (let i = 0; i < stepEls.length - 1; i += 1) {
+          if (!validateStep(i)) {
+            currentStep = i;
+            renderSteps();
+            setMsg('Completa los campos obligatorios antes de enviar.', true);
+            return;
+          }
+        }
+        persist('pending_review');
+        setMsg('Solicitud enviada a revisión. Las credenciales se asignarán solo después de aprobación.');
+        resetFormAfterSubmit();
+      });
+
+      applicationCodeEl.textContent = applicationId;
+      renderSteps();
+    })();
+  </script>
+</body>
+</html>

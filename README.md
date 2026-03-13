@@ -21,19 +21,29 @@ Acceso interno del prototipo:
 
 - Entrada oficial para admin por GitHub Pages: `pp-admin-entry.html`
 - Entrada alternativa para admin: `admin-login.html`
-- Portal de credenciales de agentes: `admin/credentials.html`
+- `pp-admin-entry.html` ahora contiene el login admin y la gestión de credenciales en una sola URL estable
+- `admin/credentials.html` se mantiene solo como compatibilidad y redirige a la entrada oficial
+- Nuevo formulario de onboarding exhaustivo: `onboarding.html`
 - Requiere iniciar sesión como `superadmin`
 
 Si publicas este repo con GitHub Pages, las rutas quedarían así:
 
 - `https://juancalidoso01.github.io/checkout-demo/pp-admin-entry.html`
 - `https://juancalidoso01.github.io/checkout-demo/admin-login.html`
-- `https://juancalidoso01.github.io/checkout-demo/admin/credentials.html`
+- `https://juancalidoso01.github.io/checkout-demo/admin/credentials.html` (redirige a la entrada oficial)
+- `https://juancalidoso01.github.io/checkout-demo/onboarding.html`
 
 Flujo recomendado:
 
 1. Abrir `https://juancalidoso01.github.io/checkout-demo/pp-admin-entry.html`
 2. Iniciar sesión como `superadmin`
-3. Revisar y administrar las credenciales de agentes en `admin/credentials.html`
+3. Revisar y administrar las credenciales de agentes en la misma página, sin depender de rutas adicionales
+
+Flujo de onboarding propuesto:
+
+1. Abrir `https://juancalidoso01.github.io/checkout-demo/onboarding.html`
+2. Completar el formulario exhaustivo del comercio
+3. Guardar la solicitud como `pending_review` en la cola local del prototipo
+4. Aprobar luego desde el portal admin y recién entonces asignar/pegar credenciales definitivas
 
 Licencia: uso para demostración y pruebas.

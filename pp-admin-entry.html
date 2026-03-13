@@ -14,6 +14,27 @@
     .admin-login-hero{background:linear-gradient(180deg, rgba(84,98,230,.08), rgba(255,255,255,0) 220px)}
     .admin-login-note{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
     .admin-login-kicker{font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-primary,#5462e6)}
+    .cred-shell{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+    .cred-grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
+    .cred-note{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.06);color:#334155}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .hidden-by-state{display:none}
+    .portal-stack{display:grid;gap:18px}
+    .review-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+    .status-pill.-draft{background:#f3f4f6;color:#475569}
+    .status-pill.-pending_review,.status-pill.-pending{background:#fff7ed;color:#c2410c}
+    .status-pill.-approved{background:#ecfdf5;color:#047857}
+    .status-pill.-rejected{background:#fef2f2;color:#b91c1c}
+    .review-item{border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:14px;background:#fff;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease}
+    .review-item:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(0,0,0,.08)}
+    .review-item.-active{border-color:rgba(84,98,230,.35);box-shadow:0 16px 34px rgba(84,98,230,.14)}
+    .review-kv{display:grid;grid-template-columns:minmax(0,150px) 1fr;gap:10px 16px}
+    .review-kv dt{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#6b7280}
+    .review-kv dd{margin:0;font-size:14px;color:#111827}
+    .review-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .review-textarea{height:auto;min-height:110px;padding:14px 16px;resize:vertical}
+    @media (max-width: 920px){ .cred-grid,.review-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -28,17 +49,17 @@
   </nav>
 
   <main class="pp-page admin-login-hero flex-grow">
-    <div class="pp-shell">
+    <div id="loginView" class="pp-shell hidden-by-state">
       <div class="max-w-md mx-auto">
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head space-y-4">
             <div>
               <div class="admin-login-kicker">Punto Pago</div>
               <h1 class="text-2xl font-extrabold pp-type mt-2">Portal privado de credenciales</h1>
-              <p class="text-sm text-gray-500 mt-2">Este acceso está separado del flujo principal y redirige directo al portal oculto para administración de agentes.</p>
+              <p class="text-sm text-gray-500 mt-2">Este acceso está separado del flujo principal y ahora funciona completo desde esta misma URL para evitar desvíos del prototipo.</p>
             </div>
             <div class="admin-login-note rounded-[18px] p-4 text-sm text-slate-600">
-              Solo el rol <strong>superadmin</strong> puede continuar. Si inicias con otro rol, el sistema te enviará a tu portal correspondiente.
+              Solo el rol <strong>superadmin</strong> puede continuar. Si inicias con otro rol, el sistema te enviará a su portal operativo.
             </div>
           </div>
 
@@ -67,25 +88,554 @@
         </section>
       </div>
     </div>
+
+    <div id="portalView" class="cred-shell hidden-by-state">
+      <div class="pp-card cred-note rounded-[24px] p-4 mb-5">
+        <div class="flex items-start gap-3">
+          <i class="fas fa-lock mt-1 text-[var(--pp-primary)]"></i>
+          <div class="text-sm leading-relaxed">
+            Esta página no está enlazada desde la interfaz del demo. Está pensada solo para administrar credenciales simples mientras definimos el onboarding.
+          </div>
+        </div>
+      </div>
+
+      <div class="portal-stack">
+      <div class="cred-grid">
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h1 class="text-xl font-extrabold">Nuevo agente</h1>
+            <p class="text-sm text-gray-500 mt-1">Versión mínima: usuario, clave temporal y estado de onboarding.</p>
+          </div>
+          <div class="pp-card-body space-y-4">
+            <div>
+              <label class="pp-label">Nombre visible</label>
+              <input id="displayName" class="pp-field" type="text" placeholder="Ej: Agente Santiago Centro">
+            </div>
+            <div>
+              <label class="pp-label">Usuario</label>
+              <input id="agentUsername" class="pp-field" type="text" placeholder="Ej: agente02" autocomplete="off">
+            </div>
+            <div>
+              <label class="pp-label">Clave temporal</label>
+              <input id="agentPassword" class="pp-field" type="text" placeholder="Ej: 1234-temp" autocomplete="off">
+            </div>
+            <div>
+              <label class="pp-label">Estado onboarding</label>
+              <select id="onboardingStatus" class="pp-field">
+                <option value="draft">draft</option>
+                <option value="pending">pending</option>
+                <option value="review">review</option>
+                <option value="approved">approved</option>
+              </select>
+            </div>
+
+            <div class="flex gap-3">
+              <button id="saveAgentBtn" type="button" class="pp-btn pp-btn-primary -full">Guardar agente</button>
+              <button id="resetFormBtn" type="button" class="pp-btn pp-btn-secondary -full">Limpiar</button>
+            </div>
+
+            <p id="formMsg" class="text-sm text-gray-600 min-h-[20px]"></p>
+          </div>
+        </section>
+
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head flex items-center justify-between gap-3">
+            <div>
+              <h2 class="text-xl font-extrabold">Agentes registrados</h2>
+              <p class="text-sm text-gray-500 mt-1">Se almacenan en <code class="mono">localStorage</code> usando la misma base de usuarios del demo.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="hidden md:block text-xs text-slate-500"><span data-pp-session></span></div>
+              <button id="seedBtn" type="button" class="pp-btn pp-btn-secondary">Crear demo</button>
+              <button id="logoutBtn" type="button" class="pp-btn pp-btn-secondary">Salir</button>
+            </div>
+          </div>
+          <div class="pp-card-body">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-gray-500 border-b">
+                    <th class="text-left py-3 pr-3">Usuario</th>
+                    <th class="text-left py-3 pr-3">Nombre</th>
+                    <th class="text-left py-3 pr-3">Onboarding</th>
+                    <th class="text-left py-3 pr-3">Estado</th>
+                    <th class="text-right py-3">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="agentsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="review-grid">
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head flex items-center justify-between gap-3">
+            <div>
+              <h2 class="text-xl font-extrabold">Bandeja de onboarding</h2>
+              <p class="text-sm text-gray-500 mt-1">Solicitudes capturadas en `onboarding.html` antes de asignar credenciales.</p>
+            </div>
+            <a href="onboarding.html" class="pp-btn pp-btn-secondary">Abrir formulario</a>
+          </div>
+          <div class="pp-card-body space-y-3">
+            <div id="applicationsList" class="space-y-3"></div>
+          </div>
+        </section>
+
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold">Detalle del caso</h2>
+            <p class="text-sm text-gray-500 mt-1">Aprueba o rechaza después de validar la información.</p>
+          </div>
+          <div class="pp-card-body space-y-4">
+            <div id="applicationEmpty" class="text-sm text-gray-500">Selecciona una solicitud para ver sus datos.</div>
+            <div id="applicationDetail" class="hidden-by-state space-y-4">
+              <div class="flex items-start justify-between gap-3 flex-wrap">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.18em] text-slate-400 font-extrabold">Solicitud</div>
+                  <h3 id="detailTitle" class="text-lg font-extrabold mt-1">—</h3>
+                  <p id="detailSubtitle" class="text-sm text-gray-500 mt-1">—</p>
+                </div>
+                <div id="detailStatus"></div>
+              </div>
+
+              <dl id="detailFields" class="review-kv"></dl>
+
+              <div class="ob-grid">
+                <div>
+                  <label class="pp-label">Usuario a crear</label>
+                  <input id="approvalUsername" class="pp-field" type="text" placeholder="Ej: agente03" autocomplete="off">
+                </div>
+                <div>
+                  <label class="pp-label">Clave temporal</label>
+                  <input id="approvalPassword" class="pp-field" type="text" placeholder="Ej: temp-1234" autocomplete="off">
+                </div>
+              </div>
+
+              <div>
+                <label class="pp-label">Comentario de revisión</label>
+                <textarea id="reviewNotes" class="pp-field review-textarea" placeholder="Observaciones internas, motivo de rechazo o notas para activación..."></textarea>
+              </div>
+
+              <div class="review-actions">
+                <button id="approveBtn" type="button" class="pp-btn pp-btn-primary">Aprobar y crear agente</button>
+                <button id="rejectBtn" type="button" class="pp-btn pp-btn-secondary">Rechazar solicitud</button>
+              </div>
+
+              <p id="reviewMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
+            </div>
+          </div>
+        </section>
+      </div>
+      </div>
+    </div>
   </main>
 
   <script src="auth.js"></script>
   <script>
     (function(){
-      const target = 'https://juancalidoso01.github.io/checkout-demo/admin/credentials.html';
-      const existing = window.PPAuth.getSession();
-      if (existing) {
-        window.PPAuth.signOut();
-      }
-
+      const loginView = document.getElementById('loginView');
+      const portalView = document.getElementById('portalView');
+  const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
       const $u = document.getElementById('username');
       const $p = document.getElementById('password');
       const $btn = document.getElementById('loginBtn');
       const $err = document.getElementById('error');
+      const USERS_KEY = window.PPAuth && window.PPAuth.USERS_KEY ? window.PPAuth.USERS_KEY : 'pp_users_v1';
+      const els = {
+        displayName: document.getElementById('displayName'),
+        username: document.getElementById('agentUsername'),
+        password: document.getElementById('agentPassword'),
+        onboardingStatus: document.getElementById('onboardingStatus'),
+        saveAgentBtn: document.getElementById('saveAgentBtn'),
+        resetFormBtn: document.getElementById('resetFormBtn'),
+        formMsg: document.getElementById('formMsg'),
+        agentsTable: document.getElementById('agentsTable'),
+        seedBtn: document.getElementById('seedBtn'),
+        logoutBtn: document.getElementById('logoutBtn'),
+        applicationsList: document.getElementById('applicationsList'),
+        applicationEmpty: document.getElementById('applicationEmpty'),
+        applicationDetail: document.getElementById('applicationDetail'),
+        detailTitle: document.getElementById('detailTitle'),
+        detailSubtitle: document.getElementById('detailSubtitle'),
+        detailStatus: document.getElementById('detailStatus'),
+        detailFields: document.getElementById('detailFields'),
+        approvalUsername: document.getElementById('approvalUsername'),
+        approvalPassword: document.getElementById('approvalPassword'),
+        reviewNotes: document.getElementById('reviewNotes'),
+        approveBtn: document.getElementById('approveBtn'),
+        rejectBtn: document.getElementById('rejectBtn'),
+        reviewMsg: document.getElementById('reviewMsg')
+      };
+      let selectedApplicationId = null;
+
+      function showLogin(){
+        loginView.classList.remove('hidden-by-state');
+        portalView.classList.add('hidden-by-state');
+      }
+
+      function showPortal(){
+        portalView.classList.remove('hidden-by-state');
+        loginView.classList.add('hidden-by-state');
+        if (window.PPAuth.renderSessionBadge) window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+      }
 
       function showError(msg){
         $err.textContent = msg || '';
         $err.classList.toggle('hidden', !msg);
+      }
+
+      function now(){ return Date.now(); }
+      function uuid(){ return 'u_agent_' + Math.random().toString(16).slice(2, 8) + '_' + Date.now().toString(16); }
+      function readUsers(){ return window.PPAuth.loadUsers(); }
+      function writeUsers(users){ window.PPAuth.saveUsers(users); }
+      function readApplications(){
+        try {
+          const raw = localStorage.getItem(APPLICATIONS_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          return [];
+        }
+      }
+      function writeApplications(items){
+        localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items || []));
+      }
+      function agentUsers(){ return readUsers().filter(u => u.role === 'agent'); }
+      function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+      function setReviewMsg(text, isError){
+        els.reviewMsg.textContent = text || '';
+        els.reviewMsg.className = 'text-sm min-h-[20px] ' + (isError ? 'text-red-600' : 'text-slate-600');
+      }
+      function normalizeStatus(status){ return (status || 'draft').toString(); }
+      function statusBadge(status){
+        const value = normalizeStatus(status);
+        return `<span class="status-pill -${esc(value)}">${esc(value.replace(/_/g, ' '))}</span>`;
+      }
+      function findApplication(id){ return readApplications().find(app => app.id === id) || null; }
+
+      function setMsg(text, isError){
+        els.formMsg.textContent = text || '';
+        els.formMsg.className = 'text-sm min-h-[20px] ' + (isError ? 'text-red-600' : 'text-gray-600');
+      }
+
+      function resetForm(){
+        els.displayName.value = '';
+        els.username.value = '';
+        els.password.value = '';
+        els.onboardingStatus.value = 'draft';
+        setMsg('');
+      }
+
+      function render(){
+        const rows = agentUsers();
+        if (!rows.length){
+          els.agentsTable.innerHTML = '<tr><td colspan="5" class="py-6 text-gray-500">No hay agentes creados todavía.</td></tr>';
+          return;
+        }
+
+        els.agentsTable.innerHTML = rows.map(user => {
+          const onboarding = user.onboarding && user.onboarding.status ? user.onboarding.status : 'draft';
+          return `
+            <tr class="border-b last:border-0">
+              <td class="py-3 pr-3 font-bold">${esc(user.username)}</td>
+              <td class="py-3 pr-3">${esc(user.displayName || '')}</td>
+              <td class="py-3 pr-3"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mono">${esc(onboarding)}</span></td>
+              <td class="py-3 pr-3">${user.active ? '<span class="text-emerald-600 font-bold">activo</span>' : '<span class="text-gray-500 font-bold">inactivo</span>'}</td>
+              <td class="py-3 text-right space-x-2">
+                <button data-act="toggle" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">${user.active ? 'Desactivar' : 'Activar'}</button>
+                <button data-act="reset" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">Reset clave</button>
+              </td>
+            </tr>`;
+        }).join('');
+
+        renderApplications();
+      }
+
+      function renderApplications(){
+        const items = readApplications().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+        if (!items.length){
+          els.applicationsList.innerHTML = '<div class="text-sm text-gray-500">No hay solicitudes de onboarding todavía.</div>';
+          renderApplicationDetail(null);
+          return;
+        }
+
+        if (!selectedApplicationId || !items.some(item => item.id === selectedApplicationId)) {
+          selectedApplicationId = items[0].id;
+        }
+
+        els.applicationsList.innerHTML = items.map(item => {
+          const data = item.onboarding || {};
+          const isActive = item.id === selectedApplicationId;
+          return `
+            <button type="button" class="review-item ${isActive ? '-active' : ''} w-full text-left" data-app-id="${esc(item.id)}">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="font-extrabold text-sm text-slate-900">${esc(data.businessTradeName || data.businessLegalName || item.id)}</div>
+                  <div class="text-xs text-slate-500 mt-1">${esc(data.taxId || 'Sin identificación')} · ${esc(data.repEmail || 'Sin correo')}</div>
+                </div>
+                <div>${statusBadge(item.status)}</div>
+              </div>
+              <div class="text-xs text-slate-500 mt-3">Actualizado: ${esc(new Date(item.updatedAt || item.createdAt || Date.now()).toLocaleString('es-CL'))}</div>
+            </button>`;
+        }).join('');
+
+        renderApplicationDetail(findApplication(selectedApplicationId));
+      }
+
+      function renderApplicationDetail(item){
+        if (!item) {
+          els.applicationEmpty.classList.remove('hidden-by-state');
+          els.applicationDetail.classList.add('hidden-by-state');
+          return;
+        }
+
+        const data = item.onboarding || {};
+        const credentials = item.credentials || {};
+        els.applicationEmpty.classList.add('hidden-by-state');
+        els.applicationDetail.classList.remove('hidden-by-state');
+        els.detailTitle.textContent = data.businessTradeName || data.businessLegalName || 'Solicitud sin nombre';
+        els.detailSubtitle.textContent = `${data.taxId || 'Sin RUT'} · ${data.repName || 'Sin representante'} · ${data.repEmail || 'Sin correo'}`;
+        els.detailStatus.innerHTML = statusBadge(item.status);
+        els.detailFields.innerHTML = [
+          ['Razón social', data.businessLegalName],
+          ['Industria', data.industry],
+          ['Representante', data.repName],
+          ['Teléfono', data.repPhone],
+          ['Contacto operativo', `${data.opsContactName || ''} ${data.opsContactEmail ? '· ' + data.opsContactEmail : ''}`],
+          ['Ciudad', [data.country, data.region, data.city].filter(Boolean).join(' / ')],
+          ['Canal', data.channelType],
+          ['Ventas estimadas', data.estimatedMonthlySales],
+          ['Banco', [data.bankName, data.bankAccountType, data.bankAccountNumber].filter(Boolean).join(' · ')],
+          ['Integración API', data.needsApiIntegration ? 'Sí' : 'No'],
+          ['Credenciales ligadas', credentials.username ? `${credentials.username} / ${credentials.temporaryPassword || 'sin clave visible'}` : 'Aún no creadas'],
+          ['Observaciones', item.review && item.review.notes ? item.review.notes : data.additionalNotes || '—']
+        ].map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value || '—')}</dd>`).join('');
+
+        els.approvalUsername.value = credentials.username || suggestUsername(data.businessTradeName || data.businessLegalName || 'agente');
+        els.approvalPassword.value = credentials.temporaryPassword || suggestPassword();
+        els.reviewNotes.value = item.review && item.review.notes ? item.review.notes : '';
+        setReviewMsg('');
+      }
+
+      function suggestUsername(base){
+        const normalized = (base || 'agente').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '').slice(0, 10) || 'agente';
+        const users = readUsers();
+        let i = 1;
+        let candidate = `${normalized}${i.toString().padStart(2, '0')}`;
+        while (users.some(u => (u.username || '').toLowerCase() === candidate.toLowerCase())) {
+          i += 1;
+          candidate = `${normalized}${i.toString().padStart(2, '0')}`;
+        }
+        return candidate;
+      }
+
+      function suggestPassword(){
+        return `tmp-${Math.random().toString(36).slice(2, 8)}`;
+      }
+
+      function approveSelected(){
+        const item = findApplication(selectedApplicationId);
+        if (!item) {
+          setReviewMsg('Selecciona una solicitud.', true);
+          return;
+        }
+        const username = (els.approvalUsername.value || '').trim();
+        const password = (els.approvalPassword.value || '').trim();
+        const notes = (els.reviewNotes.value || '').trim();
+        if (!username || !password) {
+          setReviewMsg('Ingresa usuario y clave temporal antes de aprobar.', true);
+          return;
+        }
+
+        const users = readUsers();
+        const apps = readApplications();
+        const appIdx = apps.findIndex(app => app.id === item.id);
+        if (appIdx < 0) {
+          setReviewMsg('La solicitud ya no existe.', true);
+          return;
+        }
+
+        const existingLinkedId = apps[appIdx].credentials && apps[appIdx].credentials.linkedUserId;
+        const usernameTaken = users.find(u => (u.username || '').toLowerCase() === username.toLowerCase() && u.id !== existingLinkedId);
+        if (usernameTaken) {
+          setReviewMsg('Ese usuario ya existe. Usa otro para aprobar.', true);
+          return;
+        }
+
+        const displayName = (item.onboarding && (item.onboarding.businessTradeName || item.onboarding.businessLegalName)) || 'Nuevo agente';
+        let linkedUserId = existingLinkedId;
+        const userIdx = linkedUserId ? users.findIndex(u => u.id === linkedUserId) : -1;
+
+        if (userIdx >= 0) {
+          users[userIdx] = {
+            ...users[userIdx],
+            username,
+            password,
+            displayName,
+            active: true,
+            onboarding: { status: 'approved', updatedAt: now(), applicationId: item.id },
+            updatedAt: now()
+          };
+        } else {
+          linkedUserId = uuid();
+          users.push({
+            id: linkedUserId,
+            username,
+            password,
+            role: 'agent',
+            displayName,
+            agentId: linkedUserId,
+            active: true,
+            onboarding: { status: 'approved', updatedAt: now(), applicationId: item.id },
+            createdAt: now(),
+            updatedAt: now()
+          });
+        }
+        writeUsers(users);
+
+        apps[appIdx] = {
+          ...apps[appIdx],
+          status: 'approved',
+          updatedAt: now(),
+          review: {
+            ...(apps[appIdx].review || {}),
+            state: 'approved',
+            approvedBy: window.PPAuth.getSession()?.username || 'superadmin',
+            approvedAt: now(),
+            rejectionReason: '',
+            notes
+          },
+          credentials: {
+            username,
+            temporaryPassword: password,
+            linkedAgentId: linkedUserId,
+            linkedUserId
+          }
+        };
+        writeApplications(apps);
+        render();
+        setReviewMsg('Solicitud aprobada y agente creado/actualizado correctamente.');
+      }
+
+      function rejectSelected(){
+        const item = findApplication(selectedApplicationId);
+        if (!item) {
+          setReviewMsg('Selecciona una solicitud.', true);
+          return;
+        }
+        const notes = (els.reviewNotes.value || '').trim();
+        if (!notes) {
+          setReviewMsg('Agrega el motivo o comentario antes de rechazar.', true);
+          return;
+        }
+        const apps = readApplications();
+        const appIdx = apps.findIndex(app => app.id === item.id);
+        if (appIdx < 0) {
+          setReviewMsg('La solicitud ya no existe.', true);
+          return;
+        }
+        apps[appIdx] = {
+          ...apps[appIdx],
+          status: 'rejected',
+          updatedAt: now(),
+          review: {
+            ...(apps[appIdx].review || {}),
+            state: 'rejected',
+            approvedBy: null,
+            approvedAt: null,
+            rejectionReason: notes,
+            notes
+          }
+        };
+        writeApplications(apps);
+        renderApplications();
+        setReviewMsg('Solicitud rechazada y comentario guardado.');
+      }
+
+      function saveAgent(){
+        const displayName = (els.displayName.value || '').trim();
+        const username = (els.username.value || '').trim();
+        const password = (els.password.value || '').trim();
+        const onboardingStatus = els.onboardingStatus.value;
+
+        if (!displayName || !username || !password){
+          setMsg('Completa nombre, usuario y clave temporal.', true);
+          return;
+        }
+
+        const users = readUsers();
+        const exists = users.find(u => (u.username || '').toLowerCase() === username.toLowerCase());
+        if (exists){
+          setMsg('Ese usuario ya existe.', true);
+          return;
+        }
+
+        const id = uuid();
+        users.push({
+          id,
+          username,
+          password,
+          role: 'agent',
+          displayName,
+          agentId: id,
+          active: true,
+          onboarding: { status: onboardingStatus, updatedAt: now() },
+          createdAt: now(),
+          updatedAt: now()
+        });
+
+        writeUsers(users);
+        render();
+        resetForm();
+        setMsg('Agente guardado en el prototipo.');
+      }
+
+      function toggleAgent(id){
+        const users = readUsers();
+        const idx = users.findIndex(u => u.id === id && u.role === 'agent');
+        if (idx < 0) return;
+        users[idx] = { ...users[idx], active: !users[idx].active, updatedAt: now() };
+        writeUsers(users);
+        render();
+      }
+
+      function resetPassword(id){
+        const temp = prompt('Nueva clave temporal para este agente:', '1234');
+        if (!temp) return;
+        const users = readUsers();
+        const idx = users.findIndex(u => u.id === id && u.role === 'agent');
+        if (idx < 0) return;
+        users[idx] = { ...users[idx], password: temp, updatedAt: now() };
+        writeUsers(users);
+        setMsg('Clave temporal actualizada.');
+        render();
+      }
+
+      function seedExample(){
+        const users = readUsers();
+        const taken = users.some(u => (u.username || '').toLowerCase() === 'agente02');
+        if (taken){
+          setMsg('El demo ya existe.', true);
+          return;
+        }
+        const id = uuid();
+        users.push({
+          id,
+          username: 'agente02',
+          password: '1234',
+          role: 'agent',
+          displayName: 'Agente 02 Demo',
+          agentId: id,
+          active: true,
+          onboarding: { status: 'pending', updatedAt: now() },
+          createdAt: now(),
+          updatedAt: now()
+        });
+        writeUsers(users);
+        render();
+        setMsg('Agente demo creado.');
       }
 
       function doLogin(){
@@ -95,7 +645,26 @@
           showError(res.error || 'No fue posible iniciar sesión.');
           return;
         }
-        window.PPAuth.redirectAfterLogin(target);
+        if (res.user && res.user.role !== 'superadmin') {
+          location.href = `${location.origin}/checkout-demo/agents/recharge.html`;
+          return;
+        }
+        showPortal();
+        render();
+      }
+
+      function initState(){
+        const session = window.PPAuth.getSession();
+        if (!session) {
+          showLogin();
+          return;
+        }
+        if (session.role !== 'superadmin') {
+          location.href = `${location.origin}/checkout-demo/agents/recharge.html`;
+          return;
+        }
+        showPortal();
+        render();
       }
 
       $btn.addEventListener('click', doLogin);
@@ -103,9 +672,39 @@
         if (e.key === 'Enter') doLogin();
       }));
 
+      els.saveAgentBtn.addEventListener('click', saveAgent);
+      els.resetFormBtn.addEventListener('click', resetForm);
+      els.seedBtn.addEventListener('click', seedExample);
+      els.approveBtn.addEventListener('click', approveSelected);
+      els.rejectBtn.addEventListener('click', rejectSelected);
+      els.logoutBtn.addEventListener('click', () => {
+        window.PPAuth.signOut();
+        showLogin();
+        showError('');
+        setMsg('');
+        setReviewMsg('');
+        resetForm();
+      });
+      els.applicationsList.addEventListener('click', (e) => {
+        const card = e.target.closest('[data-app-id]');
+        if (!card) return;
+        selectedApplicationId = card.getAttribute('data-app-id');
+        renderApplications();
+      });
+      els.agentsTable.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-act]');
+        if (!btn) return;
+        const id = btn.getAttribute('data-id');
+        const act = btn.getAttribute('data-act');
+        if (act === 'toggle') toggleAgent(id);
+        if (act === 'reset') resetPassword(id);
+      });
+
       setTimeout(() => {
         try { $u.focus(); } catch (e) {}
       }, 100);
+
+      initState();
     })();
   </script>
 </body>
