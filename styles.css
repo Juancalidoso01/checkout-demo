@@ -1,3 +1,56 @@
+/* Sección negra de preparación para onboarding */
+.onboarding-prep-section {
+  background: #111217;
+  padding: 56px 0 48px 0;
+  margin-top: 48px;
+}
+.onboarding-prep-section .gate-shell {
+  max-width: 1100px;
+}
+.onboarding-prep-title {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.prep-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 36px;
+  justify-content: center;
+  align-items: stretch;
+}
+.prep-step {
+  background: #18191c;
+  border-radius: 20px;
+  padding: 32px 24px;
+  flex: 1 1 280px;
+  max-width: 340px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+}
+.prep-step img {
+  width: 88px;
+  height: auto;
+  margin-bottom: 18px;
+}
+.prep-step h3 {
+  color: #fff;
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.prep-step p {
+  color: #d1d5db;
+  font-size: 1rem;
+  text-align: center;
+}
 /* styles.css — extracted and enhanced from inline styles in checkout.html */
 :root{
   --blue-500: #0b6cff;
