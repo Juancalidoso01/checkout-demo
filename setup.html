@@ -1,1 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Ajustes — Punto Pago</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
+  <script src="i18n.js?v=5"></script>
+  <style>
+    body { background: var(--pp-page, #ffffff); font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif); color: var(--pp-text, #171717); }
+    .settings-container { max-width: 720px; margin: 0 auto; padding: 24px 20px 80px; }
+    .nav-header { padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem); }
+    .pp-header-gradient { background: linear-gradient(135deg, var(--pp-primary), var(--pp-primary-900)); }
 
+    .settings-group { background: var(--pp-bg); border-radius: var(--pp-radius-md); overflow: hidden; box-shadow: var(--pp-shadow-card); margin-bottom: 24px; border: 1px solid rgba(0,0,0,.06); }
+    .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background 0.2s; }
+    .settings-item:active, .settings-item:hover { background: #f9fafb; }
+    .settings-item:last-child { border-bottom: none; }
+    .settings-item-title { font-weight: 700; color: var(--pp-text); font-size: 0.98rem; letter-spacing: -.01em; }
+    .settings-item-sub { color: #6b7280; font-size: 0.82rem; margin-top: 2px; }
+    .settings-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 14px; font-size: 14px; }
+
+    .bg-blue-soft { background: #eff6ff; color: #3b82f6; }
+    .bg-indigo-soft { background: #e0e7ff; color: #4f46e5; }
+    .bg-purple-soft { background: #f3e8ff; color: #7c3aed; }
+    .bg-green-soft { background: #ecfdf5; color: #10b981; }
+    .bg-orange-soft { background: #fff7ed; color: #f59e0b; }
+    .bg-gray-soft { background: #f3f4f6; color: #6b7280; }
+    .bg-red-soft { background: #fef2f2; color: #ef4444; }
+
+    /* Accordion styles */
+    .accordion-content { display: none; padding: 16px; background: #fafafa; border-bottom: 1px solid #f3f4f6; }
+    .accordion-content.open { display: block; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <nav class="pp-header-gradient text-white shadow-lg sticky top-0 z-40 nav-header pb-3 px-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+  <a href="agents/recharge.html" class="w-10 h-10 flex items-center justify-center rounded-2xl bg-white/10 hover:bg-white/20 transition-colors border border-white/15" aria-label="Volver al portal de agentes" data-i18n-aria-label="setup_back_agents">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+  <h1 class="font-extrabold text-lg tracking-tight text-white" data-i18n="settings_title">Ajustes</h1>
+      </div>
+      <div class="hidden sm:block text-xs text-white/80">
+        <span data-pp-session></span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="settings-container">
+
+    <!-- 1. Cuenta -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_account">1. Cuenta</h2>
+    <div class="settings-group">
+      <!-- Info Personal (Interactive) -->
+      <div class="settings-item" id="toggle-info-personal">
+        <div class="flex items-center">
+          <div class="settings-icon bg-blue-soft"><i class="fas fa-user"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_info_personal">Información personal</div>
+            <div class="settings-item-sub" data-i18n="setup_info_sub">Nombre, teléfono, email, ID</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform" id="icon-info-personal"></i>
+      </div>
+      <div class="accordion-content" id="content-info-personal">
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_fullname">Nombre completo</label>
+            <input id="agent-name" type="text" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_id">Cédula / ID</label>
+            <input id="agent-id" type="text" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_email">Correo electrónico</label>
+            <input id="agent-email" type="email" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_phone">Teléfono</label>
+            <input id="agent-phone" type="tel" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <button id="saveAgent" type="button" class="pp-btn pp-btn-primary -full mt-2" data-i18n="setup_save">Guardar datos</button>
+        </div>
+      </div>
+
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-indigo-soft"><i class="fas fa-id-card"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_doc_verify">Documento de identidad / verificación</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-purple-soft"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_address">Dirección registrada</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-green-soft"><i class="fas fa-comment-dots"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_contact_method">Método de contacto preferido</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 2. Seguridad -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_security">2. Seguridad</h2>
+    <div class="settings-group">
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-orange-soft"><i class="fas fa-key"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_change_pwd">Cambiar contraseña</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-blue-soft"><i class="fas fa-shield-alt"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_2fa">Autenticación en dos factores (2FA)</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-purple-soft"><i class="fas fa-fingerprint"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_biometrics">Biometría (Face ID / Huella)</div>
+          </div>
+        </div>
+        <div class="w-9 h-5 bg-blue-500 rounded-full flex items-center p-0.5 justify-end">
+           <div class="w-4 h-4 bg-white rounded-full shadow"></div>
+        </div>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-history"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_security_history">Actividad e historial de seguridad</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-red-soft"><i class="fas fa-sign-out-alt"></i></div>
+          <div>
+            <div class="settings-item-title text-red-600" data-i18n="setup_close_sessions">Cerrar sesiones activas</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 3. Preferencias -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_preferences">3. Preferencias</h2>
+    <div class="settings-group">
+      <div class="settings-item">
+        <div class="flex items-center">
+          <div class="settings-icon bg-blue-soft"><i class="fas fa-globe"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_language">Idioma</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <select id="lang-selector" class="text-sm text-gray-500 bg-transparent border-none outline-none cursor-pointer appearance-none text-right">
+            <option value="es" data-i18n="lang_es">Español</option>
+            <option value="en" data-i18n="lang_en">Inglés</option>
+            <option value="ru" data-i18n="lang_ru">Ruso</option>
+            <option value="zh" data-i18n="lang_zh">Chino</option>
+          </select>
+          <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
+        </div>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-green-soft"><i class="fas fa-coins"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_currency">Moneda</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500" data-i18n="setup_currency_usd">USD ($)</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-moon"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_theme">Tema (Modo oscuro / claro)</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500" data-i18n="setup_theme_system">Sistema</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-orange-soft"><i class="fas fa-map"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_region">Región o país</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500" data-i18n="setup_region_panama">Panamá</span>
+          <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+        </div>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-indigo-soft"><i class="fas fa-user-shield"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_privacy_preferences">Preferencias de privacidad</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 4. Legal -->
+    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4" data-i18n="settings_legal">4. Legal</h2>
+    <div class="settings-group">
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-file-contract"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_terms_conditions">Términos y condiciones</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-user-secret"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_privacy_policy">Política de privacidad</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-file-signature"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_service_contracts">Contratos del servicio</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+  <div class="settings-item" onclick="showFeatureInDevelopment()">
+        <div class="flex items-center">
+          <div class="settings-icon bg-gray-soft"><i class="fas fa-gavel"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_legal_licenses">Licencias o regulaciones</div>
+          </div>
+        </div>
+        <i class="fas fa-external-link-alt text-gray-300 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- 5. Herramientas de Sandbox (Dev) -->
+  <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 ml-4 mt-8" data-i18n="setup_sandbox_tools">Herramientas de Sandbox</h2>
+    <div class="settings-group">
+      <div class="settings-item" id="toggle-sandbox">
+        <div class="flex items-center">
+          <div class="settings-icon bg-indigo-soft"><i class="fas fa-laptop-code"></i></div>
+          <div>
+            <div class="settings-item-title" data-i18n="setup_sandbox_title">Ajustes del Sandbox</div>
+            <div class="settings-item-sub" data-i18n="setup_sandbox_subtitle">Saldos, comisiones e importación</div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-down text-gray-400 text-sm transition-transform" id="icon-sandbox"></i>
+      </div>
+      <div class="accordion-content" id="content-sandbox">
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><div class="text-xs text-gray-500" data-i18n="agent_balance">Saldo</div><div id="balance-display" class="font-bold text-gray-800"></div></div>
+          <div><div class="text-xs text-gray-500" data-i18n="setup_cash_commissions">Caja / Comisiones</div><div class="font-bold text-gray-800"><span id="cash-display"></span> / <span id="gain-display"></span></div></div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_adjust_balance">Ajustar Saldo (USD)</label>
+            <input id="balance-input" type="number" step="0.01" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_adjust_cash">Ajustar Efectivo/Caja (USD)</label>
+            <input id="cash-input" type="number" step="0.01" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1" data-i18n="setup_adjust_gain">Ajustar Comisiones (USD)</label>
+            <input id="gain-input" type="number" step="0.01" class="pp-field h-auto min-h-[46px] text-sm px-4">
+          </div>
+          <div class="flex gap-2 pt-2">
+            <button id="applyFin" type="button" class="pp-btn pp-btn-primary flex-1" data-i18n="setup_btn_apply">Aplicar</button>
+            <button id="resetSandbox" type="button" class="pp-btn pp-btn-secondary flex-1 !bg-gray-100 !text-gray-800 rounded-[16px]" data-i18n="setup_btn_reset">Resetear</button>
+          </div>
+          <hr class="my-4">
+          <textarea id="importArea" rows="4" class="w-full p-4 border rounded-[20px] bg-white text-xs font-mono border-[color:var(--pp-border)] focus:outline-none focus:ring-4 focus:ring-[rgba(84,98,230,.12)]" placeholder="Pegar JSON para importar..." data-i18n-ph="setup_import_placeholder"></textarea>
+          <div class="flex gap-2">
+            <button id="importBtn" type="button" class="pp-btn flex-1 justify-center rounded-[16px] bg-gray-900 text-white py-3 font-bold text-sm" data-i18n="setup_btn_import">Importar</button>
+            <button id="clearAll" type="button" class="pp-btn flex-1 justify-center rounded-[16px] bg-red-100 text-red-600 py-3 font-bold text-sm" data-i18n="setup_btn_clear">Borrar Locales</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 mt-6">
+  <a href="#" data-pp-logout class="pp-btn pp-btn-secondary w-full justify-center border border-[rgba(235,66,66,.18)] bg-[rgba(235,66,66,.06)] text-[var(--pp-danger)] rounded-[24px] px-5 py-3.5 font-bold transition-colors hover:bg-[rgba(235,66,66,.12)]">
+        <span data-i18n="setup_logout_login">Cerrar sesión e ir al login</span>
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    // Accordion Logic
+    function showFeatureInDevelopment() {
+      alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_feature_in_dev : 'Feature in development');
+    }
+
+    function setupAccordion(toggleId, contentId, iconId) {
+      const toggle = document.getElementById(toggleId);
+      const content = document.getElementById(contentId);
+      const icon = document.getElementById(iconId);
+      if(!toggle || !content) return;
+      toggle.addEventListener('click', () => {
+        const isOpen = content.classList.contains('open');
+        content.classList.toggle('open');
+        if(icon) {
+          icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+      });
+    }
+    setupAccordion('toggle-info-personal', 'content-info-personal', 'icon-info-personal');
+    setupAccordion('toggle-sandbox', 'content-sandbox', 'icon-sandbox');
+
+    // Data Logic
+    (function(){
+      const AGENT_INFO_KEY = 'pp_agent_info_v1';
+      const STORAGE_KEY = 'pp_agent_sandbox_v1';
+
+      const defaults = { name: 'Nombre Agente', id: '00000000', email: '', phone: '' };
+      const defaultState = { balance: 1250.45, cash: 342.10, gain: 12.45, txs: [] };
+
+      function loadAgent(){ try { return JSON.parse(localStorage.getItem(AGENT_INFO_KEY)) || defaults } catch(e){ return defaults } }
+      function saveAgent(a){ try { localStorage.setItem(AGENT_INFO_KEY, JSON.stringify(a)); } catch(e){} }
+      function loadState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState } catch(e){ return defaultState } }
+      function saveState(s){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){} }
+
+      const nameEl = document.getElementById('agent-name');
+      const idEl = document.getElementById('agent-id');
+      const emailEl = document.getElementById('agent-email');
+      const phoneEl = document.getElementById('agent-phone');
+
+      const balanceDisplay = document.getElementById('balance-display');
+      const cashDisplay = document.getElementById('cash-display');
+      const gainDisplay = document.getElementById('gain-display');
+
+      const balanceInput = document.getElementById('balance-input');
+      const cashInput = document.getElementById('cash-input');
+      const gainInput = document.getElementById('gain-input');
+      const importArea = document.getElementById('importArea');
+
+      function render(){
+        const a = loadAgent();
+        const s = loadState();
+        if(nameEl) nameEl.value = a.name || '';
+        if(idEl) idEl.value = a.id || '';
+        if(emailEl) emailEl.value = a.email || '';
+        if(phoneEl) phoneEl.value = a.phone || '';
+
+        if(balanceDisplay) balanceDisplay.innerText = '$' + Number(s.balance||0).toFixed(2);
+        if(cashDisplay) cashDisplay.innerText = '$' + Number(s.cash||0).toFixed(2);
+        if(gainDisplay) gainDisplay.innerText = '$' + Number(s.gain||0).toFixed(2);
+
+        if(balanceInput) balanceInput.value = Number(s.balance||0).toFixed(2);
+        if(cashInput) cashInput.value = Number(s.cash||0).toFixed(2);
+        if(gainInput) gainInput.value = Number(s.gain||0).toFixed(2);
+      }
+
+      document.getElementById('saveAgent')?.addEventListener('click', ()=>{
+        const a = { name: nameEl.value || defaults.name, id: idEl.value || defaults.id, email: emailEl.value||'', phone: phoneEl.value||'' };
+        saveAgent(a);
+        const s = loadState();
+        saveState(s);
+  alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_msg_success : 'Datos de cuenta guardados con éxito');
+        render();
+      });
+
+      document.getElementById('applyFin')?.addEventListener('click', ()=>{
+        const s = loadState();
+        s.balance = Number(Number(balanceInput.value||0).toFixed(2));
+        s.cash = Number(Number(cashInput.value||0).toFixed(2));
+        s.gain = Number(Number(gainInput.value||0).toFixed(2));
+        saveState(s);
+  alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_sandbox_applied : 'Ajustes sandbox aplicados');
+        render();
+      });
+
+      document.getElementById('resetSandbox')?.addEventListener('click', ()=>{
+  if (!confirm(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_restore_defaults_confirm : '¿Restablecer sandbox a valores por defecto?')) return;
+        saveState(defaultState);
+  alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_sandbox_reset : 'Sandbox reiniciado');
+        render();
+      });
+
+      document.getElementById('importBtn')?.addEventListener('click', ()=>{
+        const txt = importArea.value.trim();
+  if (!txt) return alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_paste_valid_json : 'Pega un JSON válido');
+        try {
+          const obj = JSON.parse(txt);
+          if (obj[AGENT_INFO_KEY]) saveAgent(obj[AGENT_INFO_KEY]);
+          if (obj[STORAGE_KEY]) saveState(obj[STORAGE_KEY]);
+          alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_import_success : 'Importado correctamente');
+          render();
+        } catch(e){ alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_invalid_json : 'JSON inválido: ') + e.message); }
+      });
+
+      document.getElementById('clearAll')?.addEventListener('click', ()=>{
+  if (!confirm(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_clear_all_confirm : '¿Eliminar todos los datos locales (agent, sandbox, logs)?')) return;
+        try {
+          localStorage.removeItem(AGENT_INFO_KEY);
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem('pp_paid_services_v1');
+          localStorage.removeItem('pp_agent_cashout_method_v2');
+          localStorage.removeItem('pp_agent_bank_v1');
+          alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_deep_clean_success : 'Limpieza profunda exitosa');
+          render();
+        } catch(e){ alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().setup_error_prefix : 'Error: ') + e.message); }
+      });
+
+      render();
+    })();
+  </script>
+
+  <script>
+    (function(){
+      try {
+  const session = window.PPAuth && window.PPAuth.requireAuth({ role: ['agent','employee','superadmin'] });
+        if (!session) return;
+        window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+        window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+      } catch(e){ console.warn('Auth guard failed', e); }
+    })();
+  </script>
+
+  <script>
+    (function(){
+      function setupLangSelector() {
+        const langSel = document.getElementById('lang-selector');
+        if (langSel && window.I18N) {
+          langSel.value = window.I18N.currentLang;
+
+          langSel.addEventListener('change', (e) => {
+            console.log("Selector de idioma cambiado a:", e.target.value);
+            // Guarda primero el valor
+            localStorage.setItem('pp_lang', e.target.value);
+            // Fuerza un recargo completo limpio de la web
+            window.location.reload();
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupLangSelector);
+      } else {
+        setupLangSelector();
+      }
+    })();
+  </script>
+  <script src="chat-widget.js"></script>
+</body>
+</html>

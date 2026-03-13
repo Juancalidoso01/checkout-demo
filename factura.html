@@ -1,1 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Factura — Enviar comprobante</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
+  <style>
+    body{background:#f3f4f6;font-family:var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);color:var(--pp-text,#171717)}
+    .bg-punto-pago{background:#0047bb}
+    body.pp-embed nav{display:none !important}
+    body.pp-embed .pp-page{padding-top:0 !important}
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
 
+  <script>
+    (function(){
+      try{
+        const p = new URLSearchParams(location.search);
+        if (p.get('embed') === '1') document.body.classList.add('pp-embed');
+      }catch(e){}
+    })();
+  </script>
+
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+    <div class="mx-auto flex justify-between items-center w-full max-w-5xl px-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="bg-white rounded-md shadow-sm flex items-center justify-center w-[150px] h-11 md:h-12 px-2">
+          <img src="assets/logo-header-v2.png" alt="Punto Pago" class="h-7 md:h-8 w-auto max-w-[136px] object-contain">
+        </div>
+        <span class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap" data-i18n="tab_invoice">Factura</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex flex-col items-end text-right">
+          <div class="text-[10px] opacity-85 font-semibold uppercase" data-i18n="common_session">Sesión</div>
+          <div class="text-xs font-bold" data-pp-session></div>
+        </div>
+        <a href="agents/recharge.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]" data-i18n="common_back">Volver</a>
+        <a href="#" data-pp-logout class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px]" data-i18n="common_logout">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pp-page flex-grow">
+    <div class="pp-shell">
+
+      <section class="pp-top-tabs mb-6" aria-label="Acciones">
+        <button type="button" id="loadLastTx" class="pp-top-tab -active">
+          <span class="icon"><i class="fas fa-rotate"></i></span>
+          <span class="title" data-i18n="invoice_load_last">Cargar última operación</span>
+        </button>
+        <button type="button" id="clearDraft" class="pp-top-tab">
+          <span class="icon"><i class="fas fa-eraser"></i></span>
+          <span class="title" data-i18n="invoice_clear">Limpiar</span>
+        </button>
+      </section>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Datos de contacto -->
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold pp-type" data-i18n="invoice_send_btn">Enviar comprobante</h2>
+            <p class="text-sm text-gray-500" data-i18n="invoice_subtitle">Confirma los datos del cliente para compartir el recibo.</p>
+          </div>
+          <div class="pp-card-body space-y-5">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="pp-label" data-i18n="invoice_label_name">Nombre (opcional)</label>
+                <input id="clientName" class="pp-field" type="text" placeholder="Ej: Juan Pérez" data-i18n="invoice_ph_name" autocomplete="name">
+              </div>
+              <div>
+                <label class="pp-label" data-i18n="invoice_label_id">Documento / ID (opcional)</label>
+                <input id="clientId" class="pp-field" type="text" placeholder="Ej: 8-888-888" data-i18n="invoice_ph_id" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="pp-label" data-i18n="invoice_label_wa">WhatsApp (tel con país)</label>
+                <div class="pp-input-group">
+                  <span class="pp-input-prefix">+</span>
+                  <input id="waPhone" class="pp-input-control" type="tel" inputmode="tel" placeholder="50760000000" data-i18n="invoice_ph_wa" autocomplete="tel">
+                </div>
+                <p class="text-xs text-gray-500 mt-2" data-i18n="invoice_help_wa">Formato sin espacios. Ej: 50760000000</p>
+              </div>
+              <div>
+                <label class="pp-label" data-i18n="invoice_label_email">Correo electrónico</label>
+                <input id="email" class="pp-field" type="email" placeholder="cliente@correo.com" data-i18n="invoice_ph_email" autocomplete="email">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="pp-label" data-i18n="invoice_label_tg">Telegram (usuario o número)</label>
+                <input id="telegram" class="pp-field" type="text" placeholder="@usuario o 50760000000" data-i18n="invoice_ph_tg" autocomplete="off">
+              </div>
+              <div>
+                <label class="pp-label" data-i18n="invoice_label_msg">Mensaje (editable)</label>
+                <textarea id="message" class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-4" rows="4" placeholder="Mensaje para el cliente..." data-i18n="invoice_ph_msg"></textarea>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+              <button type="button" id="sendWhatsapp" class="pp-btn pp-btn-primary -full">
+                <i class="fab fa-whatsapp"></i> <span data-i18n="invoice_btn_wa">WhatsApp</span>
+              </button>
+              <button type="button" id="sendTelegram" class="pp-btn pp-btn-primary -full">
+                <i class="fab fa-telegram"></i> <span data-i18n="invoice_btn_tg">Telegram</span>
+              </button>
+              <button type="button" id="sendEmail" class="pp-btn pp-btn-primary -full">
+                <i class="fas fa-envelope"></i> <span data-i18n="invoice_btn_email">Correo</span>
+              </button>
+            </div>
+
+            <p id="status" class="text-sm text-gray-500"></p>
+          </div>
+        </section>
+
+        <!-- Preview de recibo -->
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold pp-type" data-i18n="invoice_preview_title">Vista previa</h2>
+            <p class="text-sm text-gray-500" data-i18n="invoice_preview_desc">Así verá el recibo el cliente (texto).</p>
+          </div>
+          <div class="pp-card-body">
+            <div class="rounded-2xl border border-gray-200 bg-white p-5">
+              <div class="text-xs tracking-widest text-gray-500 font-bold uppercase" data-i18n="invoice_print">Punto Pago — Comprobante</div>
+              <div id="receiptTitle" class="mt-2 text-lg font-extrabold" data-i18n="invoice_op">Operación</div>
+              <div id="receiptMeta" class="mt-2 text-sm text-gray-600"></div>
+              <div class="mt-4 border-t pt-4">
+                <div class="flex justify-between text-sm"><span class="text-gray-500" data-i18n="invoice_amount">Monto</span><span id="receiptAmount" class="font-extrabold">$0.00</span></div>
+                <div class="flex justify-between text-sm mt-2"><span class="text-gray-500" data-i18n="invoice_ref">Referencia</span><span id="receiptRef" class="font-mono text-gray-700">—</span></div>
+              </div>
+              <div class="mt-4 text-xs text-gray-500" data-i18n="invoice_preview_disclaimer">Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <footer class="mt-8 text-xs text-gray-500">
+        <span data-i18n="invoice_demo_footer">Demo — Los datos se guardan en <code>localStorage</code>. Fuente de operaciones: sandbox <code>pp_agent_sandbox_v1</code>.</span>
+      </footer>
+
+    </div>
+  </main>
+
+  <script>
+  (function(){
+    // Auth guard (agent + employee) ----------------------------------------
+    try {
+  const session = window.PPAuth && window.PPAuth.requireAuth({ role: ['agent','employee','superadmin'] });
+      if (!session) return;
+      window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+      window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
+    } catch(e){ console.warn('Auth guard failed', e); }
+
+    const STORAGE_KEY = 'pp_agent_sandbox_v1';
+    const DRAFT_KEY = 'pp_receipt_draft_v1';
+
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { txs: [] }; }
+      catch(e){ return { txs: [] }; }
+    }
+
+    function fmt(v){
+      const n = Number(v);
+      return '$' + (Number.isFinite(n) ? n.toFixed(2) : '0.00');
+    }
+
+    function safeText(v){ return (v ?? '').toString().trim(); }
+
+    const els = {
+      clientName: document.getElementById('clientName'),
+      clientId: document.getElementById('clientId'),
+      waPhone: document.getElementById('waPhone'),
+      email: document.getElementById('email'),
+      telegram: document.getElementById('telegram'),
+      message: document.getElementById('message'),
+      status: document.getElementById('status'),
+      receiptTitle: document.getElementById('receiptTitle'),
+      receiptMeta: document.getElementById('receiptMeta'),
+      receiptAmount: document.getElementById('receiptAmount'),
+      receiptRef: document.getElementById('receiptRef'),
+      loadLastTx: document.getElementById('loadLastTx'),
+      clearDraft: document.getElementById('clearDraft'),
+      sendWhatsapp: document.getElementById('sendWhatsapp'),
+      sendTelegram: document.getElementById('sendTelegram'),
+      sendEmail: document.getElementById('sendEmail'),
+    };
+
+    function setStatus(msg){
+      if (!els.status) return;
+      els.status.textContent = msg;
+    }
+
+    function buildReceiptFromTx(tx){
+      const when = tx?.when ? new Date(tx.when) : new Date();
+      const type = safeText(tx?.type) || 'Operación';
+      const desc = safeText(tx?.desc) || '—';
+      const amount = fmt(tx?.amount);
+      const ref = safeText(tx?.ref) || safeText(tx?.id) || safeText(tx?.reference) || '—';
+
+      const title = type;
+      const meta = `${when.toLocaleString()} — ${desc}`;
+
+      return { title, meta, amount, ref };
+    }
+
+    function updatePreview(receipt){
+      els.receiptTitle.textContent = receipt.title;
+      els.receiptMeta.textContent = receipt.meta;
+      els.receiptAmount.textContent = receipt.amount;
+      els.receiptRef.textContent = receipt.ref;
+    }
+
+    function defaultMessage(receipt, clientName){
+      const name = safeText(clientName);
+      const dict = window.I18N ? window.I18N.getDict() : {};
+      const greetText = dict['invoice_greet'] || 'Hola';
+      const greet = name ? `${greetText} ${name},` : `${greetText},`;
+      return [
+        greet,
+        dict['invoice_msg_body'] || 'Te compartimos tu comprobante de pago:',
+        `${receipt.title}`,
+        `${receipt.meta}`,
+        `${dict['invoice_amount'] || 'Monto'}: ${receipt.amount}`,
+        `${dict['invoice_ref'] || 'Referencia'}: ${receipt.ref}`,
+        dict['invoice_msg_footer'] || 'Gracias por usar Punto Pago.'
+      ].join('\n');
+    }
+
+    function loadDraft(){
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch(e){
+        return null;
+      }
+    }
+
+    function saveDraft(d){
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch(e){}
+    }
+
+    function clearDraft(){
+      try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+    }
+
+    function hydrateFromDraft(){
+      const d = loadDraft();
+      if (!d) return;
+      if (d.clientName) els.clientName.value = d.clientName;
+      if (d.clientId) els.clientId.value = d.clientId;
+      if (d.waPhone) els.waPhone.value = d.waPhone;
+      if (d.email) els.email.value = d.email;
+      if (d.telegram) els.telegram.value = d.telegram;
+      if (d.message) els.message.value = d.message;
+      if (d.receipt) updatePreview(d.receipt);
+    }
+
+    function persist(){
+      const d = {
+        clientName: safeText(els.clientName.value),
+        clientId: safeText(els.clientId.value),
+        waPhone: safeText(els.waPhone.value),
+        email: safeText(els.email.value),
+        telegram: safeText(els.telegram.value),
+        message: safeText(els.message.value),
+        receipt: {
+          title: safeText(els.receiptTitle.textContent),
+          meta: safeText(els.receiptMeta.textContent),
+          amount: safeText(els.receiptAmount.textContent),
+          ref: safeText(els.receiptRef.textContent),
+        }
+      };
+      saveDraft(d);
+    }
+
+    function ensureMessage(){
+      const current = safeText(els.message.value);
+      if (current) return current;
+      const receipt = {
+        title: safeText(els.receiptTitle.textContent) || 'Operación',
+        meta: safeText(els.receiptMeta.textContent) || '',
+        amount: safeText(els.receiptAmount.textContent) || '$0.00',
+        ref: safeText(els.receiptRef.textContent) || '—',
+      };
+      const msg = defaultMessage(receipt, els.clientName.value);
+      els.message.value = msg;
+      return msg;
+    }
+
+    function openUrl(url){
+      // new tab to avoid losing state
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function sendWhatsApp(){
+      const phone = safeText(els.waPhone.value).replace(/[^0-9]/g,'');
+      if (!phone){
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_err_wa'] : null) || 'Ingresa el número de WhatsApp (con código de país, sin +).');
+        els.waPhone.focus();
+        return;
+      }
+      const msg = ensureMessage();
+      const url = `https://wa.me/${encodeURIComponent(phone)}?text=${encodeURIComponent(msg)}`;
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_wa'] : null) || 'Abriendo WhatsApp…');
+      openUrl(url);
+    }
+
+    function sendEmail(){
+      const email = safeText(els.email.value);
+      if (!email){
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_err_email'] : null) || 'Ingresa un correo del cliente.');
+        els.email.focus();
+        return;
+      }
+      const msg = ensureMessage();
+      const subject = 'Comprobante de pago — Punto Pago';
+      const url = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_email'] : null) || 'Abriendo correo…');
+      openUrl(url);
+    }
+
+    function sendTelegram(){
+      const handle = safeText(els.telegram.value);
+      const msg = ensureMessage();
+      if (!handle){
+        // fallback: open t.me share
+        const url = `https://t.me/share/url?url=&text=${encodeURIComponent(msg)}`;
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_status_tg_share'] : null) || 'Abriendo Telegram (compartir)…');
+        openUrl(url);
+        return;
+      }
+      // if user provided @username, open chat
+      const clean = handle.replace(/^@/,'').trim();
+      const url = `https://t.me/${encodeURIComponent(clean)}`;
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_tg'] : null) || 'Abriendo Telegram… (luego pega el mensaje)');
+      openUrl(url);
+    }
+
+    function loadLastTx(){
+      const st = loadState();
+      const txs = Array.isArray(st.txs) ? st.txs : [];
+      if (!txs.length){
+        setStatus((window.I18N ? window.I18N.getDict()['invoice_err_no_tx'] : null) || 'No hay transacciones en el sandbox todavía. Realiza un Cash In o un pago primero.');
+        const dict = window.I18N ? window.I18N.getDict() : {};
+        const blank = { title: dict['invoice_op'] || 'Operación', meta: new Date().toLocaleString(), amount: '$0.00', ref: '—' };
+        updatePreview(blank);
+        els.message.value = '';
+        persist();
+        return;
+      }
+      const last = txs[txs.length - 1];
+      const receipt = buildReceiptFromTx(last);
+      updatePreview(receipt);
+      els.message.value = '';
+      setStatus((window.I18N ? window.I18N.getDict()['invoice_status_loaded'] : null) || 'Última operación cargada. Completa los datos del cliente y elige el canal.');
+      persist();
+    }
+
+    // Wire
+    ['input','change','blur'].forEach(evt => {
+      [els.clientName, els.clientId, els.waPhone, els.email, els.telegram, els.message].forEach(el => {
+        if (!el) return;
+        el.addEventListener(evt, persist);
+      });
+    });
+
+    els.sendWhatsapp.addEventListener('click', ()=>{ persist(); sendWhatsApp(); });
+    els.sendTelegram.addEventListener('click', ()=>{ persist(); sendTelegram(); });
+    els.sendEmail.addEventListener('click', ()=>{ persist(); sendEmail(); });
+
+    els.loadLastTx.addEventListener('click', ()=>{ loadLastTx(); });
+    els.clearDraft.addEventListener('click', ()=>{
+      clearDraft();
+      location.reload();
+    });
+
+    // Init
+    hydrateFromDraft();
+    if (!safeText(els.receiptTitle.textContent) || els.receiptTitle.textContent === 'Operación'){
+      // attempt to populate automatically
+      loadLastTx();
+    }
+
+  })();
+
+  // Forward swipes to parent window (for mobile navigation in Agent portal)
+  (function initIframeSwipe() {
+    let startX = 0, startY = 0;
+    const threshold = 60;
+    
+    document.addEventListener('touchstart', function(e) {
+      if(e.touches.length > 1) return;
+      startX = e.changedTouches[0].screenX;
+      startY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      const endX = e.changedTouches[0].screenX;
+      const endY = e.changedTouches[0].screenY;
+      const dx = endX - startX;
+      const dy = endY - startY;
+      
+      // Check if movement is mostly horizontal
+      if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'iframeSwipe', dx: dx, dy: dy }, '*');
+        }
+      }
+    }, { passive: true });
+  })();
+  </script>
+  <script src="i18n.js?v=5"></script>
+</body>
+</html>
