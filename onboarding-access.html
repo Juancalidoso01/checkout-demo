@@ -25,6 +25,8 @@
     .next-step-card.-ready{border-color:#86efac;background:linear-gradient(180deg,rgba(16,185,129,.08),rgba(255,255,255,.98))}
     .step-row{display:flex;gap:12px;align-items:flex-start}
     .step-dot{width:30px;height:30px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary);display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
+    .wait-box{border-radius:20px;border:1px solid rgba(84,98,230,.18);background:#fff;padding:16px}
+    .countdown{font-size:2rem;font-weight:800;letter-spacing:-.04em;color:var(--pp-primary)}
     @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
   </style>
 </head>
@@ -68,9 +70,24 @@
               <input id="accessBusiness" type="text" class="pp-field" placeholder="Ej: Comercial Centro SpA" autocomplete="organization">
             </div>
 
-            <div class="flex gap-3 flex-wrap">
+            <div id="formActions" class="flex gap-3 flex-wrap">
               <button id="validateBtn" type="button" class="pp-btn pp-btn-primary">Validar y continuar</button>
               <button id="continueBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Continuar al onboarding</button>
+            </div>
+
+            <div id="waitingRoom" class="wait-box is-hidden">
+              <div class="font-extrabold text-slate-900">Estamos esperando tu confirmación</div>
+              <p class="text-sm text-slate-600 mt-2">Te enviamos un enlace al correo ingresado. Abre ese mensaje y vuelve a esta misma pantalla desde el enlace.</p>
+              <div class="mt-4 flex items-end gap-3 flex-wrap">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.16em] text-slate-400 font-extrabold">Tiempo sugerido</div>
+                  <div id="countdown" class="countdown">05:00</div>
+                </div>
+                <div class="text-sm text-slate-500 max-w-xs">Si no confirmas dentro de este tiempo, puedes solicitar un enlace nuevo.</div>
+              </div>
+              <div class="mt-4 flex gap-3 flex-wrap">
+                <button id="resendBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Enviar enlace nuevamente</button>
+              </div>
             </div>
 
             <div id="supabaseHint" class="text-xs text-slate-500">Cuando presiones el botón, enviaremos un enlace de confirmación al correo ingresado. Debes abrirlo antes de seguir.</div>
@@ -118,7 +135,11 @@
         phone: document.getElementById('accessPhone'),
         business: document.getElementById('accessBusiness'),
         validateBtn: document.getElementById('validateBtn'),
-  continueBtn: document.getElementById('continueBtn'),
+    continueBtn: document.getElementById('continueBtn'),
+    formActions: document.getElementById('formActions'),
+    waitingRoom: document.getElementById('waitingRoom'),
+    countdown: document.getElementById('countdown'),
+    resendBtn: document.getElementById('resendBtn'),
         gateMsg: document.getElementById('gateMsg'),
         statusBox: document.getElementById('statusBox'),
         statusText: document.getElementById('statusText'),
@@ -129,6 +150,9 @@
       const sbCfg = window.PPSupabaseConfig || {};
       const hasSupabase = !!(window.supabase && sbCfg.enabled && sbCfg.url && sbCfg.anonKey);
       const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey) : null;
+  let waitUntil = 0;
+  let countdownTimer = null;
+  let pollingTimer = null;
 
       function readApplications(){
         try {
@@ -174,8 +198,40 @@
       function updateContinueButton(show){
         els.continueBtn.classList.toggle('is-hidden', !show);
       }
+      function setWaitingMode(waiting){
+        els.waitingRoom.classList.toggle('is-hidden', !waiting);
+        els.validateBtn.classList.toggle('is-hidden', waiting);
+      }
+      function stopTimers(){
+        if (countdownTimer) clearInterval(countdownTimer);
+        if (pollingTimer) clearInterval(pollingTimer);
+        countdownTimer = null;
+        pollingTimer = null;
+      }
+      function renderCountdown(){
+        const ms = Math.max(0, waitUntil - Date.now());
+        const totalSec = Math.ceil(ms / 1000);
+        const min = Math.floor(totalSec / 60).toString().padStart(2, '0');
+        const sec = Math.max(0, totalSec % 60).toString().padStart(2, '0');
+        els.countdown.textContent = `${min}:${sec}`;
+        const expired = ms <= 0;
+        els.resendBtn.classList.toggle('is-hidden', !expired);
+        if (expired) {
+          stopTimers();
+          setStatus('-warn', 'La ventana sugerida expiró. Puedes solicitar un nuevo enlace.');
+          setNextStep('Si no validaste el correo, solicita un nuevo enlace para continuar.', false);
+        }
+      }
+      function startWaitingWindow(){
+        waitUntil = Date.now() + (5 * 60 * 1000);
+        setWaitingMode(true);
+        renderCountdown();
+        stopTimers();
+        countdownTimer = setInterval(renderCountdown, 1000);
+        pollingTimer = setInterval(() => { handleSupabaseReturn(true); }, 4000);
+      }
 
-      async function handleSupabaseReturn(){
+      async function handleSupabaseReturn(silent){
         if (!supabaseClient) return false;
         try {
           const { data, error } = await supabaseClient.auth.getSession();
@@ -191,15 +247,19 @@
             verificationMethod: 'supabase_magic_link',
             supabaseUserId: session.user.id
           });
+          stopTimers();
+          setWaitingMode(false);
           setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
           setStatus('-ok', `Correo verificado: ${session.user.email}`);
           setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
           updateContinueButton(true);
           return true;
         } catch (e) {
-          setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
-          setStatus('-error', 'Falló la confirmación con Supabase.');
-          setNextStep('Vuelve a abrir el enlace del correo o solicita uno nuevo.', false);
+          if (!silent) {
+            setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
+            setStatus('-error', 'Falló la confirmación con Supabase.');
+            setNextStep('Vuelve a abrir el enlace del correo o solicita uno nuevo.', false);
+          }
           return false;
         }
       }
@@ -236,6 +296,7 @@
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
         setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
         setNextStep('Abre tu correo desde este mismo celular o computador. Cuando vuelvas aquí con el enlace confirmado, podrás continuar.', false);
+        startWaitingWindow();
         updateContinueButton(false);
       }
 
@@ -288,7 +349,6 @@
             setGateMsg('Existe una solicitud rechazada. Puedes iniciar una nueva versión del onboarding.', false);
             setStatus('-warn', 'Encontramos una solicitud rechazada. Continuarás con una nueva versión del formulario.');
             setNextStep('Tuviste una solicitud anterior rechazada. Puedes iniciar una nueva después de validar tu correo.', false);
-            setTimeout(() => { location.href = 'onboarding.html'; }, 700);
             return;
           }
         }
@@ -309,6 +369,12 @@
       }
 
       els.validateBtn.addEventListener('click', () => { validateAndContinue(); });
+      els.resendBtn.addEventListener('click', () => {
+        const email = normalize(els.email.value);
+        const phone = (els.phone.value || '').trim();
+        const business = (els.business.value || '').trim();
+        validateAndContinue(email, phone, business);
+      });
       els.continueBtn.addEventListener('click', () => {
         const ctx = getAccessContext();
         if (supabaseClient && !(ctx && ctx.emailVerified)) {
@@ -326,6 +392,7 @@
       if (initialCtx && (!supabaseClient || initialCtx.emailVerified)) {
         updateContinueButton(true);
         if (initialCtx.emailVerified) {
+          setWaitingMode(false);
           setStatus('-ok', `Correo verificado: ${initialCtx.email}`);
           setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
           setNextStep('Tu correo ya está validado. Continúa cuando quieras al onboarding.', true);
