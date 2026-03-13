@@ -530,7 +530,13 @@
         resetFormAfterSubmit();
       });
 
-      if (!readAccessContext()) {
+      const accessContext = readAccessContext();
+      if (!accessContext) {
+        location.href = 'onboarding-access.html';
+        return;
+      }
+
+      if (!accessContext.emailVerified) {
         location.href = 'onboarding-access.html';
         return;
       }

@@ -20,6 +20,7 @@
     .status-box.-error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
     .status-box.-info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
     .status-box.-pending{background:#f5f3ff;border-color:#c4b5fd;color:#6d28d9}
+    .is-hidden{display:none}
     @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
   </style>
 </head>
@@ -65,7 +66,7 @@
 
             <div class="flex gap-3 flex-wrap">
               <button id="validateBtn" type="button" class="pp-btn pp-btn-primary">Validar y continuar</button>
-              <a href="onboarding.html" class="pp-btn pp-btn-secondary">Ir directo al formulario</a>
+              <button id="continueBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Continuar al onboarding</button>
             </div>
 
             <div id="supabaseHint" class="text-xs text-slate-500">Modo actual: validación local del prototipo. Cuando configures Supabase, aquí mismo enviaremos un enlace real de confirmación al correo.</div>
@@ -108,6 +109,7 @@
         phone: document.getElementById('accessPhone'),
         business: document.getElementById('accessBusiness'),
         validateBtn: document.getElementById('validateBtn'),
+  continueBtn: document.getElementById('continueBtn'),
         gateMsg: document.getElementById('gateMsg'),
         statusBox: document.getElementById('statusBox'),
         statusText: document.getElementById('statusText'),
@@ -154,6 +156,9 @@
         storeAccessContext({ ...current, ...(extra || {}) });
         location.href = 'onboarding.html';
       }
+      function updateContinueButton(show){
+        els.continueBtn.classList.toggle('is-hidden', !show);
+      }
 
       async function handleSupabaseReturn(){
         if (!supabaseClient) return false;
@@ -164,11 +169,16 @@
           if (!session || !session.user || !session.user.email) return false;
           const ctx = getAccessContext();
           storeVerifiedSession({ email: session.user.email, provider: 'supabase_magic_link' });
-          setGateMsg('Correo confirmado correctamente. Continuando al onboarding.', false);
+          storeAccessContext({
+            ...(ctx || {}),
+            email: session.user.email,
+            emailVerified: true,
+            verificationMethod: 'supabase_magic_link',
+            supabaseUserId: session.user.id
+          });
+          setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
           setStatus('-ok', `Correo verificado: ${session.user.email}`);
-          setTimeout(() => {
-            continueToOnboarding({ email: session.user.email, emailVerified: true, verificationMethod: 'supabase_magic_link', supabaseUserId: session.user.id, phone: ctx && ctx.phone, businessName: ctx && ctx.businessName });
-          }, 500);
+          updateContinueButton(true);
           return true;
         } catch (e) {
           setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
@@ -181,25 +191,34 @@
         storeAccessContext({ email, phone, businessName: business, emailVerified: false, verificationMethod: 'pending_magic_link' });
         setStatus('-pending', 'Enviando enlace de confirmación al correo...');
         setGateMsg('Estamos enviando el enlace de confirmación.', false);
-        const { error } = await supabaseClient.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: sbCfg.redirectTo || location.href,
-            shouldCreateUser: true,
-            data: {
-              phone,
-              businessName: business,
-              onboardingFlow: 'agent_onboarding'
+        let error = null;
+        try {
+          const result = await supabaseClient.auth.signInWithOtp({
+            email,
+            options: {
+              emailRedirectTo: sbCfg.redirectTo || location.href,
+              shouldCreateUser: true,
+              data: {
+                phone,
+                businessName: business,
+                onboardingFlow: 'agent_onboarding'
+              }
             }
-          }
-        });
+          });
+          error = result && result.error ? result.error : null;
+        } catch (e) {
+          error = e;
+        }
         if (error) {
-          setGateMsg(error.message || 'No pudimos enviar el correo de confirmación.', true);
-          setStatus('-error', 'Falló el envío del magic link. Revisa la configuración de Supabase.');
+          const detail = error.message || String(error) || 'No pudimos enviar el correo de confirmación.';
+          setGateMsg(`Error Supabase: ${detail}`, true);
+          setStatus('-error', 'Falló el envío del magic link. Revisa la configuración de Supabase y la sección de Email.');
+          console.error('Supabase magic link error:', error);
           return;
         }
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
         setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
+        updateContinueButton(false);
       }
 
       async function validateAndContinue(){
@@ -258,7 +277,7 @@
 
         setGateMsg('Validación lista. Continúa con el formulario completo.', false);
         setStatus('-info', 'No encontramos cuenta ni solicitud activa. Puedes iniciar el onboarding.');
-        setTimeout(() => { location.href = 'onboarding.html'; }, 500);
+        updateContinueButton(true);
       }
 
       if (supabaseClient) {
@@ -266,9 +285,27 @@
       }
 
       els.validateBtn.addEventListener('click', () => { validateAndContinue(); });
+      els.continueBtn.addEventListener('click', () => {
+        const ctx = getAccessContext();
+        if (supabaseClient && !(ctx && ctx.emailVerified)) {
+          setGateMsg('Debes validar primero tu correo antes de continuar.', true);
+          setStatus('-warn', 'Aún falta validar el correo desde el enlace enviado.');
+          return;
+        }
+        continueToOnboarding();
+      });
       [els.email, els.phone, els.business].forEach(el => el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') validateAndContinue();
       }));
+
+      const initialCtx = getAccessContext();
+      if (initialCtx && (!supabaseClient || initialCtx.emailVerified)) {
+        updateContinueButton(true);
+        if (initialCtx.emailVerified) {
+          setStatus('-ok', `Correo verificado: ${initialCtx.email}`);
+          setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
+        }
+      }
 
       handleSupabaseReturn();
     })();
