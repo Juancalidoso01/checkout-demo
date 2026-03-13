@@ -328,6 +328,7 @@
   <script>
     (function(){
       const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
+      const ACCESS_KEY = 'pp_onboarding_access_v1';
       const steps = [
         { title: 'Comercio', desc: 'Identificación legal y descripción' },
         { title: 'Contactos', desc: 'Representante, operativo y técnico' },
@@ -363,6 +364,14 @@
       }
       function writeApplications(items){
         localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items || []));
+      }
+      function readAccessContext(){
+        try {
+          const raw = localStorage.getItem(ACCESS_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
       }
       function readFormData(){
         const fd = new FormData(form);
@@ -485,7 +494,19 @@
         applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
         applicationCodeEl.textContent = applicationId;
         draftStatusEl.textContent = 'Sin guardar';
+        prefillFromAccess();
         renderSteps();
+      }
+
+      function prefillFromAccess(){
+        const ctx = readAccessContext();
+        if (!ctx) return false;
+        if (form.elements.repEmail && !form.elements.repEmail.value) form.elements.repEmail.value = ctx.email || '';
+        if (form.elements.repPhone && !form.elements.repPhone.value) form.elements.repPhone.value = ctx.phone || '';
+        if (form.elements.opsContactEmail && !form.elements.opsContactEmail.value) form.elements.opsContactEmail.value = ctx.email || '';
+        if (form.elements.businessTradeName && !form.elements.businessTradeName.value) form.elements.businessTradeName.value = ctx.businessName || '';
+        if (form.elements.businessLegalName && !form.elements.businessLegalName.value) form.elements.businessLegalName.value = ctx.businessName || '';
+        return true;
       }
 
       prevBtn.addEventListener('click', goPrev);
@@ -509,7 +530,13 @@
         resetFormAfterSubmit();
       });
 
+      if (!readAccessContext()) {
+        location.href = 'onboarding-access.html';
+        return;
+      }
+
       applicationCodeEl.textContent = applicationId;
+      prefillFromAccess();
       renderSteps();
     })();
   </script>

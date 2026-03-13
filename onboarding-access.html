@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Acceso onboarding — Punto Pago</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
+    .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
+    .gate-shell{max-width:960px;margin:0 auto;padding:24px 16px 72px}
+    .gate-hero{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
+    .gate-layout{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .status-box{border-radius:20px;padding:16px;border:1px solid rgba(0,0,0,.06)}
+    .status-box.-ok{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
+    .status-box.-warn{background:#fff7ed;border-color:#fdba74;color:#9a3412}
+    .status-box.-error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+    .status-box.-info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+    @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr} }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+    <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
+      <div class="min-w-0">
+        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Validación previa</div>
+        <div class="text-xs text-white/80">Paso corto antes del onboarding</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Login regular</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pp-page flex-grow">
+    <div class="gate-shell">
+      <div class="pp-card gate-hero rounded-[24px] p-5 mb-5">
+        <h1 class="text-2xl font-extrabold">Antes de empezar tu onboarding</h1>
+        <p class="text-sm text-slate-600 mt-2 max-w-3xl">Validamos correo y datos básicos para evitar solicitudes duplicadas. Si ya tienes acceso o una solicitud en proceso, te lo mostraremos antes de seguir.</p>
+      </div>
+
+      <div class="gate-layout">
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <h2 class="text-xl font-extrabold">Validación rápida</h2>
+            <p class="text-sm text-gray-500 mt-1">Usaremos estos datos para abrir o retomar tu solicitud.</p>
+          </div>
+          <div class="pp-card-body space-y-4">
+            <div>
+              <label class="pp-label">Correo principal *</label>
+              <input id="accessEmail" type="email" class="pp-field" placeholder="nombre@empresa.com" autocomplete="email">
+            </div>
+            <div>
+              <label class="pp-label">Teléfono de contacto *</label>
+              <input id="accessPhone" type="tel" class="pp-field" placeholder="+56 9 1234 5678" autocomplete="tel">
+            </div>
+            <div>
+              <label class="pp-label">Nombre del comercio *</label>
+              <input id="accessBusiness" type="text" class="pp-field" placeholder="Ej: Comercial Centro SpA" autocomplete="organization">
+            </div>
+
+            <div class="flex gap-3 flex-wrap">
+              <button id="validateBtn" type="button" class="pp-btn pp-btn-primary">Validar y continuar</button>
+              <a href="onboarding.html" class="pp-btn pp-btn-secondary">Ir directo al formulario</a>
+            </div>
+
+            <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
+          </div>
+        </section>
+
+        <aside class="space-y-4">
+          <div id="statusBox" class="status-box -info">
+            <div class="font-extrabold">Resultado</div>
+            <div id="statusText" class="text-sm mt-2">Ingresa tu correo y los datos básicos para validar si ya existe una solicitud o una cuenta aprobada.</div>
+          </div>
+
+          <div class="pp-card -soft overflow-hidden">
+            <div class="pp-card-head">
+              <h2 class="text-lg font-extrabold">Regla del prototipo</h2>
+            </div>
+            <div class="pp-card-body text-sm text-slate-600 space-y-2">
+              <div>1. Primero validamos identidad mínima.</div>
+              <div>2. Luego llenas el onboarding completo.</div>
+              <div>3. Solo después de aprobación se habilita el login regular.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    (function(){
+      const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
+      const ACCESS_KEY = 'pp_onboarding_access_v1';
+      const els = {
+        email: document.getElementById('accessEmail'),
+        phone: document.getElementById('accessPhone'),
+        business: document.getElementById('accessBusiness'),
+        validateBtn: document.getElementById('validateBtn'),
+        gateMsg: document.getElementById('gateMsg'),
+        statusBox: document.getElementById('statusBox'),
+        statusText: document.getElementById('statusText')
+      };
+
+      function readApplications(){
+        try {
+          const raw = localStorage.getItem(APPLICATIONS_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          return [];
+        }
+      }
+      function normalize(v){ return (v || '').toString().trim().toLowerCase(); }
+      function setGateMsg(msg, isError){
+        els.gateMsg.textContent = msg || '';
+        els.gateMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
+      }
+      function setStatus(kind, text){
+        els.statusBox.className = `status-box ${kind}`;
+        els.statusText.textContent = text;
+      }
+      function storeAccessContext(payload){
+        localStorage.setItem(ACCESS_KEY, JSON.stringify({ ...payload, updatedAt: Date.now() }));
+      }
+
+      function validateAndContinue(){
+        const email = normalize(els.email.value);
+        const phone = (els.phone.value || '').trim();
+        const business = (els.business.value || '').trim();
+
+        if (!email || !phone || !business) {
+          setGateMsg('Completa correo, teléfono y nombre del comercio.', true);
+          setStatus('-error', 'Faltan datos mínimos antes de continuar.');
+          return;
+        }
+
+        const users = window.PPAuth.loadUsers();
+        const apps = readApplications();
+        const existingUser = users.find(u => normalize(u.username) === email || normalize(u.email) === email);
+        const existingApp = apps.find(app => {
+          const data = app.onboarding || {};
+          return normalize(data.repEmail) === email || normalize(data.opsContactEmail) === email || normalize(data.settlementEmail) === email;
+        });
+
+        storeAccessContext({ email, phone, businessName: business });
+
+        if (existingUser) {
+          setGateMsg('Ya existe un acceso asociado a este correo. Usa el login regular.', false);
+          setStatus('-ok', 'Este correo ya tiene cuenta aprobada. Redirige al login regular.');
+          setTimeout(() => { location.href = 'login.html'; }, 700);
+          return;
+        }
+
+        if (existingApp) {
+          const status = (existingApp.status || 'draft').toString();
+          if (status === 'approved') {
+            setGateMsg('Tu solicitud ya fue aprobada. Usa el login regular.', false);
+            setStatus('-ok', 'La solicitud ya fue aprobada y debería existir acceso activo.');
+            setTimeout(() => { location.href = 'login.html'; }, 700);
+            return;
+          }
+          if (status === 'pending_review' || status === 'pending') {
+            setGateMsg('Ya existe una solicitud en revisión para este correo.', false);
+            setStatus('-warn', 'Tu solicitud ya está en evaluación. No necesitas completar otra.');
+            return;
+          }
+          if (status === 'rejected') {
+            setGateMsg('Existe una solicitud rechazada. Puedes iniciar una nueva versión del onboarding.', false);
+            setStatus('-warn', 'Encontramos una solicitud rechazada. Continuarás con una nueva versión del formulario.');
+            setTimeout(() => { location.href = 'onboarding.html'; }, 700);
+            return;
+          }
+        }
+
+        setGateMsg('Validación lista. Continúa con el formulario completo.', false);
+        setStatus('-info', 'No encontramos cuenta ni solicitud activa. Puedes iniciar el onboarding.');
+        setTimeout(() => { location.href = 'onboarding.html'; }, 500);
+      }
+
+      els.validateBtn.addEventListener('click', validateAndContinue);
+      [els.email, els.phone, els.business].forEach(el => el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') validateAndContinue();
+      }));
+    })();
+  </script>
+</body>
+</html>

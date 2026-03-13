@@ -23,6 +23,7 @@ Acceso interno del prototipo:
 - Entrada alternativa para admin: `admin-login.html`
 - `pp-admin-entry.html` ahora contiene el login admin y la gestión de credenciales en una sola URL estable
 - `admin/credentials.html` se mantiene solo como compatibilidad y redirige a la entrada oficial
+- Nueva validación previa al onboarding: `onboarding-access.html`
 - Nuevo formulario de onboarding exhaustivo: `onboarding.html`
 - Requiere iniciar sesión como `superadmin`
 
@@ -31,6 +32,7 @@ Si publicas este repo con GitHub Pages, las rutas quedarían así:
 - `https://juancalidoso01.github.io/checkout-demo/pp-admin-entry.html`
 - `https://juancalidoso01.github.io/checkout-demo/admin-login.html`
 - `https://juancalidoso01.github.io/checkout-demo/admin/credentials.html` (redirige a la entrada oficial)
+- `https://juancalidoso01.github.io/checkout-demo/onboarding-access.html`
 - `https://juancalidoso01.github.io/checkout-demo/onboarding.html`
 
 Flujo recomendado:
@@ -41,9 +43,11 @@ Flujo recomendado:
 
 Flujo de onboarding propuesto:
 
-1. Abrir `https://juancalidoso01.github.io/checkout-demo/onboarding.html`
-2. Completar el formulario exhaustivo del comercio
-3. Guardar la solicitud como `pending_review` en la cola local del prototipo
-4. Aprobar luego desde el portal admin y recién entonces asignar/pegar credenciales definitivas
+1. Abrir `https://juancalidoso01.github.io/checkout-demo/onboarding-access.html`
+2. Validar correo, teléfono y nombre base del comercio
+3. Si no existe cuenta ni solicitud activa, continuar a `onboarding.html`
+4. Completar el formulario exhaustivo del comercio
+5. Guardar la solicitud como `pending_review` en la cola local del prototipo
+6. Aprobar luego desde el portal admin y recién entonces asignar/pegar credenciales definitivas
 
 Licencia: uso para demostración y pruebas.
