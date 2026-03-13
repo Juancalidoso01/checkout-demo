@@ -12,21 +12,23 @@
     body{background:linear-gradient(180deg,#f8fbff 0%,#f3f6fb 28%,#eef2f8 100%);font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
     .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
     .site-header{position:sticky;top:0;z-index:40;backdrop-filter:blur(16px);background:rgba(255,255,255,.78);border-bottom:1px solid rgba(148,163,184,.16)}
-    .site-header-inner{max-width:1180px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-  .site-brand{display:flex;align-items:center;gap:16px;text-decoration:none}
-  .site-brand-mark{display:block;width:auto;height:54px;max-width:220px;object-fit:contain;object-position:left center;flex:0 0 auto}
+    .site-header-inner{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+  .site-brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+  .site-brand-mark{display:block;width:168px;height:auto;max-width:168px;max-height:none;object-fit:contain;object-position:left center;flex:0 0 auto}
     .site-brand-copy{display:flex;flex-direction:column}
     .site-brand-copy strong{font-size:15px;line-height:1.1;color:#0f172a}
     .site-brand-copy span{font-size:12px;color:#64748b}
   .site-header-actions{display:flex;align-items:center;gap:14px}
+    .site-header-visual{display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,rgba(84,98,230,.10),rgba(59,130,246,.08));border:1px solid rgba(84,98,230,.10);overflow:hidden;box-shadow:0 10px 24px rgba(84,98,230,.10)}
+    .site-header-visual img{width:36px;height:36px;object-fit:contain;animation:headerFloat 5.4s ease-in-out infinite}
     .site-link{color:#475569;font-size:14px;font-weight:700;text-decoration:none;transition:color .22s ease,transform .22s ease}
     .site-link:hover{color:var(--pp-primary);transform:translateY(-1px)}
     .site-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#5b6df6,#4050d8);color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 34px rgba(84,98,230,.22);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
     .site-action:hover{transform:translateY(-1px);box-shadow:0 20px 40px rgba(84,98,230,.26);filter:saturate(1.04)}
   .site-header-actions > *{position:relative;z-index:2}
-  .cursor-ring{position:fixed;top:0;left:0;width:46px;height:46px;border-radius:999px;border:1.5px solid rgba(84,98,230,.28);background:radial-gradient(circle at center,rgba(84,98,230,.12),rgba(84,98,230,.04) 42%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .2s ease,height .2s ease,opacity .2s ease,background .2s ease,border-color .2s ease}
+  .cursor-ring{position:fixed;top:0;left:0;width:18px;height:18px;border-radius:999px;border:1.5px solid rgba(15,23,42,.72);background:rgba(15,23,42,.92);pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .18s ease,height .18s ease,opacity .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
   .cursor-ring.-visible{opacity:1}
-  .cursor-ring.-active{width:68px;height:68px;border-color:rgba(84,98,230,.38);background:radial-gradient(circle at center,rgba(84,98,230,.16),rgba(84,98,230,.06) 42%,transparent 74%)}
+  .cursor-ring.-active{width:42px;height:42px;background:rgba(15,23,42,.08);border-color:rgba(15,23,42,.88);box-shadow:0 0 0 6px rgba(15,23,42,.08)}
     .gate-shell{max-width:1180px;margin:0 auto;padding:28px 16px 72px}
     .gate-hero{position:relative;overflow:hidden;border:1px solid rgba(84,98,230,.10);background:radial-gradient(circle at top left,rgba(97,113,255,.14),transparent 28%),linear-gradient(135deg,#ffffff 0%,#eef3ff 44%,#ffffff 100%);box-shadow:0 34px 80px rgba(15,23,42,.08)}
   .gate-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px}
@@ -55,28 +57,28 @@
   .hero-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:34px;align-items:center}
   .hero-kicker{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;background:rgba(84,98,230,.08);border:1px solid rgba(84,98,230,.10);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-primary);transform:translateY(0);transition:transform .25s ease,box-shadow .25s ease}
   .hero-kicker:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(84,98,230,.12)}
-  .hero-title{font-size:clamp(2.4rem,4.1vw,4.6rem);line-height:.95;letter-spacing:-.07em;font-weight:900;color:#0f172a;margin:18px 0 16px;max-width:8.5ch}
-  .hero-copy{font-size:17px;line-height:1.72;color:#475569;max-width:620px}
+  .hero-title{font-size:clamp(2.2rem,4vw,4.2rem);line-height:.95;letter-spacing:-.07em;font-weight:900;color:#0f172a;margin:18px 0 14px;max-width:8.2ch}
+  .hero-copy{font-size:16px;line-height:1.62;color:#475569;max-width:560px}
   .hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
   .hero-primary{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#586af4,#4454db);color:#fff;font-size:14px;font-weight:800;text-decoration:none;box-shadow:0 16px 34px rgba(84,98,230,.24);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
   .hero-primary:hover{transform:translateY(-1px);box-shadow:0 20px 40px rgba(84,98,230,.28);filter:saturate(1.05)}
   .hero-secondary{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:rgba(255,255,255,.82);border:1px solid rgba(148,163,184,.18);color:#334155;font-size:14px;font-weight:800;text-decoration:none;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
   .hero-secondary:hover{transform:translateY(-1px);border-color:rgba(84,98,230,.24);box-shadow:0 18px 34px rgba(15,23,42,.06)}
-  .hero-flow{display:grid;gap:12px;margin-top:24px}
+  .hero-flow{display:grid;gap:10px;margin-top:20px}
   .hero-flow-item{display:flex;gap:12px;align-items:flex-start;padding:15px 16px;border-radius:20px;background:rgba(255,255,255,.76);border:1px solid rgba(148,163,184,.14);box-shadow:0 18px 34px rgba(15,23,42,.05);transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
   .hero-flow-item:hover{transform:translateY(-2px);box-shadow:0 22px 40px rgba(15,23,42,.08);border-color:rgba(84,98,230,.18)}
   .hero-flow-icon{width:36px;height:36px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(84,98,230,.14),rgba(59,130,246,.14));color:var(--pp-primary);flex:0 0 auto}
   .hero-flow-item strong{display:block;font-size:14px;color:#0f172a}
-  .hero-flow-item span{display:block;font-size:13px;line-height:1.5;color:#64748b;margin-top:2px}
+  .hero-flow-item span{display:block;font-size:12px;line-height:1.45;color:#64748b;margin-top:2px}
   .hero-visual{position:relative;min-height:320px;display:flex;align-items:center;justify-content:center}
     .hero-orb{position:absolute;border-radius:999px;filter:blur(6px);opacity:.9}
   .hero-orb.-one{width:220px;height:220px;background:rgba(84,98,230,.14);top:-26px;right:4px}
   .hero-orb.-two{width:120px;height:120px;background:rgba(59,130,246,.10);bottom:8px;left:36px}
   .hero-card{position:relative;width:min(100%,410px);border-radius:34px;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);box-shadow:0 30px 80px rgba(84,98,230,.16);padding:20px 20px 22px;animation:floatCard 7s ease-in-out infinite}
     .hero-brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .hero-brand img{height:30px;width:auto}
+  .hero-brand img{display:block;width:150px;height:auto;object-fit:contain}
   .hero-line{height:1px;background:linear-gradient(90deg,rgba(84,98,230,.18),rgba(84,98,230,0));margin:14px 0}
-  .hero-note{font-size:13px;line-height:1.6;color:#64748b}
+  .hero-note{font-size:12px;line-height:1.5;color:#64748b}
     .hero-illustration{width:100%;max-width:250px;height:auto;display:block;margin:14px auto 0;filter:drop-shadow(0 10px 24px rgba(84,98,230,.14))}
   .hero-card-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;margin-top:14px;border-top:1px solid rgba(148,163,184,.14)}
     .hero-card-foot strong{display:block;font-size:14px;color:#0f172a}
@@ -88,7 +90,7 @@
   .aside-step:last-child{border-bottom:0;padding-bottom:0}
   .aside-step-badge{width:30px;height:30px;border-radius:999px;background:linear-gradient(135deg,rgba(84,98,230,.16),rgba(59,130,246,.12));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--pp-primary);flex:0 0 auto}
   .aside-step strong{display:block;color:#0f172a;font-size:14px}
-  .aside-step p{margin:3px 0 0;font-size:13px;line-height:1.55;color:#64748b}
+  .aside-step p{margin:3px 0 0;font-size:12px;line-height:1.45;color:#64748b}
   .validating-panel{position:relative;overflow:hidden}
   .validating-panel::after{content:'';position:absolute;inset:auto -30px -30px auto;width:90px;height:90px;border-radius:999px;background:rgba(84,98,230,.08);filter:blur(8px)}
     .pp-btn{transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
@@ -97,10 +99,11 @@
     .pp-field:focus{transform:translateY(-1px)}
     .pp-card,.wait-box,.status-box,.next-step-card{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
     .pp-card:hover,.wait-box:hover,.status-box:hover,.next-step-card:hover{box-shadow:0 18px 38px rgba(15,23,42,.06)}
-    @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes headerFloat{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}50%{transform:translate3d(0,-4px,0) rotate(-4deg)}}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
-  @media (max-width: 900px){ .site-header-inner{padding:14px 16px}.site-brand-mark{height:44px;max-width:180px}.site-brand-copy span{display:none}.gate-layout{grid-template-columns:1fr}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:auto}.hero-card{width:100%;max-width:none}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3rem);max-width:none}.hero-cta-row{margin-top:18px} }
-    @media (max-width: 640px){ .site-header-actions .site-link{display:none}.site-brand-mark{height:38px;max-width:150px}.site-action{min-height:42px;padding:0 14px;font-size:13px}.gate-shell{padding-top:18px}.hero-flow{gap:10px} }
+  @media (max-width: 900px){ .site-header-inner{padding:14px 16px}.site-brand-mark{width:144px;max-width:144px}.site-brand-copy span{display:none}.site-header-visual{display:none}.gate-layout{grid-template-columns:1fr}.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:auto}.hero-card{width:100%;max-width:none}.hero-copy{max-width:none}.hero-title{font-size:clamp(2rem,10vw,3rem);max-width:none}.hero-cta-row{margin-top:18px} }
+    @media (max-width: 640px){ .site-header-actions .site-link{display:none}.site-brand-mark{width:132px;max-width:132px}.site-action{min-height:42px;padding:0 14px;font-size:13px}.gate-shell{padding-top:18px}.hero-flow{gap:10px} }
     @media (hover:hover) and (pointer:fine){ body{cursor:none} a,button,input,label,.pp-card,.wait-box,.status-box,.next-step-card{cursor:none} }
   </style>
 </head>
@@ -112,10 +115,11 @@
         <img class="site-brand-mark" src="assets/logo-header-v2.png" alt="Punto Pago">
         <div class="site-brand-copy">
           <strong>Punto Pago</strong>
-          <span>Portal comercial y onboarding</span>
+          <span>Portal comercial</span>
         </div>
       </a>
       <div class="site-header-actions">
+        <div class="site-header-visual" aria-hidden="true"><img src="assets/hero-illustration.svg" alt=""></div>
         <a class="site-link" href="https://puntopago.net/" target="_blank" rel="noreferrer">Sitio principal</a>
         <a href="login.html" class="site-action">Portal de agentes</a>
       </div>
@@ -129,7 +133,7 @@
           <div>
             <div class="hero-kicker"><i class="fa-solid fa-sparkles"></i><span>Punto Pago</span></div>
             <h1 class="hero-title">Tu acceso comercial empieza aquí</h1>
-            <p class="hero-copy">Si eres un comercio nuevo, validamos tu correo primero y luego habilitamos tu formulario de onboarding. Si ya tienes acceso, te llevamos al portal regular de agentes.</p>
+            <p class="hero-copy">Validamos tu acceso y te guiamos al siguiente paso correcto.</p>
             <div class="hero-cta-row">
               <a href="#validateBtn" class="hero-primary"><i class="fa-regular fa-circle-check"></i><span>Comenzar validación</span></a>
               <a href="login.html" class="hero-secondary"><i class="fa-solid fa-arrow-right-to-bracket"></i><span>Ya tengo acceso</span></a>
@@ -139,14 +143,14 @@
                 <div class="hero-flow-icon"><i class="fa-regular fa-envelope"></i></div>
                 <div>
                   <strong>Usuario nuevo</strong>
-                  <span>Confirmamos tu correo y, si está correcto, continúas al formulario completo.</span>
+                  <span>Validas correo y continúas al formulario.</span>
                 </div>
               </div>
               <div class="hero-flow-item">
                 <div class="hero-flow-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
                 <div>
                   <strong>Usuario existente</strong>
-                  <span>Si tu cuenta ya existe, te redirigimos al acceso habitual del portal de agentes.</span>
+                  <span>Ingresas por el portal regular de agentes.</span>
                 </div>
               </div>
             </div>
@@ -159,13 +163,13 @@
                 <img src="assets/logo-header-v2.png" alt="Punto Pago">
                 <div class="mini-badge"><i class="fa-solid fa-circle-check"></i><span>Seguro</span></div>
               </div>
-              <div class="hero-note">Valida tu correo para habilitar el siguiente paso del proceso.</div>
+              <div class="hero-note">Primero confirmamos tu acceso y luego habilitamos el siguiente paso.</div>
               <div class="hero-line"></div>
               <img class="hero-illustration" src="assets/hero-illustration.svg" alt="">
               <div class="hero-card-foot">
                 <div>
                   <strong>Onboarding guiado</strong>
-                  <span>Acceso simple, seguro y ordenado.</span>
+                  <span>Acceso simple y seguro.</span>
                 </div>
                 <div class="hero-chip"><i class="fa-solid fa-shield-heart"></i><span>Verificación previa</span></div>
               </div>
@@ -178,7 +182,7 @@
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-head">
             <h2 class="text-xl font-extrabold">Validación rápida</h2>
-            <p class="text-sm text-gray-500 mt-1">Ingresa tus datos base para identificar si continúas como onboarding nuevo o si debes entrar por tu portal regular.</p>
+            <p class="text-sm text-gray-500 mt-1">Te guiamos según tu tipo de acceso.</p>
           </div>
           <div class="pp-card-body space-y-4">
             <div>
@@ -230,13 +234,13 @@
               </div>
             </div>
 
-            <div id="supabaseHint" class="text-xs text-slate-500">Para usuarios nuevos, enviaremos un enlace de confirmación al correo ingresado. El formulario seguirá bloqueado hasta validar ese correo.</div>
+            <div id="supabaseHint" class="text-xs text-slate-500">Si eres un comercio nuevo, enviaremos un enlace de confirmación a tu correo.</div>
 
             <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
 
             <div id="nextStepCard" class="next-step-card">
               <div class="font-extrabold text-slate-900">Qué sigue</div>
-              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Revisamos tu estado. Si eres nuevo, validas correo y avanzas al formulario; si ya existes, entras al portal regular.</div>
+              <div id="nextStepText" class="text-sm text-slate-600 mt-2">Si eres nuevo, validas correo; si ya existes, ingresas al portal regular.</div>
             </div>
           </div>
         </section>
@@ -244,7 +248,7 @@
         <aside class="space-y-4">
           <div id="statusBox" class="status-box -info validating-panel">
             <div class="font-extrabold">Resultado</div>
-            <div id="statusText" class="text-sm mt-2">Ingresa tu correo y tus datos básicos para revisar si corresponde onboarding nuevo o acceso existente.</div>
+            <div id="statusText" class="text-sm mt-2">Revisamos si tu acceso es nuevo o existente.</div>
           </div>
 
           <div class="pp-card -soft overflow-hidden aside-card">
@@ -256,21 +260,21 @@
                 <div class="aside-step-badge">1</div>
                 <div>
                   <strong>Revisión inicial</strong>
-                  <p>Identificamos si tu correo corresponde a un onboarding nuevo o a una cuenta ya existente.</p>
+                  <p>Identificamos si tu acceso es nuevo o existente.</p>
                 </div>
               </div>
               <div class="aside-step">
                 <div class="aside-step-badge">2</div>
                 <div>
                   <strong>Correo verificado</strong>
-                  <p>Los nuevos comercios validan primero su correo antes de desbloquear el formulario comercial.</p>
+                  <p>Los comercios nuevos validan correo antes de continuar.</p>
                 </div>
               </div>
               <div class="aside-step">
                 <div class="aside-step-badge">3</div>
                 <div>
                   <strong>Portal regular</strong>
-                  <p>Si tu usuario ya existe, continúas directamente por el portal habitual de agentes.</p>
+                  <p>Si ya existe, continúas por el portal habitual.</p>
                 </div>
               </div>
             </div>
