@@ -80,8 +80,7 @@
       const target = buildTarget();
       const existing = window.PPAuth.getSession();
       if (existing) {
-        window.PPAuth.redirectAfterLogin(target);
-        return;
+        window.PPAuth.signOut();
       }
 
       const $u = document.getElementById('username');
