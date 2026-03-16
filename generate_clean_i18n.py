@@ -1,0 +1,238 @@
+import json
+
+base_keys = {
+    "es": {
+        "lang_es": "Español", "lang_en": "Inglés", "lang_ru": "Ruso", "lang_zh": "Chino",
+        "settings_title": "Ajustes", "settings_account": "Cuenta", "settings_security": "Seguridad",
+        "settings_preferences": "Preferencias", "settings_legal": "Legal",
+        "cashout_title": "Retiro de fondos", "cashout_available_funds": "Fondos Disponibles",
+        "cashout_withdraw": "Monto a retirar", "cashout_transfer_funds": "Transferir fondos a mi cuenta",
+        "cashout_origin_account": "Cuenta de origen", "cashout_destination_account": "Cuenta de destino",
+        "recharge_title": "Recargas y Pagos", "recharge_digital": "Recarga digital",
+        "tab_invoice": "Factura", "tab_history": "Histórico", "tab_payments": "Pago de servicios",
+        "tab_fund": "Fondear", "tab_ach": "Notificar ACH", "recharge_history_title": "Histórico de transacciones",
+        "invoice_send_btn": "Enviar comprobante", "invoice_op": "Operación", "invoice_amount": "Monto",
+        "invoice_ref": "Referencia", "invoice_print": "Punto Pago — Comprobante", "checkout_total": "Total a pagar",
+        "checkout_select_method": "Selecciona un método de pago para continuar.", "checkout_pay_button": "Pagar pedido",
+        "checkout_cancel": "Cancelar", "common_continue": "Continuar", "checkout_secure": "Pago seguro y rápido",
+        "cashout_profit_label": "Ganancias por comisiones (Mes):", "cashout_target_account": "Cuenta de destino",
+        "cashout_choose_method": "Elige un método para retirar tus ganancias y saldo a favor.", "cashout_pp_card": "Tarjeta Punto Pago",
+        "cashout_change_method": "Cambiar", "cashout_ach_info": "Retiros ACH toman de 24 a 48 hs hábiles.",
+        "cashout_bank_data": "Datos Bancarios", "cashout_select_bank": "Seleccione banco...", "cashout_account_type": "Tipo de cuenta",
+        "cashout_savings": "Ahorros", "cashout_checking": "Corriente", "cashout_account_number": "Número de cuenta",
+        "cashout_account_owner": "Titular de la cuenta", "cashout_save_account": "Guardar cuenta",
+        "cashout_card_number": "Número de tarjeta", "cashout_card_name": "Nombre en la tarjeta",
+        "cashout_card_expiry": "Vencimiento", "cashout_link_card": "Vincular tarjeta",
+        "common_back": "Volver", "common_logout": "Salir", "common_session": "Sesión",
+        "invoice_load_last": "Cargar última operación", "invoice_clear": "Limpiar",
+        "invoice_subtitle": "Confirma los datos del cliente para compartir el recibo.",
+        "invoice_label_name": "Nombre (opcional)", "invoice_ph_name": "Ej: Juan Pérez",
+        "invoice_label_id": "Documento / ID (opcional)", "invoice_ph_id": "Ej: 8-888-888",
+        "invoice_label_wa": "WhatsApp (tel con país)", "invoice_ph_wa": "50760000000",
+        "invoice_help_wa": "Formato sin espacios. Ej: 50760000000", "invoice_label_email": "Correo electrónico",
+        "invoice_ph_email": "cliente@correo.com", "invoice_label_tg": "Telegram (usuario o número)",
+        "invoice_ph_tg": "@usuario o 50760000000", "invoice_label_msg": "Mensaje (editable)",
+        "invoice_ph_msg": "Mensaje para el cliente...", "invoice_preview_title": "Vista previa",
+        "invoice_preview_desc": "Así verá el recibo el cliente (texto).",
+        "invoice_preview_disclaimer": "Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.",
+        "invoice_demo_footer": "Demo — Los datos se guardan en localStorage. Fuente de operaciones: sandbox pp_agent_sandbox_v1.",
+        "invoice_btn_wa": "WhatsApp", "invoice_btn_tg": "Telegram", "invoice_btn_email": "Correo",
+        "invoice_greet": "Hola", "invoice_msg_body": "Te compartimos tu comprobante de pago:",
+        "invoice_msg_footer": "Gracias por usar Punto Pago.", "invoice_err_wa": "Ingresa el número de WhatsApp (con código de país, sin +).",
+        "invoice_status_wa": "Abriendo WhatsApp…", "invoice_err_email": "Ingresa un correo del cliente.",
+        "invoice_status_email": "Abriendo correo…", "invoice_status_tg_share": "Abriendo Telegram (compartir)…",
+        "invoice_status_tg": "Abriendo Telegram… (luego pega el mensaje)", "invoice_err_no_tx": "No hay transacciones todavía. Realiza un Cash In o un pago primero.",
+        "invoice_status_loaded": "Última operación cargada. Completa los datos del cliente y elige el canal."
+    },
+    "en": {
+        "lang_es": "Spanish", "lang_en": "English", "lang_ru": "Russian", "lang_zh": "Chinese",
+        "settings_title": "Settings", "settings_account": "Account", "settings_security": "Security",
+        "settings_preferences": "Preferences", "settings_legal": "Legal",
+        "cashout_title": "Withdraw funds", "cashout_available_funds": "Available Funds",
+        "cashout_withdraw": "Amount to withdraw", "cashout_transfer_funds": "Transfer funds to my account",
+        "cashout_origin_account": "Origin account", "cashout_destination_account": "Destination account",
+        "recharge_title": "Top-ups & Payments", "recharge_digital": "Digital Recharge",
+        "tab_invoice": "Invoice", "tab_history": "History", "tab_payments": "Pay Services",
+        "tab_fund": "Fund Account", "tab_ach": "Notify ACH", "recharge_history_title": "Transaction History",
+        "invoice_send_btn": "Send receipt", "invoice_op": "Operation", "invoice_amount": "Amount",
+        "invoice_ref": "Reference", "invoice_print": "Punto Pago — Receipt", "checkout_total": "Total to pay",
+        "checkout_select_method": "Select a payment method to continue.", "checkout_pay_button": "Pay order",
+        "checkout_cancel": "Cancel", "common_continue": "Continue", "checkout_secure": "Secure and fast payment",
+        "cashout_profit_label": "Commission earnings (Month):", "cashout_target_account": "Destination account",
+        "cashout_choose_method": "Choose a method to withdraw your earnings and balance.", "cashout_pp_card": "Punto Pago Card",
+        "cashout_change_method": "Change", "cashout_ach_info": "ACH withdrawals take 24 to 48 business hours.",
+        "cashout_bank_data": "Bank Information", "cashout_select_bank": "Select bank...", "cashout_account_type": "Account type",
+        "cashout_savings": "Savings", "cashout_checking": "Checking", "cashout_account_number": "Account number",
+        "cashout_account_owner": "Account holder", "cashout_save_account": "Save account",
+        "cashout_card_number": "Card number", "cashout_card_name": "Name on card",
+        "cashout_card_expiry": "Expiry", "cashout_link_card": "Link card",
+        "common_back": "Back", "common_logout": "Logout", "common_session": "Session",
+        "invoice_load_last": "Load last operation", "invoice_clear": "Clear",
+        "invoice_subtitle": "Confirm customer details to share the receipt.",
+        "invoice_label_name": "Name (optional)", "invoice_ph_name": "Ex: John Doe",
+        "invoice_label_id": "Document / ID (optional)", "invoice_ph_id": "Ex: 8-888-888",
+        "invoice_label_wa": "WhatsApp (phone with code)", "invoice_ph_wa": "50760000000",
+        "invoice_help_wa": "Format without spaces. Ex: 50760000000", "invoice_label_email": "Email",
+        "invoice_ph_email": "customer@email.com", "invoice_label_tg": "Telegram (user or number)",
+        "invoice_ph_tg": "@user or 50760000000", "invoice_label_msg": "Message (editable)",
+        "invoice_ph_msg": "Message for the customer...", "invoice_preview_title": "Preview",
+        "invoice_preview_desc": "This is how the customer will see the receipt (text).",
+        "invoice_preview_disclaimer": "This demo opens apps/links to share. In production, this would come from a backend with real delivery.",
+        "invoice_demo_footer": "Demo — Data is saved in localStorage. Operations source: sandbox pp_agent_sandbox_v1.",
+        "invoice_btn_wa": "WhatsApp", "invoice_btn_tg": "Telegram", "invoice_btn_email": "Email",
+        "invoice_greet": "Hello", "invoice_msg_body": "Here is your payment receipt:",
+        "invoice_msg_footer": "Thank you for using Punto Pago.", "invoice_err_wa": "Enter the WhatsApp number (with country code, no +).",
+        "invoice_status_wa": "Opening WhatsApp…", "invoice_err_email": "Enter customer email.",
+        "invoice_status_email": "Opening email…", "invoice_status_tg_share": "Opening Telegram (share)…",
+        "invoice_status_tg": "Opening Telegram… (then paste message)", "invoice_err_no_tx": "No transactions yet. Make a Cash In or payment first.",
+        "invoice_status_loaded": "Last operation loaded. Fill customer data and choose channel."
+    },
+    "ru": {
+        "lang_es": "Испанский", "lang_en": "Английский", "lang_ru": "Русский", "lang_zh": "Китайский",
+        "settings_title": "Настройки", "settings_account": "Аккаунт", "settings_security": "Безопасность",
+        "settings_preferences": "Настройки", "settings_legal": "Правовая информация",
+        "cashout_title": "Вывод средств", "cashout_available_funds": "Доступные средства",
+        "cashout_withdraw": "Сумма для вывода", "cashout_transfer_funds": "Перевести средства на мой счет",
+        "cashout_origin_account": "Очередной счет", "cashout_destination_account": "Счет назначения",
+        "recharge_title": "Пополнения и Платежи", "recharge_digital": "Цифровой Перезарядка",
+        "tab_invoice": "Счет", "tab_history": "История", "tab_payments": "Оплата услуг",
+        "tab_fund": "Пополнить", "tab_ach": "Уведомить ACH", "recharge_history_title": "История транзакций",
+        "invoice_send_btn": "Отправить чек", "invoice_op": "Операция", "invoice_amount": "Сумма",
+        "invoice_ref": "Справочный номер", "invoice_print": "Punto Pago — Чек", "checkout_total": "К оплате",
+        "checkout_select_method": "Выберите способ оплаты для продолжения.", "checkout_pay_button": "Оплатить заказ",
+        "checkout_cancel": "Отмена", "common_continue": "Продолжить", "checkout_secure": "Безопасная и быстрая оплата",
+        "cashout_profit_label": "Комиссионные (Месяц):", "cashout_target_account": "Счет назначения",
+        "cashout_choose_method": "Выберите метод для вывода ваших заработков и баланса.", "cashout_pp_card": "Карта Punto Pago",
+        "cashout_change_method": "Изменить", "cashout_ach_info": "Вывод средств ACH занимает от 24 до 48 рабочих часов.",
+        "cashout_bank_data": "Банковские данные", "cashout_select_bank": "Выберите банк...", "cashout_account_type": "Тип счета",
+        "cashout_savings": "Сберегательный", "cashout_checking": "Текущий", "cashout_account_number": "Номер счета",
+        "cashout_account_owner": "Владелец счета", "cashout_save_account": "Сохранить счет",
+        "cashout_card_number": "Номер карты", "cashout_card_name": "Имя на карте",
+        "cashout_card_expiry": "Срок действия", "cashout_link_card": "Привязать карту",
+        "common_back": "Назад", "common_logout": "Выйти", "common_session": "Сессия",
+        "invoice_load_last": "Загрузить последнюю операцию", "invoice_clear": "Очистить",
+        "invoice_subtitle": "Подтвердите данные клиента для отправки чека.",
+        "invoice_label_name": "Имя (необязательно)", "invoice_ph_name": "Напр: Иван Иванов",
+        "invoice_label_id": "Документ / ID (необязательно)", "invoice_ph_id": "Напр: 8-888-888",
+        "invoice_label_wa": "WhatsApp (номер с кодом)", "invoice_ph_wa": "50760000000",
+        "invoice_help_wa": "Формат без пробелов. Напр: 50760000000", "invoice_label_email": "Электронная почта",
+        "invoice_ph_email": "client@email.com", "invoice_label_tg": "Telegram (имя пользователя или номер)",
+        "invoice_ph_tg": "@user или 50760000000", "invoice_label_msg": "Сообщение (редактируемое)",
+        "invoice_ph_msg": "Сообщение для клиента...", "invoice_preview_title": "Предпросмотр",
+        "invoice_preview_desc": "Так клиент увидит чек (текст).",
+        "invoice_preview_disclaimer": "Это демо-версия открывает приложения/ссылки для обмена. В реальной среде это будет отправляться с сервера.",
+        "invoice_demo_footer": "Демо — Данные сохраняются в localStorage. Источник операций: песочница pp_agent_sandbox_v1.",
+        "invoice_btn_wa": "WhatsApp", "invoice_btn_tg": "Telegram", "invoice_btn_email": "Эл. почта",
+        "invoice_greet": "Здравствуйте", "invoice_msg_body": "Отправляем вам чек об оплате:",
+        "invoice_msg_footer": "Спасибо за использование Punto Pago.", "invoice_err_wa": "Введите номер WhatsApp (с кодом страны, без +).",
+        "invoice_status_wa": "Открытие WhatsApp…", "invoice_err_email": "Введите email клиента.",
+        "invoice_status_email": "Открытие почты…", "invoice_status_tg_share": "Открытие Telegram (поделиться)…",
+        "invoice_status_tg": "Открытие Telegram… (затем вставьте сообщение)", "invoice_err_no_tx": "Транзакций пока нет. Совершите оплату сначала.",
+        "invoice_status_loaded": "Последняя операция загружена. Заполните данные и выберите канал."
+    },
+    "zh": {
+        "lang_es": "西班牙语", "lang_en": "英语", "lang_ru": "俄语", "lang_zh": "中文 (Chino)",
+        "settings_title": "设置", "settings_account": "账户", "settings_security": "安全",
+        "settings_preferences": "偏好设置", "settings_legal": "法律",
+        "cashout_title": "提取资金", "cashout_available_funds": "可用资金",
+        "cashout_withdraw": "提取金额", "cashout_transfer_funds": "将资金转入我的账户",
+        "cashout_origin_account": "原账户", "cashout_destination_account": "目标账户",
+        "recharge_title": "充值和付款", "recharge_digital": "数字充值",
+        "tab_invoice": "发票", "tab_history": "历史", "tab_payments": "支付服务",
+        "tab_fund": "资金账户", "tab_ach": "通知 ACH", "recharge_history_title": "交易记录",
+        "invoice_send_btn": "发送收据", "invoice_op": "操作", "invoice_amount": "金额",
+        "invoice_ref": "参考号", "invoice_print": "Punto Pago — 收据", "checkout_total": "总付款",
+        "checkout_select_method": "选择付款方式继续.", "checkout_pay_button": "支付订单",
+        "checkout_cancel": "取消", "common_continue": "继续", "checkout_secure": "安全快捷的支付",
+        "cashout_profit_label": "佣金收益（月）：", "cashout_target_account": "目标账户",
+        "cashout_choose_method": "选择一种方式提取您的收益和余额。", "cashout_pp_card": "Punto Pago卡",
+        "cashout_change_method": "更改", "cashout_ach_info": "ACH提款需要24到48个工作小时。",
+        "cashout_bank_data": "银行信息", "cashout_select_bank": "选择银行...", "cashout_account_type": "账户类型",
+        "cashout_savings": "储蓄账户", "cashout_checking": "支票账户", "cashout_account_number": "账号",
+        "cashout_account_owner": "账户持有人", "cashout_save_account": "保存账户",
+        "cashout_card_number": "卡号", "cashout_card_name": "卡上的名字",
+        "cashout_card_expiry": "到期", "cashout_link_card": "绑定卡",
+        "common_back": "返回", "common_logout": "退出", "common_session": "会话",
+        "invoice_load_last": "加载最后一次操作", "invoice_clear": "清除",
+        "invoice_subtitle": "确认客户详细信息以分享收据。",
+        "invoice_label_name": "姓名（可选）", "invoice_ph_name": "例：John Doe",
+        "invoice_label_id": "证件 / ID（可选）", "invoice_ph_id": "例：8-888-888",
+        "invoice_label_wa": "WhatsApp（带区号的电话）", "invoice_ph_wa": "50760000000",
+        "invoice_help_wa": "无空格格式。例：50760000000", "invoice_label_email": "电子邮件",
+        "invoice_ph_email": "customer@email.com", "invoice_label_tg": "Telegram（用户名或号码）",
+        "invoice_ph_tg": "@user 或 50760000000", "invoice_label_msg": "消息（可编辑）",
+        "invoice_ph_msg": "给客户的消息...", "invoice_preview_title": "预览",
+        "invoice_preview_desc": "这是客户将看到的收据（文本）。",
+        "invoice_preview_disclaimer": "此演示会打开应用/链接进行分享。在生产环境中，这会来自后端的真实发送。",
+        "invoice_demo_footer": "演示 — 数据保存在 localStorage 中。操作来源：沙盒 pp_agent_sandbox_v1。",
+        "invoice_btn_wa": "WhatsApp", "invoice_btn_tg": "Telegram", "invoice_btn_email": "电邮",
+        "invoice_greet": "你好", "invoice_msg_body": "这是您的付款收据：",
+        "invoice_msg_footer": "感谢您使用 Punto Pago。", "invoice_err_wa": "输入WhatsApp号码（带国家代码，不加+）。",
+        "invoice_status_wa": "正在打开WhatsApp…", "invoice_err_email": "输入客户电子邮件。",
+        "invoice_status_email": "正在打开电子邮件…", "invoice_status_tg_share": "正在打开Telegram（分享）…",
+        "invoice_status_tg": "正在打开Telegram…（然后粘贴消息）", "invoice_err_no_tx": "尚无交易。请先进行充值或付款。",
+        "invoice_status_loaded": "最后操作已加载。填写客户数据并选择渠道。"
+    }
+}
+
+logic_str = """
+
+window.I18N = {
+  currentLang: 'es', // Por defecto
+
+  init: function() {
+    let savedLang = localStorage.getItem('pp_lang');
+    
+    if (!savedLang) {
+      const browserLang = (navigator.language || navigator.userLanguage).slice(0, 2).toLowerCase();
+      if (['es', 'en', 'ru', 'zh'].includes(browserLang)) {
+        savedLang = browserLang;
+      } else {
+        savedLang = 'es';
+      }
+    }
+    this.setLanguage(savedLang);
+  },
+
+  setLanguage: function(lang) {
+    if (!translations[lang]) lang = 'es'; // Fallback
+    console.log("I18N: Cambiando idioma a ->", lang);
+    
+    this.currentLang = lang;
+    localStorage.setItem('pp_lang', lang);
+    document.documentElement.lang = lang; 
+
+    const dict = translations[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+             el.placeholder = dict[key];
+        } else {
+          // Usamos innerHTML para mayor compatibilidad
+          el.innerHTML = dict[key];
+        }
+      }
+    });
+
+    // Evento manual por si otros componentes necesitan percatarse
+    document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
+  },
+  
+  getDict: function() {
+      return translations[this.currentLang] || translations['es'];
+  }
+};
+
+// Autoinicialización robusta
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.I18N.init());
+} else {
+    window.I18N.init();
+}
+"""
+
+with open('i18n.js', 'w') as f:
+    f.write('const translations = ' + json.dumps(base_keys, indent=2, ensure_ascii=False) + ';\n' + logic_str)
+

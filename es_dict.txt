@@ -1,0 +1,200 @@
+common_error: ERROR: 
+checkout_receipt_sent: Comprobante enviado. Gracias por tu pago.
+checkout_ph_name: Nombre Apellido
+checkout_ph_phone: +593 9XXXXXXXX
+checkout_ph_id: Cédula / ID
+checkout_ph_tg: @usuario
+checkout_ph_email: tu@correo.com
+checkout_pay_now: Pagar ahora
+checkout_processing: Procesando…
+checkout_back_agent: Volver al agente
+checkout_err_method: Selecciona un método de pago antes de continuar.
+common_confirm: Confirmar
+common_close: Cerrar
+setup_btn_apply: Aplicar
+setup_btn_reset: Resetear
+setup_btn_import: Importar
+setup_btn_clear: Borrar Locales
+setup_msg_success: Datos de cuenta guardados con éxito.
+cashout_ph_name: Nombre completo
+cashout_btn_max: MAX
+recharge_digital_desc: Agrega fondos a tu balance usando tarjeta, Yappy u otros métodos digitales.
+recharge_cashin_amount: Monto USD
+recharge_cashin_net: Valor real a recargar (neto)
+recharge_cashin_net_hint: Neto = Monto - Comisión - ITBMS
+recharge_cashin_summary_title: Resumen de recarga digital
+recharge_cashin_account: Cuenta (agente):
+recharge_cashin_redirect_msg: Serás redirigido al checkout para completar el pago con métodos digitales.
+recharge_cashin_amount_to_recharge: Monto a recargar:
+recharge_cashin_real_value: Valor real a recargar:
+recharge_cashin_correct: Corregir
+recharge_cashin_go_checkout: Ir al checkout
+recharge_cashin_success_title: ¡Depósito Exitoso!
+recharge_cashin_success_msg: El saldo se ha acreditado instantáneamente.
+recharge_cashin_another: Realizar otro depósito
+recharge_ach_title: Alertar Pago por ACH
+recharge_ach_desc: Notifica tu transferencia de otros bancos para fondear tu saldo.
+recharge_ach_bank: Tu Banco (Emisor)
+recharge_ach_bank_ph: Seleccione banco
+recharge_ach_bank_gen: Banco General
+recharge_ach_bank_ban: Banistmo
+recharge_ach_bank_bac: BAC Credomatic
+recharge_ach_bank_oth: Otros bancos
+recharge_ach_ref: Número de Referencia
+recharge_ach_ref_ph: Ej: 0012345
+recharge_ach_amount: Monto de la Transferencia
+recharge_ach_proof: Cargar Comprobante
+recharge_ach_upload: Subir foto o PDF
+recharge_ach_notice_title: Aviso:
+recharge_ach_notice_desc: Las transferencias ACH de otros bancos pueden demorar en ser procesadas por el sistema bancario. Al alertar aquí, nuestro equipo financiero verificará su depósito prioritariamente.
+recharge_ach_btn_send: NOTIFICAR TRANSFERENCIA
+recharge_ach_history_title: Estado de recargas enviadas
+recharge_ach_history_date: Fecha
+recharge_ach_history_ref: Referencia
+recharge_ach_history_amount: Monto
+recharge_ach_history_status: Estado
+recharge_ach_status_recharged: RECARGADO
+pay_services_title: Pago de servicios
+pay_services_desc: Busca al cliente por cédula, pasaporte o número de servicio para ver su portafolio y saldos.
+pay_services_search_label: Cédula / Pasaporte / Nº de servicio
+pay_services_search_ph: Ej: 8-123-4567 | P1234567 | 001234567
+pay_services_search_btn: Buscar Cliente
+pay_services_searching: Buscando cliente...
+pay_services_search_error: Error al buscar cliente.
+pay_services_search_empty: No se encontraron coincidencias para el cliente.
+pay_services_status_paid: PAGADO
+pay_services_btn_collect: Cobrar
+pay_services_lbl_services: servicios
+pay_services_lbl_id: ID: 
+login_header: Acceso
+login_demo_badge: Demo de banca en línea (roles)
+login_title: Iniciar sesión
+login_subtitle: Ingresa tus credenciales para continuar.
+login_lbl_user: Usuario
+login_lbl_pwd: Contraseña
+login_btn_enter: Entrar
+login_demo_users: Usuarios demo
+login_err_invalid: Usuario o contraseña inválidos.
+login_err_disabled: Usuario deshabilitado.
+login_err_generic: No fue posible iniciar sesión.
+entry_header: Inicia tu pago
+entry_desc: Elige el tipo de flujo desde donde se inicia el pago. Esto es solo un selector conceptual; al elegir se abrirá el checkout.
+entry_kiosk: Kioscos / Punto físico
+entry_kiosk_desc: Flujos iniciados desde terminales, kioscos o puntos de venta.
+entry_qr: Recarga / QR
+entry_qr_desc: Recargas rápidas y flujos desde un QR o lectura de tarjeta.
+entry_web: E-commerce / Web
+entry_web_desc: Checkout integrado en tiendas online o páginas web.
+entry_agent: Módulo Agente
+entry_agent_desc: Ver saldo, cobrar servicios, ver ganancias y el histórico transaccional.
+entry_footer: Puedes volver al checkout principal directamente en 
+index_redirect: Si no eres redirigido automáticamente, 
+index_click_here: haz clic aquí para abrir el demo
+agent_module: Módulo Agente
+agent_module_desc: Panel de pruebas: saldo, cobros, ganancias y historial. Este demo usa almacenamiento local para simular estado.
+agent_module_desc_dev: Esta versión es la copia de trabajo del módulo de agente para desarrollo.
+agent_balance: Saldo
+agent_balance_desc: Saldo disponible para pagar servicios o retirar
+agent_btn_recharge: Recargar saldo (demo)
+agent_btn_recharge_portal: Recargar
+agent_services: Servicios disponibles
+agent_dashboard: Dashboard
+agent_dash_desc: Ganancias acumuladas y métricas rápidas
+agent_total_gain: Ganancia total (demo)
+agent_tx_count: Transacciones
+agent_history: Histórico
+agent_history_desc: Últimas transacciones
+agent_th_date: Fecha
+agent_th_type: Tipo
+agent_th_details: Detalles
+agent_th_amount: Monto
+agent_btn_pay: Pagar
+lang_es: Español
+lang_en: Inglés
+lang_ru: Ruso
+lang_zh: Chino
+settings_title: Ajustes
+settings_account: Cuenta
+settings_security: Seguridad
+settings_preferences: Preferencias
+settings_legal: Legal
+cashout_title: Retiro de fondos
+cashout_available_funds: Fondos Disponibles
+cashout_withdraw: Monto a retirar
+cashout_transfer_funds: Transferir fondos a mi cuenta
+cashout_origin_account: Cuenta de origen
+cashout_destination_account: Cuenta de destino
+recharge_title: Recargas y Pagos
+recharge_digital: Recarga digital
+tab_invoice: Factura
+tab_history: Histórico
+tab_payments: Pago de servicios
+tab_fund: Fondear
+tab_ach: Notificar ACH
+recharge_history_title: Histórico de transacciones
+invoice_send_btn: Enviar comprobante
+invoice_op: Operación
+invoice_amount: Monto
+invoice_ref: Referencia
+invoice_print: Punto Pago — Comprobante
+checkout_total: Total a pagar
+checkout_select_method: Selecciona un método de pago para continuar.
+checkout_pay_button: Pagar pedido
+checkout_cancel: Cancelar
+common_continue: Continuar
+checkout_secure: Pago seguro y rápido
+cashout_profit_label: Ganancias por comisiones (Mes):
+cashout_target_account: Cuenta de destino
+cashout_choose_method: Elige un método para retirar tus ganancias y saldo a favor.
+cashout_pp_card: Tarjeta Punto Pago
+cashout_change_method: Cambiar
+cashout_ach_info: Retiros ACH toman de 24 a 48 hs hábiles.
+cashout_bank_data: Datos Bancarios
+cashout_select_bank: Seleccione banco...
+cashout_account_type: Tipo de cuenta
+cashout_savings: Ahorros
+cashout_checking: Corriente
+cashout_account_number: Número de cuenta
+cashout_account_owner: Titular de la cuenta
+cashout_save_account: Guardar cuenta
+cashout_card_number: Número de tarjeta
+cashout_card_name: Nombre en la tarjeta
+cashout_card_expiry: Vencimiento
+cashout_link_card: Vincular tarjeta
+common_back: Volver
+common_logout: Salir
+common_session: Sesión
+invoice_load_last: Cargar última operación
+invoice_clear: Limpiar
+invoice_subtitle: Confirma los datos del cliente para compartir el recibo.
+invoice_label_name: Nombre (opcional)
+invoice_ph_name: Ej: Juan Pérez
+invoice_label_id: Documento / ID (opcional)
+invoice_ph_id: Ej: 8-888-888
+invoice_label_wa: WhatsApp (tel con país)
+invoice_ph_wa: 50760000000
+invoice_help_wa: Formato sin espacios. Ej: 50760000000
+invoice_label_email: Correo electrónico
+invoice_ph_email: cliente@correo.com
+invoice_label_tg: Telegram (usuario o número)
+invoice_ph_tg: @usuario o 50760000000
+invoice_label_msg: Mensaje (editable)
+invoice_ph_msg: Mensaje para el cliente...
+invoice_preview_title: Vista previa
+invoice_preview_desc: Así verá el recibo el cliente (texto).
+invoice_preview_disclaimer: Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.
+invoice_demo_footer: Demo — Los datos se guardan en localStorage. Fuente de operaciones: sandbox pp_agent_sandbox_v1.
+invoice_btn_wa: WhatsApp
+invoice_btn_tg: Telegram
+invoice_btn_email: Correo
+invoice_greet: Hola
+invoice_msg_body: Te compartimos tu comprobante de pago:
+invoice_msg_footer: Gracias por usar Punto Pago.
+invoice_err_wa: Ingresa el número de WhatsApp (con código de país, sin +).
+invoice_status_wa: Abriendo WhatsApp…
+invoice_err_email: Ingresa un correo del cliente.
+invoice_status_email: Abriendo correo…
+invoice_status_tg_share: Abriendo Telegram (compartir)…
+invoice_status_tg: Abriendo Telegram… (luego pega el mensaje)
+invoice_err_no_tx: No hay transacciones todavía. Realiza un Cash In o un pago primero.
+invoice_status_loaded: Última operación cargada. Completa los datos del cliente y elige el canal.

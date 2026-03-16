@@ -1,0 +1,15 @@
+with open('i18n.js', 'r') as f:
+    js = f.read()
+
+es = '"invoice_btn_email": "Correo",\n    "invoice_greet": "Hola",\n    "invoice_msg_body": "Te compartimos tu comprobante de pago:",\n    "invoice_msg_footer": "Gracias por usar Punto Pago.",\n    "invoice_err_wa": "Ingresa el número de WhatsApp (con código de país, sin +).",\n    "invoice_status_wa": "Abriendo WhatsApp…",\n    "invoice_err_email": "Ingresa un correo del cliente.",\n    "invoice_status_email": "Abriendo correo…",\n    "invoice_status_tg_share": "Abriendo Telegram (compartir)…",\n    "invoice_status_tg": "Abriendo Telegram… (luego pega el mensaje)",\n    "invoice_err_no_tx": "No hay transacciones todavía. Realiza un Cash In o un pago primero.",\n    "invoice_status_loaded": "Última operación cargada. Completa los datos del cliente y elige el canal."'
+en = '"invoice_btn_email": "Email",\n    "invoice_greet": "Hello",\n    "invoice_msg_body": "Here is your payment receipt:",\n    "invoice_msg_footer": "Thank you for using Punto Pago.",\n    "invoice_err_wa": "Enter the WhatsApp number (with country code, no +).",\n    "invoice_status_wa": "Opening WhatsApp…",\n    "invoice_err_email": "Enter customer email.",\n    "invoice_status_email": "Opening email…",\n    "invoice_status_tg_share": "Opening Telegram (share)…",\n    "invoice_status_tg": "Opening Telegram… (then paste message)",\n    "invoice_err_no_tx": "No transactions yet. Make a Cash In or payment first.",\n    "invoice_status_loaded": "Last operation loaded. Fill customer data and choose channel."'
+ru = '"invoice_btn_email": "Эл. почта",\n    "invoice_greet": "Здравствуйте",\n    "invoice_msg_body": "Отправляем вам чек об оплате:",\n    "invoice_msg_footer": "Спасибо за использование Punto Pago.",\n    "invoice_err_wa": "Введите номер WhatsApp (с кодом страны, без +).",\n    "invoice_status_wa": "Открытие WhatsApp…",\n    "invoice_err_email": "Введите email клиента.",\n    "invoice_status_email": "Открытие почты…",\n    "invoice_status_tg_share": "Открытие Telegram (поделиться)…",\n    "invoice_status_tg": "Открытие Telegram… (затем вставьте сообщение)",\n    "invoice_err_no_tx": "Транзакций пока нет. Совершите оплату сначала.",\n    "invoice_status_loaded": "Последняя операция загружена. Заполните данные и выберите канал."'
+zh = '"invoice_btn_email": "电邮",\n    "invoice_greet": "你好",\n    "invoice_msg_body": "这是您的付款收据：",\n    "invoice_msg_footer": "感谢您使用 Punto Pago。",\n    "invoice_err_wa": "输入WhatsApp号码（带国家代码，不加+）。",\n    "invoice_status_wa": "正在打开WhatsApp…",\n    "invoice_err_email": "输入客户电子邮件。",\n    "invoice_status_email": "正在打开电子邮件…",\n    "invoice_status_tg_share": "正在打开Telegram（分享）…",\n    "invoice_status_tg": "正在打开Telegram…（然后粘贴消息）",\n    "invoice_err_no_tx": "尚无交易。请先进行充值或付款。",\n    "invoice_status_loaded": "最后操作已加载。填写客户数据并选择渠道。"'
+
+js = js.replace('"invoice_btn_email": "Correo"', es)
+js = js.replace('"invoice_btn_email": "Email"', en)
+js = js.replace('"invoice_btn_email": "Эл. почта"', ru)
+js = js.replace('"invoice_btn_email": "电邮"', zh)
+
+with open('i18n.js', 'w') as f:
+    f.write(js)
