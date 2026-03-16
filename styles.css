@@ -358,7 +358,13 @@
 }
 
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#ffffff);color:#0f172a;-webkit-font-smoothing:antialiased}
+html,body{
+  height:100%;
+  margin:0;
+  background: linear-gradient(135deg, #23243a 0%, #1a1b2b 60%, #5462e6 100%) fixed;
+  color:#0f172a;
+  -webkit-font-smoothing:antialiased;
+}
 
 /* Optional: shared typography helpers */
 .pp-type{font-family:var(--pp-font);color:var(--pp-text)}
