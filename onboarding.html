@@ -126,7 +126,81 @@
                   </div>
                   <div>
                     <label class="pp-label">Industria / rubro *</label>
-                    <input name="industry" class="pp-field" type="text" required>
+                    <input name="industry" id="industry-autocomplete" class="pp-field" type="text" required placeholder="Escribe para buscar..." autocomplete="off">
+                    <ul id="industry-suggestions" class="absolute z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 w-full hidden"></ul>
+  <script>
+    // --- Autocompletado avanzado para Industria / rubro ---
+    (function(){
+      const industryList = [
+        "Servicios Generales",
+        "Calefacción, Fontanería, A/C",
+        "Servicios Electricos",
+        "Albañilería, mampostería y yeso",
+        "Servicios de Carpintería",
+        "Techos / Revestimientos, Chapa",
+        "Servicios de trabajos de Hormigón",
+        "Servicios comerciales especiales",
+        "Publicación e impresiones diversas",
+        "Servicios de composición tipográfica, fabricación de planchas y servicios relacionados",
+        "Limpieza especial",
+        "Ferrocarriles",
+        "Transporte de cercanías, Ferries",
+        "Ferrocarriles de pasajeros",
+        "Servicios de ambulancia",
+        "Taxis / Limusinas",
+        "Líneas de bus",
+        "Autotransportistas y camiones: locales y de larga distancia, empresas de mudanzas y almacenamiento, y servicios de entrega local",
+        "Servicios de mensajería",
+        "Almacenamiento y depósito públicos: productos agrícolas, productos refrigerados, artículos para el hogar y almacenamiento",
+        "Lineas de crucero",
+        "Alquiler de barcos y arrendamientos",
+        "Puertos deportivos, servicio y suministros",
+        "Aerolíneas, transportistas aéreos",
+        "Aeropuertos, campos de vuelo",
+        "Agencias de viajes, Tour operadores",
+        "Tarifas de peajes / puentes",
+        "Servicios de transporte (no clasificados en otra parte)",
+        "Venta de equipos de telecomunicaciones y telefonía",
+        "Servicios de telecomunicación",
+        // ...agrega aquí el resto de las categorías de tu lista...
+      ];
+      const input = document.getElementById('industry-autocomplete');
+      const suggestions = document.getElementById('industry-suggestions');
+      if (!input || !suggestions) return;
+      input.addEventListener('input', function() {
+        const value = this.value.trim().toLowerCase();
+        suggestions.innerHTML = '';
+        if (!value) {
+          suggestions.classList.add('hidden');
+          return;
+        }
+        const matches = industryList.filter(cat => cat.toLowerCase().includes(value));
+        if (matches.length === 0) {
+          suggestions.classList.add('hidden');
+          return;
+        }
+        matches.forEach(cat => {
+          const li = document.createElement('li');
+          li.textContent = cat;
+          li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100';
+          li.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            input.value = cat;
+            suggestions.classList.add('hidden');
+          });
+          suggestions.appendChild(li);
+        });
+        suggestions.classList.remove('hidden');
+      });
+      input.addEventListener('blur', function() {
+        setTimeout(() => suggestions.classList.add('hidden'), 100);
+      });
+      input.addEventListener('focus', function() {
+        if (this.value.trim()) this.dispatchEvent(new Event('input'));
+      });
+    })();
+  </script>
+                    </datalist>
                   </div>
                   <div>
                     <label class="pp-label">Años operando *</label>
