@@ -195,6 +195,30 @@
   @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr}.hero-copy{max-width:none}.hero-title{font-size:clamp(2.08rem,10vw,3.24rem);line-height:.96;letter-spacing:-.072em;max-width:13.6ch}.hero-title .hero-line{white-space:normal}.hero-cta-row{margin-top:18px} }
   @media (max-width: 640px){ .gate-shell{padding-top:16px} }
   @media (hover:hover) and (pointer:fine){ body{cursor:auto} a,button,input,label,.pp-card,.wait-box,.status-box,.next-step-card{cursor:auto} }
+
+  /* Brochure Punto Aliado */
+  .brochure-shell{max-width:1180px;margin:0 auto;padding:0 16px 18px}
+  .brochure-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+  .brochure-card{border-radius:28px;border:1px solid rgba(148,163,184,.18);background:rgba(255,255,255,.94);box-shadow:0 18px 46px rgba(15,23,42,.06)}
+  .brochure-card .head{padding:18px 20px;border-bottom:1px solid rgba(148,163,184,.16);background:linear-gradient(180deg, rgba(84,98,230,.06), rgba(255,255,255,.92))}
+  .brochure-card .body{padding:18px 20px}
+  .brochure-title{font-family:'Montserrat',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;letter-spacing:-.06em;font-weight:800;color:#0f172a;font-size:clamp(1.6rem,2.2vw,2.15rem);line-height:1.05}
+  .brochure-kicker{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:999px;background:rgba(84,98,230,.08);border:1px solid rgba(84,98,230,.12);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-primary)}
+  .brochure-lead{color:#475569;font-size:15px;line-height:1.65;margin-top:10px;max-width:64ch}
+  .brochure-cols{display:grid;grid-template-columns:repeat(12, 1fr);gap:12px;margin-top:16px}
+  .pill{grid-column:span 12;display:flex;gap:10px;align-items:flex-start;border-radius:20px;border:1px solid rgba(148,163,184,.18);background:#fff;padding:14px 14px;box-shadow:0 10px 26px rgba(15,23,42,.05)}
+  .pill .ic{width:38px;height:38px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.10);color:var(--pp-primary);flex:0 0 auto}
+  .pill strong{display:block;color:#0f172a;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:900}
+  .pill p{margin:6px 0 0;color:#475569;font-size:13px;line-height:1.55}
+  .list{display:grid;gap:10px;margin-top:10px}
+  .li{display:flex;gap:12px;align-items:flex-start}
+  .li i{margin-top:2px;color:rgba(84,98,230,.95)}
+  .li span{color:#475569;font-size:14px;line-height:1.55}
+  .cta-card{position:sticky;top:16px}
+  .cta-badge{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 12px;background:rgba(2,6,23,.06);border:1px solid rgba(148,163,184,.18);color:#0f172a;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .cta-actions{display:grid;gap:10px;margin-top:14px}
+  .cta-actions .pp-btn{width:100%;justify-content:center}
+  @media (max-width: 980px){ .brochure-grid{grid-template-columns:1fr}.cta-card{position:static} }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -217,42 +241,85 @@
         </div>
       </div>
 
-      <div class="gate-layout">
-        <aside class="space-y-4">
-          <div id="statusBox" class="status-box -info validating-panel">
-            <div class="font-extrabold">Resultado</div>
-            <div id="statusText" class="text-sm mt-2">Revisamos si tu acceso es nuevo o existente.</div>
-          </div>
+      <div class="brochure-shell">
+        <div class="brochure-grid">
+          <section class="brochure-card">
+            <div class="head">
+              <div class="brochure-kicker"><i class="fa-solid fa-store"></i><span>Punto Aliado</span></div>
+              <h2 class="brochure-title mt-3">Convierte tu tienda en un punto de pagos y atrae más clientes todos los días</h2>
+              <p class="brochure-lead">
+                Ofrece en tu negocio servicios que las personas usan todos los días y genera ingresos adicionales por cada transacción.
+              </p>
+            </div>
+            <div class="body">
+              <div class="brochure-cols">
+                <div class="pill">
+                  <div class="ic"><i class="fa-solid fa-bolt"></i></div>
+                  <div>
+                    <strong>Servicios disponibles</strong>
+                    <div class="list">
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Recargas de celular</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Pago de luz con ENSA</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Pago de gas con Naturgy</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Recargas del Metro de Panamá</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Otros pagos y recargas</span></div>
+                    </div>
+                  </div>
+                </div>
 
-          <div class="pp-card -soft overflow-hidden aside-card">
-            <div class="pp-card-head">
-              <h2 class="text-lg font-extrabold">Ruta de acceso</h2>
-            </div>
-            <div class="pp-card-body aside-steps">
-              <div class="aside-step">
-                <div class="aside-step-badge">1</div>
-                <div>
-                  <strong>Revisión inicial</strong>
-                  <p>Identificamos si tu acceso es nuevo o existente.</p>
+                <div class="pill">
+                  <div class="ic"><i class="fa-solid fa-sack-dollar"></i></div>
+                  <div>
+                    <strong>Beneficios para tu negocio</strong>
+                    <div class="list">
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Más clientes entrando a tu tienda</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Comisión por cada pago realizado</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Sistema fácil y rápido de usar</span></div>
+                      <div class="li"><i class="fa-regular fa-circle-check"></i><span>Instalación y capacitación incluida</span></div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="aside-step">
-                <div class="aside-step-badge">2</div>
-                <div>
-                  <strong>Correo verificado</strong>
-                  <p>Los comercios nuevos validan correo antes de continuar.</p>
-                </div>
-              </div>
-              <div class="aside-step">
-                <div class="aside-step-badge">3</div>
-                <div>
-                  <strong>Portal regular</strong>
-                  <p>Si ya existe, continúas por el portal habitual.</p>
+
+                <div class="pill">
+                  <div class="ic"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                  <div>
+                    <strong>Cómo funciona</strong>
+                    <p>
+                      El cliente llega a tu tienda, realiza su pago y recibe su comprobante en segundos.
+                      Tu negocio gana una comisión por cada transacción.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </aside>
+          </section>
+
+          <aside class="brochure-card cta-card">
+            <div class="head">
+              <div class="cta-badge"><i class="fa-solid fa-shield-halved"></i><span>Requisitos</span></div>
+              <h3 class="text-lg font-extrabold mt-3">Ten esto listo antes de iniciar</h3>
+              <p class="text-sm text-slate-600 mt-1">Te tomará menos tiempo completar el registro.</p>
+            </div>
+            <div class="body">
+              <div class="list">
+                <div class="li"><i class="fa-regular fa-id-card"></i><span>Cédula o pasaporte vigente del representante.</span></div>
+                <div class="li"><i class="fa-solid fa-building"></i><span>Datos legales del comercio (razón social y número de registro).</span></div>
+                <div class="li"><i class="fa-solid fa-location-dot"></i><span>Dirección del negocio y un documento de soporte.</span></div>
+                <div class="li"><i class="fa-regular fa-envelope"></i><span>Correo y teléfono de contacto para validación.</span></div>
+              </div>
+
+              <div class="cta-actions">
+                <button type="button" class="pp-btn pp-btn-primary" id="openQuickValidation2">
+                  <i class="fa-regular fa-circle-check"></i><span>Empezar registro</span>
+                </button>
+                <a class="pp-btn pp-btn-secondary" href="login.html">
+                  <i class="fa-solid fa-arrow-right-to-bracket"></i><span>Ya tengo acceso</span>
+                </a>
+              </div>
+              <p class="text-xs text-slate-500 mt-3">Empieza hoy con <strong>Punto Aliado</strong> y ofrece más servicios a tu comunidad.</p>
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
     <!-- Modal de Validación rápida -->
@@ -328,46 +395,7 @@
         </div>
       </section>
     </div>
-    <!-- Sección de preparación para onboarding: estilo dark tipo Punto Pago -->
-    <section class="onboarding-prep-section">
-      <div class="gate-shell">
-        <h2 class="onboarding-prep-title">Prepara estos documentos antes de comenzar</h2>
-        <p class="onboarding-prep-subtitle">
-          Esto acelera la revisión y evita que tengas que pausar el formulario a la mitad.
-        </p>
-        <div class="prep-steps">
-          <div class="prep-step">
-            <img src="https://assets.revolut.com/published-assets-v3/85055325-6f27-40b9-8f62-c63c1f8ee8aa/19a3b5cc-6c94-4407-98ad-a36f3365f4ad.png" alt="Verificación de identidad">
-            <div class="prep-step-content">
-              <h3>Documento de identidad del representante</h3>
-              <p>
-                Cédula o pasaporte vigente del representante legal o autorizado que firmará el acuerdo.
-              </p>
-            </div>
-          </div>
-
-          <div class="prep-step">
-            <img src="https://assets.revolut.com/published-assets-v3/9e2d7861-3458-4afb-ab75-c08e05bb7bb2/86c76881-183b-4034-beac-7f58e941c254.png" alt="Datos de la sociedad">
-            <div class="prep-step-content">
-              <h3>Datos legales de la empresa</h3>
-              <p>
-                Escritura o documentación constitutiva, RUC / NIT y razón social tal como aparece en los registros.
-              </p>
-            </div>
-          </div>
-
-          <div class="prep-step">
-            <img src="https://assets.revolut.com/published-assets-v3/05dba9e0-ef47-4384-9160-47ac0e5f2070/1006a4a0-ea94-497d-9bb8-7dae818486ce.png" alt="Dirección de la empresa">
-            <div class="prep-step-content">
-              <h3>Comprobante de domicilio comercial</h3>
-              <p>
-                Recibo de servicios, contrato de arrendamiento u otro documento que acredite la dirección del comercio.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- La sección dark de documentos se retiró (reemplazada por "Requisitos" en el brochure). -->
   </main>
 
   <script src="auth.js"></script>
@@ -386,6 +414,7 @@
         business: document.getElementById('accessBusiness'),
         existingPortalLink: document.getElementById('existingPortalLink'),
         openQuickValidation: document.getElementById('openQuickValidation'),
+        openQuickValidation2: document.getElementById('openQuickValidation2'),
         quickValidationModal: document.getElementById('quickValidationModal'),
         closeQuickValidation: document.getElementById('closeQuickValidation'),
         modalStep1: document.getElementById('modalStep1'),
@@ -459,6 +488,11 @@
 
       if (els.openQuickValidation) {
         els.openQuickValidation.addEventListener('click', () => {
+          openQuickValidationModal();
+        });
+      }
+      if (els.openQuickValidation2) {
+        els.openQuickValidation2.addEventListener('click', () => {
           openQuickValidationModal();
         });
       }
