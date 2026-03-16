@@ -219,13 +219,118 @@
   .cta-actions{display:grid;gap:10px;margin-top:14px}
   .cta-actions .pp-btn{width:100%;justify-content:center}
   @media (max-width: 980px){ .brochure-grid{grid-template-columns:1fr}.cta-card{position:static} }
+
+  /* Landing motion: Puntopago-like polish */
+  .pp-motion-bg{
+    position:absolute;
+    inset:-2px;
+    pointer-events:none;
+    overflow:hidden;
+    border-radius:24px;
+  }
+  .pp-orb{
+    position:absolute;
+    width:420px;
+    height:420px;
+    border-radius:999px;
+    filter:blur(26px);
+    opacity:.55;
+    transform:translate3d(0,0,0);
+    mix-blend-mode:multiply;
+    animation:orbFloat 14s ease-in-out infinite;
+  }
+  .pp-orb.-a{left:-140px;top:-180px;background:radial-gradient(circle at 30% 30%, rgba(84,98,230,.65), rgba(84,98,230,0) 62%)}
+  .pp-orb.-b{right:-180px;top:-140px;background:radial-gradient(circle at 30% 30%, rgba(59,130,246,.55), rgba(59,130,246,0) 62%);animation-duration:18s;animation-delay:-3s}
+  .pp-orb.-c{right:-120px;bottom:-220px;background:radial-gradient(circle at 30% 30%, rgba(16,185,129,.35), rgba(16,185,129,0) 62%);animation-duration:20s;animation-delay:-7s}
+  @keyframes orbFloat{
+    0%{transform:translate3d(0,0,0) scale(1)}
+    50%{transform:translate3d(26px,18px,0) scale(1.06)}
+    100%{transform:translate3d(0,0,0) scale(1)}
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(14px);
+    filter:blur(4px);
+    transition:opacity .6s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1), filter .7s cubic-bezier(.2,.8,.2,1);
+    will-change:transform,opacity,filter;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+    filter:blur(0);
+  }
+  .reveal[data-delay="1"]{transition-delay:.06s}
+  .reveal[data-delay="2"]{transition-delay:.12s}
+  .reveal[data-delay="3"]{transition-delay:.18s}
+  .reveal[data-delay="4"]{transition-delay:.24s}
+
+  .pill{
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    will-change:transform;
+  }
+  .pill:hover{
+    transform:translateY(-4px);
+    box-shadow:0 18px 44px rgba(15,23,42,.08);
+    border-color:rgba(84,98,230,.22);
+  }
+  .pill .ic{transition:transform .22s ease, background .22s ease}
+  .pill:hover .ic{transform:scale(1.06) rotate(-2deg);background:rgba(84,98,230,.14)}
+
+  .hero-visual{
+    position:relative;
+    border-radius:24px;
+    border:1px solid rgba(148,163,184,.18);
+    background:linear-gradient(135deg, rgba(84,98,230,.10), rgba(255,255,255,.92));
+    overflow:hidden;
+    min-height:180px;
+    box-shadow:0 18px 46px rgba(15,23,42,.06);
+  }
+  .hero-visual-inner{
+    position:relative;
+    z-index:2;
+    padding:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    align-items:stretch;
+  }
+  .mini-card{
+    border-radius:22px;
+    background:rgba(255,255,255,.88);
+    border:1px solid rgba(148,163,184,.22);
+    padding:14px 14px;
+    box-shadow:0 12px 30px rgba(15,23,42,.06);
+    transform:translate3d(0,0,0);
+  }
+  .mini-card.-float{
+    animation:miniFloat 6.5s ease-in-out infinite;
+  }
+  .mini-card.-float2{
+    animation:miniFloat 7.8s ease-in-out infinite;
+    animation-delay:-1.6s;
+  }
+  @keyframes miniFloat{
+    0%{transform:translate3d(0,0,0)}
+    50%{transform:translate3d(0,-10px,0)}
+    100%{transform:translate3d(0,0,0)}
+  }
+  .mini-kpi{display:flex;align-items:center;gap:10px}
+  .mini-kpi .b{width:38px;height:38px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.12);color:var(--pp-primary)}
+  .mini-kpi .t{font-weight:900;letter-spacing:-.02em;color:#0f172a}
+  .mini-kpi .s{font-size:12px;color:#64748b;margin-top:2px}
+
+  @media (prefers-reduced-motion: reduce){
+    .pp-orb,.mini-card.-float,.mini-card.-float2{animation:none !important}
+    .reveal,.pill,.hero-primary,.hero-secondary{transition:none !important}
+  }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
   <div id="cursorRing" class="cursor-ring" aria-hidden="true"></div>
   <main class="pp-page flex-grow">
     <div class="gate-shell">
-      <div class="pp-card gate-hero rounded-[24px] p-5 mb-5">
+      <div class="pp-card gate-hero rounded-[24px] p-5 mb-5 reveal" data-reveal data-delay="1">
         <div class="hero-grid">
           <div>
             <div class="hero-kicker"><i class="fa-solid fa-sparkles"></i><span>Punto Pago</span></div>
@@ -243,17 +348,57 @@
 
       <div class="brochure-shell">
         <div class="brochure-grid">
-          <section class="brochure-card">
-            <div class="head">
+          <section class="brochure-card reveal" data-reveal data-delay="2">
+            <div class="head" style="position:relative;">
+              <div class="pp-motion-bg" aria-hidden="true">
+                <div class="pp-orb -a"></div>
+                <div class="pp-orb -b"></div>
+                <div class="pp-orb -c"></div>
+              </div>
               <div class="brochure-kicker"><i class="fa-solid fa-store"></i><span>Punto Aliado</span></div>
               <h2 class="brochure-title mt-3">Convierte tu tienda en un punto de pagos y atrae más clientes todos los días</h2>
               <p class="brochure-lead">
                 Ofrece en tu negocio servicios que las personas usan todos los días y genera ingresos adicionales por cada transacción.
               </p>
+              <div class="hero-visual mt-5" id="heroVisual">
+                <div class="pp-motion-bg" aria-hidden="true">
+                  <div class="pp-orb -a"></div>
+                  <div class="pp-orb -b"></div>
+                </div>
+                <div class="hero-visual-inner">
+                  <div class="mini-card -float">
+                    <div class="mini-kpi">
+                      <div class="b"><i class="fa-solid fa-users"></i></div>
+                      <div>
+                        <div class="t">Más clientes</div>
+                        <div class="s">Más visitas cada día</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mini-card -float2">
+                    <div class="mini-kpi">
+                      <div class="b"><i class="fa-solid fa-sack-dollar"></i></div>
+                      <div>
+                        <div class="t">Comisión</div>
+                        <div class="s">Por cada transacción</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mini-card -float2" style="grid-column:span 2;">
+                    <div class="mini-kpi">
+                      <div class="b"><i class="fa-solid fa-bolt"></i></div>
+                      <div>
+                        <div class="t">Pagos en segundos</div>
+                        <div class="s">Recargas y servicios de uso diario</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="body">
               <div class="brochure-cols">
-                <div class="pill">
+                <div class="pill reveal" data-reveal data-delay="1">
                   <div class="ic"><i class="fa-solid fa-bolt"></i></div>
                   <div>
                     <strong>Servicios disponibles</strong>
@@ -267,7 +412,7 @@
                   </div>
                 </div>
 
-                <div class="pill">
+                <div class="pill reveal" data-reveal data-delay="2">
                   <div class="ic"><i class="fa-solid fa-sack-dollar"></i></div>
                   <div>
                     <strong>Beneficios para tu negocio</strong>
@@ -280,7 +425,7 @@
                   </div>
                 </div>
 
-                <div class="pill">
+                <div class="pill reveal" data-reveal data-delay="3">
                   <div class="ic"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                   <div>
                     <strong>Cómo funciona</strong>
@@ -294,7 +439,7 @@
             </div>
           </section>
 
-          <aside class="brochure-card cta-card">
+          <aside class="brochure-card cta-card reveal" data-reveal data-delay="3">
             <div class="head">
               <div class="cta-badge"><i class="fa-solid fa-shield-halved"></i><span>Requisitos</span></div>
               <h3 class="text-lg font-extrabold mt-3">Ten esto listo antes de iniciar</h3>
@@ -792,6 +937,47 @@
           setNextStep('Tu correo ya está validado. Continúa cuando quieras al onboarding.', true);
         }
       }
+
+      // Scroll reveal + subtle parallax (premium landing feel)
+      (function setupMotion(){
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduceMotion) {
+          const items = Array.from(document.querySelectorAll('[data-reveal]'));
+          if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add('in');
+              });
+            }, { root: null, threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+            items.forEach(el => io.observe(el));
+          } else {
+            items.forEach(el => el.classList.add('in'));
+          }
+
+          const hero = document.getElementById('heroVisual');
+          if (hero) {
+            let raf = null;
+            let mx = 0, my = 0;
+            function apply(){
+              raf = null;
+              const x = (mx - 0.5) * 10;
+              const y = (my - 0.5) * 10;
+              hero.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            }
+            hero.addEventListener('mousemove', (e) => {
+              const r = hero.getBoundingClientRect();
+              mx = (e.clientX - r.left) / Math.max(1, r.width);
+              my = (e.clientY - r.top) / Math.max(1, r.height);
+              if (!raf) raf = requestAnimationFrame(apply);
+            });
+            hero.addEventListener('mouseleave', () => {
+              hero.style.transform = 'translate3d(0,0,0)';
+            });
+          }
+        } else {
+          document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('in'));
+        }
+      })();
 
       handleSupabaseReturn();
     })();
