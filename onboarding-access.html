@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <title>Acceso onboarding — Punto Pago</title>
+  <title>Sección de validación — Punto Pago</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
@@ -104,6 +104,12 @@
     .pp-field:focus{transform:translateY(-1px)}
   .pp-card,.wait-box,.status-box{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
   .pp-card:hover,.wait-box:hover,.status-box:hover{box-shadow:0 18px 38px rgba(15,23,42,.06)}
+
+  /* Header azul */
+  .gate-nav{background:linear-gradient(135deg,#5462e6 0%,#4352d4 40%,#3738ab 100%);color:#fff;border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 4px 20px rgba(84,98,230,.25)}
+  .gate-nav .gate-nav-sub{color:rgba(255,255,255,.85)}
+  .gate-nav .gate-nav-btn{border-color:rgba(255,255,255,.35);color:#fff;background:rgba(255,255,255,.12)}
+  .gate-nav .gate-nav-btn:hover{background:rgba(255,255,255,.2)}
 
   /* Modal de validación rápida */
   .gate-modal-backdrop{
@@ -354,6 +360,17 @@
 </head>
 <body class="min-h-screen flex flex-col bg-page-white">
   <div id="cursorRing" class="cursor-ring" aria-hidden="true"></div>
+  <nav class="gate-nav p-4 sticky top-0 z-40">
+    <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
+      <div class="min-w-0">
+        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Punto Aliado</div>
+        <div class="text-xs gate-nav-sub">Sección de validación</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="gate-nav-btn inline-flex items-center gap-2 h-[42px] rounded-[14px] px-4 border text-sm font-semibold no-underline"><i class="fa-solid fa-arrow-right-to-bracket"></i> Portal</a>
+      </div>
+    </div>
+  </nav>
   <main class="pp-page flex-grow">
     <div class="gate-shell">
       <div class="pp-card gate-hero rounded-[24px] p-5 mb-5 reveal" data-reveal data-delay="1">
@@ -375,7 +392,7 @@
       <div class="brochure-shell">
         <div class="brochure-grid">
           <section class="brochure-card reveal" data-reveal data-delay="2">
-            <div class="head" style="position:relative;">
+            <div class="head relative">
               <div class="pp-motion-bg" aria-hidden="true">
                 <div class="pp-orb -a"></div>
                 <div class="pp-orb -b"></div>
@@ -410,7 +427,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="mini-card -float2" style="grid-column:span 2;">
+                  <div class="mini-card -float2" style="grid-column:span 2;" class="col-span-2">
                     <div class="mini-kpi">
                       <div class="b"><i class="fa-solid fa-bolt"></i></div>
                       <div>
@@ -494,7 +511,7 @@
       </div>
     </div>
     <!-- Modal de Validación rápida -->
-    <div id="quickValidationModal" class="gate-modal-backdrop">
+  <div id="quickValidationModal" class="gate-modal-backdrop">
       <section class="pp-card -soft overflow-hidden gate-modal" role="dialog" aria-modal="true" aria-labelledby="quickValidationTitle">
         <div class="gate-modal-head">
           <div>
@@ -505,14 +522,14 @@
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-        <div class="gate-modal-steps" aria-label="Progreso de acceso">
+  <div class="gate-modal-steps" role="list" aria-label="Progreso de acceso">
           <div id="modalStep1" class="gate-step -active"><span class="gate-step-dot">1</span><span>Revisión</span></div>
           <div class="gate-step-sep" aria-hidden="true"></div>
           <div id="modalStep2" class="gate-step"><span class="gate-step-dot">2</span><span>Correo</span></div>
           <div class="gate-step-sep" aria-hidden="true"></div>
           <div id="modalStep3" class="gate-step"><span class="gate-step-dot">3</span><span>Portal</span></div>
         </div>
-        <div id="statusBox" class="status-box -info validating-panel" style="margin:12px 22px 0;">
+  <div id="statusBox" class="status-box -info validating-panel mt-3 mx-6">
           <div class="font-extrabold">Resultado</div>
           <div id="statusText" class="text-sm mt-2">Revisamos si tu acceso es nuevo o existente.</div>
           <div id="supabaseHint" class="text-xs text-slate-500 mt-2"></div>
@@ -531,64 +548,10 @@
             <input id="accessBusiness" type="text" class="pp-field" placeholder="Ej: Comercial Centro SpA" autocomplete="organization">
           </div>
 
-          <div id="formActions" class="flex gap-3 flex-wrap">
-
-          <div class="mt-6">
-            <label class="pp-label font-bold">Descripción del negocio *</label>
-            <div id="pdf-dropzone-access" class="border-2 border-dashed border-blue-400 rounded-lg p-4 text-center cursor-pointer hover:bg-blue-50 transition">
-              <span class="block text-gray-500">Arrastre o cargue aquí el PDF de su aviso de operaciones. Este documento es la única forma válida de describir su negocio.</span>
-              <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" class="hidden" required>
-              <span id="pdf-file-info-access" class="block text-green-600 mt-2 hidden"></span>
-              <span id="pdf-file-error-access" class="block text-red-600 mt-2 hidden"></span>
-            </div>
-          </div>
-
-          <div id="formActions" class="flex gap-3 flex-wrap">
+          <div id="formActions" class="flex gap-3 flex-wrap mt-4">
             <button id="validateBtn" type="button" class="pp-btn pp-btn-primary">Validar y continuar</button>
             <button id="continueBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Continuar al onboarding</button>
           </div>
-  <script>
-    // Drag & drop PDF para aviso de operaciones en acceso
-    (function(){
-      const dropzone = document.getElementById('pdf-dropzone-access');
-  const input = document.getElementById('businessDescriptionPdf');
-      const info = document.getElementById('pdf-file-info-access');
-      const error = document.getElementById('pdf-file-error-access');
-      if (!dropzone || !input) return;
-      dropzone.addEventListener('click', () => input.click());
-      dropzone.addEventListener('dragover', e => {
-        e.preventDefault();
-        dropzone.classList.add('bg-blue-100');
-      });
-      dropzone.addEventListener('dragleave', e => {
-        e.preventDefault();
-        dropzone.classList.remove('bg-blue-100');
-      });
-      dropzone.addEventListener('drop', e => {
-        e.preventDefault();
-        dropzone.classList.remove('bg-blue-100');
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-          input.files = e.dataTransfer.files;
-          handleFile();
-        }
-      });
-      input.addEventListener('change', handleFile);
-      function handleFile() {
-        error.classList.add('hidden');
-        info.classList.add('hidden');
-        const file = input.files && input.files[0];
-        if (!file) return;
-        if (file.type !== 'application/pdf') {
-          error.textContent = 'Solo se permite subir archivos PDF.';
-          error.classList.remove('hidden');
-          input.value = '';
-          return;
-        }
-        info.textContent = `Archivo seleccionado: ${file.name}`;
-        info.classList.remove('hidden');
-      }
-    })();
-  </script>
 
           <div id="waitingRoom" class="wait-box is-hidden">
             <div class="waiting-emphasis">
@@ -623,7 +586,7 @@
 
           <p id="gateMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
         </div>
-      </section>
+  </section>
     </div>
     <!-- La sección dark de documentos se retiró (reemplazada por "Requisitos" en el brochure). -->
   </main>

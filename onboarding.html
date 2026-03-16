@@ -12,7 +12,12 @@
     html,body{background:#fff !important}
     body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
     main.pp-page{background:#fff !important}
-    .bg-punto-pago{background:#fff !important;color:#0f172a;border-bottom:1px solid rgba(0,0,0,.08)}
+    .ob-nav{background:linear-gradient(135deg, #5462e6 0%, #4352d4 40%, #3738ab 100%);color:#fff;border-bottom:1px solid rgba(255,255,255,.1);box-shadow:0 4px 20px rgba(84,98,230,.25)}
+    .ob-nav .ob-nav-sub{color:rgba(255,255,255,.85)}
+    .ob-nav .ob-nav-btn{border-color:rgba(255,255,255,.35);color:#fff;background:rgba(255,255,255,.12)}
+    .ob-nav .ob-nav-btn:hover{background:rgba(255,255,255,.2)}
+    .ob-progress-bar{height:8px;border-radius:999px;background:rgba(0,0,0,.08);overflow:hidden}
+    .ob-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg, #5462e6, #4352d4);transition:width .4s ease}
     .ob-shell{max-width:1180px;margin:0 auto;padding:24px 16px 72px}
     .ob-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
     .ob-sidebar{position:sticky;top:96px;height:fit-content}
@@ -41,14 +46,14 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-page-white">
-  <nav class="bg-punto-pago p-4 shadow-sm sticky top-0 z-40 pp-type">
+  <nav class="ob-nav p-4 sticky top-0 z-40 pp-type">
     <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
       <div class="min-w-0">
-        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Onboarding aliado</div>
-        <div class="text-xs text-slate-500">Formulario exhaustivo · prototipo interno</div>
+        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Punto Aliado</div>
+        <div class="text-xs ob-nav-sub">Registro de nuevo aliado</div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="pp-admin-entry.html" class="pp-btn pp-btn-secondary border border-slate-300 text-slate-700 h-[42px] rounded-[14px] px-4">Portal credenciales</a>
+        <a href="pp-admin-entry.html" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4">Portal credenciales</a>
       </div>
     </div>
   </nav>
@@ -56,15 +61,22 @@
   <main class="pp-page flex-grow">
     <div class="ob-shell">
       <div class="pp-card ob-hero rounded-[24px] p-5 mb-5">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <div class="ob-chip"><i class="fa-solid fa-file-signature"></i> Solicitud previa a activación</div>
-            <h1 class="text-2xl font-extrabold mt-3">Registro completo de nuevo aliado</h1>
-            <p class="text-sm text-slate-600 mt-2 max-w-3xl">Esta pantalla reemplaza temporalmente el formulario externo para el prototipo. Guarda la información en <code>localStorage</code>, deja el caso en revisión y luego el superadmin podrá aprobarlo antes de crear o pegar las credenciales definitivas.</p>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div class="ob-chip"><i class="fa-solid fa-store"></i> Registro de aliado</div>
+              <h1 class="text-2xl font-extrabold mt-3">Completa los datos de tu negocio</h1>
+              <p class="text-sm text-slate-600 mt-2 max-w-2xl">Llena cada sección para que podamos evaluar tu solicitud. Al finalizar podrás enviar todo a revisión.</p>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <span id="obProgressLabel" class="text-sm font-bold text-slate-700">0%</span>
+              <div class="ob-progress-bar w-28 md:w-36" aria-hidden="true">
+                <div id="obProgressFill" class="ob-progress-fill" style="width:0%"></div>
+              </div>
+            </div>
           </div>
-          <div class="text-sm text-slate-500">
-            <div><strong>Estado por defecto:</strong> pendiente de revisión</div>
-            <div><strong>Siguiente paso:</strong> validación documental + aprobación comercial</div>
+          <div class="ob-progress-bar w-full" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Avance del formulario">
+            <div id="obProgressFillFull" class="ob-progress-fill" style="width:0%"></div>
           </div>
         </div>
       </div>
@@ -96,7 +108,7 @@
             <section class="pp-card -soft overflow-hidden form-step" data-step="0">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">1. Identificación del comercio</h2>
-                <p class="text-sm text-gray-500 mt-1">Datos principales del aliado y su operación.</p>
+                <p class="text-sm text-gray-500 mt-1">Primer paso para conocer la estructura o empresa del cliente.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
@@ -126,10 +138,10 @@
                       <option>Otra sociedad panameña</option>
                     </select>
                   </div>
-                  <div>
+                  <div class="relative">
                     <label class="pp-label">Industria / rubro *</label>
                     <input name="industry" id="industry-autocomplete" class="pp-field" type="text" required placeholder="Escribe para buscar..." autocomplete="off">
-                    <ul id="industry-suggestions" class="absolute z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 w-full hidden"></ul>
+                    <ul id="industry-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de industria"></ul>
                     <script>
                       // --- Autocompletado avanzado para Industria / rubro ---
                       (function(){
@@ -204,19 +216,50 @@
                 </div>
 
                 <div>
-                  <label class="pp-label">Descripción del negocio *</label>
-                  <!-- Eliminado textarea, solo se permite cargar archivo PDF -->
-                  <div id="pdf-dropzone" class="border-2 border-dashed border-blue-400 rounded-lg p-4 text-center cursor-pointer hover:bg-blue-50 transition">
-                    <span class="block text-gray-500">Arrastra y suelta el PDF aquí o haz clic para seleccionar archivo</span>
-                    <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" class="hidden" required>
-                    <span id="pdf-file-info" class="block text-green-600 mt-2 hidden"></span>
-                    <span id="pdf-file-error" class="block text-red-600 mt-2 hidden"></span>
+                  <label class="pp-label">1. Identificación del comercio / Descripción del negocio *</label>
+                  <p class="text-xs text-slate-500 mb-2">
+                    Arrastra un PDF en la zona de abajo o selecciona el documento desde tu ordenador. Solo se acepta formato PDF.
+                  </p>
+                  <!-- Zona exclusiva de arrastre -->
+                  <div id="pdf-dropzone" class="border-2 border-dashed border-blue-400 rounded-xl p-6 text-center transition min-h-[120px] flex flex-col justify-center items-center gap-3 bg-slate-50/50 hover:bg-blue-50/80">
+                    <span class="text-gray-500 text-sm">Suelta aquí el PDF o usa el botón de abajo para cargarlo desde tu ordenador</span>
+                    <span id="pdf-file-info" class="text-green-600 text-sm hidden"></span>
+                    <span id="pdf-file-error" class="text-red-600 text-sm hidden"></span>
+                  </div>
+                  <!-- Input visible: clic abre el selector para cargar desde el ordenador -->
+                  <div class="mt-3">
+                    <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" required aria-describedby="pdf-file-info pdf-file-error" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-blue-600 file:text-white file:font-semibold file:cursor-pointer hover:file:bg-blue-700" aria-label="Cargar PDF desde el ordenador">
                   </div>
                 </div>
               </div>
             </section>
-          </form>
-        </section>
+
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">2. Contactos</h2>
+                <p class="text-sm text-gray-500 mt-1">Representante legal, contacto operativo y técnico.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">Nombre del representante legal *</label>
+                    <input name="repName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Correo del representante *</label>
+                    <input name="repEmail" class="pp-field" type="email" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Nombre contacto operativo *</label>
+                    <input name="opsContactName" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Correo contacto operativo *</label>
+                    <input name="opsContactEmail" class="pp-field" type="email" required>
+                  </div>
+                </div>
+              </div>
+            </section>
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
               <div class="pp-card-head">
@@ -367,7 +410,7 @@
       const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
       const ACCESS_KEY = 'pp_onboarding_access_v1';
       const steps = [
-        { title: 'Comercio', desc: 'Identificación legal y descripción' },
+        { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
         { title: 'Contactos', desc: 'Representante, operativo y técnico' },
         { title: 'Operación', desc: 'Dirección, alcance y volumen' },
         { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
@@ -385,6 +428,14 @@
       const nextBtn = document.getElementById('nextBtn');
       const saveDraftBtn = document.getElementById('saveDraftBtn');
       const submitBtn = document.getElementById('submitBtn');
+      const pdfInput = document.getElementById('businessDescriptionPdf');
+      const pdfDropzone = document.getElementById('pdf-dropzone');
+      const pdfInfo = document.getElementById('pdf-file-info');
+      const pdfError = document.getElementById('pdf-file-error');
+      const obProgressLabel = document.getElementById('obProgressLabel');
+      const obProgressFill = document.getElementById('obProgressFill');
+      const obProgressFillFull = document.getElementById('obProgressFillFull');
+      const obProgressBarFull = document.querySelector('.ob-progress-bar[role="progressbar"]');
       let currentStep = 0;
       let applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
 
@@ -419,6 +470,9 @@
         }
         data.acceptTerms = form.elements.acceptTerms.checked;
         data.needsApiIntegration = form.elements.needsApiIntegration.checked;
+        if (pdfInput && pdfInput.files && pdfInput.files[0]) {
+          data.businessDescriptionPdfName = pdfInput.files[0].name;
+        }
         return data;
       }
       function setMsg(msg, isError){
@@ -435,6 +489,17 @@
             </div>
           </div>`).join('');
       }
+      function updateProgress(){
+        const total = stepEls.length;
+        const percent = total ? Math.round(((currentStep + 1) / total) * 100) : 0;
+        const percentStr = percent + '%';
+        if (obProgressLabel) obProgressLabel.textContent = percentStr;
+        if (obProgressFill) obProgressFill.style.width = percentStr;
+        if (obProgressFillFull) obProgressFillFull.style.width = percentStr;
+        if (obProgressBarFull) {
+          obProgressBarFull.setAttribute('aria-valuenow', percent);
+        }
+      }
       function renderSteps(){
         stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
         prevBtn.disabled = currentStep === 0;
@@ -442,6 +507,65 @@
         submitBtn.classList.toggle('is-hidden', currentStep !== stepEls.length - 1);
         if (currentStep === stepEls.length - 1) renderSummary();
         renderIndicator();
+        updateProgress();
+      }
+      function setupPdfUpload(){
+        if (!pdfInput || !pdfDropzone) return;
+        function clearError(){
+          if (pdfError) {
+            pdfError.textContent = '';
+            pdfError.classList.add('hidden');
+          }
+        }
+        function showError(msg){
+          if (!pdfError) return;
+          pdfError.textContent = msg;
+          pdfError.classList.remove('hidden');
+        }
+        function showInfo(msg){
+          if (!pdfInfo) return;
+          pdfInfo.textContent = msg;
+          pdfInfo.classList.remove('hidden');
+        }
+        function handleFiles(files){
+          clearError();
+          if (!files || !files[0]) return;
+          const file = files[0];
+          if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+            pdfInput.value = '';
+            showError('Solo se permiten archivos en formato PDF.');
+            return;
+          }
+          const mb = (file.size / (1024 * 1024)).toFixed(2);
+          showInfo(`Seleccionado: ${file.name} (${mb} MB)`);
+        }
+        pdfDropzone.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          pdfDropzone.classList.add('bg-blue-50');
+        });
+        pdfDropzone.addEventListener('dragleave', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          pdfDropzone.classList.remove('bg-blue-50');
+        });
+        pdfDropzone.addEventListener('drop', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          pdfDropzone.classList.remove('bg-blue-50');
+          var files = e.dataTransfer && e.dataTransfer.files;
+          if (!files || !files[0]) return;
+          var file = files[0];
+          try {
+            var dt = new DataTransfer();
+            dt.items.add(file);
+            pdfInput.files = dt.files;
+          } catch (err) {}
+          handleFiles(files);
+        });
+        pdfInput.addEventListener('change', (e) => {
+          handleFiles(e.target.files);
+        });
       }
       function getStepFields(stepIndex){
         return Array.from(stepEls[stepIndex].querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
@@ -474,6 +598,7 @@
           ['Nombre comercial', data.businessTradeName],
           ['RUT / NIT', data.taxId],
           ['Industria', data.industry],
+          ['Descripción del negocio', data.businessDescriptionPdfName ? `Archivo: ${data.businessDescriptionPdfName}` : 'No adjuntado'],
           ['Representante', `${data.repName || ''} · ${data.repEmail || ''}`],
           ['Contacto operativo', `${data.opsContactName || ''} · ${data.opsContactEmail || ''}`],
           ['Ubicación', [data.country, data.region, data.city, data.district].filter(Boolean).join(' / ')],
@@ -581,6 +706,7 @@
       applicationCodeEl.textContent = applicationId;
       prefillFromAccess();
       renderSteps();
+      setupPdfUpload();
     })();
   </script>
 </body>
