@@ -1,3 +1,54 @@
+/* Premium: Brochure card (cuadro de requisitos) */
+.brochure-card {
+  background: linear-gradient(135deg, #181a20 80%, #23243a 100%);
+  border-radius: 28px;
+  border: 1.5px solid rgba(255,255,255,0.13);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.16), 0 1.5px 0 rgba(84,98,230,0.08);
+  overflow: hidden;
+  color: #fff;
+  margin-bottom: 32px;
+  transition: box-shadow 0.22s, transform 0.22s, border-color 0.22s;
+}
+.brochure-card:hover {
+  box-shadow: 0 16px 48px rgba(84,98,230,0.18), 0 2.5px 0 rgba(84,98,230,0.12);
+  transform: translateY(-2px) scale(1.012);
+  border-color: rgba(84,98,230,0.18);
+}
+.brochure-card .head {
+  padding: 28px 32px 0 32px;
+}
+.brochure-card .body {
+  padding: 0 32px 32px 32px;
+}
+.brochure-card .list .li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 1.08rem;
+  color: #e5e7eb;
+}
+.brochure-card .list .li i {
+  color: #7b8cff;
+  font-size: 1.2em;
+}
+.brochure-card .cta-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.brochure-card .cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(84,98,230,0.13);
+  color: #b6c0ff;
+  font-size: 0.98rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 7px 16px;
+  margin-bottom: 8px;
+}
 .prep-block-img.small {
   flex: 0 0 120px;
   height: 120px;

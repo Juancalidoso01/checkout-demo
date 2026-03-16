@@ -47,6 +47,40 @@
   .hero-title .hero-accent{color:#5b63f6}
   .hero-title .hero-dark{color:#121212}
   .hero-title .hero-line{display:block;white-space:nowrap}
+  .hero-here{
+    display:inline-block;
+    position:relative;
+    padding:0 .08em;
+    margin-left:.06em;
+    border-radius:.22em;
+    background:linear-gradient(135deg, rgba(84,98,230,.18), rgba(59,130,246,.12));
+    box-shadow:0 10px 26px rgba(84,98,230,.12);
+    transform-origin:center;
+    animation:hereBeat 1.9s cubic-bezier(.2,.8,.2,1) infinite;
+  }
+  .hero-here::after{
+    content:'';
+    position:absolute;
+    inset:-8px -10px;
+    border-radius:.5em;
+    background:radial-gradient(circle at 50% 50%, rgba(84,98,230,.24), rgba(84,98,230,0) 70%);
+    opacity:.8;
+    filter:blur(10px);
+    z-index:-1;
+    animation:hereGlow 1.9s ease-in-out infinite;
+  }
+  @keyframes hereBeat{
+    0%, 100%{transform:scale(1)}
+    14%{transform:scale(1.035)}
+    28%{transform:scale(1)}
+    42%{transform:scale(1.018)}
+    56%{transform:scale(1)}
+  }
+  @keyframes hereGlow{
+    0%, 100%{opacity:.55; transform:scale(1)}
+    22%{opacity:.95; transform:scale(1.05)}
+    44%{opacity:.65; transform:scale(1.02)}
+  }
   .hero-copy{font-size:16px;line-height:1.62;color:#475569;max-width:560px;margin-top:4px}
 .hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
 .hero-primary{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,#586af4,#4454db);color:#fff;font-size:14px;font-weight:800;text-decoration:none;border:0;cursor:pointer;box-shadow:0 16px 34px rgba(84,98,230,.24);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
@@ -325,6 +359,7 @@
   @media (prefers-reduced-motion: reduce){
     .pp-orb,.mini-card.-float,.mini-card.-float2{animation:none !important}
     .reveal,.pill,.hero-primary,.hero-secondary{transition:none !important}
+    .hero-here,.hero-here::after{animation:none !important}
   }
   </style>
 </head>
@@ -336,7 +371,7 @@
         <div class="hero-grid">
           <div>
             <div class="hero-kicker"><i class="fa-solid fa-sparkles"></i><span>Punto Pago</span></div>
-            <h1 class="hero-title"><span class="hero-line"><span class="hero-accent">Tu acceso</span> <span class="hero-dark">comercial</span></span><span class="hero-line hero-dark">empieza aquí</span></h1>
+            <h1 class="hero-title"><span class="hero-line"><span class="hero-accent">Tu acceso</span> <span class="hero-dark">comercial</span></span><span class="hero-line hero-dark">empieza <span class="hero-here">aquí</span></span></h1>
             <p class="hero-copy">Validamos tu acceso y te guiamos al siguiente paso correcto.</p>
             <div class="hero-cta-row">
               <button id="openQuickValidation" type="button" class="hero-primary">
@@ -441,7 +476,7 @@
             </div>
           </section>
 
-          <aside class="brochure-card cta-card reveal" data-reveal data-delay="3">
+          <aside class="brochure-card reveal" data-reveal data-delay="3">
             <div class="head">
               <div class="cta-badge"><i class="fa-solid fa-shield-halved"></i><span>Requisitos</span></div>
               <h3 class="text-lg font-extrabold mt-3">Ten esto listo antes de iniciar</h3>
