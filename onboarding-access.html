@@ -543,9 +543,63 @@
           </div>
 
           <div id="formActions" class="flex gap-3 flex-wrap">
+
+          <div class="mt-6">
+            <label class="pp-label font-bold">Descripción del negocio *</label>
+            <div id="pdf-dropzone-access" class="border-2 border-dashed border-blue-400 rounded-lg p-4 text-center cursor-pointer hover:bg-blue-50 transition">
+              <span class="block text-gray-500">Arrastre o cargue aquí el PDF de su aviso de operaciones. Este documento es la única forma válida de describir su negocio.</span>
+              <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" class="hidden" required>
+              <span id="pdf-file-info-access" class="block text-green-600 mt-2 hidden"></span>
+              <span id="pdf-file-error-access" class="block text-red-600 mt-2 hidden"></span>
+            </div>
+          </div>
+
+          <div id="formActions" class="flex gap-3 flex-wrap">
             <button id="validateBtn" type="button" class="pp-btn pp-btn-primary">Validar y continuar</button>
             <button id="continueBtn" type="button" class="pp-btn pp-btn-secondary is-hidden">Continuar al onboarding</button>
           </div>
+  <script>
+    // Drag & drop PDF para aviso de operaciones en acceso
+    (function(){
+      const dropzone = document.getElementById('pdf-dropzone-access');
+  const input = document.getElementById('businessDescriptionPdf');
+      const info = document.getElementById('pdf-file-info-access');
+      const error = document.getElementById('pdf-file-error-access');
+      if (!dropzone || !input) return;
+      dropzone.addEventListener('click', () => input.click());
+      dropzone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropzone.classList.add('bg-blue-100');
+      });
+      dropzone.addEventListener('dragleave', e => {
+        e.preventDefault();
+        dropzone.classList.remove('bg-blue-100');
+      });
+      dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('bg-blue-100');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          input.files = e.dataTransfer.files;
+          handleFile();
+        }
+      });
+      input.addEventListener('change', handleFile);
+      function handleFile() {
+        error.classList.add('hidden');
+        info.classList.add('hidden');
+        const file = input.files && input.files[0];
+        if (!file) return;
+        if (file.type !== 'application/pdf') {
+          error.textContent = 'Solo se permite subir archivos PDF.';
+          error.classList.remove('hidden');
+          input.value = '';
+          return;
+        }
+        info.textContent = `Archivo seleccionado: ${file.name}`;
+        info.classList.remove('hidden');
+      }
+    })();
+  </script>
 
           <div id="waitingRoom" class="wait-box is-hidden">
             <div class="waiting-emphasis">
