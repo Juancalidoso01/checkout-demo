@@ -438,7 +438,8 @@
                           "Energía y servicios públicos",
                           "Agricultura y pesca",
                           "Construcción",
-                          "Otra (especificar)"
+                          "Otra (especificar)",
+                          "Actividad no listada"
                         ];
                         const input = document.getElementById('industry-autocomplete');
                         const suggestions = document.getElementById('industry-suggestions');
@@ -454,11 +455,13 @@
                           const matches = industryList.filter(cat => cat.toLowerCase().includes(lower));
                           if (matches.length === 0) {
                             var li = document.createElement('li');
-                            li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100 border-t border-slate-200 bg-amber-50/80';
-                            li.innerHTML = '<span class="text-slate-600">No encuentro mi rubro</span><br><span class="text-xs text-slate-500">Usar &quot;' + raw + '&quot; como industria</span>';
+                            li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-100 border-t border-slate-200 bg-amber-50/80';
+                            li.setAttribute('role', 'option');
+                            li.textContent = 'Actividad no listada (no encuentro mi rubro)';
                             li.addEventListener('mousedown', function(e) {
                               e.preventDefault();
-                              input.value = raw;
+                              e.stopPropagation();
+                              input.value = 'Actividad no listada';
                               suggestions.classList.add('hidden');
                             });
                             suggestions.appendChild(li);
