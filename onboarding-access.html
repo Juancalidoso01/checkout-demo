@@ -479,7 +479,7 @@
           <aside class="brochure-card cta-card reveal" data-reveal data-delay="3">
             <div class="head">
               <div class="cta-badge"><i class="fa-solid fa-shield-halved"></i><span>Requisitos</span></div>
-              <h3 class="text-lg font-extrabold mt-3">Ten esto listo antes de iniciar</h3>
+              <h3 class="brochure-req-title text-lg font-extrabold mt-3">Ten esto listo antes de iniciar</h3>
               <p class="text-sm text-slate-600 mt-1">Te tomará menos tiempo completar el registro.</p>
             </div>
             <div class="body">
@@ -948,7 +948,18 @@
         els.supabaseHint.textContent = 'Modo actual: validación real por correo activa. Enviaremos un magic link y el formulario se abrirá solo después de validar el email.';
       }
 
-      els.validateBtn.addEventListener('click', () => { validateAndContinue(); });
+      els.validateBtn.addEventListener('click', () => {
+        const email = normalize(els.email.value);
+        const users = window.PPAuth.loadUsers();
+        const existingUser = users.find(u => normalize(u.username) === email || normalize(u.email) === email);
+        if (existingUser) {
+          setGateMsg('Opps, ya estás registrado. Intenta iniciar sesión.', true);
+          setStatus('-warn', 'Este correo ya tiene cuenta. Usa el login regular.');
+          setNextStep('Tu acceso ya existe. Usa tu usuario y contraseña en el login regular para entrar.', true);
+          return;
+        }
+        validateAndContinue();
+      });
       els.resendBtn.addEventListener('click', () => {
         const email = normalize(els.email.value);
         const phone = (els.phone.value || '').trim();
@@ -957,6 +968,15 @@
       });
       els.continueBtn.addEventListener('click', () => {
         const ctx = getAccessContext();
+        const email = ctx && ctx.email ? normalize(ctx.email) : '';
+        const users = window.PPAuth.loadUsers();
+        const existingUser = users.find(u => normalize(u.username) === email || normalize(u.email) === email);
+        if (existingUser) {
+          setGateMsg('Opps, ya estás registrado. Intenta iniciar sesión.', true);
+          setStatus('-warn', 'Este correo ya tiene cuenta. Usa el login regular.');
+          setNextStep('Tu acceso ya existe. Usa tu usuario y contraseña en el login regular para entrar.', true);
+          return;
+        }
         if (supabaseClient && !(ctx && ctx.emailVerified)) {
           setGateMsg('Debes validar primero tu correo antes de continuar.', true);
           setStatus('-warn', 'Aún falta validar el correo desde el enlace enviado.');

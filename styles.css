@@ -1,3 +1,17 @@
+
+.brochure-card .head h3.brochure-req-title,
+.brochure-card .head h3.brochure-req-title.text-lg {
+  color: #5462e6 !important;
+  font-weight: 800 !important;
+  position: relative;
+  animation: pulseBlue 1.8s infinite !important;
+  z-index: 1;
+}
+
+@keyframes pulseBlue {
+  0%, 100% { filter: drop-shadow(0 0 0 #5462e6); }
+  50% { filter: drop-shadow(0 0 8px #5462e6); }
+}
 /* Permitir scroll en la modal de validación */
 .gate-modal-body {
   max-height: 60vh;
