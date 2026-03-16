@@ -127,6 +127,70 @@
     background:rgba(15,23,42,0.12);
     transform:translateY(-1px);
   }
+  .gate-modal-steps{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:12px 22px 0;
+  }
+  .gate-step{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:16px;
+    border:1px solid rgba(148,163,184,.22);
+    background:rgba(255,255,255,.72);
+    color:#334155;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+  }
+  .gate-step:hover{transform:translateY(-1px)}
+  .gate-step-dot{
+    width:26px;
+    height:26px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(84,98,230,.12);
+    color:var(--pp-primary,#5462e6);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:-.02em;
+    flex:0 0 auto;
+  }
+  .gate-step-sep{
+    width:18px;
+    height:2px;
+    border-radius:999px;
+    background:rgba(148,163,184,.28);
+    flex:0 0 auto;
+  }
+  .gate-step.-active{
+    background:linear-gradient(135deg, rgba(84,98,230,.14), rgba(59,130,246,.10));
+    border-color:rgba(84,98,230,.34);
+    box-shadow:0 14px 34px rgba(84,98,230,.14);
+    color:#0f172a;
+  }
+  .gate-step.-done{
+    background:rgba(16,185,129,.10);
+    border-color:rgba(16,185,129,.30);
+    color:#064e3b;
+  }
+  .gate-step.-done .gate-step-dot{
+    background:rgba(16,185,129,.16);
+    color:#047857;
+  }
+  @media (max-width: 640px){
+    .gate-modal-steps{padding-left:18px;padding-right:18px;gap:8px}
+    .gate-step{padding:10px 10px}
+    .gate-step-sep{display:none}
+  }
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
   @media (max-width: 900px){ .gate-layout{grid-template-columns:1fr}.hero-copy{max-width:none}.hero-title{font-size:clamp(2.08rem,10vw,3.24rem);line-height:.96;letter-spacing:-.072em;max-width:13.6ch}.hero-title .hero-line{white-space:normal}.hero-cta-row{margin-top:18px} }
   @media (max-width: 640px){ .gate-shell{padding-top:16px} }
@@ -202,6 +266,13 @@
           <button type="button" id="closeQuickValidation" class="gate-modal-close" aria-label="Cerrar validación rápida">
             <i class="fa-solid fa-xmark"></i>
           </button>
+        </div>
+        <div class="gate-modal-steps" aria-label="Progreso de acceso">
+          <div id="modalStep1" class="gate-step -active"><span class="gate-step-dot">1</span><span>Revisión</span></div>
+          <div class="gate-step-sep" aria-hidden="true"></div>
+          <div id="modalStep2" class="gate-step"><span class="gate-step-dot">2</span><span>Correo</span></div>
+          <div class="gate-step-sep" aria-hidden="true"></div>
+          <div id="modalStep3" class="gate-step"><span class="gate-step-dot">3</span><span>Portal</span></div>
         </div>
         <div class="pp-card-body space-y-4">
           <div>
@@ -317,6 +388,9 @@
         openQuickValidation: document.getElementById('openQuickValidation'),
         quickValidationModal: document.getElementById('quickValidationModal'),
         closeQuickValidation: document.getElementById('closeQuickValidation'),
+        modalStep1: document.getElementById('modalStep1'),
+        modalStep2: document.getElementById('modalStep2'),
+        modalStep3: document.getElementById('modalStep3'),
         validateBtn: document.getElementById('validateBtn'),
         continueBtn: document.getElementById('continueBtn'),
         formActions: document.getElementById('formActions'),
@@ -373,6 +447,7 @@
       function openQuickValidationModal(){
         if (!els.quickValidationModal) return;
         els.quickValidationModal.classList.add('is-open');
+        setModalStep(1);
         try {
           if (els.email) els.email.focus();
         } catch (e) {}
@@ -428,9 +503,22 @@
         els.gateMsg.textContent = msg || '';
         els.gateMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
       }
+      function setModalStep(active){
+        const a = Number(active || 1);
+        const s1 = els.modalStep1, s2 = els.modalStep2, s3 = els.modalStep3;
+        if (!s1 || !s2 || !s3) return;
+        [s1,s2,s3].forEach(el => el.classList.remove('-active','-done'));
+        if (a >= 2) s1.classList.add('-done'); else s1.classList.add('-active');
+        if (a === 2) s2.classList.add('-active');
+        if (a >= 3) { s2.classList.add('-done'); s3.classList.add('-active'); }
+      }
       function setStatus(kind, text){
         els.statusBox.className = `status-box ${kind}`;
         els.statusText.textContent = text;
+        // Map estados a pasos (1 revisión, 2 correo, 3 portal)
+        if (kind === '-pending') setModalStep(2);
+        if (kind === '-ok') setModalStep(3);
+        if (kind === '-warn' || kind === '-info' || kind === '-error') setModalStep(1);
       }
       function setNextStep(text, isReady){
         return;
