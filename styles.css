@@ -1,3 +1,8 @@
+/* Permitir scroll en la modal de validación */
+.gate-modal-body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
 /* Premium: Brochure card (cuadro de requisitos) */
 .brochure-card {
   background: linear-gradient(135deg, #181a20 80%, #23243a 100%);
