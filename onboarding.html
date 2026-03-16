@@ -53,7 +53,7 @@
         <div class="text-xs ob-nav-sub">Registro de nuevo aliado</div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="pp-admin-entry.html" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4">Portal credenciales</a>
+        <a id="portalLink" href="pp-admin-entry.html" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4">Portal credenciales</a>
       </div>
     </div>
   </nav>
@@ -96,9 +96,9 @@
               <h2 class="text-lg font-extrabold">Estado del registro</h2>
             </div>
             <div class="pp-card-body text-sm text-slate-600 space-y-2">
-              <div><strong>ID temporal:</strong> <span id="applicationCode">—</span></div>
+              <div><strong>Código de solicitud:</strong> <span id="applicationCode">—</span></div>
               <div><strong>Guardado:</strong> <span id="draftStatus">Sin guardar</span></div>
-              <div><strong>Destino:</strong> cola de onboarding pendiente</div>
+              <div class="text-xs text-slate-500 pt-1 border-t border-slate-200 mt-2"><strong>Nota:</strong> Al enviar, tu caso pasará a revisión antes de asignar credenciales.</div>
             </div>
           </div>
         </aside>
@@ -143,68 +143,346 @@
                     <input name="industry" id="industry-autocomplete" class="pp-field" type="text" required placeholder="Escribe para buscar..." autocomplete="off">
                     <ul id="industry-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de industria"></ul>
                     <script>
-                      // --- Autocompletado avanzado para Industria / rubro ---
+                      // --- Autocompletado Industria / rubro (lista completa + opción manual) ---
                       (function(){
                         const industryList = [
-                          "Servicios Generales",
-                          "Calefacción, Fontanería, A/C",
-                          "Servicios Electricos",
+                          "(ATM) Desembolso de efectivo automatizado",
+                          "A/C, Reparación de Refrigeración",
+                          "Acuarios",
+                          "Aerolíneas, transportistas aéreos",
+                          "Aeropuertos, campos de vuelo",
+                          "Agencias de alquiler de Automóviles",
+                          "Agencias de detectives",
+                          "Agencias de empleo / temporales",
+                          "Agencias de informes crediticios",
+                          "Agencias de venta de entradas para teatros",
+                          "Agencias de viajes, Tour operadores",
+                          "Agentes / distribuidores de seguridad",
+                          "Agentes y Gerentes Inmobiliarios - Alquileres",
                           "Albañilería, mampostería y yeso",
-                          "Servicios de Carpintería",
-                          "Techos / Revestimientos, Chapa",
-                          "Servicios de trabajos de Hormigón",
-                          "Servicios comerciales especiales",
-                          "Publicación e impresiones diversas",
-                          "Servicios de composición tipográfica, fabricación de planchas y servicios relacionados",
+                          "Almacén de suministros para el hogar",
+                          "Almacenamiento y depósito públicos: productos agrícolas, productos refrigerados, artículos para el hogar y almacenamiento",
+                          "Alquiler de barcos y arrendamientos",
+                          "Alquiler de camiones / remolques utilitarios",
+                          "Alquiler de equipos",
+                          "Alquiler de ropa",
+                          "Alquiler de vehículos recreativos",
+                          "Apuestas / Juegos de casino",
+                          "Artículos ortopédicos: dispositivos protésicos",
+                          "Asociaciones automotrices",
+                          "Asociaciones cívicas, sociales y fraternales",
+                          "Astilleros de demolición y salvamento",
+                          "Atracciones turísticas y exhibiciones",
+                          "Autotransportistas y camiones: locales y de larga distancia, empresas de mudanzas y almacenamiento, y servicios de entrega local",
+                          "Bandas, Orquestas",
+                          "Bienes digitales - Juegos",
+                          "Bienes digitales: gran comerciante de bienes digitales",
+                          "Bienes duraderos (no clasificados en otra parte)",
+                          "Bienes no duraderos (no clasificados en otra parte)",
+                          "Bolos",
+                          "Calefacción, Fontanería, A/C",
+                          "Calzado comercial",
+                          "Campamentos deportivos / recreativos",
+                          "Campos / clubes deportivos",
+                          "Campos de golf - Públicos",
+                          "Casas de Empeño",
+                          "Categoría",
+                          "Catering",
+                          "Centros de servicio de metal",
+                          "Clubes al por mayor",
+                          "Clubes de campo",
+                          "Colegios, universidades",
+                          "Compras dentro de la empresa",
+                          "Computadoras, periféricos y software",
+                          "Concesionarios de automóviles varios",
+                          "Concesionarios de automóviles y camiones (nuevos y usados) Ventas, servicio, reparaciones, repuestos y arrendamiento",
+                          "Concesionarios de automóviles y camiones (solo usados) Ventas, servicio, reparaciones, repuestos y arrendamiento",
+                          "Concesionarios de barcos",
+                          "Concesionarios de casas rodantes",
+                          "Concesionarios de motos de nieve",
+                          "Consultoría, Relaciones Públicas",
+                          "Cooperativa agrícola",
+                          "Copia rápida, reproducción y planos",
+                          "Costos judiciales, incluida la pensión alimenticia y la manutención infantil - Tribunales de justicia",
+                          "Cristalería, Tiendas de cristales",
+                          "Dentistas, Ortodoncistas",
+                          "Desarrollo de Software",
+                          "Desembolso de efectivo manual",
+                          "Dispensadores de combustible automatizados",
+                          "Distribuidores de casas móviles",
+                          "Distribuidores de combustible (no automotrices)",
+                          "Distribuidores y quioscos de noticias",
+                          "Doctores, Médicos",
+                          "Droguerías y farmacias",
+                          "Enfermería / Cuidado personal",
+                          "Equipo comercial (no clasificado en otra parte)",
+                          "Equipo y suministros para fotografía, fotocopias, microfilmes",
+                          "Equipos y suministros médicos, dentales, oftálmicos y hospitalarios",
+                          "Escuelas de negocios / secretariado",
+                          "Escuelas por correspondencia",
+                          "Escuelas primarias, secundarias",
+                          "Escuelas vocacionales / comerciales",
+                          "Establecimientos de billar / piscina",
+                          "Estacionamientos, garajes",
+                          "Estaciones de servicio",
+                          "Estudios fotográficos",
+                          "Ferreterías",
+                          "Ferrocarriles",
+                          "Ferrocarriles de pasajeros",
+                          "Floristas",
+                          "Fontanería, equipos de calefacción y suministros",
+                          "Fotografía comercial, arte y gráficos",
+                          "Galerías y marchantes de arte",
+                          "Giros postales, giros postales",
+                          "Giros postales, Instituciones No Financieras",
+                          "Grandes almacenes",
+                          "Hardware, equipo y suministros",
+                          "Hospitales",
+                          "Hoteles, moteles y complejos turísticos",
+                          "Instituciones financieras",
+                          "Instituciones No Financieras, compra / carga de tarjeta de valor almacenado",
+                          "Joyerías, relojería, relojería y platería",
+                          "Kioscos, Supermercados",
+                          "Laboratorios de pruebas",
+                          "Laboratorios médicos y dentales",
+                          "Lavados de coches",
+                          "Lavandería, Servicios de limpieza",
+                          "Lavanderías",
+                          "Librerías",
+                          "Libros, publicaciones periódicas y periódicos",
+                          "Limpieza de alfombras / tapizados",
                           "Limpieza especial",
-                          "Plataformas de juegos online",
-                          "Educación online",
-                          "Intercambio de criptomonedas",
-                          "Custodia de activos digitales",
-                          "Servicios blockchain",
-                          "Redes de agentes de pago",
-                          "Puntos de recaudo",
-                          "Corresponsales no bancarios",
-                          "Servicios de recaudación de facturas",
-                          "Pago electrónico de servicios públicos",
-                          "Recaudación electrónica de impuestos",
-                          "Servicios de gobierno digital",
-                          // --- Opción genérica ---
+                          "Limpieza y mantenimiento",
+                          "Líneas de bus",
+                          "Líneas de crucero",
+                          "Lugares para beber",
+                          "Lugares para comer, Restaurantes",
+                          "Madera, Tiendas de materiales de construcción",
+                          "Marketing directo - Otros",
+                          "Marketing directo - Servicios de seguros",
+                          "Marketing directo - Suscripción",
+                          "Marketing directo - Viajes",
+                          "Marketing directo: catálogo combinado y comerciante minorista",
+                          "Marketing directo: comerciante de catálogos",
+                          "Marketing directo: telemarketing entrante",
+                          "Marketing directo: telemarketing saliente",
+                          "Materiales de construcción (no clasificados en otra parte)",
+                          "Medicamentos, propietarios de medicamentos y artículos diversos para farmacéuticos",
+                          "Medios de productos digitales: libros, películas, música",
+                          "Mercancía general miscelánea",
+                          "Mercancía usada y tiendas de segunda mano",
+                          "Mobiliario de oficina y comercial",
+                          "Multas - Entidades administrativas gubernamentales",
+                          "Ópticas, Lentes",
+                          "Optometristas, Oftalmólogo",
+                          "Organizaciones benéficas y de servicios sociales: recaudación de fondos",
+                          "Organizaciones de membresía",
+                          "Organizaciones Políticas",
+                          "Organizaciones religiosas",
+                          "Osteópatas",
+                          "Pagos de fianza y fianza (pago a la fianza de la fianza, no la fianza real pagada a la agencia gubernamental)",
+                          "Pagos de impuestos: agencias gubernamentales",
+                          "Panaderías",
+                          "Papelería, Material de oficina, Papel de impresión y escritura",
+                          "Papelerías, Tiendas de útiles escolares y de oficina",
+                          "Parada de camiones",
+                          "Parques de atracciones / Carnavales",
+                          "Parques de casas rodantes, Campamentos",
+                          "Peleteros y peleterías",
+                          "Peluquerías y salones de belleza",
+                          "Petróleo y productos derivados del petróleo",
+                          "Piedras preciosas y metales, relojería y joyería",
+                          "Piezas y equipos eléctricos",
+                          "Pinturas, barnices y suministros",
+                          "Podólogos, podólogos",
+                          "Producción de imágenes / videos",
+                          "Productos digitales: aplicaciones (no incluye juegos)",
+                          "Productos por pieza, nociones y otros productos secos",
+                          "Productos químicos y productos afines (no clasificados en otra parte)",
+                          "Publicación e impresiones diversas",
+                          "Puertos deportivos, servicio y suministros",
+                          "Quiroprácticos",
+                          "Reencauchado y reparación de neumáticos",
+                          "Reparación de calzado / Limpieza de sombreros",
+                          "Reparación de muebles, Reacabado",
+                          "Reparación de ordenador",
+                          "Reparación de pequeños electrodomésticos",
+                          "Reparación de relojes / joyas",
+                          "Reparación de soldaduras",
+                          "Reproducciones antiguas",
+                          "Restaurantes de comida rápida",
+                          "Revelado de fotografías",
+                          "Salón de baile, Estudios, Escuelas",
+                          "Salones de masaje",
+                          "Sastres, Reformas",
+                          "Seguro - Incumplimiento",
+                          "Servicios comerciales especiales",
+                          "Servicios comerciales varios",
+                          "Servicios de ambulancia",
+                          "Servicios de apoyo de secretaría",
+                          "Servicios de arquitectura / topografía",
+                          "Servicios de asesoramiento",
+                          "Servicios de Carpintería",
+                          "Servicios de citas / acompañantes",
+                          "Servicios de composición tipográfica, fabricación de planchas y servicios relacionados",
+                          "Servicios de compra / compra",
+                          "Servicios de contabilidad / teneduría de libros",
+                          "Servicios de cuidado infantil",
+                          "Servicios de exterminio",
+                          "Servicios de mensajería",
+                          "Servicios de paisajismo",
+                          "Servicios de preparación de impuestos",
+                          "Servicios de recreación varios",
+                          "Servicios de recuperación de información",
+                          "Servicios de red informática",
+                          "Servicios de remolque",
+                          "Servicios de telecomunicación",
+                          "Servicios de telégrafo",
+                          "Servicios de trabajos de Hormigón",
+                          "Servicios de transporte (no clasificados en otra parte)",
+                          "Servicios educativos",
+                          "Servicios Electricos",
+                          "Servicios funerarios, Crematorios",
+                          "Servicios Generales",
+                          "Servicios generales varios",
+                          "Servicios gubernamentales (no clasificados en otra parte)",
+                          "Servicios legales, Abogados",
+                          "Servicios médicos",
+                          "Servicios postales: solo para el gobierno",
+                          "Servicios profesionales",
+                          "Servicios publicitarios",
+                          "Servicios veterinarios",
+                          "Spas de salud y belleza",
+                          "Suministradores de carne para congeladores y casilleros",
+                          "Suministros de floristería, material de vivero y flores",
+                          "Suministros de vehículos de motor y piezas nuevas",
+                          "Suministros de videojuegos de entretenimiento",
+                          "Suministros industriales (no clasificados en otra parte)",
+                          "Suscripción de seguros, primas",
+                          "Talleres de pintura de automóviles",
+                          "Talleres de reparación de carrocerías",
+                          "Talleres de reparación de electrónica",
+                          "Talleres de reparación diversos",
+                          "Talleres de servicio automotriz",
+                          "Tarifas de peajes / puentes",
+                          "Taxis / Limusinas",
+                          "Teatros cinematográficos",
+                          "Techos / Revestimientos, Chapa",
+                          "Televisión por cable, satélite y otra televisión y radio de pago",
+                          "Tiempos compartidos",
+                          "Tiendas de alimentos misceláneas: tiendas de conveniencia y mercados especializados",
+                          "Tiendas de alquiler de cintas de vídeo",
+                          "Tiendas de antigüedades",
+                          "Tiendas de artesanía y suministros para artistas",
+                          "Tiendas de artículos de costura, costura, telas y piezas",
+                          "Tiendas de artículos deportivos",
+                          "Tiendas de artículos religiosos",
+                          "Tiendas de bicicletas",
+                          "Tiendas de carpas y toldos",
+                          "Tiendas de chimeneas, mamparas para chimeneas y accesorios",
+                          "Tiendas de cortinas, cortinas y tapicerías",
+                          "Tiendas de cosméticos",
+                          "Tiendas de descuento",
+                          "Tiendas de discos",
+                          "Tiendas de dulces, nueces y confitería",
+                          "Tiendas de electrodomésticos",
+                          "Tiendas de electrónica",
+                          "Tiendas de equipaje y marroquinería",
+                          "Tiendas de máquinas de escribir",
+                          "Tiendas de maquinillas de afeitar eléctricas",
+                          "Tiendas de mascotas, alimentos para mascotas y suministros",
+                          "Tiendas de motos, Concesionarios",
+                          "Tiendas de muebles, muebles para el hogar y equipos, excepto electrodomésticos",
+                          "Tiendas de música: instrumentos musicales, pianos y partituras",
+                          "Tiendas de neumáticos para automóviles",
+                          "Tiendas de paquetes: cerveza, vino y licores",
+                          "Tiendas de pasatiempos, juguetes y juegos",
+                          "Tiendas de pelucas y peluquines",
+                          "Tiendas de prendas para mujer",
+                          "Tiendas de productos lácteos",
+                          "Tiendas de regalos, tarjetas, novedades y souvenirs",
+                          "Tiendas de repuestos y accesorios automotrices",
+                          "Tiendas de revestimientos de suelos",
+                          "Tiendas de ropa familiar",
+                          "Tiendas de ropa para deportes y equitación",
+                          "Tiendas de ropa para hombres y mujeres",
+                          "Tiendas de ropa para niños y bebés",
+                          "Tiendas de ropa y accesorios para hombres y niños",
+                          "Tiendas de sellos y monedas",
+                          "Tiendas de software informático",
+                          "Tiendas de suministros fotográficos y de cámaras",
+                          "Tiendas de suministros para el hogar y el automóvil",
+                          "Tiendas de variedades",
+                          "Tiendas de vidrio, pintura y papel tapiz",
+                          "Tiendas de zapatos",
+                          "Tiendas diversas de ropa y accesorios",
+                          "Tiendas especializadas de mobiliario para el hogar misceláneo",
+                          "Tiendas especializadas y de accesorios para mujeres",
+                          "Tiendas libres de impuestos",
+                          "Tiendas y concesionarios de motocicletas",
+                          "Tiendas y puestos de cigarros",
+                          "Tintorerías",
+                          "Transporte de cercanías, Ferries",
+                          "Uniformes, Ropa Comercial",
+                          "Utilidades",
+                          "Venta al por menor de especialidades diversas",
+                          "Venta de equipos de telecomunicaciones y telefonía",
+                          "Venta de Piscinas",
+                          "Venta y suministros de audífonos",
+                          "Ventas puerta a puerta",
+                          "Videojuegos Arcades",
+                          "Viveros, Tiendas de suministros para césped y jardín",
+                          "Servicios financieros y fintech",
+                          "Telecomunicaciones",
+                          "Transporte y logística",
+                          "Energía y servicios públicos",
+                          "Agricultura y pesca",
+                          "Construcción",
                           "Otra (especificar)"
                         ];
                         const input = document.getElementById('industry-autocomplete');
                         const suggestions = document.getElementById('industry-suggestions');
                         if (!input || !suggestions) return;
-                        input.addEventListener('input', function() {
-                          const value = this.value.trim().toLowerCase();
+                        function showSuggestions(value) {
+                          const raw = (value || '').trim();
+                          const lower = raw.toLowerCase();
                           suggestions.innerHTML = '';
-                          if (!value) {
+                          if (!raw) {
                             suggestions.classList.add('hidden');
                             return;
                           }
-                          const matches = industryList.filter(cat => cat.toLowerCase().includes(value));
+                          const matches = industryList.filter(cat => cat.toLowerCase().includes(lower));
                           if (matches.length === 0) {
-                            suggestions.classList.add('hidden');
-                            return;
-                          }
-                          matches.forEach(cat => {
-                            const li = document.createElement('li');
-                            li.textContent = cat;
-                            li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100';
+                            var li = document.createElement('li');
+                            li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100 border-t border-slate-200 bg-amber-50/80';
+                            li.innerHTML = '<span class="text-slate-600">No encuentro mi rubro</span><br><span class="text-xs text-slate-500">Usar &quot;' + raw + '&quot; como industria</span>';
                             li.addEventListener('mousedown', function(e) {
                               e.preventDefault();
-                              input.value = cat;
+                              input.value = raw;
                               suggestions.classList.add('hidden');
                             });
                             suggestions.appendChild(li);
-                          });
+                          } else {
+                            matches.forEach(cat => {
+                              var li = document.createElement('li');
+                              li.textContent = cat;
+                              li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100';
+                              li.addEventListener('mousedown', function(e) {
+                                e.preventDefault();
+                                input.value = cat;
+                                suggestions.classList.add('hidden');
+                              });
+                              suggestions.appendChild(li);
+                            });
+                          }
                           suggestions.classList.remove('hidden');
-                        });
+                        }
+                        input.addEventListener('input', function() { showSuggestions(this.value); });
                         input.addEventListener('blur', function() {
                           setTimeout(() => suggestions.classList.add('hidden'), 100);
                         });
                         input.addEventListener('focus', function() {
-                          if (this.value.trim()) this.dispatchEvent(new Event('input'));
+                          if (this.value.trim()) showSuggestions(this.value);
                         });
                       })();
                     </script>
@@ -216,7 +494,7 @@
                 </div>
 
                 <div>
-                  <label class="pp-label">1. Identificación del comercio / Descripción del negocio *</label>
+                  <label class="pp-label">Cargue su aviso de operaciones *</label>
                   <p class="text-xs text-slate-500 mb-2">
                     Arrastra un PDF en la zona de abajo o selecciona el documento desde tu ordenador. Solo se acepta formato PDF.
                   </p>
@@ -707,6 +985,80 @@
       prefillFromAccess();
       renderSteps();
       setupPdfUpload();
+    })();
+  </script>
+
+  <!-- Modal: confirmar salida con cambios sin guardar -->
+  <div id="leaveConfirmBackdrop" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden" aria-hidden="true">
+    <div class="bg-white rounded-2xl p-6 max-w-md mx-4 shadow-xl">
+      <h3 class="text-lg font-extrabold text-slate-900 mb-2">¿Está seguro que desea salir?</h3>
+      <p class="text-sm text-slate-600 mb-5">Tiene cambios sin guardar. Debe guardar los cambios o los perderá.</p>
+      <div class="flex gap-3 flex-wrap">
+        <button type="button" id="leaveConfirmSave" class="pp-btn pp-btn-primary">Guardar borrador y salir</button>
+        <button type="button" id="leaveConfirmDiscard" class="pp-btn pp-btn-secondary">Salir sin guardar</button>
+        <button type="button" id="leaveConfirmCancel" class="pp-btn pp-btn-secondary">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var form = document.getElementById('onboardingForm');
+      var formDirty = false;
+      var formSaved = false;
+      var pendingHref = null;
+      var backdrop = document.getElementById('leaveConfirmBackdrop');
+      var portalLink = document.getElementById('portalLink');
+
+      function markDirty(){ formDirty = true; }
+      function markSaved(){ formSaved = true; formDirty = false; }
+
+      if (form) {
+        form.addEventListener('input', markDirty);
+        form.addEventListener('change', markDirty);
+      }
+
+      window.addEventListener('beforeunload', function(e){
+        if (formDirty && !formSaved) e.preventDefault();
+      });
+
+      function showLeaveModal(href){
+        if (!backdrop) return;
+        pendingHref = href;
+        backdrop.classList.remove('hidden');
+      }
+      function hideLeaveModal(){
+        if (backdrop) backdrop.classList.add('hidden');
+        pendingHref = null;
+      }
+
+      if (portalLink) {
+        portalLink.addEventListener('click', function(e){
+          if (!formDirty || formSaved) return;
+          e.preventDefault();
+          showLeaveModal(this.getAttribute('href'));
+        });
+      }
+
+      if (backdrop) {
+        document.getElementById('leaveConfirmSave')?.addEventListener('click', function(){
+          var btn = document.getElementById('saveDraftBtn');
+          if (btn) { btn.click(); markSaved(); }
+          hideLeaveModal();
+          if (pendingHref) location.href = pendingHref;
+        });
+        document.getElementById('leaveConfirmDiscard')?.addEventListener('click', function(){
+          var h = pendingHref;
+          hideLeaveModal();
+          if (h) location.href = h;
+        });
+        document.getElementById('leaveConfirmCancel')?.addEventListener('click', function(){
+          hideLeaveModal();
+        });
+      }
+
+      document.getElementById('saveDraftBtn')?.addEventListener('click', markSaved);
+      document.getElementById('onboardingForm')?.addEventListener('submit', markSaved);
     })();
   </script>
 </body>
