@@ -9,15 +9,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <style>
-    body{background:#f3f4f6;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
-    .bg-punto-pago{background:linear-gradient(135deg,var(--pp-primary,#5462e6),var(--pp-primary-900,#3738ab))}
+    html,body{background:#fff !important}
+    body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
+    main.pp-page{background:#fff !important}
+    .bg-punto-pago{background:#fff !important;color:#0f172a;border-bottom:1px solid rgba(0,0,0,.08)}
     .ob-shell{max-width:1180px;margin:0 auto;padding:24px 16px 72px}
     .ob-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
     .ob-sidebar{position:sticky;top:96px;height:fit-content}
     .ob-step{display:flex;align-items:flex-start;gap:12px;padding:14px 12px;border-radius:18px;border:1px solid rgba(0,0,0,.06);background:#fff;color:#374151}
     .ob-step.-active{border-color:rgba(84,98,230,.35);box-shadow:0 12px 30px rgba(84,98,230,.12)}
     .ob-step-index{width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.1);color:var(--pp-primary);font-weight:800;font-size:13px;flex:0 0 auto}
-    .ob-hero{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
+    .ob-hero{border:1px solid rgba(0,0,0,.08);background:#fff}
     .ob-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
     .ob-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
     .pp-field.-area{height:auto;min-height:116px;padding:14px 16px;resize:vertical}
@@ -38,15 +40,15 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
-  <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
+<body class="min-h-screen flex flex-col bg-page-white">
+  <nav class="bg-punto-pago p-4 shadow-sm sticky top-0 z-40 pp-type">
     <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
       <div class="min-w-0">
         <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Onboarding aliado</div>
-        <div class="text-xs text-white/80">Formulario exhaustivo · prototipo interno</div>
+        <div class="text-xs text-slate-500">Formulario exhaustivo · prototipo interno</div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="pp-admin-entry.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Portal credenciales</a>
+        <a href="pp-admin-entry.html" class="pp-btn pp-btn-secondary border border-slate-300 text-slate-700 h-[42px] rounded-[14px] px-4">Portal credenciales</a>
       </div>
     </div>
   </nav>
@@ -128,134 +130,93 @@
                     <label class="pp-label">Industria / rubro *</label>
                     <input name="industry" id="industry-autocomplete" class="pp-field" type="text" required placeholder="Escribe para buscar..." autocomplete="off">
                     <ul id="industry-suggestions" class="absolute z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 w-full hidden"></ul>
-  <script>
-    // --- Autocompletado avanzado para Industria / rubro ---
-    (function(){
-      const industryList = [
-        "Servicios Generales",
-        "Calefacción, Fontanería, A/C",
-        "Servicios Electricos",
-        "Albañilería, mampostería y yeso",
-        "Servicios de Carpintería",
-        "Techos / Revestimientos, Chapa",
-        "Servicios de trabajos de Hormigón",
-        "Servicios comerciales especiales",
-        "Publicación e impresiones diversas",
-        "Servicios de composición tipográfica, fabricación de planchas y servicios relacionados",
-        "Limpieza especial",
-        "Ferrocarriles",
-        "Transporte de cercanías, Ferries",
-        "Ferrocarriles de pasajeros",
-        "Servicios de ambulancia",
-        "Taxis / Limusinas",
-        "Líneas de bus",
-        "Autotransportistas y camiones: locales y de larga distancia, empresas de mudanzas y almacenamiento, y servicios de entrega local",
-        "Servicios de mensajería",
-        "Almacenamiento y depósito públicos: productos agrícolas, productos refrigerados, artículos para el hogar y almacenamiento",
-        "Lineas de crucero",
-        "Alquiler de barcos y arrendamientos",
-        "Puertos deportivos, servicio y suministros",
-        "Aerolíneas, transportistas aéreos",
-        "Aeropuertos, campos de vuelo",
-        "Agencias de viajes, Tour operadores",
-        "Tarifas de peajes / puentes",
-        "Servicios de transporte (no clasificados en otra parte)",
-        "Venta de equipos de telecomunicaciones y telefonía",
-        "Servicios de telecomunicación",
-        // ...agrega aquí el resto de las categorías de tu lista...
-      ];
-      const input = document.getElementById('industry-autocomplete');
-      const suggestions = document.getElementById('industry-suggestions');
-      if (!input || !suggestions) return;
-      input.addEventListener('input', function() {
-        const value = this.value.trim().toLowerCase();
-        suggestions.innerHTML = '';
-        if (!value) {
-          suggestions.classList.add('hidden');
-          return;
-        }
-        const matches = industryList.filter(cat => cat.toLowerCase().includes(value));
-        if (matches.length === 0) {
-          suggestions.classList.add('hidden');
-          return;
-        }
-        matches.forEach(cat => {
-          const li = document.createElement('li');
-          li.textContent = cat;
-          li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100';
-          li.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-            input.value = cat;
-            suggestions.classList.add('hidden');
-          });
-          suggestions.appendChild(li);
-        });
-        suggestions.classList.remove('hidden');
-      });
-      input.addEventListener('blur', function() {
-        setTimeout(() => suggestions.classList.add('hidden'), 100);
-      });
-      input.addEventListener('focus', function() {
-        if (this.value.trim()) this.dispatchEvent(new Event('input'));
-      });
-    })();
-  </script>
-                    </datalist>
+                    <script>
+                      // --- Autocompletado avanzado para Industria / rubro ---
+                      (function(){
+                        const industryList = [
+                          "Servicios Generales",
+                          "Calefacción, Fontanería, A/C",
+                          "Servicios Electricos",
+                          "Albañilería, mampostería y yeso",
+                          "Servicios de Carpintería",
+                          "Techos / Revestimientos, Chapa",
+                          "Servicios de trabajos de Hormigón",
+                          "Servicios comerciales especiales",
+                          "Publicación e impresiones diversas",
+                          "Servicios de composición tipográfica, fabricación de planchas y servicios relacionados",
+                          "Limpieza especial",
+                          "Plataformas de juegos online",
+                          "Educación online",
+                          "Intercambio de criptomonedas",
+                          "Custodia de activos digitales",
+                          "Servicios blockchain",
+                          "Redes de agentes de pago",
+                          "Puntos de recaudo",
+                          "Corresponsales no bancarios",
+                          "Servicios de recaudación de facturas",
+                          "Pago electrónico de servicios públicos",
+                          "Recaudación electrónica de impuestos",
+                          "Servicios de gobierno digital",
+                          // --- Opción genérica ---
+                          "Otra (especificar)"
+                        ];
+                        const input = document.getElementById('industry-autocomplete');
+                        const suggestions = document.getElementById('industry-suggestions');
+                        if (!input || !suggestions) return;
+                        input.addEventListener('input', function() {
+                          const value = this.value.trim().toLowerCase();
+                          suggestions.innerHTML = '';
+                          if (!value) {
+                            suggestions.classList.add('hidden');
+                            return;
+                          }
+                          const matches = industryList.filter(cat => cat.toLowerCase().includes(value));
+                          if (matches.length === 0) {
+                            suggestions.classList.add('hidden');
+                            return;
+                          }
+                          matches.forEach(cat => {
+                            const li = document.createElement('li');
+                            li.textContent = cat;
+                            li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-100';
+                            li.addEventListener('mousedown', function(e) {
+                              e.preventDefault();
+                              input.value = cat;
+                              suggestions.classList.add('hidden');
+                            });
+                            suggestions.appendChild(li);
+                          });
+                          suggestions.classList.remove('hidden');
+                        });
+                        input.addEventListener('blur', function() {
+                          setTimeout(() => suggestions.classList.add('hidden'), 100);
+                        });
+                        input.addEventListener('focus', function() {
+                          if (this.value.trim()) this.dispatchEvent(new Event('input'));
+                        });
+                      })();
+                    </script>
                   </div>
                   <div>
                     <label class="pp-label">Años operando *</label>
                     <input name="yearsOperating" class="pp-field" type="number" min="0" step="1" required>
                   </div>
                 </div>
+
                 <div>
                   <label class="pp-label">Descripción del negocio *</label>
-                  <textarea name="businessDescription" class="pp-field -area" required placeholder="Describe productos, flujo de ventas, ticket promedio, canales principales..."></textarea>
-                </div>
-              </div>
-            </section>
-
-            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
-              <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">2. Representante y contactos</h2>
-                <p class="text-sm text-gray-500 mt-1">Quién firma y quién operará el canal.</p>
-              </div>
-              <div class="pp-card-body space-y-4">
-                <div class="ob-grid">
-                  <div>
-                    <label class="pp-label">Nombre completo del representante *</label>
-                    <input name="repName" class="pp-field" type="text" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Cargo *</label>
-                    <input name="repRole" class="pp-field" type="text" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Correo del representante *</label>
-                    <input name="repEmail" class="pp-field" type="email" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Teléfono del representante *</label>
-                    <input name="repPhone" class="pp-field" type="tel" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Contacto operativo *</label>
-                    <input name="opsContactName" class="pp-field" type="text" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Correo operativo *</label>
-                    <input name="opsContactEmail" class="pp-field" type="email" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Contacto técnico</label>
-                    <input name="techContactName" class="pp-field" type="text">
-                  </div>
-                  <div>
-                    <label class="pp-label">Correo técnico</label>
-                    <input name="techContactEmail" class="pp-field" type="email">
+                  <!-- Eliminado textarea, solo se permite cargar archivo PDF -->
+                  <div id="pdf-dropzone" class="border-2 border-dashed border-blue-400 rounded-lg p-4 text-center cursor-pointer hover:bg-blue-50 transition">
+                    <span class="block text-gray-500">Arrastra y suelta el PDF aquí o haz clic para seleccionar archivo</span>
+                    <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" class="hidden" required>
+                    <span id="pdf-file-info" class="block text-green-600 mt-2 hidden"></span>
+                    <span id="pdf-file-error" class="block text-red-600 mt-2 hidden"></span>
                   </div>
                 </div>
               </div>
             </section>
+          </form>
+        </section>
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
               <div class="pp-card-head">
