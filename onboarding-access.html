@@ -248,14 +248,16 @@
     100%{transform:translate3d(0,0,0) scale(1)}
   }
 
-  .reveal{
+  /* Reveal is fail-safe: without JS, content stays visible */
+  .reveal{opacity:1;transform:none;filter:none}
+  html.-reveal .reveal{
     opacity:0;
     transform:translateY(14px);
     filter:blur(4px);
     transition:opacity .6s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1), filter .7s cubic-bezier(.2,.8,.2,1);
     will-change:transform,opacity,filter;
   }
-  .reveal.in{
+  html.-reveal .reveal.in{
     opacity:1;
     transform:translateY(0);
     filter:blur(0);
@@ -945,6 +947,8 @@
 
       // Scroll reveal + subtle parallax (premium landing feel)
       (function setupMotion(){
+        // Enable reveal mode only when JS runs successfully
+        document.documentElement.classList.add('-reveal');
         const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!reduceMotion) {
           const items = Array.from(document.querySelectorAll('[data-reveal]'));
@@ -958,6 +962,11 @@
           } else {
             items.forEach(el => el.classList.add('in'));
           }
+
+          // Safety: if observer never fires for above-fold content
+          setTimeout(() => {
+            items.forEach(el => el.classList.add('in'));
+          }, 600);
 
           const hero = document.getElementById('heroVisual');
           if (hero) {
