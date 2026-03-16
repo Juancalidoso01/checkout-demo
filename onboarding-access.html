@@ -486,6 +486,11 @@
           <div class="gate-step-sep" aria-hidden="true"></div>
           <div id="modalStep3" class="gate-step"><span class="gate-step-dot">3</span><span>Portal</span></div>
         </div>
+        <div id="statusBox" class="status-box -info validating-panel" style="margin:12px 22px 0;">
+          <div class="font-extrabold">Resultado</div>
+          <div id="statusText" class="text-sm mt-2">Revisamos si tu acceso es nuevo o existente.</div>
+          <div id="supabaseHint" class="text-xs text-slate-500 mt-2"></div>
+        </div>
         <div class="pp-card-body space-y-4">
           <div>
             <label class="pp-label">Correo principal *</label>
@@ -692,8 +697,8 @@
         if (a >= 3) { s2.classList.add('-done'); s3.classList.add('-active'); }
       }
       function setStatus(kind, text){
-        els.statusBox.className = `status-box ${kind}`;
-        els.statusText.textContent = text;
+        if (els.statusBox) els.statusBox.className = `status-box ${kind}`;
+        if (els.statusText) els.statusText.textContent = text;
         // Map estados a pasos (1 revisión, 2 correo, 3 portal)
         if (kind === '-pending') setModalStep(2);
         if (kind === '-ok') setModalStep(3);
@@ -902,7 +907,7 @@
         updateContinueButton(true);
       }
 
-      if (supabaseClient) {
+      if (supabaseClient && els.supabaseHint) {
         els.supabaseHint.textContent = 'Modo actual: validación real por correo activa. Enviaremos un magic link y el formulario se abrirá solo después de validar el email.';
       }
 
