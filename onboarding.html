@@ -130,6 +130,22 @@
     .ob-field-check{position:absolute;right:12px;top:50%;margin-top:-11px;width:22px;height:22px;border-radius:50%;background:#10b981;color:#fff;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:bold;z-index:2}
     .ob-field-check.-ok{display:flex}
     #pdf-dropzone .ob-field-check{top:12px;right:12px;margin-top:0}
+    /* Dirección: animaciones y profundidad */
+    .ob-address-block{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 50%,#eef2ff 100%);box-shadow:0 4px 16px rgba(15,23,42,.06),inset 0 1px 0 rgba(255,255,255,.8);transition:box-shadow .25s ease,transform .25s ease}
+    .ob-address-block:hover{box-shadow:0 8px 24px rgba(84,98,230,.12),inset 0 1px 0 rgba(255,255,255,.9)}
+    .ob-address-block .pp-field:focus{box-shadow:0 0 0 3px rgba(84,98,230,.2)}
+    .ob-map-section{position:relative}
+    .ob-map-section::before{content:'';position:absolute;inset:-2px;border-radius:14px;background:linear-gradient(135deg,rgba(84,98,230,.08),transparent);pointer-events:none;opacity:0;transition:opacity .3s}
+    .ob-map-section:hover::before{opacity:1}
+    .ob-map-btn{transform:translateY(0);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .ob-map-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(84,98,230,.25)}
+    .ob-map-btn:active{transform:translateY(0)}
+    .ob-coords-badge{background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);border:1px solid rgba(16,185,129,.3);box-shadow:0 4px 12px rgba(16,185,129,.15)}
+    .ob-coords-badge{animation:obCoordsFadeIn .4s ease}
+    @keyframes obCoordsFadeIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+    @media (hover:none),(prefers-reduced-motion:reduce){
+      .ob-address-block:hover,.ob-map-btn:hover{transform:none}
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-page-white">
@@ -733,7 +749,7 @@
                 <p class="text-sm text-gray-500 mt-1">Ubicación exacta del negocio en Panamá. Es fundamental para la operación.</p>
               </div>
               <div class="pp-card-body space-y-4">
-                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="ob-address-block p-4 rounded-2xl border border-slate-200/80">
                   <p class="text-sm text-slate-700 mb-3">Detalle la dirección lo más exacta posible. Escriba y seleccione una sugerencia, o complete manualmente.</p>
                   <div class="relative">
                     <label class="pp-label">Dirección *</label>
@@ -871,13 +887,13 @@
                     <input name="addressLandmarks" class="pp-field" type="text" placeholder="Ej: PH 5, Local 3, edificio X piso 2, frente al super">
                   </div>
                 </div>
-                <div>
+                <div class="ob-map-section">
                   <label class="pp-label">Ubicación en mapa *</label>
                   <p class="text-xs text-slate-500 mb-2">Al hacer clic en &quot;Leer mi ubicación&quot;, solicitaremos su ubicación (en móvil el navegador pedirá permiso; en PC usamos ubicación aproximada por IP).</p>
-                  <div class="flex flex-wrap gap-2 items-center">
-                    <button type="button" id="btnUseMyLocationQuick" class="pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm" onclick="if(window.__obReadMyLocation){window.__obReadMyLocation();}return false;"><i class="fa-solid fa-location-crosshairs mr-2"></i>Leer mi ubicación</button>
-                    <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm" onclick="if(window.__obOpenMapModal){window.__obOpenMapModal();}else{var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m&&f){var b='mapa-picker.html';var lat=document.getElementById('addressLat');var lng=document.getElementById('addressLng');if(lat&&lat.value)b+='?lat='+lat.value;if(lng&&lng.value)b+=(b.indexOf('?')>=0?'&':'?')+'lng='+lng.value;f.src=b;m.style.display='flex';m.classList.remove('hidden');m.setAttribute('aria-hidden','false');}}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
-                    <div id="mapCoordsBox" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 min-h-[40px] min-w-[200px]" style="display:none">
+                  <div class="flex flex-wrap gap-2 items-center ob-map-actions">
+                    <button type="button" id="btnUseMyLocationQuick" class="ob-map-btn pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm transition-all duration-200" onclick="if(window.__obReadMyLocation){window.__obReadMyLocation();}return false;"><i class="fa-solid fa-location-crosshairs mr-2"></i>Leer mi ubicación</button>
+                    <button type="button" id="btnOpenMap" class="ob-map-btn pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm transition-all duration-200" onclick="if(window.__obOpenMapModal){window.__obOpenMapModal();}else{var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m&&f){var b='mapa-picker.html';var lat=document.getElementById('addressLat');var lng=document.getElementById('addressLng');if(lat&&lat.value)b+='?lat='+lat.value;if(lng&&lng.value)b+=(b.indexOf('?')>=0?'&':'?')+'lng='+lng.value;f.src=b;m.style.display='flex';m.classList.remove('hidden');m.setAttribute('aria-hidden','false');}}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
+                    <div id="mapCoordsBox" class="ob-coords-badge flex items-center gap-2 px-3 py-2 rounded-xl min-h-[40px] min-w-[200px] transition-all duration-300" style="display:none">
                       <span class="text-xs font-semibold text-emerald-800">Coordenadas:</span>
                       <span id="mapCoordsDisplay" class="text-sm font-mono text-emerald-900"></span>
                     </div>
