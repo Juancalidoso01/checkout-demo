@@ -338,7 +338,7 @@
     submitBtn.setAttribute('aria-hidden', canShowSubmit ? 'false' : 'true');
     if (currentStep === stepEls.length - 1) renderSummary();
     if (currentStep === 1) { updateMetamapMetadata(); renderKycStatus(); }
-    if (currentStep === 2) { initAddressMapIfNeeded(); }
+    if (currentStep === 2) { setTimeout(initAddressMapIfNeeded, 100); }
     renderIndicator();
     updateProgress();
     updateFieldChecks();
@@ -756,7 +756,8 @@
     const latEl = document.getElementById('addressLat');
     const lngEl = document.getElementById('addressLng');
     const coordsDisplay = document.getElementById('mapCoordsDisplay');
-    if (!mapEl || !window.L) return;
+    if (!mapEl) return;
+    if (!window.L) { setTimeout(initAddressMapIfNeeded, 300); return; }
     if (addressMapInstance) {
       addressMapInstance.invalidateSize();
       return;
@@ -781,6 +782,7 @@
     }
     addressMarker.on('dragend', function(e){ updateCoords(e.target.getLatLng()); saveRecovery(); });
     updateCoords(addressMarker.getLatLng());
+    setTimeout(function(){ if (addressMapInstance) addressMapInstance.invalidateSize(); }, 200);
     window.__obSetAddressFromGeocode = function(lat, lng){
       var latEl = document.getElementById('addressLat');
       var lngEl = document.getElementById('addressLng');
