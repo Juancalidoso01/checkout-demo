@@ -21,7 +21,10 @@
 </head>
 <body>
   <div class="bar">
-    <h2>Mueva el pin al lugar exacto</h2>
+    <div>
+      <h2>Coloque el marcador en el lugar donde desea activar el servicio</h2>
+      <p style="font-size:11px;color:#64748b;margin-top:4px">Si tiene varias sucursales, indique la oficina principal.</p>
+    </div>
     <div class="bar-right" style="display:flex;align-items:center;gap:8px">
       <button type="button" id="btnMyLocation" class="btn-sec" style="padding:6px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:12px;cursor:pointer"><i class="fa-solid fa-location-crosshairs" style="margin-right:4px"></i>Mi ubicación</button>
       <span class="coords" id="coordsDisplay">8.994500, -79.519900</span>
@@ -51,7 +54,7 @@
           subdomains: 'abcd',
           maxZoom: 19
         }).addTo(map);
-        var storeIcon = L.icon({ iconUrl: 'pin-tienda.png', iconSize: [48, 72], iconAnchor: [24, 72], popupAnchor: [0, -72] });
+        var storeIcon = L.icon({ iconUrl: 'pin-tienda.png', iconSize: [62, 94], iconAnchor: [31, 94], popupAnchor: [0, -94] });
         marker = L.marker([lat, lng], { draggable: true, icon: storeIcon }).addTo(map);
         setTimeout(function() { if (map) map.invalidateSize(); }, 100);
       } catch (e) { marker = null; map = null; }

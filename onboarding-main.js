@@ -859,7 +859,7 @@
   function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
   }
-  function applyCoordsFromLocation(lat, lng, source) {
+  function applyCoordsFromLocation(lat, lng, source, addressParts) {
     var latStr = parseFloat(lat).toFixed(6);
     var lngStr = parseFloat(lng).toFixed(6);
     var latEl = form.elements.addressLat, lngEl = form.elements.addressLng;
@@ -867,8 +867,15 @@
     if (latEl) latEl.value = latStr;
     if (lngEl) lngEl.value = lngStr;
     if (cd) cd.textContent = latStr + ', ' + lngStr;
+    if (addressParts && addressParts.length) {
+      var addrStr = addressParts.filter(Boolean).join(', ');
+      var addrInput = document.getElementById('addressSearch');
+      var addrHidden = form.elements.businessAddress;
+      if (addrInput) addrInput.value = addrStr;
+      if (addrHidden) addrHidden.value = addrStr;
+    }
     saveRecovery();
-    setMsg('Ubicación guardada (' + source + '): ' + latStr + ', ' + lngStr, false);
+    setMsg('Ubicación guardada (' + source + '). No necesita abrir el mapa.', false);
   }
   var btnUseMyLocationQuick = document.getElementById('btnUseMyLocationQuick');
   if (btnUseMyLocationQuick) {
@@ -882,7 +889,7 @@
         }
         navigator.geolocation.getCurrentPosition(
           function(pos) {
-            applyCoordsFromLocation(pos.coords.latitude, pos.coords.longitude, 'GPS');
+            applyCoordsFromLocation(pos.coords.latitude, pos.coords.longitude, 'GPS', null);
             btn.disabled = false;
           },
           function() {
@@ -902,7 +909,8 @@
       .then(function(data) {
         var lat = data.latitude, lng = data.longitude;
         if (lat != null && lng != null && !isNaN(lat) && !isNaN(lng)) {
-          applyCoordsFromLocation(lat, lng, 'IP');
+          var parts = [data.city, data.region_name, data.country_name].filter(Boolean);
+          applyCoordsFromLocation(lat, lng, 'IP', parts);
         } else {
           setMsg('No se pudo obtener la ubicación por IP.', true);
         }

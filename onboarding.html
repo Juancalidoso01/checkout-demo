@@ -873,7 +873,7 @@
                 </div>
                 <div>
                   <label class="pp-label">Ubicación en mapa *</label>
-                  <p class="text-xs text-slate-500 mb-2">Use &quot;Leer mi ubicación&quot; para marcar rápido, o abra el mapa para ajustar el punto exacto.</p>
+                  <p class="text-xs text-slate-500 mb-2">Use &quot;Leer mi ubicación&quot; para obtener las coordenadas automáticamente (no necesita abrir el mapa). Si desea ajustar el punto, abra el mapa.</p>
                   <div class="flex flex-wrap gap-2 items-center">
                     <button type="button" id="btnUseMyLocationQuick" class="pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm"><i class="fa-solid fa-location-crosshairs mr-2"></i>Leer mi ubicación</button>
                     <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm" onclick="if(window.__obOpenMapModal){window.__obOpenMapModal();}else{var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m&&f){var b='mapa-picker.html';var lat=document.getElementById('addressLat');var lng=document.getElementById('addressLng');if(lat&&lat.value)b+='?lat='+lat.value;if(lng&&lng.value)b+=(b.indexOf('?')>=0?'&':'?')+'lng='+lng.value;f.src=b;m.style.display='flex';m.classList.remove('hidden');m.setAttribute('aria-hidden','false');}}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
