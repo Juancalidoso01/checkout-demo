@@ -4,8 +4,7 @@
   const ACCESS_KEY = 'pp_onboarding_access_v1';
   const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
   const steps = [
-    { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
-    { title: 'Documentos', desc: 'Aviso de operaciones en PDF' },
+    { title: 'Comercio', desc: 'Estructura, empresa y aviso de operaciones (PDF)' },
     { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
     { title: 'Dirección', desc: 'Mapa, provincia, barrio y operación' },
     { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
@@ -289,12 +288,12 @@
     stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
     prevBtn.disabled = currentStep === 0;
     nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
-    const canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3,4].every(i => validateStepSilent(i));
+    const canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3].every(i => validateStepSilent(i));
     submitBtn.classList.toggle('is-hidden', !canShowSubmit);
     submitBtn.setAttribute('aria-hidden', canShowSubmit ? 'false' : 'true');
     if (currentStep === stepEls.length - 1) renderSummary();
-    if (currentStep === 2) { updateMetamapMetadata(); renderKycStatus(); }
-    if (currentStep === 3) { initAddressMapIfNeeded(); }
+    if (currentStep === 1) { updateMetamapMetadata(); renderKycStatus(); }
+    if (currentStep === 2) { initAddressMapIfNeeded(); }
     renderIndicator();
     updateProgress();
   }
@@ -382,12 +381,12 @@
     for (const field of fields) {
       if (!field.checkValidity()) return false;
     }
-    if (stepIndex === 3) {
+    if (stepIndex === 2) {
       const lat = (form.elements.addressLat?.value || '').trim();
       const lng = (form.elements.addressLng?.value || '').trim();
       if (!lat || !lng) return false;
     }
-    if (stepIndex === 2) {
+    if (stepIndex === 1) {
       const companyVal = (form.elements.companyPhone?.value || '').trim();
       if (!companyVal) return false;
       const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
@@ -401,11 +400,13 @@
     const fields = getStepFields(stepIndex);
     for (const field of fields) {
       if (!field.checkValidity()) {
+        field.focus();
+        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
         field.reportValidity();
         return false;
       }
     }
-        if (stepIndex === 3) {
+        if (stepIndex === 2) {
           const lat = (form.elements.addressLat?.value || '').trim();
           const lng = (form.elements.addressLng?.value || '').trim();
           if (!lat || !lng) {
@@ -413,7 +414,7 @@
             return false;
           }
         }
-        if (stepIndex === 2) {
+        if (stepIndex === 1) {
           const companyVal = (form.elements.companyPhone?.value || '').trim();
           if (!companyVal) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
           showPhoneError('companyPhone', '');
@@ -439,6 +440,7 @@
     currentStep = Math.max(currentStep - 1, 0);
     renderSteps();
     setMsg('');
+    saveRecovery();
   }
   function renderSummary(){
     const data = readFormData();
@@ -539,8 +541,8 @@
     return true;
   }
 
-  prevBtn.addEventListener('click', goPrev);
-  nextBtn.addEventListener('click', goNext);
+  prevBtn.addEventListener('click', function(e) { e.preventDefault(); goPrev(); });
+  nextBtn.addEventListener('click', function(e) { e.preventDefault(); goNext(); });
   saveDraftBtn.addEventListener('click', () => {
     try {
       persist('draft');

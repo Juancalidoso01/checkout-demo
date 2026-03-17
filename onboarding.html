@@ -188,39 +188,32 @@
                 <div class="ob-step-index">1</div>
                 <div>
                   <div class="font-extrabold text-sm">Comercio</div>
-                  <div class="text-xs text-slate-500 mt-1">Estructura o empresa del cliente</div>
+                  <div class="text-xs text-slate-500 mt-1">Estructura, empresa y aviso de operaciones (PDF)</div>
                 </div>
               </div>
               <div class="ob-step cursor-pointer" data-step-idx="1" role="button" tabindex="0">
                 <div class="ob-step-index">2</div>
                 <div>
-                  <div class="font-extrabold text-sm">Documentos</div>
-                  <div class="text-xs text-slate-500 mt-1">Aviso de operaciones en PDF</div>
+                  <div class="font-extrabold text-sm">Contactos</div>
+                  <div class="text-xs text-slate-500 mt-1">Representante, teléfono empresa y celular</div>
                 </div>
               </div>
               <div class="ob-step cursor-pointer" data-step-idx="2" role="button" tabindex="0">
                 <div class="ob-step-index">3</div>
                 <div>
-                  <div class="font-extrabold text-sm">Contactos</div>
-                  <div class="text-xs text-slate-500 mt-1">Representante, teléfono empresa y celular</div>
+                  <div class="font-extrabold text-sm">Dirección</div>
+                  <div class="text-xs text-slate-500 mt-1">Mapa, provincia, barrio y operación</div>
                 </div>
               </div>
               <div class="ob-step cursor-pointer" data-step-idx="3" role="button" tabindex="0">
                 <div class="ob-step-index">4</div>
                 <div>
-                  <div class="font-extrabold text-sm">Dirección</div>
-                  <div class="text-xs text-slate-500 mt-1">Mapa, provincia, barrio y operación</div>
-                </div>
-              </div>
-              <div class="ob-step cursor-pointer" data-step-idx="4" role="button" tabindex="0">
-                <div class="ob-step-index">5</div>
-                <div>
                   <div class="font-extrabold text-sm">Compliance</div>
                   <div class="text-xs text-slate-500 mt-1">Cuenta bancaria y validaciones</div>
                 </div>
               </div>
-              <div class="ob-step cursor-pointer" data-step-idx="5" role="button" tabindex="0">
-                <div class="ob-step-index">6</div>
+              <div class="ob-step cursor-pointer" data-step-idx="4" role="button" tabindex="0">
+                <div class="ob-step-index">5</div>
                 <div>
                   <div class="font-extrabold text-sm">Resumen</div>
                   <div class="text-xs text-slate-500 mt-1">Confirmación para revisión</div>
@@ -235,8 +228,8 @@
           <form id="onboardingForm" class="space-y-5" novalidate>
             <section class="pp-card -soft overflow-hidden form-step" data-step="0">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">1. Identificación del comercio</h2>
-                <p class="text-sm text-gray-500 mt-1">Primer paso para conocer la estructura o empresa del cliente.</p>
+                <h2 class="text-xl font-extrabold">1. Identificación del comercio y aviso de operaciones</h2>
+                <p class="text-sm text-gray-500 mt-1">Estructura o empresa del cliente y documento PDF con la descripción del negocio.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
@@ -576,7 +569,7 @@
                         function syncValidity() {
                           var v = (input.value || '').trim();
                           if (!v) { input.setCustomValidity(''); return; }
-                          var inList = industryList.some(function(c) { return c === v; });
+                          var inList = industryList.some(function(c) { return c.toLowerCase() === v.toLowerCase(); });
                           input.setCustomValidity(inList ? '' : 'Debe elegir una opción de la lista o \'Ocupación o actividad no enlistada\'.');
                         }
                         function setFromList(value) {
@@ -634,27 +627,16 @@
                     <input name="yearsOperating" class="pp-field" type="number" min="0" step="1" required>
                   </div>
                 </div>
-              </div>
-            </section>
-
-            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
-              <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">2. Aviso de operaciones</h2>
-                <p class="text-sm text-gray-500 mt-1">Documento PDF con la descripción del negocio.</p>
-              </div>
-              <div class="pp-card-body space-y-4">
-                <div>
+                <div class="pt-4 mt-4 border-t border-gray-200">
                   <label class="pp-label">Cargue su aviso de operaciones *</label>
                   <p class="text-xs text-slate-500 mb-2">
                     Arrastra un PDF en la zona de abajo o selecciona el documento desde tu ordenador. Solo se acepta formato PDF.
                   </p>
-                  <!-- Zona exclusiva de arrastre -->
                   <div id="pdf-dropzone" class="border-2 border-dashed border-blue-400 rounded-xl p-6 text-center transition min-h-[120px] flex flex-col justify-center items-center gap-3 bg-slate-50/50 hover:bg-blue-50/80">
                     <span class="text-gray-500 text-sm">Suelta aquí el PDF o usa el botón de abajo para cargarlo desde tu ordenador</span>
                     <span id="pdf-file-info" class="text-green-600 text-sm hidden"></span>
                     <span id="pdf-file-error" class="text-red-600 text-sm hidden"></span>
                   </div>
-                  <!-- Input visible: clic abre el selector para cargar desde el ordenador -->
                   <div class="mt-3">
                     <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" required aria-describedby="pdf-file-info pdf-file-error" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-blue-600 file:text-white file:font-semibold file:cursor-pointer hover:file:bg-blue-700" aria-label="Cargar PDF desde el ordenador">
                   </div>
@@ -662,9 +644,9 @@
               </div>
             </section>
 
-            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">3. Contactos</h2>
+                <h2 class="text-xl font-extrabold">2. Contactos</h2>
                 <p class="text-sm text-gray-500 mt-1">Representante legal y datos de contacto de la empresa.</p>
               </div>
               <div class="pp-card-body space-y-4">
@@ -741,9 +723,9 @@
               </div>
             </section>
 
-            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="3">
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">4. Dirección y operación comercial</h2>
+                <h2 class="text-xl font-extrabold">3. Dirección y operación comercial</h2>
                 <p class="text-sm text-gray-500 mt-1">Ubicación exacta del negocio (Panamá) y estimados de uso.</p>
               </div>
               <div class="pp-card-body space-y-4">
@@ -827,9 +809,9 @@
               </div>
             </section>
 
-            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="4">
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="3">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">5. Datos bancarios y compliance</h2>
+                <h2 class="text-xl font-extrabold">4. Datos bancarios y compliance</h2>
                 <p class="text-sm text-gray-500 mt-1">Para evaluación y futura liquidación.</p>
               </div>
               <div class="pp-card-body space-y-4">
@@ -881,9 +863,9 @@
               </div>
             </section>
 
-            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="5">
+            <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="4">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">6. Resumen y envío</h2>
+                <h2 class="text-xl font-extrabold">5. Resumen y envío</h2>
                 <p class="text-sm text-gray-500 mt-1">Revisa antes de dejar el comercio en evaluación.</p>
               </div>
               <div class="pp-card-body space-y-5">
