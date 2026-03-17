@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
   <!-- Bloquea sdk.metamap.com/tracker.js (evita errores 403/nosniff). El botón usa web-button.metamap.com -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https:;">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https:;">
   <title>Onboarding aliado — Punto Pago</title>
   <script>
     (function(){
@@ -96,7 +96,7 @@
     }
     /* Listas desplegables: encima del contenido, sin recorte */
     .form-step{overflow:visible !important}
-    #industry-suggestions,#repOcupacion-suggestions,#repActividad-suggestions{z-index:9999 !important;position:absolute !important;box-shadow:0 12px 28px rgba(0,0,0,.15) !important}
+    #industry-suggestions,#repOcupacion-suggestions,#repActividad-suggestions,#addressSuggestions{z-index:9999 !important;position:absolute !important;box-shadow:0 12px 28px rgba(0,0,0,.15) !important}
     /* Cursor ring + efectos visuales (como onboarding-access) */
     .cursor-ring{position:fixed;top:0;left:0;width:58px;height:58px;border-radius:999px;border:2px solid rgba(84,98,230,.82);background:transparent;pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .18s ease,height .18s ease,opacity .18s ease,border-color .18s ease,box-shadow .18s ease}
     .cursor-ring.-visible{opacity:1}
@@ -189,35 +189,35 @@
               <p class="text-sm text-gray-500 mt-1">Completa los <span class="ob-accent">datos mínimos</span> para pasar a evaluación.</p>
             </div>
             <div class="pp-card-body space-y-3" id="stepIndicator" style="overflow:visible">
-              <div class="ob-step -active cursor-pointer" data-step-idx="0" role="button" tabindex="0">
+              <div class="ob-step -active cursor-pointer" data-step-idx="0" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(0);return false;">
                 <div class="ob-step-index">1</div>
                 <div>
                   <div class="font-extrabold text-sm">Comercio</div>
                   <div class="text-xs text-slate-500 mt-1">Estructura, empresa y aviso de operaciones (PDF)</div>
                 </div>
               </div>
-              <div class="ob-step cursor-pointer" data-step-idx="1" role="button" tabindex="0">
+              <div class="ob-step cursor-pointer" data-step-idx="1" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(1);return false;">
                 <div class="ob-step-index">2</div>
                 <div>
                   <div class="font-extrabold text-sm">Contactos</div>
                   <div class="text-xs text-slate-500 mt-1">Representante, teléfono empresa y celular</div>
                 </div>
               </div>
-              <div class="ob-step cursor-pointer" data-step-idx="2" role="button" tabindex="0">
+              <div class="ob-step cursor-pointer" data-step-idx="2" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(2);return false;">
                 <div class="ob-step-index">3</div>
                 <div>
                   <div class="font-extrabold text-sm">Dirección</div>
-                  <div class="text-xs text-slate-500 mt-1">Mapa, provincia, barrio y operación</div>
+                  <div class="text-xs text-slate-500 mt-1">Provincia, distrito, mapa y ubicación exacta</div>
                 </div>
               </div>
-              <div class="ob-step cursor-pointer" data-step-idx="3" role="button" tabindex="0">
+              <div class="ob-step cursor-pointer" data-step-idx="3" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(3);return false;">
                 <div class="ob-step-index">4</div>
                 <div>
                   <div class="font-extrabold text-sm">Compliance</div>
                   <div class="text-xs text-slate-500 mt-1">Cuenta bancaria y validaciones</div>
                 </div>
               </div>
-              <div class="ob-step cursor-pointer" data-step-idx="4" role="button" tabindex="0">
+              <div class="ob-step cursor-pointer" data-step-idx="4" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(4);return false;">
                 <div class="ob-step-index">5</div>
                 <div>
                   <div class="font-extrabold text-sm">Resumen</div>
@@ -731,48 +731,146 @@
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">3. Dirección y operación comercial</h2>
-                <p class="text-sm text-gray-500 mt-1">Ubicación exacta del negocio (Panamá) y estimados de uso.</p>
+                <h2 class="text-xl font-extrabold">3. Dirección del negocio</h2>
+                <p class="text-sm text-gray-500 mt-1">Ubicación exacta del negocio en Panamá. Es fundamental para la operación.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <p class="text-sm text-slate-700 mb-3"><strong>En Panamá las direcciones no tienen nomenclatura estándar.</strong> Usamos mapa y descripción detallada para ubicar su negocio con precisión.</p>
-                  <div class="ob-grid ob-grid-3">
-                    <div>
-                      <label class="pp-label">Provincia *</label>
-                      <select name="province" id="province" class="pp-field -select" required>
-                        <option value="">Selecciona</option>
-                        <option>Bocas del Toro</option>
-                        <option>Chiriquí</option>
-                        <option>Coclé</option>
-                        <option>Colón</option>
-                        <option>Darién</option>
-                        <option>Emberá-Wounaan</option>
-                        <option>Guna Yala</option>
-                        <option>Herrera</option>
-                        <option>Los Santos</option>
-                        <option>Ngäbe-Buglé</option>
-                        <option>Panamá</option>
-                        <option>Panamá Oeste</option>
-                        <option>Veraguas</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label class="pp-label">Distrito *</label>
-                      <input name="district" class="pp-field" type="text" required placeholder="Ej: Panamá, San Miguelito">
-                    </div>
-                    <div>
-                      <label class="pp-label">Corregimiento / Barrio *</label>
-                      <input name="corregimiento" class="pp-field" type="text" required placeholder="Ej: Bella Vista, Calidonia">
-                    </div>
+                  <p class="text-sm text-slate-700 mb-3">Detalle la dirección lo más exacta posible. Escriba y seleccione una sugerencia, o complete manualmente.</p>
+                  <div class="relative">
+                    <label class="pp-label">Dirección *</label>
+                    <input id="addressSearch" type="text" class="pp-field" placeholder="Escriba calle, barrio, ciudad... Ej: Av. Central, Bella Vista, Panamá" autocomplete="off">
+                    <ul id="addressSuggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-slate-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de dirección"></ul>
                   </div>
+                  <input type="hidden" name="province" id="province">
+                  <input type="hidden" name="district" id="district">
+                  <input type="hidden" name="corregimiento" id="corregimiento">
+                  <input type="hidden" name="businessAddress" id="businessAddress" required>
+                  <div id="addressParsed" class="text-xs text-slate-600 mt-2 hidden"></div>
+                  <script>
+                    (function initAddressAutocomplete(){
+                      function run(){
+                      var addressList = ['Bella Vista, Panamá','Bella Vista Viejo, Panamá','El Cangrejo, Panamá','Obarrio, Panamá','Marbella, Panamá','Campo Alegre, Panamá','El Carmen, Panamá','San Francisco, Panamá','Costa del Este, Panamá','Albrook, Panamá','Ancón, Panamá','Calidonia, Panamá','Curundú, Panamá','Bethania, Panamá','Pueblo Nuevo, Panamá','Juan Díaz, Panamá','Parque Lefevre, Panamá','Río Abajo, Panamá','Paitilla, Panamá','Panamá Viejo, Panamá','Vía España, Panamá','Av. Central, Panamá','Calle 50, Panamá','Vía Porras, Panamá','Vía Brasil, Panamá','Av. Balboa, Panamá','Clayton, Panamá','Chorrillo, Panamá','Santa Ana, Panamá','El Chorrillo, Panamá','La Exposición, Panamá','Brisas del Golf, Panamá','Colón, Colón','David, Chiriquí','Santiago, Veraguas','Chitré, Herrera','Aguadulce, Coclé','Penonomé, Coclé','La Chorrera, Panamá Oeste','Arraiján, Panamá Oeste','Tocumen, Panamá','24 de Diciembre, Panamá','Las Cumbres, Panamá','Pacora, Panamá','Chepo, Panamá','Pedregal, Panamá','Don Bosco, Panamá','San Miguelito, Panamá','Alcalde Díaz, Panamá','Villa Lucre, Panamá','Otra dirección (especificar)'];
+                      var input = document.getElementById('addressSearch');
+                      var suggestions = document.getElementById('addressSuggestions');
+                      var provinceEl = document.getElementById('province');
+                      var districtEl = document.getElementById('district');
+                      var corregimientoEl = document.getElementById('corregimiento');
+                      var businessAddressEl = document.getElementById('businessAddress');
+                      var addressParsed = document.getElementById('addressParsed');
+                      var debounceTimer = null;
+                      function getApiKey(){ return ((window.PPSupabaseConfig || {}).geoapifyApiKey || '').trim(); }
+                      if (!input || !suggestions) return;
+                      function syncBusinessAddr(v){ if (businessAddressEl) businessAddressEl.value = (v || '').trim(); }
+                      function showParsed(t){ if (addressParsed){ addressParsed.textContent = t || ''; addressParsed.classList.toggle('hidden', !t); } }
+                      function setFromLocal(value){
+                        input.value = value;
+                        syncBusinessAddr(value);
+                        suggestions.classList.add('hidden');
+                        if (value !== 'Otra dirección (especificar)') {
+                          var m = value.match(/^(.+),\s*(.+)$/);
+                          if (m) { if (corregimientoEl) corregimientoEl.value = m[1].trim(); if (provinceEl) provinceEl.value = m[2].trim(); }
+                        }
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                      }
+                      function setFromGeoapify(item){
+                        var fmt = item.formatted || item.address_line1 || '';
+                        if (item.address_line2) fmt += ', ' + item.address_line2;
+                        input.value = fmt;
+                        syncBusinessAddr(fmt);
+                        suggestions.classList.add('hidden');
+                        if (provinceEl) provinceEl.value = (item.state || item.county || '') + '';
+                        if (districtEl) districtEl.value = (item.county || item.district || '') + '';
+                        if (corregimientoEl) corregimientoEl.value = (item.suburb || item.district || item.city || '') + '';
+                        var parts = [];
+                        if (item.state) parts.push('Provincia: ' + item.state);
+                        if (item.county) parts.push('Distrito: ' + item.county);
+                        if (item.suburb || item.city) parts.push('Barrio: ' + (item.suburb || item.city));
+                        showParsed(parts.length ? parts.join(' • ') : '');
+                        if (item.lat != null && item.lon != null && typeof window.__obSetAddressFromGeocode === 'function') {
+                          window.__obSetAddressFromGeocode(parseFloat(item.lat), parseFloat(item.lon));
+                        }
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                      }
+                      function renderLocalSuggestions(value){
+                        var raw = (value || '').trim();
+                        var lower = raw.toLowerCase();
+                        suggestions.innerHTML = '';
+                        if (!raw) { suggestions.classList.add('hidden'); return; }
+                        var matches = addressList.filter(function(a){ return a.toLowerCase().indexOf(lower) >= 0; });
+                        if (matches.length === 0) {
+                          var li = document.createElement('li');
+                          li.className = 'px-4 py-3 cursor-pointer hover:bg-amber-50 border-t border-slate-200 bg-amber-50/80';
+                          li.textContent = 'Otra dirección (especificar)';
+                          li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromLocal('Otra dirección (especificar)'); });
+                          suggestions.appendChild(li);
+                        } else {
+                          matches.forEach(function(addr){
+                            var li = document.createElement('li');
+                            li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50 border-t border-slate-100';
+                            li.textContent = addr;
+                            li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromLocal(addr); });
+                            suggestions.appendChild(li);
+                          });
+                        }
+                        suggestions.classList.remove('hidden');
+                      }
+                      function fetchGeoapify(text, done){
+                        var key = getApiKey();
+                        if (!key || !text || text.length < 2) { done([]); return; }
+                        var url = 'https://api.geoapify.com/v1/geocode/autocomplete?text=' + encodeURIComponent(text + ', Panama') + '&filter=countrycode:pa&limit=8&format=json&lang=es&apiKey=' + encodeURIComponent(key);
+                        fetch(url).then(function(r){ return r.json(); }).then(function(data){
+                          var items = (data && data.results) ? data.results : [];
+                          done(items);
+                        }).catch(function(){ done([]); });
+                      }
+                      function onInput(){
+                        var val = (input.value || '').trim();
+                        syncBusinessAddr(val);
+                        clearTimeout(debounceTimer);
+                        if (!val) { suggestions.innerHTML = ''; suggestions.classList.add('hidden'); return; }
+                        if (getApiKey() && val.length >= 2) {
+                          debounceTimer = setTimeout(function(){
+                            fetchGeoapify(val, function(items){
+                              suggestions.innerHTML = '';
+                              if (items && items.length > 0) {
+                                items.forEach(function(it){
+                                  var li = document.createElement('li');
+                                  li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50 border-t border-slate-100';
+                                  var disp = it.formatted || (it.address_line1 || '') + (it.address_line2 ? ', ' + it.address_line2 : '') || it.name || 'Dirección';
+                                  li.textContent = disp;
+                                  li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromGeoapify(it); });
+                                  suggestions.appendChild(li);
+                                });
+                                var li2 = document.createElement('li');
+                                li2.className = 'px-4 py-2 cursor-pointer hover:bg-amber-50 border-t border-slate-200 bg-slate-50 text-slate-600 text-sm';
+                                li2.textContent = 'Otra dirección (especificar)';
+                                li2.addEventListener('mousedown', function(e){ e.preventDefault(); setFromLocal('Otra dirección (especificar)'); });
+                                suggestions.appendChild(li2);
+                              } else {
+                                renderLocalSuggestions(val);
+                              }
+                              suggestions.classList.remove('hidden');
+                            });
+                          }, 350);
+                        } else {
+                          renderLocalSuggestions(val);
+                        }
+                      }
+                      input.addEventListener('input', onInput);
+                      input.addEventListener('blur', function(){ setTimeout(function(){ suggestions.classList.add('hidden'); }, 150); });
+                      input.addEventListener('focus', function(){ if ((input.value || '').trim()) onInput(); });
+                      }
+                      if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', run);
+                      } else {
+                        run();
+                      }
+                    })();
+                  </script>
                   <div class="mt-3">
-                    <label class="pp-label">Dirección detallada *</label>
-                    <textarea name="businessAddress" class="pp-field -area" required placeholder="Calle, edificio, local, piso, número. Ej: Av. Central, Edificio XYZ, Local 5, frente a..."></textarea>
-                  </div>
-                  <div class="mt-3">
-                    <label class="pp-label">Puntos de referencia</label>
-                    <input name="addressLandmarks" class="pp-field" type="text" placeholder="Ej: 50 m antes del super X, detrás de la farmacia Y">
+                    <label class="pp-label">Complemento o puntos de referencia (opcional)</label>
+                    <input name="addressLandmarks" class="pp-field" type="text" placeholder="Ej: PH 5, Local 3, edificio X piso 2, frente al super">
                   </div>
                 </div>
                 <div>
@@ -787,29 +885,33 @@
                   <input type="hidden" name="addressLng" id="addressLng">
                   <input type="hidden" name="country" value="Panamá">
                 </div>
-                <div class="ob-grid-3">
-                  <div>
-                    <label class="pp-label">Ventas mensuales estimadas *</label>
-                    <select name="estimatedMonthlySales" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <option>Menos de 100 transacciones</option>
-                      <option>100 - 500 transacciones</option>
-                      <option>500 - 2.000 transacciones</option>
-                      <option>Más de 2.000 transacciones</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="pp-label">Ticket promedio *</label>
-                    <input name="averageTicket" class="pp-field" type="text" required placeholder="Ej: USD 25 o PAB">
-                  </div>
-                  <div>
-                    <label class="pp-label">Canal principal *</label>
-                    <select name="channelType" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <option>Presencial</option>
-                      <option>Online</option>
-                      <option>Mixto</option>
-                    </select>
+                <div class="pt-4 mt-4 border-t border-slate-200">
+                  <h3 class="text-sm font-semibold text-slate-600 mb-2">Operación comercial (opcional)</h3>
+                  <p class="text-xs text-slate-500 mb-3">Datos estimados para evaluación. Puede completarlos más adelante.</p>
+                  <div class="ob-grid ob-grid-3">
+                    <div>
+                      <label class="pp-label">Ventas mensuales estimadas</label>
+                      <select name="estimatedMonthlySales" class="pp-field -select">
+                        <option value="">Selecciona (opcional)</option>
+                        <option>Menos de 100 transacciones</option>
+                        <option>100 - 500 transacciones</option>
+                        <option>500 - 2.000 transacciones</option>
+                        <option>Más de 2.000 transacciones</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="pp-label">Ticket promedio</label>
+                      <input name="averageTicket" class="pp-field" type="text" placeholder="Ej: USD 25 (opcional)">
+                    </div>
+                    <div>
+                      <label class="pp-label">Canal principal</label>
+                      <select name="channelType" class="pp-field -select">
+                        <option value="">Selecciona (opcional)</option>
+                        <option>Presencial</option>
+                        <option>Online</option>
+                        <option>Mixto</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -903,6 +1005,9 @@
     </div>
   </main>
 
+  <script>
+  window.__obStepClick=function(i){var s=document.querySelectorAll('.form-step');var c=document.querySelector('.form-step:not(.is-hidden)');if(!c||!s[i])return;c.classList.add('is-hidden');s[i].classList.remove('is-hidden');var ind=document.querySelectorAll('.ob-step[data-step-idx]');for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===i);var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn'),b=document.getElementById('submitBtn');if(p)p.disabled=(i===0);if(n)n.classList.toggle('is-hidden',i===s.length-1);if(b)b.classList.toggle('is-hidden',i!==s.length-1);var pct=Math.round(((i+1)/s.length)*100);var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');if(lab)lab.textContent=pct+'%';if(fil)fil.style.width=pct+'%';if(window.__obSetStep)window.__obSetStep(i);};
+  </script>
   <script src="auth.js"></script>
   <script src="onboarding-main.js"></script>
 

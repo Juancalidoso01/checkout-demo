@@ -6,7 +6,7 @@
   const steps = [
     { title: 'Comercio', desc: 'Estructura, empresa y aviso de operaciones (PDF)' },
     { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
-    { title: 'Dirección', desc: 'Mapa, provincia, barrio y operación' },
+    { title: 'Dirección', desc: 'Provincia, distrito, mapa y ubicación exacta' },
     { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
     { title: 'Resumen', desc: 'Confirmación para revisión' }
   ];
@@ -200,10 +200,25 @@
     setMsg('');
     saveRecovery();
   }
+  window.__obGoToStep = goToStep;
+  if (indicator) {
+    indicator.addEventListener('click', function(e) {
+      var el = e.target;
+      while (el && el !== indicator) {
+        if (el.classList && el.classList.contains('ob-step')) break;
+        el = el.parentNode;
+      }
+      if (!el || el === indicator) return;
+      var idxAttr = el.getAttribute('data-step-idx');
+      if (idxAttr == null) return;
+      var idx = parseInt(idxAttr, 10);
+      if (!isNaN(idx) && idx >= 0) goToStep(idx);
+    });
+  }
   function renderIndicator(){
     if (!indicator) return;
     var html = steps.map(function(step, idx) { return `
-      <div class="ob-step ${idx === currentStep ? '-active' : ''} cursor-pointer" data-step-idx="${idx}" role="button" tabindex="0">
+      <div class="ob-step ${idx === currentStep ? '-active' : ''} cursor-pointer" data-step-idx="${idx}" role="button" tabindex="0" onclick="if(window.__obGoToStep)window.__obGoToStep(${idx});return false;">
         <div class="ob-step-index">${idx + 1}</div>
         <div>
           <div class="font-extrabold text-sm">${esc(step.title)}</div>
@@ -734,6 +749,9 @@
   let addressMarker = null;
   const PANAMA_CENTER = [8.9945, -79.5199];
   function initAddressMapIfNeeded(){
+    var addrInput = document.getElementById('addressSearch');
+    var addrHidden = document.getElementById('businessAddress');
+    if (addrInput && addrHidden && addrHidden.value && !addrInput.value) addrInput.value = addrHidden.value;
     const mapEl = document.getElementById('addressMap');
     const latEl = document.getElementById('addressLat');
     const lngEl = document.getElementById('addressLng');
@@ -763,6 +781,16 @@
     }
     addressMarker.on('dragend', function(e){ updateCoords(e.target.getLatLng()); saveRecovery(); });
     updateCoords(addressMarker.getLatLng());
+    window.__obSetAddressFromGeocode = function(lat, lng){
+      var latEl = document.getElementById('addressLat');
+      var lngEl = document.getElementById('addressLng');
+      var cd = document.getElementById('mapCoordsDisplay');
+      if (latEl) latEl.value = lat; if (lngEl) lngEl.value = lng;
+      if (cd) cd.textContent = lat + ', ' + lng;
+      if (addressMarker) addressMarker.setLatLng([lat, lng]);
+      if (addressMapInstance) addressMapInstance.setView([lat, lng], 17);
+      saveRecovery();
+    };
     var btnLoc = document.getElementById('btnUseMyLocation');
     if (btnLoc) btnLoc.addEventListener('click', function(){
       if (!navigator.geolocation) { setMsg('Su navegador no admite geolocalización.', true); return; }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Prueba autocompletado dirección</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8 bg-slate-100">
+  <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <h1 class="text-xl font-bold mb-4">Prueba: Autocompletado de dirección</h1>
+    <p class="text-sm text-slate-600 mb-4">Escribe en el campo. Deberías ver sugerencias de Geoapify (o lista local si no hay key).</p>
+    <div class="relative">
+      <label class="block text-sm font-medium text-slate-700 mb-1">Dirección *</label>
+      <input id="addressSearch" type="text" class="w-full px-4 py-3 border border-slate-200 rounded-lg" placeholder="Ej: Bella vista, Via España, Obarrio" autocomplete="off">
+      <ul id="addressSuggestions" class="absolute left-0 right-0 z-50 bg-white border border-slate-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden"></ul>
+    </div>
+    <div id="status" class="mt-4 text-sm text-slate-500"></div>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script>
+    (function(){
+      var addressList = ['Bella Vista, Panamá','El Cangrejo, Panamá','Obarrio, Panamá','Via España, Panamá','Costa del Este, Panamá','Otra dirección (especificar)'];
+      var input = document.getElementById('addressSearch');
+      var suggestions = document.getElementById('addressSuggestions');
+      var statusEl = document.getElementById('status');
+      function getApiKey(){ return ((window.PPSupabaseConfig || {}).geoapifyApiKey || '').trim(); }
+      function setStatus(t){ if (statusEl) statusEl.textContent = t; }
+
+      if (!input || !suggestions) return;
+
+      if (getApiKey()) {
+        setStatus('Geoapify activo. Escribe 2+ caracteres para ver sugerencias de la API.');
+      } else {
+        setStatus('Sin API key de Geoapify. Usando lista local.');
+      }
+
+      function setFromList(value){
+        input.value = value;
+        suggestions.classList.add('hidden');
+      }
+      function renderLocal(value){
+        var raw = (value || '').trim().toLowerCase();
+        suggestions.innerHTML = '';
+        if (!raw) { suggestions.classList.add('hidden'); return; }
+        var matches = addressList.filter(function(a){ return a.toLowerCase().indexOf(raw) >= 0; });
+        matches.forEach(function(addr){
+          var li = document.createElement('li');
+          li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50';
+          li.textContent = addr;
+          li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromList(addr); });
+          suggestions.appendChild(li);
+        });
+        var li2 = document.createElement('li');
+        li2.className = 'px-4 py-2 cursor-pointer hover:bg-amber-50 text-slate-600 text-sm';
+        li2.textContent = 'Otra dirección (especificar)';
+        li2.addEventListener('mousedown', function(e){ e.preventDefault(); setFromList('Otra dirección (especificar)'); });
+        suggestions.appendChild(li2);
+        suggestions.classList.remove('hidden');
+      }
+      function fetchGeoapify(text, done){
+        var key = getApiKey();
+        if (!key || !text || text.length < 2) { done([]); return; }
+        var url = 'https://api.geoapify.com/v1/geocode/autocomplete?text=' + encodeURIComponent(text + ', Panama') + '&filter=countrycode:pa&limit=8&format=json&lang=es&apiKey=' + encodeURIComponent(key);
+        fetch(url).then(function(r){ return r.json(); }).then(function(data){
+          var items = (data && data.results) ? data.results : [];
+          done(items);
+        }).catch(function(err){ console.error('Geoapify error:', err); done([]); });
+      }
+      function onInput(){
+        var val = (input.value || '').trim();
+        clearTimeout(window._deb);
+        if (!val) { suggestions.innerHTML = ''; suggestions.classList.add('hidden'); return; }
+        if (getApiKey() && val.length >= 2) {
+          window._deb = setTimeout(function(){
+            fetchGeoapify(val, function(items){
+              suggestions.innerHTML = '';
+              if (items && items.length > 0) {
+                items.forEach(function(it){
+                  var li = document.createElement('li');
+                  li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50';
+                  li.textContent = it.formatted || it.address_line1 || '';
+                  li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromList(it.formatted || it.address_line1 || ''); });
+                  suggestions.appendChild(li);
+                });
+                var li2 = document.createElement('li');
+                li2.className = 'px-4 py-2 cursor-pointer hover:bg-amber-50 text-slate-600 text-sm';
+                li2.textContent = 'Otra dirección (especificar)';
+                li2.addEventListener('mousedown', function(e){ e.preventDefault(); setFromList('Otra dirección (especificar)'); });
+                suggestions.appendChild(li2);
+                setStatus('Sugerencias de Geoapify (' + items.length + ' resultados)');
+              } else {
+                renderLocal(val);
+                setStatus('Lista local (Geoapify sin resultados)');
+              }
+              suggestions.classList.remove('hidden');
+            });
+          }, 350);
+        } else {
+          renderLocal(val);
+        }
+      }
+      input.addEventListener('input', onInput);
+      input.addEventListener('blur', function(){ setTimeout(function(){ suggestions.classList.add('hidden'); }, 150); });
+      input.addEventListener('focus', function(){ if ((input.value || '').trim()) onInput(); });
+    })();
+  </script>
+</body>
+</html>
