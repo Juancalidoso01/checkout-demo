@@ -84,7 +84,7 @@
     .ob-checkbox-input{appearance:auto;-webkit-appearance:checkbox;accent-color:#5462e6;cursor:pointer}
     .ob-marker.leaflet-marker-icon{border:none !important;background:transparent !important}
     /* Evitar que CSS global img rompa los tiles del mapa Leaflet */
-    #addressMap img{max-width:none !important;max-height:none !important;width:auto !important;height:auto !important}
+    #addressMap img{max-width:none !important;max-height:none !important}
     #addressMap{cursor:grab}
     #addressMap:active{cursor:grabbing}
     @media (max-width: 980px){
@@ -856,7 +856,7 @@
                               }
                               suggestions.classList.remove('hidden');
                             });
-                          }, 350);
+                          }, 250);
                         } else {
                           renderLocalSuggestions(val);
                         }
