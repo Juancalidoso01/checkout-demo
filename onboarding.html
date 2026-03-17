@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
   <!-- Bloquea sdk.metamap.com/tracker.js (evita errores 403/nosniff). El botón usa web-button.metamap.com -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https:;">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com;">
   <title>Onboarding aliado — Punto Pago</title>
   <script>
     (function(){
@@ -879,12 +879,11 @@
                 </div>
                 <div>
                   <label class="pp-label">Ubicación en mapa *</label>
-                  <p class="text-xs text-slate-500 mb-2">Arrastre el mapa para explorar. <strong>Mueva el pin azul</strong> al lugar exacto del negocio (puede arrastrarlo). O use &quot;Usar mi ubicación&quot; si está en el sitio.</p>
-                  <div class="flex gap-2 mb-2">
-                    <button type="button" id="btnUseMyLocation" class="pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm"><i class="fa-solid fa-location-crosshairs mr-2"></i>Usar mi ubicación</button>
-                    <span id="mapCoordsDisplay" class="text-xs text-slate-600 self-center"></span>
+                  <p class="text-xs text-slate-500 mb-2">Haga clic en &quot;Abrir mapa&quot; para ubicar el negocio. Arrastre el pin azul al lugar exacto y cierre con &quot;Listo&quot;.</p>
+                  <div class="flex flex-wrap gap-2 items-center">
+                    <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
+                    <span id="mapCoordsDisplay" class="text-xs text-slate-600"></span>
                   </div>
-                  <div id="addressMap" style="width:100%;height:320px;min-height:320px;border-radius:14px;border:1px solid #e2e8f0;background:#e2e8f0;"></div>
                   <input type="hidden" name="addressLat" id="addressLat">
                   <input type="hidden" name="addressLng" id="addressLng">
                   <input type="hidden" name="country" value="Panamá">
@@ -1014,6 +1013,18 @@
   </script>
   <script src="auth.js"></script>
   <script src="onboarding-main.js"></script>
+
+  <!-- Modal: mapa para ubicar (siempre visible en DOM cuando abierto) -->
+  <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex-col bg-white" aria-hidden="true" style="display:none">
+    <div class="flex items-center justify-between gap-2 p-4 border-b border-slate-200 bg-white flex-wrap">
+      <h3 class="text-lg font-bold text-slate-800">Ubicar en el mapa</h3>
+      <div class="flex gap-2">
+        <button type="button" id="btnUseMyLocation" class="pp-btn pp-btn-secondary py-2 px-4 text-sm"><i class="fa-solid fa-location-crosshairs mr-1"></i>Mi ubicación</button>
+        <button type="button" id="mapModalClose" class="pp-btn pp-btn-primary py-2 px-4">Listo</button>
+      </div>
+    </div>
+    <div id="addressMap" class="flex-1 min-h-[60vh] w-full" style="background:#e2e8f0"></div>
+  </div>
 
   <!-- Modal: confirmar salida con cambios sin guardar -->
   <div id="leaveConfirmBackdrop" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden" aria-hidden="true">

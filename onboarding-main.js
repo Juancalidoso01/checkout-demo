@@ -338,7 +338,7 @@
     submitBtn.setAttribute('aria-hidden', canShowSubmit ? 'false' : 'true');
     if (currentStep === stepEls.length - 1) renderSummary();
     if (currentStep === 1) { updateMetamapMetadata(); renderKycStatus(); }
-    if (currentStep === 2) { setTimeout(initAddressMapIfNeeded, 100); }
+    if (currentStep === 2) { /* Mapa se init al abrir el modal */ }
     renderIndicator();
     updateProgress();
     updateFieldChecks();
@@ -766,7 +766,7 @@
     var savedLng = parseFloat(lngEl && lngEl.value ? lngEl.value : '');
     const startCenter = (!isNaN(savedLat) && !isNaN(savedLng)) ? [savedLat, savedLng] : PANAMA_CENTER;
     addressMapInstance = L.map('addressMap').setView(startCenter, 14);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(addressMapInstance);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap', maxZoom: 19 }).addTo(addressMapInstance);
     const markerIcon = L.divIcon({ className: 'ob-marker', html: '<div style="width:32px;height:32px;background:#5462e6;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.3);"></div>', iconSize: [32,32], iconAnchor: [16,16] });
     addressMarker = L.marker(startCenter, { draggable: true, icon: markerIcon }).addTo(addressMapInstance);
     if (!isNaN(savedLat) && !isNaN(savedLng)) {
@@ -810,6 +810,22 @@
         },
         function(){ setMsg('No se pudo obtener la ubicación. Verifique los permisos.', true); document.getElementById('btnUseMyLocation').disabled = false; }
       );
+    });
+  }
+  var mapModal = document.getElementById('mapModal');
+  var btnOpenMap = document.getElementById('btnOpenMap');
+  var mapModalClose = document.getElementById('mapModalClose');
+  if (mapModal && btnOpenMap) {
+    btnOpenMap.addEventListener('click', function(){
+      mapModal.style.display = 'flex';
+      mapModal.setAttribute('aria-hidden', 'false');
+      setTimeout(initAddressMapIfNeeded, 100);
+    });
+  }
+  if (mapModal && mapModalClose) {
+    mapModalClose.addEventListener('click', function(){
+      mapModal.style.display = 'none';
+      mapModal.setAttribute('aria-hidden', 'true');
     });
   }
   var elRepEmail = form.elements.repEmail;
