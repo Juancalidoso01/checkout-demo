@@ -572,7 +572,7 @@
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">2. Contactos</h2>
-                <p class="text-sm text-gray-500 mt-1">Representante legal, contacto operativo y técnico.</p>
+                <p class="text-sm text-gray-500 mt-1">Representante legal y datos de contacto de la empresa.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
@@ -585,12 +585,20 @@
                     <input name="repEmail" class="pp-field" type="email" required>
                   </div>
                   <div>
-                    <label class="pp-label">Nombre contacto operativo *</label>
-                    <input name="opsContactName" class="pp-field" type="text" required>
+                    <label class="pp-label">Teléfono de atención a clientes *</label>
+                    <input name="companyPhone" class="pp-field" type="tel" placeholder="+507 6XXX XXXX" inputmode="tel" required>
+                    <span class="text-xs text-slate-500 mt-1 block">Número donde la empresa recibe reclamos. Formato: +507 6XXX XXXX (Panamá).</span>
+                    <span id="companyPhoneError" class="text-xs text-red-600 hidden mt-1"></span>
                   </div>
                   <div>
-                    <label class="pp-label">Correo contacto operativo *</label>
-                    <input name="opsContactEmail" class="pp-field" type="email" required>
+                    <label class="pp-label">Celular del representante legal *</label>
+                    <input name="repCellPhone" id="repCellPhone" class="pp-field" type="tel" placeholder="+507 6XXX XXXX" inputmode="tel" required>
+                    <span class="text-xs text-slate-500 mt-1 block">Celular Panamá: +507 6XXX XXXX (8 dígitos, comienza por 6).</span>
+                    <span id="repCellPhoneError" class="text-xs text-red-600 hidden mt-1"></span>
+                    <label class="flex items-start gap-3 mt-3 cursor-pointer">
+                      <input name="confirmPhoneOwnership" type="checkbox" class="mt-1.5 w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                      <span class="text-sm text-slate-700">Confirmo que este número me pertenece y es correcto.</span>
+                    </label>
                   </div>
                 </div>
                 <div class="pt-4 mt-4 border-t border-gray-200">
@@ -777,7 +785,7 @@
       const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
       const steps = [
         { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
-        { title: 'Contactos', desc: 'Representante, operativo y técnico' },
+        { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
         { title: 'Operación', desc: 'Dirección, alcance y volumen' },
         { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
         { title: 'Resumen', desc: 'Confirmación para revisión' }
@@ -836,6 +844,7 @@
         }
         data.acceptTerms = form.elements.acceptTerms.checked;
         data.needsApiIntegration = form.elements.needsApiIntegration.checked;
+        data.confirmPhoneOwnership = form.elements.confirmPhoneOwnership?.checked || false;
         if (pdfInput && pdfInput.files && pdfInput.files[0]) {
           data.businessDescriptionPdfName = pdfInput.files[0].name;
         }
@@ -1068,6 +1077,21 @@
       function getStepFields(stepIndex){
         return Array.from(stepEls[stepIndex].querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
       }
+      function isValidPanamaMobile(v){
+        const digits = (v||'').replace(/\D/g,'');
+        if (!digits.length) return { valid: false, message: 'Ingrese el número.' };
+        let local = digits;
+        if (digits.startsWith('507') && digits.length === 11) local = digits.slice(3);
+        else if (digits.length === 8) local = digits;
+        else if (digits.length === 11 && digits.startsWith('507')) local = digits.slice(3);
+        else return { valid: false, message: 'Formato: +507 6XXX XXXX (8 dígitos, código de país +507, celular comienza por 6).' };
+        if (local.length !== 8 || local[0] !== '6') return { valid: false, message: 'Celular Panamá: 8 dígitos comenzando por 6 (ej. 6123 4567).' };
+        return { valid: true };
+      }
+      function showPhoneError(fieldName, msg){
+        const el = document.getElementById(fieldName + 'Error');
+        if (el) { el.textContent = msg || ''; el.classList.toggle('hidden', !msg); }
+      }
       function validateStep(stepIndex){
         const fields = getStepFields(stepIndex);
         for (const field of fields) {
@@ -1076,9 +1100,15 @@
             return false;
           }
         }
-        if (stepIndex === 1 && !isKycCompleted()) {
-          setMsg('Debe completar la verificación de identidad para continuar.', true);
-          return false;
+        if (stepIndex === 1) {
+          const companyRes = isValidPanamaMobile(form.elements.companyPhone?.value);
+          if (!companyRes.valid) { showPhoneError('companyPhone', companyRes.message); setMsg(companyRes.message, true); return false; }
+          showPhoneError('companyPhone', '');
+          const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
+          if (!cellRes.valid) { showPhoneError('repCellPhone', cellRes.message); setMsg(cellRes.message, true); return false; }
+          showPhoneError('repCellPhone', '');
+          if (!isKycCompleted()) { setMsg('Debe completar la verificación de identidad para continuar.', true); return false; }
+          if (!form.elements.confirmPhoneOwnership?.checked) { setMsg('Debe confirmar que el número de celular es correcto.', true); return false; }
         }
         return true;
       }
@@ -1102,7 +1132,8 @@
           ['Industria', data.industry],
           ['Descripción del negocio', data.businessDescriptionPdfName ? `Archivo: ${data.businessDescriptionPdfName}` : 'No adjuntado'],
           ['Representante', `${data.repName || ''} · ${data.repEmail || ''}`],
-          ['Contacto operativo', `${data.opsContactName || ''} · ${data.opsContactEmail || ''}`],
+          ['Tel. atención clientes', data.companyPhone || '—'],
+          ['Celular representante', data.repCellPhone || '—'],
           ['Ubicación', [data.country, data.region, data.city, data.district].filter(Boolean).join(' / ')],
           ['Canal principal', data.channelType],
           ['Ventas estimadas', data.estimatedMonthlySales],
@@ -1176,8 +1207,7 @@
         const ctx = readAccessContext();
         if (!ctx) return false;
         if (form.elements.repEmail && !form.elements.repEmail.value) form.elements.repEmail.value = ctx.email || '';
-        if (form.elements.repPhone && !form.elements.repPhone.value) form.elements.repPhone.value = ctx.phone || '';
-        if (form.elements.opsContactEmail && !form.elements.opsContactEmail.value) form.elements.opsContactEmail.value = ctx.email || '';
+        if (form.elements.repCellPhone && !form.elements.repCellPhone.value) form.elements.repCellPhone.value = ctx.phone || '';
         if (form.elements.businessTradeName && !form.elements.businessTradeName.value) form.elements.businessTradeName.value = ctx.businessName || '';
         if (form.elements.businessLegalName && !form.elements.businessLegalName.value) form.elements.businessLegalName.value = ctx.businessName || '';
         return true;
@@ -1229,6 +1259,10 @@
       }
       form.addEventListener('input', saveRecovery);
       form.addEventListener('change', saveRecovery);
+      form.elements.companyPhone?.addEventListener('blur', function(){ const r = isValidPanamaMobile(this.value); showPhoneError('companyPhone', r.valid ? '' : r.message); });
+      form.elements.companyPhone?.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('companyPhone', ''); });
+      form.elements.repCellPhone?.addEventListener('blur', function(){ const r = isValidPanamaMobile(this.value); showPhoneError('repCellPhone', r.valid ? '' : r.message); });
+      form.elements.repCellPhone?.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('repCellPhone', ''); });
       setupPdfUpload();
       form.elements.repEmail?.addEventListener('input', () => { if (currentStep === 1) updateMetamapMetadata(); });
       form.elements.repEmail?.addEventListener('change', () => { if (currentStep === 1) updateMetamapMetadata(); });
