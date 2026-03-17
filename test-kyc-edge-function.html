@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Test Edge Function KYC</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <style>
+    body { font-family: system-ui; max-width: 600px; margin: 40px auto; padding: 20px; }
+    label { display: block; margin-top: 12px; font-weight: 600; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 4px; box-sizing: border-box; }
+    button { margin-top: 16px; padding: 12px 24px; background: #5462e6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    button:hover { background: #4352d4; }
+    #result { margin-top: 20px; padding: 16px; background: #f5f5f5; border-radius: 8px; white-space: pre-wrap; font-size: 13px; word-break: break-all; }
+    .ok { background: #ecfdf5 !important; border: 1px solid #10b981; }
+    .err { background: #fef2f2 !important; border: 1px solid #ef4444; }
+    .hint { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Test: check-metamap-verification</h1>
+  <p>Prueba la Edge Function directamente.</p>
+  <p class="hint">Obtén <code>verificationId</code> desde: (1) <a href="https://dashboard.getmati.com" target="_blank">Metamap Dashboard</a> → Verifications, o (2) en la página de onboarding, tras completar Metamap, abre consola (F12) y ejecuta: <code>JSON.parse(localStorage.getItem('pp_kyc_status') || '{}')</code> — busca tu applicationId y el campo verificationId.</p>
+  <form id="form">
+    <label>verificationId (requerido)</label>
+    <input type="text" name="verificationId" placeholder="Ej: 64f2a3b1c4d5e0001abc123" required>
+    <span class="hint">ID de la verificación aprobada en Metamap</span>
+
+    <label>applicationId (requerido para guardar en Supabase)</label>
+    <input type="text" name="applicationId" placeholder="Ej: oba_abc123_1234567890" value="oba_test_manual">
+    <span class="hint">Si está vacío, la función no guardará en kyc_verifications</span>
+
+    <button type="submit">Llamar Edge Function</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('form');
+    const resultEl = document.getElementById('result');
+    const sbCfg = window.PPSupabaseConfig || {};
+    if (!sbCfg.url || !sbCfg.anonKey) {
+      resultEl.textContent = 'ERROR: Falta supabase-config.js o PPSupabaseConfig (url, anonKey)';
+      resultEl.className = 'err';
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const verificationId = form.verificationId.value.trim();
+      const applicationId = form.applicationId.value.trim();
+      if (!verificationId) {
+        resultEl.textContent = 'Ingresa un verificationId';
+        resultEl.className = 'err';
+        return;
+      }
+      resultEl.textContent = 'Llamando…';
+      resultEl.className = '';
+      try {
+        const supabase = window.supabase.createClient(sbCfg.url, sbCfg.anonKey);
+        const { data, error } = await supabase.functions.invoke('check-metamap-verification', {
+          body: { verificationId, applicationId: applicationId || 'oba_test_manual' }
+        });
+        if (error) {
+          resultEl.textContent = 'ERROR: ' + JSON.stringify(error, null, 2);
+          resultEl.className = 'err';
+          return;
+        }
+        const saved = data?.savedToSupabase === true;
+        resultEl.textContent = JSON.stringify(data, null, 2);
+        resultEl.className = saved ? 'ok' : 'err';
+        if (!saved && (data?.supabaseError || data?.supabaseDetails)) {
+          resultEl.textContent += '\n\n⚠ ERROR SUPABASE: ' + (data.supabaseError || '') + (data.supabaseDetails ? ' | ' + JSON.stringify(data.supabaseDetails) : '');
+        } else if (!saved && data?.status) {
+          resultEl.textContent += '\n\n⚠ savedToSupabase: false. Redespliega la Edge Function con el código actualizado y prueba de nuevo para ver supabaseError.';
+        }
+      } catch (err) {
+        resultEl.textContent = 'Excepción: ' + err.message;
+        resultEl.className = 'err';
+      }
+    });
+  </script>
+</body>
+</html>

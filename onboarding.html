@@ -4,11 +4,45 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
+  <!-- Bloquea sdk.metamap.com/tracker.js (evita errores 403/nosniff). El botón usa web-button.metamap.com -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com;">
   <title>Onboarding aliado — Punto Pago</title>
+  <script>
+    (function(){
+      function blockTracker(url){return !!(url&&String(url).indexOf('tracker')>=0||(url&&String(url).indexOf('sdk.metamap.com')>=0));}
+      var origCreateElement=document.createElement.bind(document);
+      document.createElement=function(tag){
+        var el=origCreateElement(tag);
+        if(tag.toLowerCase()==='script'){
+          var origSetAttr=el.setAttribute.bind(el);
+          el.setAttribute=function(name,val){
+            if((name==='src'||name==='href')&&blockTracker(val))return;
+            return origSetAttr(name,val);
+          };
+          var pd=Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype,'src');
+          if(pd&&pd.set){
+            var origSrcSet=pd.set;
+            Object.defineProperty(el,'src',{set:function(v){if(blockTracker(v))return;origSrcSet.call(this,v);},get:pd.get?function(){return pd.get.call(this)}:function(){return el.getAttribute('src')||''},configurable:!0});
+          }
+        }
+        return el;
+      };
+      var origAppendChild=Node.prototype.appendChild;
+      Node.prototype.appendChild=function(child){
+        if(child&&child.tagName==='SCRIPT'){
+          var src=(child.src||child.getAttribute('src')||'').toString();
+          if(blockTracker(src))return child;
+        }
+        return origAppendChild.call(this,child);
+      };
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <script src="https://web-button.metamap.com/button.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <style>
     html,body{background:#fff !important}
     body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
@@ -562,20 +596,23 @@
                 <div class="pt-4 mt-4 border-t border-gray-200">
                   <h3 class="text-base font-bold text-gray-800 mb-2">Validación de identidad (KYC)</h3>
                   <p class="text-sm text-gray-600 mb-3">El representante legal debe completar la verificación de identidad para continuar con el proceso.</p>
+                  <p class="text-xs text-slate-400 mb-2">Si aparecen avisos de &quot;tracker&quot; o 403 en la consola al abrir la verificación, son inofensivos y no afectan el proceso.</p>
                   <div id="metamap-kyc-container">
                     <div id="kyc-status-panel" class="hidden">
                       <div id="kyc-status-loading" class="kyc-status-loading hidden">
                         <div class="kyc-spinner" aria-hidden="true"></div>
-                        <div>
+                        <div class="flex-1">
                           <div class="font-semibold text-slate-800">Validando identidad…</div>
                           <div class="text-sm text-slate-600 mt-0.5">MetaMap puede tomar hasta 5 minutos. No cierre esta ventana.</div>
+                          <button type="button" id="kyc-check-status-btn-loading" class="mt-3 text-sm font-semibold text-indigo-600 hover:text-indigo-700 underline">Verificar estado</button>
                         </div>
                       </div>
                       <div id="kyc-status-review" class="kyc-status-loading kyc-status-review hidden">
                         <i class="fa-solid fa-clock text-amber-500 text-xl"></i>
-                        <div>
+                        <div class="flex-1">
                           <div class="font-semibold text-amber-900">Espera de revisión</div>
                           <div class="text-sm text-amber-800 mt-0.5">Un verificador revisará manualmente. Te notificaremos cuando esté listo.</div>
+                          <button type="button" id="kyc-check-status-btn-review" class="mt-3 text-sm font-semibold text-amber-700 hover:text-amber-800 underline">Verificar estado</button>
                         </div>
                       </div>
                       <div id="kyc-status-approved" class="kyc-status-loading kyc-status-approved hidden">
@@ -756,6 +793,7 @@
     (function(){
       const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
       const ACCESS_KEY = 'pp_onboarding_access_v1';
+      const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
       const steps = [
         { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
         { title: 'Contactos', desc: 'Representante, operativo y técnico' },
@@ -822,6 +860,44 @@
         }
         return data;
       }
+      let saveRecoveryTimer = null;
+      function saveRecovery(){
+        clearTimeout(saveRecoveryTimer);
+        saveRecoveryTimer = setTimeout(function(){
+          try {
+            const data = readFormData();
+            sessionStorage.setItem(RECOVERY_KEY, JSON.stringify({
+              applicationId,
+              currentStep,
+              formData: data,
+              savedAt: Date.now()
+            }));
+          } catch (e) {}
+        }, 800);
+      }
+      function restoreRecovery(){
+        try {
+          const raw = sessionStorage.getItem(RECOVERY_KEY);
+          if (!raw) return false;
+          const r = JSON.parse(raw);
+          if (!r.applicationId || !r.formData) return false;
+          if (Date.now() - (r.savedAt || 0) > 24 * 60 * 60 * 1000) { sessionStorage.removeItem(RECOVERY_KEY); return false; }
+          applicationId = r.applicationId;
+          currentStep = Math.min(Math.max(0, r.currentStep || 0), stepEls.length - 1);
+          const d = r.formData;
+          for (const k in d) {
+            const el = form.elements[k];
+            if (!el) continue;
+            if (el.type === 'checkbox') el.checked = !!d[k];
+            else if (el.type === 'radio') el.checked = (el.value === d[k]);
+            else if (el.value !== d[k]) el.value = d[k] || '';
+          }
+          applicationCodeEl.textContent = applicationId;
+          renderSteps();
+          setMsg('Progreso restaurado. Puede continuar donde lo dejó.', false);
+          return true;
+        } catch (e) { return false; }
+      }
       function setMsg(msg, isError){
         formMsg.textContent = msg || '';
         formMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
@@ -842,6 +918,7 @@
         currentStep = idx;
         renderSteps();
         setMsg('');
+        saveRecovery();
       }
       function renderIndicator(){
         indicator.innerHTML = steps.map((step, idx) => `
@@ -896,6 +973,71 @@
           if (appId === applicationId) renderKycStatus();
         } catch (e) {}
       };
+      async function checkKycStatusFromMetamap(){
+        const kyc = getKycStatus();
+        if (!kyc?.verificationId) {
+          setMsg('Complete la verificación con Metamap primero.', true);
+          return;
+        }
+        const sbCfg = window.PPSupabaseConfig || {};
+        if (!sbCfg.url || !(sbCfg.anonKey || sbCfg.anon_key)) {
+          setMsg('Configura supabase-config.js con url y anonKey.', true);
+          return;
+        }
+        setMsg('Comprobando estado en Metamap…', false);
+        const supabase = window.supabase?.createClient(sbCfg.url, sbCfg.anonKey || sbCfg.anon_key);
+        if (!supabase?.functions?.invoke) {
+          setMsg('Carga el SDK de Supabase (supabase-js).', true);
+          return;
+        }
+        try {
+          const { data, error } = await supabase.functions.invoke('check-metamap-verification', {
+            body: { verificationId: kyc.verificationId, applicationId },
+          });
+          if (error) {
+            setMsg(error.message || 'Error al verificar.', true);
+            console.error('Supabase invoke error:', error);
+            return;
+          }
+          const status = (data?.status || '').toLowerCase();
+          const mapped = status === 'verified' ? 'approved' : status === 'rejected' ? 'rejected' : status === 'reviewneeded' ? 'reviewNeeded' : status;
+          setKycStatus({
+            status: mapped || 'pending_review',
+            identityId: kyc.identityId,
+            verificationId: kyc.verificationId,
+            error: data?.error || null,
+          });
+          renderKycStatus();
+          const savedOk = data?.savedToSupabase === true;
+          if (!savedOk) console.warn('Edge Function respondió pero savedToSupabase=false. Revisa logs en Supabase.', data);
+          if (status === 'verified') setMsg('¡Identidad verificada! Puede continuar.' + (savedOk ? '' : ' (No se guardó en Supabase)'), false);
+          else if (status === 'rejected') setMsg('Verificación rechazada. Revise el motivo.' + (savedOk ? '' : ' (No se guardó en Supabase)'), true);
+          else setMsg('Sigue en revisión. Intente de nuevo en unos minutos.' + (savedOk ? '' : ' (No se guardó en Supabase)'), savedOk ? false : true);
+        } catch (err) {
+          setMsg('Error. Abra la consola (F12) para más detalles.', true);
+          console.error('checkKycStatusFromMetamap:', err);
+        }
+      }
+      async function fetchKycStatusFromSupabase(){
+        const sbCfg = window.PPSupabaseConfig || {};
+        if (!sbCfg.url || !(sbCfg.anonKey || sbCfg.anon_key)) return;
+        const supabase = window.supabase?.createClient(sbCfg.url, sbCfg.anonKey || sbCfg.anon_key);
+        if (!supabase?.from) return;
+        try {
+          const { data, error } = await supabase.from('kyc_verifications').select('*').eq('application_id', applicationId).maybeSingle();
+          if (error || !data) return;
+          const kyc = {
+            status: data.status || 'pending_review',
+            identityId: data.identity_id || null,
+            verificationId: data.verification_id || null,
+            error: (data.error_message || data.error_code || data.error_type) ? { message: data.error_message, code: data.error_code, type: data.error_type } : null,
+            completedAt: data.completed_at ? new Date(data.completed_at).getTime() : null,
+            updatedAt: data.updated_at ? new Date(data.updated_at).getTime() : null
+          };
+          setKycStatus(kyc);
+          renderKycStatus();
+        } catch (e) {}
+      }
       window.getKycVerificationsForSupabase = function(){
         try {
           const raw = localStorage.getItem(KYC_STATUS_KEY);
@@ -1126,6 +1268,7 @@
         return payload;
       }
       function resetFormAfterSubmit(){
+        try { sessionStorage.removeItem(RECOVERY_KEY); } catch(_){}
         form.reset();
         currentStep = 0;
         applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
@@ -1149,8 +1292,15 @@
       prevBtn.addEventListener('click', goPrev);
       nextBtn.addEventListener('click', goNext);
       saveDraftBtn.addEventListener('click', () => {
-        persist('draft');
-        setMsg('Borrador guardado en la cola local de onboarding.');
+        try {
+          persist('draft');
+          window.__metamapModalOpen = false;
+          window.__formSavedAfterDraft = true;
+          setMsg('Borrador guardado. Puede recargar sin perder datos.', false);
+        } catch (err) {
+          setMsg('Error al guardar. Revise la consola (F12).', true);
+          console.error('persist error:', err);
+        }
       });
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -1179,8 +1329,13 @@
       }
 
       applicationCodeEl.textContent = applicationId;
-      prefillFromAccess();
-      renderSteps();
+      if (!restoreRecovery()) {
+        prefillFromAccess();
+        renderSteps();
+      }
+      fetchKycStatusFromSupabase();
+      form.addEventListener('input', saveRecovery);
+      form.addEventListener('change', saveRecovery);
       setupPdfUpload();
       form.elements.repEmail?.addEventListener('input', () => { if (currentStep === 1) updateMetamapMetadata(); });
       form.elements.repEmail?.addEventListener('change', () => { if (currentStep === 1) updateMetamapMetadata(); });
@@ -1194,6 +1349,8 @@
           setMsg('Complete o cancele la verificación de identidad antes de salir.', true);
         }
       }, true);
+      document.getElementById('kyc-check-status-btn-loading')?.addEventListener('click', checkKycStatusFromMetamap);
+      document.getElementById('kyc-check-status-btn-review')?.addEventListener('click', checkKycStatusFromMetamap);
       document.getElementById('kyc-retry-btn')?.addEventListener('click', () => {
         setKycStatus(null);
         renderKycStatus();
@@ -1208,14 +1365,22 @@
         metamapBtn.addEventListener('metamap:userFinishedSdk', (e) => {
           setMetamapModalOpen(false);
           const d = e.detail || {};
+          const identityId = d.identityId || d.identity_id;
+          const verificationId = d.verificationId || d.verification_id;
+          if (!verificationId) {
+            console.warn('Metamap userFinishedSdk: sin verificationId. detail=', d);
+            setMsg('No se recibió el ID de verificación. Intente de nuevo o haga clic en "Verificar estado".', true);
+            return;
+          }
           setKycStatus({
             status: 'pending_review',
-            identityId: d.identityId,
-            verificationId: d.verificationId,
+            identityId: identityId,
+            verificationId: verificationId,
             completedAt: Date.now()
           });
           renderKycStatus();
-          setMsg('En espera de validación. Puede tomar hasta 5 minutos.', false);
+          setMsg('Verificando estado automáticamente…', false);
+          setTimeout(function(){ checkKycStatusFromMetamap(); }, 2000);
         });
         metamapBtn.addEventListener('metamap:exitedSdk', () => {
           setMetamapModalOpen(false);
@@ -1247,8 +1412,8 @@
       var backdrop = document.getElementById('leaveConfirmBackdrop');
       var portalLink = document.getElementById('portalLink');
 
-      function markDirty(){ formDirty = true; }
-      function markSaved(){ formSaved = true; formDirty = false; }
+      function markDirty(){ formDirty = true; window.__formSavedAfterDraft = false; }
+      function markSaved(){ formSaved = true; formDirty = false; window.__formSavedAfterDraft = true; }
 
       if (form) {
         form.addEventListener('input', markDirty);
@@ -1256,7 +1421,9 @@
       }
 
       window.addEventListener('beforeunload', function(e){
-        if (formDirty && !formSaved) e.preventDefault();
+        if (window.__formSavedAfterDraft) return;
+        if (window.__metamapModalOpen) e.preventDefault();
+        // No bloquear recarga: sessionStorage recupera progreso al refrescar
       });
 
       function showLeaveModal(href){
