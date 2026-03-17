@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
   <!-- Bloquea sdk.metamap.com/tracker.js (evita errores 403/nosniff). El botón usa web-button.metamap.com -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com;">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https:;">
   <title>Onboarding aliado — Punto Pago</title>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="compliance-lists.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
   <style>
     html,body{background:#fff !important}
     body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
@@ -80,6 +82,7 @@
     .kyc-error-detail{padding:10px 14px;margin-top:8px;border-radius:10px;background:rgba(239,68,68,.1);color:#b91c1c;font-size:13px;line-height:1.4}
     @keyframes kyc-spin{to{transform:rotate(360deg)}}
     .ob-checkbox-input{appearance:auto;-webkit-appearance:checkbox;accent-color:#5462e6;cursor:pointer}
+    .ob-marker.leaflet-marker-icon{border:none !important;background:transparent !important}
     @media (max-width: 980px){
       .ob-layout{grid-template-columns:1fr}
       .ob-sidebar{position:relative;top:auto}
@@ -657,30 +660,60 @@
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">3. Dirección y operación comercial</h2>
-                <p class="text-sm text-gray-500 mt-1">Ubicación, cobertura y estimados de uso.</p>
+                <p class="text-sm text-gray-500 mt-1">Ubicación exacta del negocio (Panamá) y estimados de uso.</p>
               </div>
               <div class="pp-card-body space-y-4">
-                <div class="ob-grid">
-                  <div>
-                    <label class="pp-label">País *</label>
-                    <input name="country" class="pp-field" type="text" required value="Chile">
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <p class="text-sm text-slate-700 mb-3"><strong>En Panamá las direcciones no tienen nomenclatura estándar.</strong> Usamos mapa y descripción detallada para ubicar su negocio con precisión.</p>
+                  <div class="ob-grid">
+                    <div>
+                      <label class="pp-label">Provincia *</label>
+                      <select name="province" id="province" class="pp-field -select" required>
+                        <option value="">Selecciona</option>
+                        <option>Bocas del Toro</option>
+                        <option>Chiriquí</option>
+                        <option>Coclé</option>
+                        <option>Colón</option>
+                        <option>Darién</option>
+                        <option>Emberá-Wounaan</option>
+                        <option>Guna Yala</option>
+                        <option>Herrera</option>
+                        <option>Los Santos</option>
+                        <option>Ngäbe-Buglé</option>
+                        <option>Panamá</option>
+                        <option>Panamá Oeste</option>
+                        <option>Veraguas</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="pp-label">Distrito *</label>
+                      <input name="district" class="pp-field" type="text" required placeholder="Ej: Panamá, San Miguelito">
+                    </div>
+                    <div>
+                      <label class="pp-label">Corregimiento / Barrio *</label>
+                      <input name="corregimiento" class="pp-field" type="text" required placeholder="Ej: Bella Vista, Calidonia">
+                    </div>
                   </div>
-                  <div>
-                    <label class="pp-label">Región / estado *</label>
-                    <input name="region" class="pp-field" type="text" required>
+                  <div class="mt-3">
+                    <label class="pp-label">Dirección detallada *</label>
+                    <textarea name="businessAddress" class="pp-field -area" required placeholder="Calle, edificio, local, piso, número. Ej: Av. Central, Edificio XYZ, Local 5, frente a..."></textarea>
                   </div>
-                  <div>
-                    <label class="pp-label">Ciudad *</label>
-                    <input name="city" class="pp-field" type="text" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Comuna / municipio</label>
-                    <input name="district" class="pp-field" type="text">
+                  <div class="mt-3">
+                    <label class="pp-label">Puntos de referencia</label>
+                    <input name="addressLandmarks" class="pp-field" type="text" placeholder="Ej: 50 m antes del super X, detrás de la farmacia Y">
                   </div>
                 </div>
                 <div>
-                  <label class="pp-label">Dirección comercial *</label>
-                  <textarea name="businessAddress" class="pp-field -area" required></textarea>
+                  <label class="pp-label">Ubicación en mapa *</label>
+                  <p class="text-xs text-slate-500 mb-2">Mueva el pin al lugar exacto del negocio. Puede usar &quot;Usar mi ubicación&quot; si está en el sitio.</p>
+                  <div class="flex gap-2 mb-2">
+                    <button type="button" id="btnUseMyLocation" class="pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm"><i class="fa-solid fa-location-crosshairs mr-2"></i>Usar mi ubicación</button>
+                    <span id="mapCoordsDisplay" class="text-xs text-slate-600 self-center"></span>
+                  </div>
+                  <div id="addressMap" style="height:320px;border-radius:14px;border:1px solid #e2e8f0;"></div>
+                  <input type="hidden" name="addressLat" id="addressLat">
+                  <input type="hidden" name="addressLng" id="addressLng">
+                  <input type="hidden" name="country" value="Panamá">
                 </div>
                 <div class="ob-grid-3">
                   <div>
@@ -695,7 +728,7 @@
                   </div>
                   <div>
                     <label class="pp-label">Ticket promedio *</label>
-                    <input name="averageTicket" class="pp-field" type="text" required placeholder="Ej: CLP 18.000">
+                    <input name="averageTicket" class="pp-field" type="text" required placeholder="Ej: USD 25 o PAB">
                   </div>
                   <div>
                     <label class="pp-label">Canal principal *</label>
@@ -806,7 +839,7 @@
       const steps = [
         { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
         { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
-        { title: 'Operación', desc: 'Dirección, alcance y volumen' },
+        { title: 'Dirección', desc: 'Mapa, provincia, barrio y operación' },
         { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
         { title: 'Resumen', desc: 'Confirmación para revisión' }
       ];
@@ -860,6 +893,7 @@
         const data = {};
         for (const [key, value] of fd.entries()) {
           if (data[key] !== undefined) continue;
+          if (value instanceof File || value instanceof Blob) continue;
           data[key] = value;
         }
         data.acceptTerms = form.elements.acceptTerms.checked;
@@ -869,6 +903,54 @@
           data.businessDescriptionPdfName = pdfInput.files[0].name;
         }
         return data;
+      }
+      const IDB_NAME = 'pp_onboarding_recovery';
+      const IDB_STORE = 'files';
+      function savePdfToIndexedDB(file, cb){ if (!file) { if (cb) cb(); return; }
+        try {
+          const req = indexedDB.open(IDB_NAME, 1);
+          req.onupgradeneeded = function(){ req.result.createObjectStore(IDB_STORE); };
+          req.onsuccess = function(){
+            const tx = req.result.transaction(IDB_STORE, 'readwrite');
+            tx.objectStore(IDB_STORE).put({ blob: file, name: file.name }, 'pdf');
+            tx.oncomplete = function(){ if (cb) cb(); };
+          };
+          req.onerror = function(){ if (cb) cb(); };
+        } catch(e){ if (cb) cb(); }
+      }
+      function clearPdfFromIndexedDB(cb){ try {
+        const req = indexedDB.open(IDB_NAME, 1);
+        req.onupgradeneeded = function(){ req.result.createObjectStore(IDB_STORE); };
+        req.onsuccess = function(){
+          const tx = req.result.transaction(IDB_STORE, 'readwrite');
+          tx.objectStore(IDB_STORE).delete('pdf');
+          tx.oncomplete = function(){ if (cb) cb(); };
+        };
+        req.onerror = function(){ if (cb) cb(); };
+      } catch(e){ if (cb) cb(); }
+      function restorePdfFromIndexedDB(cb){
+        try {
+          const req = indexedDB.open(IDB_NAME, 1);
+          req.onupgradeneeded = function(){ req.result.createObjectStore(IDB_STORE); };
+          req.onsuccess = function(){
+            const tx = req.result.transaction(IDB_STORE, 'readonly');
+            const getReq = tx.objectStore(IDB_STORE).get('pdf');
+            getReq.onsuccess = function(){
+              var row = getReq.result;
+              if (!row || !row.blob || !pdfInput) { if (cb) cb(); return; }
+              try {
+                var file = row.blob instanceof File ? row.blob : new File([row.blob], row.name || 'aviso.pdf', { type: row.blob.type || 'application/pdf' });
+                var dt = new DataTransfer();
+                dt.items.add(file);
+                pdfInput.files = dt.files;
+                if (pdfInfo) { pdfInfo.textContent = 'Restaurado: ' + file.name + ' (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)'; pdfInfo.classList.remove('hidden'); }
+              } catch(e2) {}
+              if (cb) cb();
+            };
+            getReq.onerror = function(){ if (cb) cb(); };
+          };
+          req.onerror = function(){ if (cb) cb(); };
+        } catch(e) { if (cb) cb(); }
       }
       let saveRecoveryTimer = null;
       function saveRecovery(){
@@ -882,6 +964,11 @@
               formData: data,
               savedAt: Date.now()
             }));
+            if (pdfInput && pdfInput.files && pdfInput.files[0]) {
+              savePdfToIndexedDB(pdfInput.files[0]);
+            } else {
+              clearPdfFromIndexedDB();
+            }
           } catch (e) {}
         }, 800);
       }
@@ -891,7 +978,7 @@
           if (!raw) return false;
           const r = JSON.parse(raw);
           if (!r.applicationId || !r.formData) return false;
-          if (Date.now() - (r.savedAt || 0) > 24 * 60 * 60 * 1000) { sessionStorage.removeItem(RECOVERY_KEY); return false; }
+          if (Date.now() - (r.savedAt || 0) > 24 * 60 * 60 * 1000) { sessionStorage.removeItem(RECOVERY_KEY); clearPdfFromIndexedDB(function(){}); return false; }
           applicationId = r.applicationId;
           currentStep = Math.min(Math.max(0, r.currentStep || 0), stepEls.length - 1);
           const d = r.formData;
@@ -905,6 +992,7 @@
           applicationCodeEl.textContent = applicationId;
           renderSteps();
           setMsg('Progreso restaurado. Puede continuar donde lo dejó.', false);
+          restorePdfFromIndexedDB(function(){});
           return true;
         } catch (e) { return false; }
       }
@@ -1033,6 +1121,7 @@
         submitBtn.classList.toggle('is-hidden', currentStep !== stepEls.length - 1);
         if (currentStep === stepEls.length - 1) renderSummary();
         if (currentStep === 1) { updateMetamapMetadata(); renderKycStatus(); }
+        if (currentStep === 2) { initAddressMapIfNeeded(); }
         renderIndicator();
         updateProgress();
       }
@@ -1120,6 +1209,14 @@
             return false;
           }
         }
+        if (stepIndex === 2) {
+          const lat = (form.elements.addressLat?.value || '').trim();
+          const lng = (form.elements.addressLng?.value || '').trim();
+          if (!lat || !lng) {
+            setMsg('Debe marcar la ubicación en el mapa moviendo el pin o usando "Usar mi ubicación".', true);
+            return false;
+          }
+        }
         if (stepIndex === 1) {
           const companyVal = (form.elements.companyPhone?.value || '').trim();
           if (!companyVal) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
@@ -1156,7 +1253,9 @@
           ['Celular representante', data.repCellPhone || '—'],
           ['Ocupación rep. legal', data.repOcupacion || '—'],
           ['Actividad rep. legal', data.repActividad || '—'],
-          ['Ubicación', [data.country, data.region, data.city, data.district].filter(Boolean).join(' / ')],
+          ['Ubicación', [data.province, data.district, data.corregimiento].filter(Boolean).join(' / ')],
+          ['Dirección', data.businessAddress || '—'],
+          ['Coordenadas', (data.addressLat && data.addressLng) ? `${data.addressLat}, ${data.addressLng}` : '—'],
           ['Canal principal', data.channelType],
           ['Ventas estimadas', data.estimatedMonthlySales],
           ['Banco / cuenta', [data.bankName, data.bankAccountType, data.bankAccountNumber].filter(Boolean).join(' · ')],
@@ -1216,6 +1315,7 @@
       }
       function resetFormAfterSubmit(){
         try { sessionStorage.removeItem(RECOVERY_KEY); } catch(_){}
+        clearPdfFromIndexedDB(function(){});
         form.reset();
         currentStep = 0;
         applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
@@ -1285,6 +1385,57 @@
       form.elements.repCellPhone?.addEventListener('blur', function(){ const r = isValidPanamaMobile(this.value); showPhoneError('repCellPhone', r.valid ? '' : r.message); });
       form.elements.repCellPhone?.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('repCellPhone', ''); });
       setupPdfUpload();
+      let addressMapInstance = null;
+      let addressMarker = null;
+      const PANAMA_CENTER = [8.9945, -79.5199];
+      function initAddressMapIfNeeded(){
+        const mapEl = document.getElementById('addressMap');
+        const latEl = document.getElementById('addressLat');
+        const lngEl = document.getElementById('addressLng');
+        const coordsDisplay = document.getElementById('mapCoordsDisplay');
+        if (!mapEl || !window.L) return;
+        if (addressMapInstance) {
+          addressMapInstance.invalidateSize();
+          return;
+        }
+        const savedLat = parseFloat(latEl?.value);
+        const savedLng = parseFloat(lngEl?.value);
+        const startCenter = (!isNaN(savedLat) && !isNaN(savedLng)) ? [savedLat, savedLng] : PANAMA_CENTER;
+        addressMapInstance = L.map('addressMap').setView(startCenter, 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(addressMapInstance);
+        const markerIcon = L.divIcon({ className: 'ob-marker', html: '<div style="width:32px;height:32px;background:#5462e6;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,.3);"></div>', iconSize: [32,32], iconAnchor: [16,16] });
+        addressMarker = L.marker(startCenter, { draggable: true, icon: markerIcon }).addTo(addressMapInstance);
+        if (!isNaN(savedLat) && !isNaN(savedLng)) {
+          addressMarker.setLatLng([savedLat, savedLng]);
+          addressMapInstance.setView([savedLat, savedLng], 14);
+        }
+        function updateCoords(latLng){
+          const lat = latLng.lat.toFixed(6);
+          const lng = latLng.lng.toFixed(6);
+          if (latEl) latEl.value = lat;
+          if (lngEl) lngEl.value = lng;
+          if (coordsDisplay) coordsDisplay.textContent = lat + ', ' + lng;
+        }
+        addressMarker.on('dragend', function(e){ updateCoords(e.target.getLatLng()); saveRecovery(); });
+        updateCoords(addressMarker.getLatLng());
+        document.getElementById('btnUseMyLocation')?.addEventListener('click', function(){
+          if (!navigator.geolocation) { setMsg('Su navegador no admite geolocalización.', true); return; }
+          this.disabled = true;
+          navigator.geolocation.getCurrentPosition(
+            function(pos){
+              const lat = pos.coords.latitude;
+              const lng = pos.coords.longitude;
+              addressMarker.setLatLng([lat, lng]);
+              addressMapInstance.setView([lat, lng], 17);
+              updateCoords({ lat, lng });
+              saveRecovery();
+              document.getElementById('btnUseMyLocation').disabled = false;
+              setMsg('Ubicación actualizada.', false);
+            },
+            function(){ setMsg('No se pudo obtener la ubicación. Verifique los permisos.', true); document.getElementById('btnUseMyLocation').disabled = false; }
+          );
+        });
+      }
       form.elements.repEmail?.addEventListener('input', () => { if (currentStep === 1) updateMetamapMetadata(); });
       form.elements.repEmail?.addEventListener('change', () => { if (currentStep === 1) updateMetamapMetadata(); });
       window.addEventListener('beforeunload', (e) => {
