@@ -153,8 +153,8 @@
         return;
       } catch(e) {}
     }
-    const s = getSession();
-    if (s?.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
+    var s = getSession();
+    if (s && s.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
     else location.href = buildAppUrl('agents/recharge.html');
   }
 

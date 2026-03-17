@@ -429,10 +429,12 @@
     const fields = getStepFields(stepIndex);
     for (const field of fields) {
       if (!field.checkValidity()) {
-        const label = getFieldLabel(field);
+        var label = getFieldLabel(field);
         setMsg('Falta completar: ' + label + '.', true);
         field.focus();
-        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        try {
+          if (document.body) field.scrollIntoView();
+        } catch (e) {}
         field.reportValidity();
         return false;
       }
