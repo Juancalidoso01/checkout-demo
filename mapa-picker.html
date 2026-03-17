@@ -72,9 +72,31 @@
           var pos = marker ? marker.getLatLng() : { lat: lat, lng: lng };
           try {
             if (window.parent !== window) {
-              window.parent.postMessage({ type: 'mapa-picker-done', lat: pos.lat, lng: pos.lng }, '*');
+              var received = false;
+              if (typeof window.parent.__obReceiveMapCoords === 'function') {
+                try {
+                  window.parent.__obReceiveMapCoords(pos.lat, pos.lng);
+                  received = true;
+                } catch (e) {}
+              }
+              if (!received) {
+                window.parent.postMessage({ type: 'mapa-picker-done', lat: pos.lat, lng: pos.lng }, '*');
+              }
+            } else {
+              var txt = pos.lat.toFixed(6) + ', ' + pos.lng.toFixed(6);
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(txt).then(function() {
+                  alert('Coordenadas copiadas: ' + txt + '\n\nPara guardarlas en el formulario, abra onboarding.html, vaya al paso Dirección y haga clic en "Abrir mapa". Dentro del mapa, haga clic en "Listo".');
+                }).catch(function() {
+                  alert('Coordenadas: ' + txt + '\n\nCópielas manualmente. Para usarlas en el formulario, abra onboarding.html → Dirección → "Abrir mapa" → "Listo".');
+                });
+              } else {
+                alert('Coordenadas: ' + txt + '\n\nPara guardarlas en el formulario, abra onboarding.html, vaya al paso Dirección y haga clic en "Abrir mapa".');
+              }
             }
-          } catch (err) {}
+          } catch (err) {
+            alert('Error: ' + (err.message || 'No se pudo enviar'));
+          }
         };
       }
 

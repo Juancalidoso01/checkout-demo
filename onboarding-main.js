@@ -1,4 +1,4 @@
-!function(){
+(function(){
   function init(){
   const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
   const ACCESS_KEY = 'pp_onboarding_access_v1';
@@ -832,9 +832,7 @@
     if (mapModal) { mapModal.style.display = 'none'; mapModal.classList.add('hidden'); mapModal.setAttribute('aria-hidden', 'true'); }
     if (mapPickerFrame) mapPickerFrame.src = 'about:blank';
   }
-  window.addEventListener('message', function(e){
-    if (!e.data || e.data.type !== 'mapa-picker-done') return;
-    var lat = e.data.lat, lng = e.data.lng;
+  function applyMapCoordsFromPicker(lat, lng) {
     var latStr = (typeof lat === 'number' && !isNaN(lat)) ? lat.toFixed(6) : String(lat || '');
     var lngStr = (typeof lng === 'number' && !isNaN(lng)) ? lng.toFixed(6) : String(lng || '');
     var latEl = form.elements.addressLat, lngEl = form.elements.addressLng;
@@ -846,6 +844,11 @@
     closeMapModal();
     saveRecovery();
     setMsg('Ubicación guardada.', false);
+  }
+  window.__obReceiveMapCoords = applyMapCoordsFromPicker;
+  window.addEventListener('message', function(e){
+    if (!e.data || e.data.type !== 'mapa-picker-done') return;
+    applyMapCoordsFromPicker(e.data.lat, e.data.lng);
   });
   function openMapModal(){
     if (!mapModal || !mapPickerFrame) return;
@@ -863,9 +866,6 @@
     mapModal.setAttribute('aria-hidden', 'false');
   }
   window.__obOpenMapModal = openMapModal;
-  if (mapModal && btnOpenMap && mapPickerFrame) {
-    btnOpenMap.addEventListener('click', function(e){ e.preventDefault(); openMapModal(); });
-  }
   if (mapModal && mapModalClose) {
     mapModalClose.addEventListener('click', closeMapModal);
   }
@@ -878,10 +878,15 @@
     var latEl = form.elements.addressLat, lngEl = form.elements.addressLng;
     var cd = document.getElementById('mapCoordsDisplay');
     var box = document.getElementById('mapCoordsBox');
+    var btn = document.getElementById('btnUseMyLocationQuick');
+    var btnText = document.getElementById('btnUseMyLocationQuickText');
     if (latEl) latEl.value = latStr;
     if (lngEl) lngEl.value = lngStr;
     if (cd) cd.textContent = latStr + ', ' + lngStr;
     if (box) { box.style.display = 'flex'; box.classList.remove('hidden'); }
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.textContent = 'Leer mi ubicación';
+    setLocationStatus('Ubicación guardada (' + source + ')', false);
     if (addressParts && addressParts.length) {
       var addrStr = addressParts.filter(Boolean).join(', ');
       var addrInput = document.getElementById('addressSearch');
@@ -892,10 +897,20 @@
     saveRecovery();
     setMsg('Ubicación guardada (' + source + '). No necesita abrir el mapa.', false);
   }
+  function setLocationStatus(txt, isError) {
+    var el = document.getElementById('obLocationStatus');
+    if (el) {
+      el.textContent = txt || '';
+      el.className = 'text-sm font-medium min-w-[200px] ' + (isError ? 'text-red-600' : 'text-slate-600');
+    }
+    if (txt) setMsg(txt, isError);
+  }
   function readMyLocation() {
     var btn = document.getElementById('btnUseMyLocationQuick');
+    var btnText = document.getElementById('btnUseMyLocationQuickText');
     if (btn) btn.disabled = true;
-    setMsg('Obteniendo ubicación...', false);
+    if (btnText) btnText.textContent = 'Obteniendo...';
+    setLocationStatus('Obteniendo ubicación...', false);
     if (isMobileDevice()) {
       if (!navigator.geolocation) {
         fetchLocationByIP(btn);
@@ -905,9 +920,11 @@
         function(pos) {
           applyCoordsFromLocation(pos.coords.latitude, pos.coords.longitude, 'GPS', null);
           if (btn) btn.disabled = false;
+          if (btnText) btnText.textContent = 'Leer mi ubicación';
+          setLocationStatus('', false);
         },
         function(err) {
-          setMsg('Permiso denegado o GPS no disponible. Intentando ubicación por IP...', false);
+          setLocationStatus('Permiso denegado. Intentando por IP...', false);
           fetchLocationByIP(btn);
         },
         { timeout: 10000, maximumAge: 60000 }
@@ -917,11 +934,8 @@
     }
   }
   window.__obReadMyLocation = readMyLocation;
-  var btnUseMyLocationQuick = document.getElementById('btnUseMyLocationQuick');
-  if (btnUseMyLocationQuick) {
-    btnUseMyLocationQuick.addEventListener('click', function(e){ e.preventDefault(); readMyLocation(); });
-  }
   function fetchLocationByIP(btn) {
+    setLocationStatus('Obteniendo ubicación por IP...', false);
     function tryApply(data) {
       var lat = data.latitude != null ? data.latitude : data.lat;
       var lng = data.longitude != null ? data.longitude : data.lon;
@@ -932,22 +946,48 @@
       }
       return false;
     }
-    function fail() {
-      setMsg('No se pudo obtener la ubicación. Compruebe su conexión.', true);
+    function onFail() {
+      setLocationStatus('No se pudo obtener. Use "Abrir mapa" para ubicar manualmente.', true);
       if (btn) btn.disabled = false;
+      var bt = document.getElementById('btnUseMyLocationQuickText');
+      if (bt) bt.textContent = 'Leer mi ubicación';
     }
-    fetch('https://reallyfreegeoip.org/json/')
-      .then(function(r) { return r.json(); })
+    function tryFetch(url) {
+      return fetch(url).then(function(r) { return r.json(); });
+    }
+    tryFetch('https://ipapi.co/json/')
       .then(function(data) {
-        if (tryApply(data)) { if (btn) btn.disabled = false; return; }
-        return fetch('https://ipapi.co/json/').then(function(r2){ return r2.json(); });
+        if (tryApply(data)) {
+          if (btn) btn.disabled = false;
+          var bt = document.getElementById('btnUseMyLocationQuickText');
+          if (bt) bt.textContent = 'Leer mi ubicación';
+          return;
+        }
+        return tryFetch('https://reallyfreegeoip.org/json/');
       })
       .then(function(data2) {
         if (!data2) return;
-        if (tryApply(data2)) { if (btn) btn.disabled = false; return; }
-        fail();
+        if (tryApply(data2)) {
+          if (btn) btn.disabled = false;
+          var bt = document.getElementById('btnUseMyLocationQuickText');
+          if (bt) bt.textContent = 'Leer mi ubicación';
+          return;
+        }
+        onFail();
       })
-      .catch(fail);
+      .catch(function() {
+        tryFetch('https://reallyfreegeoip.org/json/')
+          .then(function(data3) {
+            if (data3 && tryApply(data3)) {
+              if (btn) btn.disabled = false;
+              var bt = document.getElementById('btnUseMyLocationQuickText');
+              if (bt) bt.textContent = 'Leer mi ubicación';
+            } else {
+              onFail();
+            }
+          })
+          .catch(function() { onFail(); });
+      });
   }
   var elRepEmail = form.elements.repEmail;
   if (elRepEmail) { elRepEmail.addEventListener('input', function(){ if (currentStep === 1) updateMetamapMetadata(); }); elRepEmail.addEventListener('change', function(){ if (currentStep === 1) updateMetamapMetadata(); }); }
@@ -962,7 +1002,7 @@
       setMsg('Complete o cancele la verificación de identidad antes de salir.', true);
     }
   }, true);
-  const metamapBtn = document.getElementById('metamap-btn');
+  var metamapBtn = document.getElementById('metamap-btn');
   if (metamapBtn) {
     metamapBtn.addEventListener('metamap:userStartedSdk', function() {
       setMetamapModalOpen(true);
@@ -998,4 +1038,4 @@
   } else {
     init();
   }
-}();
+})();
