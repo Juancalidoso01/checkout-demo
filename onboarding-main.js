@@ -171,11 +171,22 @@
     } catch (e) { return false; }
   }
   function setMsg(msg, isError){
-    if (!formMsg) return;
-    formMsg.textContent = msg || '';
-    formMsg.className = 'text-sm min-h-[20px] mt-2 ' + (isError ? 'text-red-600 font-semibold p-3 rounded-lg bg-red-50 border border-red-200' : 'text-slate-600');
-    formMsg.setAttribute('role', isError ? 'alert' : 'status');
-    if (msg && isError) {
+    if (formMsg) {
+      formMsg.textContent = msg || '';
+      formMsg.className = 'text-sm min-h-[20px] mt-2 ' + (isError ? 'text-red-600 font-semibold p-3 rounded-lg bg-red-50 border border-red-200' : 'text-slate-600');
+      formMsg.setAttribute('role', isError ? 'alert' : 'status');
+    }
+    var banner = document.getElementById('ob-step-error-banner');
+    if (banner) {
+      banner.textContent = msg || '';
+      banner.classList.toggle('hidden', !(msg && isError));
+      if (msg && isError) {
+        try {
+          if (document.body) banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (e) {}
+      }
+    }
+    if (msg && isError && formMsg) {
       try {
         if (document.body) formMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       } catch (e) {}
@@ -613,11 +624,12 @@
     return true;
   }
 
-  prevBtn.addEventListener('click', function(e) { e.preventDefault(); goPrev(); });
-  nextBtn.addEventListener('click', function(e) {
+  if (prevBtn) prevBtn.addEventListener('click', function(e) { e.preventDefault(); goPrev(); });
+  if (nextBtn) nextBtn.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
     try {
+      if (!form) { setMsg('Error de configuración: formulario no encontrado.', true); return; }
       goNext();
     } catch (err) {
       console.error('goNext error:', err);
