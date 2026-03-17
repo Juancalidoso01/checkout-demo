@@ -107,6 +107,10 @@
     .ob-hero::after{content:'';position:absolute;inset:-40px -20px auto auto;width:200px;height:200px;border-radius:999px;background:rgba(59,130,246,.08);filter:blur(24px)}
     .ob-chip{transition:transform .22s ease,box-shadow .22s ease}
     .ob-chip:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(84,98,230,.14)}
+    .ob-status-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+    .ob-status-pill.ob-status-unsaved{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+    .ob-status-pill.ob-status-saved{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+    .ob-status-pill.ob-status-saved::before{content:'';width:6px;height:6px;border-radius:999px;background:currentColor}
     /* Palabras con palpitación/subrayado elegante */
     .ob-accent{display:inline-block;position:relative;padding:0 .06em;border-radius:.2em;background:linear-gradient(135deg,rgba(84,98,230,.14),rgba(59,130,246,.1));box-shadow:0 8px 20px rgba(84,98,230,.1);animation:obBeat 2s cubic-bezier(.2,.8,.2,1) infinite}
     .ob-accent::after{content:'';position:absolute;inset:-6px -8px;border-radius:.35em;background:radial-gradient(circle at 50% 50%,rgba(84,98,230,.2),transparent 65%);opacity:.7;filter:blur(8px);z-index:-1;animation:obGlow 2s ease-in-out infinite}
@@ -153,15 +157,21 @@
               <h1 class="text-2xl font-extrabold mt-3">Completa los <span class="ob-accent">datos</span> de tu negocio</h1>
               <p class="text-sm text-slate-600 mt-2 max-w-2xl">Llena cada sección para que podamos <span class="ob-accent">evaluar</span> tu solicitud. Al finalizar podrás enviar todo a <span class="ob-accent">revisión</span>.</p>
             </div>
-            <div class="flex items-center gap-3 shrink-0">
-              <span id="obProgressLabel" class="text-sm font-bold text-slate-700">0%</span>
-              <div class="ob-progress-bar w-28 md:w-36" aria-hidden="true">
-                <div id="obProgressFill" class="ob-progress-fill" style="width:0%"></div>
+            <div class="flex flex-wrap items-center gap-3 shrink-0">
+              <div class="flex items-center gap-2" id="obSaveStatusWrap">
+                <span id="obProgressLabel" class="text-sm font-bold text-slate-700">0%</span>
+                <div class="ob-progress-bar w-24 md:w-28" aria-hidden="true">
+                  <div id="obProgressFill" class="ob-progress-fill" style="width:0%"></div>
+                </div>
+                <span id="draftStatus" class="ob-status-pill ob-status-unsaved" aria-live="polite">Sin guardar</span>
               </div>
             </div>
           </div>
-          <div class="ob-progress-bar w-full" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Avance del formulario">
-            <div id="obProgressFillFull" class="ob-progress-fill" style="width:0%"></div>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="ob-progress-bar flex-1" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Avance del formulario">
+              <div id="obProgressFillFull" class="ob-progress-fill" style="width:0%"></div>
+            </div>
+            <span class="text-xs text-slate-500 shrink-0" id="applicationCodeLabel">Código: <span id="applicationCode">—</span></span>
           </div>
         </div>
       </div>
@@ -219,16 +229,6 @@
             </div>
           </div>
 
-          <div class="pp-card -soft overflow-hidden">
-            <div class="pp-card-head">
-              <h2 class="text-lg font-extrabold">Estado del registro</h2>
-            </div>
-            <div class="pp-card-body text-sm text-slate-600 space-y-2">
-              <div><strong>Código de solicitud:</strong> <span id="applicationCode">—</span></div>
-              <div><strong>Guardado:</strong> <span id="draftStatus">Sin guardar</span></div>
-              <div class="text-xs text-slate-500 pt-1 border-t border-slate-200 mt-2"><strong>Nota:</strong> Al enviar, tu caso pasará a revisión antes de asignar credenciales.</div>
-            </div>
-          </div>
         </aside>
 
         <section class="space-y-5">
@@ -903,7 +903,7 @@
               </div>
               <div class="flex gap-3 flex-wrap">
                 <button id="saveDraftBtn" type="button" class="pp-btn pp-btn-secondary">Guardar borrador</button>
-                <button id="submitBtn" type="submit" class="pp-btn pp-btn-primary">Enviar a revisión</button>
+                <button id="submitBtn" type="submit" class="pp-btn pp-btn-primary is-hidden" aria-hidden="true">Enviar a revisión</button>
               </div>
             </div>
 

@@ -299,7 +299,9 @@
     stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
     prevBtn.disabled = currentStep === 0;
     nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
-    submitBtn.classList.toggle('is-hidden', currentStep !== stepEls.length - 1);
+    const canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3,4].every(i => validateStepSilent(i));
+    submitBtn.classList.toggle('is-hidden', !canShowSubmit);
+    submitBtn.setAttribute('aria-hidden', canShowSubmit ? 'false' : 'true');
     if (currentStep === stepEls.length - 1) renderSummary();
     if (currentStep === 2) { updateMetamapMetadata(); renderKycStatus(); }
     if (currentStep === 3) { initAddressMapIfNeeded(); }
@@ -365,7 +367,9 @@
     });
   }
   function getStepFields(stepIndex){
-    return Array.from(stepEls[stepIndex].querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
+    const stepEl = stepEls[stepIndex];
+    if (!stepEl) return [];
+    return Array.from(stepEl.querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
   }
   function isValidPanamaMobile(v){
     const digits = (v||'').replace(/\D/g,'');
@@ -513,6 +517,8 @@
     writeApplications(items);
     applicationCodeEl.textContent = applicationId;
     draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : 'Borrador guardado';
+    draftStatusEl.classList.remove('ob-status-unsaved');
+    draftStatusEl.classList.add('ob-status-saved');
     return payload;
   }
   function resetFormAfterSubmit(){
@@ -523,6 +529,8 @@
     applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
     applicationCodeEl.textContent = applicationId;
     draftStatusEl.textContent = 'Sin guardar';
+    draftStatusEl.classList.remove('ob-status-saved');
+    draftStatusEl.classList.add('ob-status-unsaved');
     prefillFromAccess();
     renderSteps();
   }
