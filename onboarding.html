@@ -94,9 +94,39 @@
       .ob-grid,.ob-grid-3{grid-template-columns:1fr}
       .ob-summary dl{grid-template-columns:1fr}
     }
+    /* Listas desplegables: encima del contenido, sin recorte */
+    .form-step{overflow:visible !important}
+    #industry-suggestions,#repOcupacion-suggestions,#repActividad-suggestions{z-index:9999 !important;position:absolute !important;box-shadow:0 12px 28px rgba(0,0,0,.15) !important}
+    /* Cursor ring + efectos visuales (como onboarding-access) */
+    .cursor-ring{position:fixed;top:0;left:0;width:58px;height:58px;border-radius:999px;border:2px solid rgba(84,98,230,.82);background:transparent;pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .18s ease,height .18s ease,opacity .18s ease,border-color .18s ease,box-shadow .18s ease}
+    .cursor-ring.-visible{opacity:1}
+    .cursor-ring.-active{width:68px;height:68px;border-color:rgba(84,98,230,.96);box-shadow:0 0 0 6px rgba(84,98,230,.08)}
+    /* Hero mejorado: gradiente, blur orbs, palabras con palpitación */
+    .ob-hero{position:relative;overflow:hidden;border:1px solid rgba(84,98,230,.10);background:radial-gradient(circle at top left,rgba(97,113,255,.12),transparent 32%),linear-gradient(135deg,#ffffff 0%,#eef3ff 38%,#ffffff 100%);box-shadow:0 20px 50px rgba(15,23,42,.06)}
+    .ob-hero::before{content:'';position:absolute;inset:auto auto -30px -30px;width:160px;height:160px;border-radius:999px;background:rgba(84,98,230,.08);filter:blur(20px)}
+    .ob-hero::after{content:'';position:absolute;inset:-40px -20px auto auto;width:200px;height:200px;border-radius:999px;background:rgba(59,130,246,.08);filter:blur(24px)}
+    .ob-chip{transition:transform .22s ease,box-shadow .22s ease}
+    .ob-chip:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(84,98,230,.14)}
+    /* Palabras con palpitación/subrayado elegante */
+    .ob-accent{display:inline-block;position:relative;padding:0 .06em;border-radius:.2em;background:linear-gradient(135deg,rgba(84,98,230,.14),rgba(59,130,246,.1));box-shadow:0 8px 20px rgba(84,98,230,.1);animation:obBeat 2s cubic-bezier(.2,.8,.2,1) infinite}
+    .ob-accent::after{content:'';position:absolute;inset:-6px -8px;border-radius:.35em;background:radial-gradient(circle at 50% 50%,rgba(84,98,230,.2),transparent 65%);opacity:.7;filter:blur(8px);z-index:-1;animation:obGlow 2s ease-in-out infinite}
+    @keyframes obBeat{0%,100%{transform:scale(1)}12%{transform:scale(1.03)}24%{transform:scale(1)}36%{transform:scale(1.018)}48%{transform:scale(1)}}
+    @keyframes obGlow{0%,100%{opacity:.5;transform:scale(1)}20%{opacity:.9;transform:scale(1.04)}40%{opacity:.6;transform:scale(1.02)}}
+    /* Etapas: paso activo con pulso suave en el número */
+    .ob-step{transition:transform .24s ease,border-color .24s,box-shadow .24s,background .24s}
+    .ob-step:hover:not(.-active){transform:translateX(4px)}
+    .ob-step.-active .ob-step-index{animation:obStepPulse 2.2s ease-in-out infinite}
+    @keyframes obStepPulse{0%,100%{box-shadow:0 0 0 0 rgba(84,98,230,.25)}50%{box-shadow:0 0 0 8px rgba(84,98,230,0)}}
+    .pp-card,.ob-step{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
+    .pp-card:hover,.ob-step:hover{box-shadow:0 16px 36px rgba(15,23,42,.06)}
+    @media (hover:none),(prefers-reduced-motion:reduce){
+      .cursor-ring,.ob-accent,.ob-accent::after,.ob-step.-active .ob-step-index{animation:none !important}
+      .ob-chip:hover,.ob-step:hover{transform:none !important}
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-page-white">
+  <div id="cursorRing" class="cursor-ring" aria-hidden="true"></div>
   <nav class="ob-nav p-4 sticky top-0 z-40 pp-type">
     <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
       <div class="min-w-0">
@@ -120,8 +150,8 @@
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div class="ob-chip"><i class="fa-solid fa-store"></i> Registro de aliado</div>
-              <h1 class="text-2xl font-extrabold mt-3">Completa los datos de tu negocio</h1>
-              <p class="text-sm text-slate-600 mt-2 max-w-2xl">Llena cada sección para que podamos evaluar tu solicitud. Al finalizar podrás enviar todo a revisión.</p>
+              <h1 class="text-2xl font-extrabold mt-3">Completa los <span class="ob-accent">datos</span> de tu negocio</h1>
+              <p class="text-sm text-slate-600 mt-2 max-w-2xl">Llena cada sección para que podamos <span class="ob-accent">evaluar</span> tu solicitud. Al finalizar podrás enviar todo a <span class="ob-accent">revisión</span>.</p>
             </div>
             <div class="flex items-center gap-3 shrink-0">
               <span id="obProgressLabel" class="text-sm font-bold text-slate-700">0%</span>
@@ -141,7 +171,7 @@
           <div class="pp-card -soft" style="overflow:visible">
             <div class="pp-card-head">
               <h2 class="text-lg font-extrabold">Etapas</h2>
-              <p class="text-sm text-gray-500 mt-1">Completa los datos mínimos para pasar a evaluación.</p>
+              <p class="text-sm text-gray-500 mt-1">Completa los <span class="ob-accent">datos mínimos</span> para pasar a evaluación.</p>
             </div>
             <div class="pp-card-body space-y-3" id="stepIndicator" style="overflow:visible">
               <div class="ob-step -active cursor-pointer" data-step-idx="0" role="button" tabindex="0">
@@ -240,7 +270,7 @@
                     <label class="pp-label">Industria / rubro *</label>
                     <input name="industry" id="industry-autocomplete" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción de la lista" autocomplete="off">
                     <span class="text-xs text-slate-500 block mt-1">Obligatorio elegir una opción. Si no encuentra su rubro, seleccione &quot;Ocupación o actividad no enlistada&quot;.</span>
-                    <ul id="industry-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de industria"></ul>
+                    <ul id="industry-suggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de industria"></ul>
                     <script>
                       // --- Autocompletado Industria / rubro (lista completa + opción manual) ---
                       (function(){
@@ -669,13 +699,13 @@
                     <label class="pp-label">Ocupación del representante legal *</label>
                     <input name="repOcupacion" id="repOcupacion" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción" autocomplete="off">
                     <span class="text-xs text-slate-500 block mt-1">Obligatorio. Seleccione de la lista o &quot;Ocupación no listada&quot;.</span>
-                    <ul id="repOcupacion-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Ocupaciones"></ul>
+                    <ul id="repOcupacion-suggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Ocupaciones"></ul>
                   </div>
                   <div class="relative">
                     <label class="pp-label">Actividad del representante legal *</label>
                     <input name="repActividad" id="repActividad" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción" autocomplete="off">
                     <span class="text-xs text-slate-500 block mt-1">Obligatorio. Seleccione de la lista o &quot;Actividad no listada&quot;.</span>
-                    <ul id="repActividad-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Actividades"></ul>
+                    <ul id="repActividad-suggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Actividades"></ul>
                   </div>
                 </div>
                 <div class="pt-4 mt-4 border-t border-gray-200">
@@ -901,5 +931,18 @@
   </div>
 
   <script src="onboarding-leave-modal.js"></script>
+  <script>
+    (function(){
+      var cursorRing = document.getElementById('cursorRing');
+      var desktopCursor = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+      if (desktopCursor && cursorRing) {
+        var rafId = null, targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+        function render(){ currentX += (targetX - currentX) * 0.18; currentY += (targetY - currentY) * 0.18; cursorRing.style.transform = 'translate(' + currentX + 'px,' + currentY + 'px) translate(-50%,-50%)'; rafId = requestAnimationFrame(render); }
+        window.addEventListener('mousemove', function(e){ targetX = e.clientX; targetY = e.clientY; if (!cursorRing.classList.contains('-visible')){ currentX = targetX; currentY = targetY; cursorRing.classList.add('-visible'); } if (!rafId) rafId = requestAnimationFrame(render); });
+        window.addEventListener('mouseout', function(){ cursorRing.classList.remove('-visible'); });
+        document.querySelectorAll('a, button, input, select, textarea, .pp-card, .ob-step, label[for]').forEach(function(node){ node.addEventListener('mouseenter', function(){ cursorRing.classList.add('-active'); }); node.addEventListener('mouseleave', function(){ cursorRing.classList.remove('-active'); }); });
+      }
+    })();
+  </script>
 </body>
 </html>
