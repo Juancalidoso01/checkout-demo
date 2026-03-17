@@ -78,6 +78,7 @@
     .kyc-status-rejected{background:linear-gradient(135deg,#fef2f2 0%,#fee2e2 100%);border-color:#ef4444}
     .kyc-error-detail{padding:10px 14px;margin-top:8px;border-radius:10px;background:rgba(239,68,68,.1);color:#b91c1c;font-size:13px;line-height:1.4}
     @keyframes kyc-spin{to{transform:rotate(360deg)}}
+    .ob-checkbox-input{appearance:auto;-webkit-appearance:checkbox;accent-color:#5462e6;cursor:pointer}
     @media (max-width: 980px){
       .ob-layout{grid-template-columns:1fr}
       .ob-sidebar{position:relative;top:auto}
@@ -586,8 +587,8 @@
                   </div>
                   <div>
                     <label class="pp-label">Teléfono de atención a clientes *</label>
-                    <input name="companyPhone" class="pp-field" type="tel" placeholder="+507 6XXX XXXX" inputmode="tel" required>
-                    <span class="text-xs text-slate-500 mt-1 block">Número donde la empresa recibe reclamos. Formato: +507 6XXX XXXX (Panamá).</span>
+                    <input name="companyPhone" class="pp-field" type="tel" placeholder="+507 XXX XXXX" inputmode="tel" required>
+                    <span class="text-xs text-slate-500 mt-1 block">Número donde la empresa recibe reclamos. Celular o teléfono fijo (Panamá +507).</span>
                     <span id="companyPhoneError" class="text-xs text-red-600 hidden mt-1"></span>
                   </div>
                   <div>
@@ -595,8 +596,8 @@
                     <input name="repCellPhone" id="repCellPhone" class="pp-field" type="tel" placeholder="+507 6XXX XXXX" inputmode="tel" required>
                     <span class="text-xs text-slate-500 mt-1 block">Celular Panamá: +507 6XXX XXXX (8 dígitos, comienza por 6).</span>
                     <span id="repCellPhoneError" class="text-xs text-red-600 hidden mt-1"></span>
-                    <label class="flex items-start gap-3 mt-3 cursor-pointer">
-                      <input name="confirmPhoneOwnership" type="checkbox" class="mt-1.5 w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label class="ob-checkbox-row flex items-center gap-3 mt-3 cursor-pointer">
+                      <input name="confirmPhoneOwnership" type="checkbox" class="ob-checkbox-input w-5 h-5 rounded border-2 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 shrink-0" style="accent-color:#5462e6">
                       <span class="text-sm text-slate-700">Confirmo que este número me pertenece y es correcto.</span>
                     </label>
                   </div>
@@ -1101,8 +1102,8 @@
           }
         }
         if (stepIndex === 1) {
-          const companyRes = isValidPanamaMobile(form.elements.companyPhone?.value);
-          if (!companyRes.valid) { showPhoneError('companyPhone', companyRes.message); setMsg(companyRes.message, true); return false; }
+          const companyVal = (form.elements.companyPhone?.value || '').trim();
+          if (!companyVal) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
           showPhoneError('companyPhone', '');
           const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
           if (!cellRes.valid) { showPhoneError('repCellPhone', cellRes.message); setMsg(cellRes.message, true); return false; }
@@ -1259,8 +1260,7 @@
       }
       form.addEventListener('input', saveRecovery);
       form.addEventListener('change', saveRecovery);
-      form.elements.companyPhone?.addEventListener('blur', function(){ const r = isValidPanamaMobile(this.value); showPhoneError('companyPhone', r.valid ? '' : r.message); });
-      form.elements.companyPhone?.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('companyPhone', ''); });
+      form.elements.companyPhone?.addEventListener('blur', function(){ if ((this.value||'').trim()) showPhoneError('companyPhone', ''); });
       form.elements.repCellPhone?.addEventListener('blur', function(){ const r = isValidPanamaMobile(this.value); showPhoneError('repCellPhone', r.valid ? '' : r.message); });
       form.elements.repCellPhone?.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('repCellPhone', ''); });
       setupPdfUpload();

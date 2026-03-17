@@ -892,8 +892,8 @@ nav{ -webkit-transform: translateZ(0); transform: translateZ(0); will-change: tr
 .card{max-height:calc(100vh - 24px)}
 
 /* Mobile & cross-browser compatibility helpers (appended safely) */
-/* Reset native appearances on inputs across browsers */
-input,textarea,select{ -webkit-appearance:none; -moz-appearance:none; appearance:none }
+/* Reset native appearances on inputs across browsers (excluir checkbox/radio para que se vean) */
+input:not([type="checkbox"]):not([type="radio"]),textarea,select{ -webkit-appearance:none; -moz-appearance:none; appearance:none }
 
 /* Ensure backdrop-filter has vendor-prefixed and standard versions */
 .overlay-backdrop{ -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
