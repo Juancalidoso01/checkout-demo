@@ -65,7 +65,7 @@
     }
     data.acceptTerms = form.elements.acceptTerms.checked;
     data.needsApiIntegration = form.elements.needsApiIntegration.checked;
-    data.confirmPhoneOwnership = form.elements.confirmPhoneOwnership?.checked || false;
+    data.confirmPhoneOwnership = (form.elements.confirmPhoneOwnership && form.elements.confirmPhoneOwnership.checked) || false;
     if (pdfInput && pdfInput.files && pdfInput.files[0]) {
       data.businessDescriptionPdfName = pdfInput.files[0].name;
     }
@@ -187,10 +187,10 @@
       </div>`).join('');
     if (!html) return;
     indicator.innerHTML = html;
-    indicator.querySelectorAll('.ob-step[data-step-idx]').forEach(el => {
-      const idx = parseInt(el.getAttribute('data-step-idx'), 10);
-      el.addEventListener('click', () => goToStep(idx));
-      el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToStep(idx); } });
+    indicator.querySelectorAll('.ob-step[data-step-idx]').forEach(function(el) {
+      var idx = parseInt(el.getAttribute('data-step-idx'), 10);
+      el.addEventListener('click', function() { goToStep(idx); });
+      el.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToStep(idx); } });
     });
   }
   function updateProgress(){
@@ -241,9 +241,9 @@
         identity_id: kyc.identityId || null,
         verification_id: kyc.verificationId || null,
         status: kyc.status || 'pending_review',
-        error_message: kyc.error?.message || null,
-        error_code: kyc.error?.code || null,
-        error_type: kyc.error?.type || null,
+        error_message: (kyc.error && kyc.error.message) || null,
+        error_code: (kyc.error && kyc.error.code) || null,
+        error_type: (kyc.error && kyc.error.type) || null,
         completed_at: kyc.completedAt || null,
         updated_at: kyc.updatedAt || null
       }));
@@ -259,7 +259,7 @@
   function updateMetamapMetadata(){
     const btn = document.getElementById('metamap-btn');
     if (!btn) return;
-    const repEmail = form.elements.repEmail?.value || '';
+    const repEmail = (form.elements.repEmail && form.elements.repEmail.value) || '';
     const meta = {
       onboardingId: applicationId,
       email: repEmail
@@ -296,6 +296,7 @@
     if (currentStep === 2) { initAddressMapIfNeeded(); }
     renderIndicator();
     updateProgress();
+    updateFieldChecks();
   }
   function setupPdfUpload(){
     if (!pdfInput || !pdfDropzone) return;
@@ -315,17 +316,24 @@
       pdfInfo.textContent = msg;
       pdfInfo.classList.remove('hidden');
     }
+    function updatePdfCheck() {
+      var pdfChk = document.getElementById('pdf-check');
+      if (pdfChk) pdfChk.classList.toggle('-ok', !!(pdfInput && pdfInput.files && pdfInput.files[0]));
+    }
     function handleFiles(files){
       clearError();
-      if (!files || !files[0]) return;
-      const file = files[0];
+      if (!files || !files[0]) { updatePdfCheck(); return; }
+      var file = files[0];
       if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
         pdfInput.value = '';
         showError('Solo se permiten archivos en formato PDF.');
+        updatePdfCheck();
         return;
       }
-      const mb = (file.size / (1024 * 1024)).toFixed(2);
-      showInfo(`Seleccionado: ${file.name} (${mb} MB)`);
+      var mb = (file.size / (1024 * 1024)).toFixed(2);
+      showInfo('Seleccionado: ' + file.name + ' (' + mb + ' MB)');
+      updatePdfCheck();
+      updateFieldChecks();
     }
     pdfDropzone.addEventListener('dragover', function(e) {
       e.preventDefault();
@@ -351,9 +359,10 @@
       } catch (err) {}
       handleFiles(files);
     });
-    pdfInput.addEventListener('change', (e) => {
+    pdfInput.addEventListener('change', function(e) {
       handleFiles(e.target.files);
     });
+    updatePdfCheck();
   }
   function getStepFields(stepIndex){
     const stepEl = stepEls[stepIndex];
@@ -382,17 +391,22 @@
       if (!field.checkValidity()) return false;
     }
     if (stepIndex === 2) {
-      const lat = (form.elements.addressLat?.value || '').trim();
-      const lng = (form.elements.addressLng?.value || '').trim();
+      var elLat = form.elements.addressLat;
+      var elLng = form.elements.addressLng;
+      var lat = (elLat && elLat.value) ? String(elLat.value).trim() : '';
+      var lng = (elLng && elLng.value) ? String(elLng.value).trim() : '';
       if (!lat || !lng) return false;
     }
     if (stepIndex === 1) {
-      const companyVal = (form.elements.companyPhone?.value || '').trim();
+      var elCp = form.elements.companyPhone;
+      var elCell = form.elements.repCellPhone;
+      var elConfirm = form.elements.confirmPhoneOwnership;
+      var companyVal = (elCp && elCp.value) ? String(elCp.value).trim() : '';
       if (!companyVal) return false;
-      const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
+      var cellRes = isValidPanamaMobile(elCell ? elCell.value : '');
       if (!cellRes.valid) return false;
       if (!isKycCompleted()) return false;
-      if (!form.elements.confirmPhoneOwnership?.checked) return false;
+      if (!elConfirm || !elConfirm.checked) return false;
     }
     return true;
   }
@@ -424,22 +438,27 @@
       }
     }
         if (stepIndex === 2) {
-          const lat = (form.elements.addressLat?.value || '').trim();
-          const lng = (form.elements.addressLng?.value || '').trim();
-          if (!lat || !lng) {
+          var elLat2 = form.elements.addressLat;
+          var elLng2 = form.elements.addressLng;
+          var lat2 = (elLat2 && elLat2.value) ? String(elLat2.value).trim() : '';
+          var lng2 = (elLng2 && elLng2.value) ? String(elLng2.value).trim() : '';
+          if (!lat2 || !lng2) {
             setMsg('Debe marcar la ubicación en el mapa moviendo el pin o usando "Usar mi ubicación".', true);
             return false;
           }
         }
         if (stepIndex === 1) {
-          const companyVal = (form.elements.companyPhone?.value || '').trim();
-          if (!companyVal) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
+          var elCp2 = form.elements.companyPhone;
+          var elCell2 = form.elements.repCellPhone;
+          var elConfirm2 = form.elements.confirmPhoneOwnership;
+          var companyVal2 = (elCp2 && elCp2.value) ? String(elCp2.value).trim() : '';
+          if (!companyVal2) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
           showPhoneError('companyPhone', '');
-          const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
-          if (!cellRes.valid) { showPhoneError('repCellPhone', cellRes.message); setMsg(cellRes.message, true); return false; }
+          var cellRes2 = isValidPanamaMobile(elCell2 ? elCell2.value : '');
+          if (!cellRes2.valid) { showPhoneError('repCellPhone', cellRes2.message); setMsg(cellRes2.message, true); return false; }
           showPhoneError('repCellPhone', '');
           if (!isKycCompleted()) { setMsg('Debe completar la verificación de identidad para continuar.', true); return false; }
-          if (!form.elements.confirmPhoneOwnership?.checked) { setMsg('Debe confirmar que el número de celular es correcto.', true); return false; }
+          if (!elConfirm2 || !elConfirm2.checked) { setMsg('Debe confirmar que el número de celular es correcto.', true); return false; }
         }
     return true;
   }
@@ -568,7 +587,7 @@
       setMsg('Error al avanzar. Abra la consola (F12) para más detalles.', true);
     }
   });
-  saveDraftBtn.addEventListener('click', () => {
+  saveDraftBtn.addEventListener('click', function() {
     try {
       persist('draft');
       window.__metamapModalOpen = false;
@@ -579,7 +598,7 @@
       console.error('persist error:', err);
     }
   });
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
     for (let i = 0; i < stepEls.length - 1; i += 1) {
       if (!validateStep(i)) {
@@ -610,8 +629,53 @@
     prefillFromAccess();
     renderSteps();
   }
-  form.addEventListener('input', saveRecovery);
-  form.addEventListener('change', saveRecovery);
+  form.addEventListener('input', function(){ saveRecovery(); updateFieldChecks(); });
+  form.addEventListener('change', function(){ saveRecovery(); updateFieldChecks(); });
+
+  function updateFieldChecks() {
+    var stepEl = stepEls[currentStep];
+    if (!stepEl) return;
+    var fields = getStepFields(currentStep);
+    for (var i = 0; i < fields.length; i++) {
+      var field = fields[i];
+      var wrap = field.closest('.ob-field-wrap');
+      if (!wrap) continue;
+      var check = wrap.querySelector('.ob-field-check');
+      if (!check) continue;
+      var valid = field.checkValidity();
+      if (currentStep === 1 && field.name === 'repCellPhone') {
+        valid = valid && isValidPanamaMobile(field.value || '').valid;
+      }
+      if (currentStep === 1 && field.name === 'confirmPhoneOwnership') {
+        var elCell = form.elements.repCellPhone;
+        valid = valid && elCell && isValidPanamaMobile(elCell.value).valid && field.checked;
+      }
+      check.classList.toggle('-ok', !!valid);
+    }
+  }
+  function setupFieldChecks() {
+    for (var s = 0; s < stepEls.length; s++) {
+      var stepEl = stepEls[s];
+      var fields = stepEl.querySelectorAll('input, select, textarea');
+      for (var i = 0; i < fields.length; i++) {
+        var field = fields[i];
+        if (field.type === 'button' || field.type === 'submit' || field.type === 'file' || field.disabled) continue;
+        var wrap = field.closest('.ob-field-wrap');
+        if (!wrap) {
+          wrap = document.createElement('div');
+          wrap.className = 'ob-field-wrap';
+          field.parentNode.insertBefore(wrap, field);
+          wrap.appendChild(field);
+          var check = document.createElement('span');
+          check.className = 'ob-field-check';
+          check.setAttribute('aria-hidden', 'true');
+          check.innerHTML = '&#10003;';
+          wrap.appendChild(check);
+        }
+      }
+    }
+  }
+  setupFieldChecks();
   var elPhone = form.elements.companyPhone;
   if (elPhone) elPhone.addEventListener('blur', function(){ if ((this.value||'').trim()) showPhoneError('companyPhone', ''); });
   var elCell = form.elements.repCellPhone;
@@ -630,8 +694,8 @@
       addressMapInstance.invalidateSize();
       return;
     }
-    const savedLat = parseFloat(latEl?.value);
-    const savedLng = parseFloat(lngEl?.value);
+    var savedLat = parseFloat(latEl && latEl.value ? latEl.value : '');
+    var savedLng = parseFloat(lngEl && lngEl.value ? lngEl.value : '');
     const startCenter = (!isNaN(savedLat) && !isNaN(savedLng)) ? [savedLat, savedLng] : PANAMA_CENTER;
     addressMapInstance = L.map('addressMap').setView(startCenter, 14);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(addressMapInstance);

@@ -39,22 +39,27 @@
   }
 
   if (backdrop) {
-    document.getElementById('leaveConfirmSave')?.addEventListener('click', function(){
+    var btnSave = document.getElementById('leaveConfirmSave');
+    if (btnSave) btnSave.addEventListener('click', function(){
       var btn = document.getElementById('saveDraftBtn');
       if (btn) { btn.click(); markSaved(); }
       hideLeaveModal();
       if (pendingHref) location.href = pendingHref;
     });
-    document.getElementById('leaveConfirmDiscard')?.addEventListener('click', function(){
+    var btnDiscard = document.getElementById('leaveConfirmDiscard');
+    if (btnDiscard) btnDiscard.addEventListener('click', function(){
       var h = pendingHref;
       hideLeaveModal();
       if (h) location.href = h;
     });
-    document.getElementById('leaveConfirmCancel')?.addEventListener('click', function(){
+    var btnCancel = document.getElementById('leaveConfirmCancel');
+    if (btnCancel) btnCancel.addEventListener('click', function(){
       hideLeaveModal();
     });
   }
 
-  document.getElementById('saveDraftBtn')?.addEventListener('click', markSaved);
-  document.getElementById('onboardingForm')?.addEventListener('submit', markSaved);
+  var saveBtn = document.getElementById('saveDraftBtn');
+  if (saveBtn) saveBtn.addEventListener('click', markSaved);
+  var obForm = document.getElementById('onboardingForm');
+  if (obForm) obForm.addEventListener('submit', markSaved);
 })();
