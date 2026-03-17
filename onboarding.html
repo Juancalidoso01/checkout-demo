@@ -596,43 +596,24 @@
                 <div class="pt-4 mt-4 border-t border-gray-200">
                   <h3 class="text-base font-bold text-gray-800 mb-2">Validación de identidad (KYC)</h3>
                   <p class="text-sm text-gray-600 mb-3">El representante legal debe completar la verificación de identidad para continuar con el proceso.</p>
-                  <p class="text-xs text-slate-400 mb-2">Si aparecen avisos de &quot;tracker&quot; o 403 en la consola al abrir la verificación, son inofensivos y no afectan el proceso.</p>
                   <div id="metamap-kyc-container">
                     <div id="kyc-status-panel" class="hidden">
-                      <div id="kyc-status-loading" class="kyc-status-loading hidden">
-                        <div class="kyc-spinner" aria-hidden="true"></div>
-                        <div class="flex-1">
-                          <div class="font-semibold text-slate-800">Validando identidad…</div>
-                          <div class="text-sm text-slate-600 mt-0.5">MetaMap puede tomar hasta 5 minutos. No cierre esta ventana.</div>
-                          <button type="button" id="kyc-check-status-btn-loading" class="mt-3 text-sm font-semibold text-indigo-600 hover:text-indigo-700 underline">Verificar estado</button>
-                        </div>
-                      </div>
-                      <div id="kyc-status-review" class="kyc-status-loading kyc-status-review hidden">
-                        <i class="fa-solid fa-clock text-amber-500 text-xl"></i>
-                        <div class="flex-1">
-                          <div class="font-semibold text-amber-900">Espera de revisión</div>
-                          <div class="text-sm text-amber-800 mt-0.5">Un verificador revisará manualmente. Te notificaremos cuando esté listo.</div>
-                          <button type="button" id="kyc-check-status-btn-review" class="mt-3 text-sm font-semibold text-amber-700 hover:text-amber-800 underline">Verificar estado</button>
-                        </div>
-                      </div>
-                      <div id="kyc-status-approved" class="kyc-status-loading kyc-status-approved hidden">
-                        <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+                      <div class="kyc-status-loading kyc-status-approved flex items-center gap-3 p-4 rounded-xl">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-2xl"></i>
                         <div>
-                          <div class="font-semibold text-emerald-800">Identidad verificada</div>
-                          <div class="text-sm text-emerald-700 mt-0.5">Puede continuar con el proceso.</div>
-                        </div>
-                      </div>
-                      <div id="kyc-status-rejected" class="kyc-status-loading kyc-status-rejected hidden">
-                        <i class="fa-solid fa-circle-xmark text-red-600 text-xl"></i>
-                        <div class="flex-1">
-                          <div class="font-semibold text-red-900">Verificación rechazada</div>
-                          <div id="kyc-error-message" class="text-sm text-red-800 mt-0.5"></div>
-                          <div id="kyc-error-detail" class="kyc-error-detail hidden mt-2"></div>
-                          <button type="button" id="kyc-retry-btn" class="mt-3 text-sm font-semibold text-red-700 hover:text-red-800 underline">Intentar de nuevo</button>
+                          <div class="font-semibold text-emerald-800">Tu verificación fue enviada con éxito</div>
+                          <div class="text-sm text-emerald-700 mt-0.5">Puede continuar con el proceso de onboarding.</div>
                         </div>
                       </div>
                     </div>
-                    <div id="kyc-button-wrap">
+                    <div id="kyc-pending-wrap">
+                      <div class="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 mb-3">
+                        <i class="fa-solid fa-clock text-amber-600 text-xl"></i>
+                        <div>
+                          <div class="font-semibold text-amber-900">Pendiente</div>
+                          <div class="text-sm text-amber-800 mt-0.5">Debe completar la verificación para continuar al siguiente paso.</div>
+                        </div>
+                      </div>
                       <metamap-button
                         id="metamap-btn"
                         clientid="612566a0a0be80001b035915"
@@ -973,71 +954,7 @@
           if (appId === applicationId) renderKycStatus();
         } catch (e) {}
       };
-      async function checkKycStatusFromMetamap(){
-        const kyc = getKycStatus();
-        if (!kyc?.verificationId) {
-          setMsg('Complete la verificación con Metamap primero.', true);
-          return;
-        }
-        const sbCfg = window.PPSupabaseConfig || {};
-        if (!sbCfg.url || !(sbCfg.anonKey || sbCfg.anon_key)) {
-          setMsg('Configura supabase-config.js con url y anonKey.', true);
-          return;
-        }
-        setMsg('Comprobando estado en Metamap…', false);
-        const supabase = window.supabase?.createClient(sbCfg.url, sbCfg.anonKey || sbCfg.anon_key);
-        if (!supabase?.functions?.invoke) {
-          setMsg('Carga el SDK de Supabase (supabase-js).', true);
-          return;
-        }
-        try {
-          const { data, error } = await supabase.functions.invoke('check-metamap-verification', {
-            body: { verificationId: kyc.verificationId, applicationId },
-          });
-          if (error) {
-            setMsg(error.message || 'Error al verificar.', true);
-            console.error('Supabase invoke error:', error);
-            return;
-          }
-          const status = (data?.status || '').toLowerCase();
-          const mapped = status === 'verified' ? 'approved' : status === 'rejected' ? 'rejected' : status === 'reviewneeded' ? 'reviewNeeded' : status;
-          setKycStatus({
-            status: mapped || 'pending_review',
-            identityId: kyc.identityId,
-            verificationId: kyc.verificationId,
-            error: data?.error || null,
-          });
-          renderKycStatus();
-          const savedOk = data?.savedToSupabase === true;
-          if (!savedOk) console.warn('Edge Function respondió pero savedToSupabase=false. Revisa logs en Supabase.', data);
-          if (status === 'verified') setMsg('¡Identidad verificada! Puede continuar.' + (savedOk ? '' : ' (No se guardó en Supabase)'), false);
-          else if (status === 'rejected') setMsg('Verificación rechazada. Revise el motivo.' + (savedOk ? '' : ' (No se guardó en Supabase)'), true);
-          else setMsg('Sigue en revisión. Intente de nuevo en unos minutos.' + (savedOk ? '' : ' (No se guardó en Supabase)'), savedOk ? false : true);
-        } catch (err) {
-          setMsg('Error. Abra la consola (F12) para más detalles.', true);
-          console.error('checkKycStatusFromMetamap:', err);
-        }
-      }
-      async function fetchKycStatusFromSupabase(){
-        const sbCfg = window.PPSupabaseConfig || {};
-        if (!sbCfg.url || !(sbCfg.anonKey || sbCfg.anon_key)) return;
-        const supabase = window.supabase?.createClient(sbCfg.url, sbCfg.anonKey || sbCfg.anon_key);
-        if (!supabase?.from) return;
-        try {
-          const { data, error } = await supabase.from('kyc_verifications').select('*').eq('application_id', applicationId).maybeSingle();
-          if (error || !data) return;
-          const kyc = {
-            status: data.status || 'pending_review',
-            identityId: data.identity_id || null,
-            verificationId: data.verification_id || null,
-            error: (data.error_message || data.error_code || data.error_type) ? { message: data.error_message, code: data.error_code, type: data.error_type } : null,
-            completedAt: data.completed_at ? new Date(data.completed_at).getTime() : null,
-            updatedAt: data.updated_at ? new Date(data.updated_at).getTime() : null
-          };
-          setKycStatus(kyc);
-          renderKycStatus();
-        } catch (e) {}
-      }
+      function isKycCompleted(){ const k = getKycStatus(); return !!(k && k.verificationId); }
       window.getKycVerificationsForSupabase = function(){
         try {
           const raw = localStorage.getItem(KYC_STATUS_KEY);
@@ -1056,38 +973,11 @@
         } catch (e) { return []; }
       };
       function renderKycStatus(){
-        const kyc = getKycStatus();
-        const loadingEl = document.getElementById('kyc-status-loading');
-        const reviewEl = document.getElementById('kyc-status-review');
-        const approvedEl = document.getElementById('kyc-status-approved');
-        const rejectedEl = document.getElementById('kyc-status-rejected');
+        const completed = isKycCompleted();
         const panelEl = document.getElementById('kyc-status-panel');
-        const buttonWrap = document.getElementById('kyc-button-wrap');
-        const errMsg = document.getElementById('kyc-error-message');
-        const errDetail = document.getElementById('kyc-error-detail');
-        [loadingEl, reviewEl, approvedEl, rejectedEl].forEach(el => { if (el) el.classList.add('hidden'); });
-        if (!kyc) {
-          if (panelEl) panelEl.classList.add('hidden');
-          if (buttonWrap) buttonWrap.classList.remove('hidden');
-          return;
-        }
-        if (panelEl) panelEl.classList.remove('hidden');
-        if (buttonWrap) buttonWrap.classList.add('hidden');
-        if (kyc.status === 'approved') {
-          if (approvedEl) approvedEl.classList.remove('hidden');
-        } else if (kyc.status === 'rejected') {
-          if (rejectedEl) rejectedEl.classList.remove('hidden');
-          if (errMsg) errMsg.textContent = kyc.error?.message || 'La verificación no pudo completarse.';
-          if (errDetail) {
-            const detail = kyc.error?.code || kyc.error?.type ? [kyc.error.code, kyc.error.type].filter(Boolean).join(' — ') : '';
-            if (detail) { errDetail.textContent = detail; errDetail.classList.remove('hidden'); }
-            else errDetail.classList.add('hidden');
-          }
-        } else if (kyc.status === 'reviewNeeded') {
-          if (reviewEl) reviewEl.classList.remove('hidden');
-        } else {
-          if (loadingEl) loadingEl.classList.remove('hidden');
-        }
+        const pendingWrap = document.getElementById('kyc-pending-wrap');
+        if (panelEl) panelEl.classList.toggle('hidden', !completed);
+        if (pendingWrap) pendingWrap.classList.toggle('hidden', !!completed);
       }
       function updateMetamapMetadata(){
         const btn = document.getElementById('metamap-btn');
@@ -1185,6 +1075,10 @@
             field.reportValidity();
             return false;
           }
+        }
+        if (stepIndex === 1 && !isKycCompleted()) {
+          setMsg('Debe completar la verificación de identidad para continuar.', true);
+          return false;
         }
         return true;
       }
@@ -1333,7 +1227,6 @@
         prefillFromAccess();
         renderSteps();
       }
-      fetchKycStatusFromSupabase();
       form.addEventListener('input', saveRecovery);
       form.addEventListener('change', saveRecovery);
       setupPdfUpload();
@@ -1349,13 +1242,6 @@
           setMsg('Complete o cancele la verificación de identidad antes de salir.', true);
         }
       }, true);
-      document.getElementById('kyc-check-status-btn-loading')?.addEventListener('click', checkKycStatusFromMetamap);
-      document.getElementById('kyc-check-status-btn-review')?.addEventListener('click', checkKycStatusFromMetamap);
-      document.getElementById('kyc-retry-btn')?.addEventListener('click', () => {
-        setKycStatus(null);
-        renderKycStatus();
-        setMsg('', false);
-      });
       const metamapBtn = document.getElementById('metamap-btn');
       if (metamapBtn) {
         metamapBtn.addEventListener('metamap:userStartedSdk', () => {
@@ -1369,18 +1255,17 @@
           const verificationId = d.verificationId || d.verification_id;
           if (!verificationId) {
             console.warn('Metamap userFinishedSdk: sin verificationId. detail=', d);
-            setMsg('No se recibió el ID de verificación. Intente de nuevo o haga clic en "Verificar estado".', true);
+            setMsg('No se recibió el ID de verificación. Intente de nuevo.', true);
             return;
           }
           setKycStatus({
-            status: 'pending_review',
+            status: 'completed',
             identityId: identityId,
             verificationId: verificationId,
             completedAt: Date.now()
           });
           renderKycStatus();
-          setMsg('Verificando estado automáticamente…', false);
-          setTimeout(function(){ checkKycStatusFromMetamap(); }, 2000);
+          setMsg('Tu verificación fue enviada con éxito. Puede continuar.', false);
         });
         metamapBtn.addEventListener('metamap:exitedSdk', () => {
           setMetamapModalOpen(false);
