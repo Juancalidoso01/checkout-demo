@@ -1,4 +1,5 @@
 (function(){
+  function init(){
   const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
   const ACCESS_KEY = 'pp_onboarding_access_v1';
   const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
@@ -644,5 +645,11 @@
       setMetamapModalOpen(false);
       setMsg('', false);
     });
+  }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();
