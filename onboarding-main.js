@@ -171,8 +171,15 @@
     } catch (e) { return false; }
   }
   function setMsg(msg, isError){
+    if (!formMsg) return;
     formMsg.textContent = msg || '';
-    formMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
+    formMsg.className = 'text-sm min-h-[20px] mt-2 ' + (isError ? 'text-red-600 font-semibold p-3 rounded-lg bg-red-50 border border-red-200' : 'text-slate-600');
+    formMsg.setAttribute('role', isError ? 'alert' : 'status');
+    if (msg && isError) {
+      try {
+        if (document.body) formMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (e) {}
+    }
   }
   function goToStep(idx){
     if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
@@ -402,6 +409,9 @@
     for (var fi = 0; fi < fields.length; fi++) {
       if (!fields[fi].checkValidity()) return false;
     }
+    if (stepIndex === 0) {
+      if (!pdfInput || !pdfInput.files || !pdfInput.files[0]) return false;
+    }
     if (stepIndex === 2) {
       var elLat = form.elements.addressLat;
       var elLng = form.elements.addressLng;
@@ -443,12 +453,24 @@
       var field = fields[fi];
       if (!field.checkValidity()) {
         var label = getFieldLabel(field);
-        setMsg('Falta completar: ' + label + '.', true);
+        var customMsg = (field.validationMessage && field.validationMessage.trim()) ? field.validationMessage.trim() : '';
+        var msg = customMsg || ('Falta completar: ' + label + '.');
+        setMsg(msg, true);
         field.focus();
         try {
-          if (document.body) field.scrollIntoView();
+          if (document.body) field.scrollIntoView({ behavior: 'smooth', block: 'center' });
         } catch (e) {}
         field.reportValidity();
+        return false;
+      }
+    }
+    if (stepIndex === 0) {
+      if (!pdfInput || !pdfInput.files || !pdfInput.files[0]) {
+        setMsg('Falta completar: Aviso de operaciones (PDF). Debe cargar el documento PDF.', true);
+        if (pdfInput) pdfInput.focus();
+        try {
+          if (document.body && pdfDropzone) pdfDropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (e) {}
         return false;
       }
     }
