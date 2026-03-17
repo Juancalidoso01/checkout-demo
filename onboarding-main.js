@@ -612,9 +612,10 @@
   }
   form.addEventListener('input', saveRecovery);
   form.addEventListener('change', saveRecovery);
-  form.elements.companyPhone?.addEventListener('blur', function(){ if ((this.value||'').trim()) showPhoneError('companyPhone', ''); });
-  form.elements.repCellPhone?.addEventListener('blur', function(){ const r = isValidPanamaMobile(this.value); showPhoneError('repCellPhone', r.valid ? '' : r.message); });
-  form.elements.repCellPhone?.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('repCellPhone', ''); });
+  var elPhone = form.elements.companyPhone;
+  if (elPhone) elPhone.addEventListener('blur', function(){ if ((this.value||'').trim()) showPhoneError('companyPhone', ''); });
+  var elCell = form.elements.repCellPhone;
+  if (elCell) { elCell.addEventListener('blur', function(){ var r = isValidPanamaMobile(this.value); showPhoneError('repCellPhone', r.valid ? '' : r.message); }); elCell.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('repCellPhone', ''); }); }
   setupPdfUpload();
   let addressMapInstance = null;
   let addressMarker = null;
@@ -649,7 +650,8 @@
     }
     addressMarker.on('dragend', function(e){ updateCoords(e.target.getLatLng()); saveRecovery(); });
     updateCoords(addressMarker.getLatLng());
-    document.getElementById('btnUseMyLocation')?.addEventListener('click', function(){
+    var btnLoc = document.getElementById('btnUseMyLocation');
+    if (btnLoc) btnLoc.addEventListener('click', function(){
       if (!navigator.geolocation) { setMsg('Su navegador no admite geolocalización.', true); return; }
       this.disabled = true;
       navigator.geolocation.getCurrentPosition(
@@ -667,12 +669,13 @@
       );
     });
   }
-  form.elements.repEmail?.addEventListener('input', () => { if (currentStep === 1) updateMetamapMetadata(); });
-  form.elements.repEmail?.addEventListener('change', () => { if (currentStep === 1) updateMetamapMetadata(); });
-  window.addEventListener('beforeunload', (e) => {
+  var elRepEmail = form.elements.repEmail;
+  if (elRepEmail) { elRepEmail.addEventListener('input', function(){ if (currentStep === 1) updateMetamapMetadata(); }); elRepEmail.addEventListener('change', function(){ if (currentStep === 1) updateMetamapMetadata(); }); }
+  window.addEventListener('beforeunload', function(e) {
     if (window.__metamapModalOpen) e.preventDefault();
   });
-  document.getElementById('portalLink')?.addEventListener('click', (e) => {
+  var portalLink = document.getElementById('portalLink');
+  if (portalLink) portalLink.addEventListener('click', function(e) {
     if (window.__metamapModalOpen) {
       e.preventDefault();
       e.stopPropagation();
@@ -681,15 +684,15 @@
   }, true);
   const metamapBtn = document.getElementById('metamap-btn');
   if (metamapBtn) {
-    metamapBtn.addEventListener('metamap:userStartedSdk', () => {
+    metamapBtn.addEventListener('metamap:userStartedSdk', function() {
       setMetamapModalOpen(true);
       setMsg('Complete la verificación. No cierre ni actualice la página.', false);
     });
-    metamapBtn.addEventListener('metamap:userFinishedSdk', (e) => {
+    metamapBtn.addEventListener('metamap:userFinishedSdk', function(e) {
       setMetamapModalOpen(false);
-      const d = e.detail || {};
-      const identityId = d.identityId || d.identity_id;
-      const verificationId = d.verificationId || d.verification_id;
+      var d = e.detail || {};
+      var identityId = d.identityId || d.identity_id;
+      var verificationId = d.verificationId || d.verification_id;
       if (!verificationId) {
         console.warn('Metamap userFinishedSdk: sin verificationId. detail=', d);
         setMsg('No se recibió el ID de verificación. Intente de nuevo.', true);
@@ -704,7 +707,7 @@
       renderKycStatus();
       setMsg('Tu verificación fue enviada con éxito. Puede continuar.', false);
     });
-    metamapBtn.addEventListener('metamap:exitedSdk', () => {
+    metamapBtn.addEventListener('metamap:exitedSdk', function() {
       setMetamapModalOpen(false);
       setMsg('', false);
     });
