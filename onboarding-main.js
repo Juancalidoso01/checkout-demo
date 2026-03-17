@@ -5,6 +5,7 @@
   const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
   const steps = [
     { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
+    { title: 'Documentos', desc: 'Aviso de operaciones en PDF' },
     { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
     { title: 'Dirección', desc: 'Mapa, provincia, barrio y operación' },
     { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
@@ -187,7 +188,7 @@
   }
   function renderIndicator(){
     if (!indicator) return;
-    indicator.innerHTML = steps.map((step, idx) => `
+    const html = steps.map((step, idx) => `
       <div class="ob-step ${idx === currentStep ? '-active' : ''} cursor-pointer" data-step-idx="${idx}" role="button" tabindex="0">
         <div class="ob-step-index">${idx + 1}</div>
         <div>
@@ -195,6 +196,8 @@
           <div class="text-xs text-slate-500 mt-1">${esc(step.desc)}</div>
         </div>
       </div>`).join('');
+    if (!html) return;
+    indicator.innerHTML = html;
     indicator.querySelectorAll('.ob-step[data-step-idx]').forEach(el => {
       const idx = parseInt(el.getAttribute('data-step-idx'), 10);
       el.addEventListener('click', () => goToStep(idx));
@@ -283,13 +286,23 @@
     if (nextBtn) nextBtn.disabled = open;
   }
   function renderSteps(){
+    // Si estamos en el último paso, verificar que todos los anteriores estén completos. Si no, volver al primer paso incompleto.
+    if (currentStep === stepEls.length - 1) {
+      for (let i = 0; i < stepEls.length - 1; i++) {
+        if (!validateStepSilent(i)) {
+          currentStep = i;
+          setMsg('Completa los campos obligatorios antes de enviar.', true);
+          break;
+        }
+      }
+    }
     stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
     prevBtn.disabled = currentStep === 0;
     nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
     submitBtn.classList.toggle('is-hidden', currentStep !== stepEls.length - 1);
     if (currentStep === stepEls.length - 1) renderSummary();
-    if (currentStep === 1) { updateMetamapMetadata(); renderKycStatus(); }
-    if (currentStep === 2) { initAddressMapIfNeeded(); }
+    if (currentStep === 2) { updateMetamapMetadata(); renderKycStatus(); }
+    if (currentStep === 3) { initAddressMapIfNeeded(); }
     renderIndicator();
     updateProgress();
   }
@@ -369,6 +382,27 @@
     const el = document.getElementById(fieldName + 'Error');
     if (el) { el.textContent = msg || ''; el.classList.toggle('hidden', !msg); }
   }
+  /** Validación silenciosa (sin reportValidity) para comprobar si un paso está completo */
+  function validateStepSilent(stepIndex){
+    const fields = getStepFields(stepIndex);
+    for (const field of fields) {
+      if (!field.checkValidity()) return false;
+    }
+    if (stepIndex === 3) {
+      const lat = (form.elements.addressLat?.value || '').trim();
+      const lng = (form.elements.addressLng?.value || '').trim();
+      if (!lat || !lng) return false;
+    }
+    if (stepIndex === 2) {
+      const companyVal = (form.elements.companyPhone?.value || '').trim();
+      if (!companyVal) return false;
+      const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
+      if (!cellRes.valid) return false;
+      if (!isKycCompleted()) return false;
+      if (!form.elements.confirmPhoneOwnership?.checked) return false;
+    }
+    return true;
+  }
   function validateStep(stepIndex){
     const fields = getStepFields(stepIndex);
     for (const field of fields) {
@@ -377,24 +411,24 @@
         return false;
       }
     }
-    if (stepIndex === 2) {
-      const lat = (form.elements.addressLat?.value || '').trim();
-      const lng = (form.elements.addressLng?.value || '').trim();
-      if (!lat || !lng) {
-        setMsg('Debe marcar la ubicación en el mapa moviendo el pin o usando "Usar mi ubicación".', true);
-        return false;
-      }
-    }
-    if (stepIndex === 1) {
-      const companyVal = (form.elements.companyPhone?.value || '').trim();
-      if (!companyVal) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
-      showPhoneError('companyPhone', '');
-      const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
-      if (!cellRes.valid) { showPhoneError('repCellPhone', cellRes.message); setMsg(cellRes.message, true); return false; }
-      showPhoneError('repCellPhone', '');
-      if (!isKycCompleted()) { setMsg('Debe completar la verificación de identidad para continuar.', true); return false; }
-      if (!form.elements.confirmPhoneOwnership?.checked) { setMsg('Debe confirmar que el número de celular es correcto.', true); return false; }
-    }
+        if (stepIndex === 3) {
+          const lat = (form.elements.addressLat?.value || '').trim();
+          const lng = (form.elements.addressLng?.value || '').trim();
+          if (!lat || !lng) {
+            setMsg('Debe marcar la ubicación en el mapa moviendo el pin o usando "Usar mi ubicación".', true);
+            return false;
+          }
+        }
+        if (stepIndex === 2) {
+          const companyVal = (form.elements.companyPhone?.value || '').trim();
+          if (!companyVal) { showPhoneError('companyPhone', 'Ingrese el teléfono de atención a clientes.'); setMsg('Ingrese el teléfono de atención a clientes.', true); return false; }
+          showPhoneError('companyPhone', '');
+          const cellRes = isValidPanamaMobile(form.elements.repCellPhone?.value);
+          if (!cellRes.valid) { showPhoneError('repCellPhone', cellRes.message); setMsg(cellRes.message, true); return false; }
+          showPhoneError('repCellPhone', '');
+          if (!isKycCompleted()) { setMsg('Debe completar la verificación de identidad para continuar.', true); return false; }
+          if (!form.elements.confirmPhoneOwnership?.checked) { setMsg('Debe confirmar que el número de celular es correcto.', true); return false; }
+        }
     return true;
   }
   function goNext(){
