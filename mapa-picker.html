@@ -43,38 +43,42 @@
       if (isNaN(lat)) lat = 8.9945;
       if (isNaN(lng)) lng = -79.5199;
 
-      var map = L.map('mapa', { preferCanvas: false }).setView([lat, lng], 14);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
-        attribution: '© OSM © CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19
-      }).addTo(map);
-      var storeIcon = L.icon({ iconUrl: 'pin-tienda.png', iconSize: [48, 48], iconAnchor: [24, 48], popupAnchor: [0, -48] });
-      var marker = L.marker([lat, lng], { draggable: true, icon: storeIcon }).addTo(map);
-      setTimeout(function() { map.invalidateSize(); }, 100);
+      var map, marker, updateCoords;
+      try {
+        map = L.map('mapa', { preferCanvas: false }).setView([lat, lng], 14);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+          attribution: '© OSM © CARTO',
+          subdomains: 'abcd',
+          maxZoom: 19
+        }).addTo(map);
+        var storeIcon = L.icon({ iconUrl: 'pin-tienda.png', iconSize: [48, 72], iconAnchor: [24, 72], popupAnchor: [0, -72] });
+        marker = L.marker([lat, lng], { draggable: true, icon: storeIcon }).addTo(map);
+        setTimeout(function() { if (map) map.invalidateSize(); }, 100);
+      } catch (e) { marker = null; map = null; }
+
       var coordsEl = document.getElementById('coordsDisplay');
+      updateCoords = function() {
+        if (marker && coordsEl) coordsEl.textContent = marker.getLatLng().lat.toFixed(6) + ', ' + marker.getLatLng().lng.toFixed(6);
+      };
+      if (marker) { marker.on('dragend', updateCoords); updateCoords(); }
+
       var btnListo = document.getElementById('btnListo');
-
-      function updateCoords() {
-        var pos = marker.getLatLng();
-        coordsEl.textContent = pos.lat.toFixed(6) + ', ' + pos.lng.toFixed(6);
+      if (btnListo) {
+        btnListo.onclick = function() {
+          var pos = marker ? marker.getLatLng() : { lat: lat, lng: lng };
+          try {
+            if (window.parent !== window) {
+              window.parent.postMessage({ type: 'mapa-picker-done', lat: pos.lat, lng: pos.lng }, '*');
+            }
+          } catch (err) {}
+        };
       }
-      marker.on('dragend', updateCoords);
-      updateCoords();
 
-      btnListo.addEventListener('click', function() {
-        var pos = marker.getLatLng();
-        try {
-          if (window.parent !== window) {
-            window.parent.postMessage({ type: 'mapa-picker-done', lat: pos.lat, lng: pos.lng }, '*');
-          }
-        } catch (e) {}
-      });
       var btnMyLoc = document.getElementById('btnMyLocation');
-      if (btnMyLoc) {
-        btnMyLoc.addEventListener('click', function() {
+      if (btnMyLoc && map && marker) {
+        btnMyLoc.onclick = function() {
           if (!navigator.geolocation) return;
-          btnMyLoc.disabled = true;
+          this.disabled = true;
           navigator.geolocation.getCurrentPosition(
             function(pos) {
               var p = [pos.coords.latitude, pos.coords.longitude];
@@ -85,7 +89,7 @@
             },
             function() { btnMyLoc.disabled = false; }
           );
-        });
+        };
       }
     })();
   </script>

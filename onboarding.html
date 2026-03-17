@@ -1008,10 +1008,10 @@
   </script>
   <!-- Modal: mapa en iframe (mapa-picker.html aísla Leaflet del CSS del onboarding) -->
   <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex flex-col bg-white" aria-hidden="true" style="display:none">
-    <div class="flex items-center justify-end p-2 border-b border-slate-100 flex-shrink-0">
-      <button type="button" id="mapModalClose" class="pp-btn pp-btn-secondary py-2 px-3 text-sm" aria-label="Cerrar sin guardar"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+    <div class="flex items-center justify-end p-2 border-b border-slate-100 flex-shrink-0 relative z-10 bg-white">
+      <button type="button" id="mapModalClose" class="pp-btn pp-btn-secondary py-2 px-3 text-sm cursor-pointer" aria-label="Cerrar sin guardar" onclick="var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m){m.style.display='none';m.classList.add('hidden');m.setAttribute('aria-hidden','true');}if(f)f.src='about:blank';"><i class="fa-solid fa-xmark"></i> Cerrar</button>
     </div>
-    <iframe id="mapPickerFrame" src="about:blank" class="flex-1 w-full min-h-[65vh] border-0" title="Mapa para ubicar el negocio"></iframe>
+    <iframe id="mapPickerFrame" src="about:blank" class="flex-1 w-full min-h-[65vh] border-0 relative z-0" title="Mapa para ubicar el negocio"></iframe>
   </div>
 
   <script src="auth.js"></script>
