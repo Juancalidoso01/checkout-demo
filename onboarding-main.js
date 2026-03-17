@@ -171,16 +171,6 @@
   function goToStep(idx){
     if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
     if (metamapModalOpen) return;
-    if (idx > currentStep) {
-      for (let i = currentStep; i < idx; i++) {
-        if (!validateStep(i)) {
-          currentStep = i;
-          renderSteps();
-          setMsg('Completa los campos antes de avanzar.', true);
-          return;
-        }
-      }
-    }
     currentStep = idx;
     renderSteps();
     setMsg('');
@@ -436,10 +426,14 @@
     return true;
   }
   function goNext(){
-    if (!validateStep(currentStep)) return;
+    if (!validateStep(currentStep)) {
+      setMsg('Completa los campos obligatorios antes de avanzar.', true);
+      return;
+    }
     currentStep = Math.min(currentStep + 1, stepEls.length - 1);
     renderSteps();
     setMsg('');
+    saveRecovery();
   }
   function goPrev(){
     currentStep = Math.max(currentStep - 1, 0);
