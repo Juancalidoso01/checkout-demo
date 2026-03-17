@@ -1011,11 +1011,8 @@
   <script>
   window.__obStepClick=function(i){var s=document.querySelectorAll('.form-step');var c=document.querySelector('.form-step:not(.is-hidden)');if(!c||!s[i])return;c.classList.add('is-hidden');s[i].classList.remove('is-hidden');var ind=document.querySelectorAll('.ob-step[data-step-idx]');for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===i);var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn'),b=document.getElementById('submitBtn');if(p)p.disabled=(i===0);if(n)n.classList.toggle('is-hidden',i===s.length-1);if(b)b.classList.toggle('is-hidden',i!==s.length-1);var pct=Math.round(((i+1)/s.length)*100);var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');if(lab)lab.textContent=pct+'%';if(fil)fil.style.width=pct+'%';if(window.__obSetStep)window.__obSetStep(i);};
   </script>
-  <script src="auth.js"></script>
-  <script src="onboarding-main.js"></script>
-
-  <!-- Modal: mapa para ubicar (siempre visible en DOM cuando abierto) -->
-  <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex-col bg-white" aria-hidden="true" style="display:none">
+  <!-- Modal: mapa para ubicar (antes del script para que exista al init) -->
+  <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex flex-col bg-white" aria-hidden="true" style="display:none">
     <div class="flex items-center justify-between gap-2 p-4 border-b border-slate-200 bg-white flex-wrap">
       <h3 class="text-lg font-bold text-slate-800">Ubicar en el mapa</h3>
       <div class="flex gap-2">
@@ -1025,6 +1022,9 @@
     </div>
     <div id="addressMap" class="flex-1 min-h-[60vh] w-full" style="background:#e2e8f0"></div>
   </div>
+
+  <script src="auth.js"></script>
+  <script src="onboarding-main.js"></script>
 
   <!-- Modal: confirmar salida con cambios sin guardar -->
   <div id="leaveConfirmBackdrop" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden" aria-hidden="true">
