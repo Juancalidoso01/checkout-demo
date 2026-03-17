@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
   <!-- Bloquea sdk.metamap.com/tracker.js (evita errores 403/nosniff). El botón usa web-button.metamap.com -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com;">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com; frame-src 'self' https://*.metamap.com https://*.getmati.com https://signup.metamap.com; img-src 'self' data: blob: https: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com;">
   <title>Onboarding aliado — Punto Pago</title>
   <script>
     (function(){
@@ -44,8 +44,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js" defer></script>
   <script src="compliance-lists.js" defer></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" crossorigin>
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin defer></script>
   <style>
     html,body{background:#fff !important}
     body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
@@ -83,10 +81,6 @@
     @keyframes kyc-spin{to{transform:rotate(360deg)}}
     .ob-checkbox-input{appearance:auto;-webkit-appearance:checkbox;accent-color:#5462e6;cursor:pointer}
     .ob-marker.leaflet-marker-icon{border:none !important;background:transparent !important}
-    /* Evitar que CSS global img rompa los tiles del mapa Leaflet */
-    #addressMap img{max-width:none !important;max-height:none !important}
-    #addressMap{cursor:grab}
-    #addressMap:active{cursor:grabbing}
     @media (max-width: 980px){
       .ob-layout{grid-template-columns:1fr}
       .ob-sidebar{position:relative;top:auto;order:-1}
@@ -879,9 +873,10 @@
                 </div>
                 <div>
                   <label class="pp-label">Ubicación en mapa *</label>
-                  <p class="text-xs text-slate-500 mb-2">Haga clic en &quot;Abrir mapa&quot; para ubicar el negocio. Arrastre el pin azul al lugar exacto y cierre con &quot;Listo&quot;.</p>
+                  <p class="text-xs text-slate-500 mb-2">Use &quot;Leer mi ubicación&quot; para marcar rápido, o abra el mapa para ajustar el punto exacto.</p>
                   <div class="flex flex-wrap gap-2 items-center">
-                    <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm" onclick="var m=document.getElementById('mapModal');if(m){m.style.display='flex';m.setAttribute('aria-hidden','false');setTimeout(function(){if(window.__obInitAddressMap)window.__obInitAddressMap();},100);}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
+                    <button type="button" id="btnUseMyLocationQuick" class="pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm"><i class="fa-solid fa-location-crosshairs mr-2"></i>Leer mi ubicación</button>
+                    <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm" onclick="if(window.__obOpenMapModal){window.__obOpenMapModal();}else{var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m&&f){var b='mapa-picker.html';var lat=document.getElementById('addressLat');var lng=document.getElementById('addressLng');if(lat&&lat.value)b+='?lat='+lat.value;if(lng&&lng.value)b+=(b.indexOf('?')>=0?'&':'?')+'lng='+lng.value;f.src=b;m.style.display='flex';m.classList.remove('hidden');m.setAttribute('aria-hidden','false');}}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
                     <span id="mapCoordsDisplay" class="text-xs text-slate-600"></span>
                   </div>
                   <input type="hidden" name="addressLat" id="addressLat">
@@ -1011,16 +1006,12 @@
   <script>
   window.__obStepClick=function(i){var s=document.querySelectorAll('.form-step');var c=document.querySelector('.form-step:not(.is-hidden)');if(!c||!s[i])return;c.classList.add('is-hidden');s[i].classList.remove('is-hidden');var ind=document.querySelectorAll('.ob-step[data-step-idx]');for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===i);var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn'),b=document.getElementById('submitBtn');if(p)p.disabled=(i===0);if(n)n.classList.toggle('is-hidden',i===s.length-1);if(b)b.classList.toggle('is-hidden',i!==s.length-1);var pct=Math.round(((i+1)/s.length)*100);var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');if(lab)lab.textContent=pct+'%';if(fil)fil.style.width=pct+'%';if(window.__obSetStep)window.__obSetStep(i);};
   </script>
-  <!-- Modal: mapa para ubicar (antes del script para que exista al init) -->
+  <!-- Modal: mapa en iframe (mapa-picker.html aísla Leaflet del CSS del onboarding) -->
   <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex flex-col bg-white" aria-hidden="true" style="display:none">
-    <div class="flex items-center justify-between gap-2 p-4 border-b border-slate-200 bg-white flex-wrap">
-      <h3 class="text-lg font-bold text-slate-800">Ubicar en el mapa</h3>
-      <div class="flex gap-2">
-        <button type="button" id="btnUseMyLocation" class="pp-btn pp-btn-secondary py-2 px-4 text-sm"><i class="fa-solid fa-location-crosshairs mr-1"></i>Mi ubicación</button>
-        <button type="button" id="mapModalClose" class="pp-btn pp-btn-primary py-2 px-4">Listo</button>
-      </div>
+    <div class="flex items-center justify-end p-2 border-b border-slate-100 flex-shrink-0">
+      <button type="button" id="mapModalClose" class="pp-btn pp-btn-secondary py-2 px-3 text-sm" aria-label="Cerrar sin guardar"><i class="fa-solid fa-xmark"></i> Cerrar</button>
     </div>
-    <div id="addressMap" class="flex-1 min-h-[60vh] w-full" style="background:#e2e8f0"></div>
+    <iframe id="mapPickerFrame" src="about:blank" class="flex-1 w-full min-h-[65vh] border-0" title="Mapa para ubicar el negocio"></iframe>
   </div>
 
   <script src="auth.js"></script>

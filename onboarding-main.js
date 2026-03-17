@@ -814,19 +814,72 @@
   }
   window.__obInitAddressMap = initAddressMapIfNeeded;
   var mapModal = document.getElementById('mapModal');
+  var mapPickerFrame = document.getElementById('mapPickerFrame');
   var btnOpenMap = document.getElementById('btnOpenMap');
   var mapModalClose = document.getElementById('mapModalClose');
-  if (mapModal && btnOpenMap) {
-    btnOpenMap.addEventListener('click', function(){
-      mapModal.style.display = 'flex';
-      mapModal.setAttribute('aria-hidden', 'false');
-      setTimeout(initAddressMapIfNeeded, 100);
-    });
+  function closeMapModal(){
+    if (mapModal) { mapModal.style.display = 'none'; mapModal.classList.add('hidden'); mapModal.setAttribute('aria-hidden', 'true'); }
+    if (mapPickerFrame) mapPickerFrame.src = 'about:blank';
+  }
+  window.addEventListener('message', function(e){
+    if (!e.data || e.data.type !== 'mapa-picker-done') return;
+    var lat = e.data.lat, lng = e.data.lng;
+    var latStr = (typeof lat === 'number' && !isNaN(lat)) ? lat.toFixed(6) : String(lat || '');
+    var lngStr = (typeof lng === 'number' && !isNaN(lng)) ? lng.toFixed(6) : String(lng || '');
+    var latEl = form.elements.addressLat, lngEl = form.elements.addressLng;
+    var cd = document.getElementById('mapCoordsDisplay');
+    if (latEl) latEl.value = latStr; if (lngEl) lngEl.value = lngStr;
+    if (cd) cd.textContent = latStr + ', ' + lngStr;
+    closeMapModal();
+    saveRecovery();
+    setMsg('Ubicación guardada.', false);
+  });
+  function openMapModal(){
+    if (!mapModal || !mapPickerFrame) return;
+    var latEl = form.elements.addressLat, lngEl = form.elements.addressLng;
+    var lat = (latEl && latEl.value) ? parseFloat(latEl.value) : NaN;
+    var lng = (lngEl && lngEl.value) ? parseFloat(lngEl.value) : NaN;
+    var base = 'mapa-picker.html';
+    var q = [];
+    if (!isNaN(lat)) q.push('lat=' + lat);
+    if (!isNaN(lng)) q.push('lng=' + lng);
+    if (q.length) base += '?' + q.join('&');
+    mapPickerFrame.src = base;
+    mapModal.style.display = 'flex';
+    mapModal.classList.remove('hidden');
+    mapModal.setAttribute('aria-hidden', 'false');
+  }
+  window.__obOpenMapModal = openMapModal;
+  if (mapModal && btnOpenMap && mapPickerFrame) {
+    btnOpenMap.addEventListener('click', function(e){ e.preventDefault(); openMapModal(); });
   }
   if (mapModal && mapModalClose) {
-    mapModalClose.addEventListener('click', function(){
-      mapModal.style.display = 'none';
-      mapModal.setAttribute('aria-hidden', 'true');
+    mapModalClose.addEventListener('click', closeMapModal);
+  }
+  var btnUseMyLocationQuick = document.getElementById('btnUseMyLocationQuick');
+  if (btnUseMyLocationQuick) {
+    btnUseMyLocationQuick.addEventListener('click', function() {
+      if (!navigator.geolocation) { setMsg('Su navegador no admite geolocalización.', true); return; }
+      var btn = this;
+      btn.disabled = true;
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          var lat = pos.coords.latitude.toFixed(6);
+          var lng = pos.coords.longitude.toFixed(6);
+          var latEl = form.elements.addressLat, lngEl = form.elements.addressLng;
+          var cd = document.getElementById('mapCoordsDisplay');
+          if (latEl) latEl.value = lat;
+          if (lngEl) lngEl.value = lng;
+          if (cd) cd.textContent = lat + ', ' + lng;
+          saveRecovery();
+          setMsg('Ubicación guardada: ' + lat + ', ' + lng, false);
+          btn.disabled = false;
+        },
+        function() {
+          setMsg('No se pudo obtener la ubicación. Verifique los permisos del navegador.', true);
+          btn.disabled = false;
+        }
+      );
     });
   }
   var elRepEmail = form.elements.repEmail;

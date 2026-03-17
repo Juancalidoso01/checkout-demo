@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ubicar en mapa</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" crossorigin>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; font-family: system-ui, sans-serif; }
+    .bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #fff; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
+    .bar h2 { font-size: 1rem; font-weight: 700; color: #1e293b; }
+    .bar .coords { font-size: 11px; color: #64748b; margin-right: 12px; }
+    .bar button { padding: 8px 20px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; background: #5462e6; color: #fff; }
+    .bar button:hover { background: #4352d4; }
+    #mapa { flex: 1; min-height: 200px; background: #e2e8f0; position: relative; }
+    /* Solo los tiles: evitar que se deformen. NO tocar el ícono del marcador */
+    #mapa .leaflet-tile-container img { max-width: none !important; max-height: none !important; width: 256px !important; height: 256px !important; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <h2>Mueva el pin al lugar exacto</h2>
+    <div class="bar-right" style="display:flex;align-items:center;gap:8px">
+      <button type="button" id="btnMyLocation" class="btn-sec" style="padding:6px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;font-size:12px;cursor:pointer"><i class="fa-solid fa-location-crosshairs" style="margin-right:4px"></i>Mi ubicación</button>
+      <span class="coords" id="coordsDisplay">8.994500, -79.519900</span>
+      <button type="button" id="btnListo">Listo</button>
+    </div>
+  </div>
+  <div id="mapa"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+  <script>
+    (function() {
+      var params = {};
+      (location.search || '').slice(1).split('&').forEach(function(p) {
+        var kv = p.split('=');
+        if (kv[0]) params[kv[0]] = decodeURIComponent((kv[1] || '').replace(/\+/g, ' '));
+      });
+      var lat = parseFloat(params.lat) || 8.9945;
+      var lng = parseFloat(params.lng) || -79.5199;
+      if (isNaN(lat)) lat = 8.9945;
+      if (isNaN(lng)) lng = -79.5199;
+
+      var map = L.map('mapa', { preferCanvas: false }).setView([lat, lng], 14);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
+        attribution: '© OSM © CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+      var storeIcon = L.icon({ iconUrl: 'pin-tienda.png', iconSize: [48, 48], iconAnchor: [24, 48], popupAnchor: [0, -48] });
+      var marker = L.marker([lat, lng], { draggable: true, icon: storeIcon }).addTo(map);
+      setTimeout(function() { map.invalidateSize(); }, 100);
+      var coordsEl = document.getElementById('coordsDisplay');
+      var btnListo = document.getElementById('btnListo');
+
+      function updateCoords() {
+        var pos = marker.getLatLng();
+        coordsEl.textContent = pos.lat.toFixed(6) + ', ' + pos.lng.toFixed(6);
+      }
+      marker.on('dragend', updateCoords);
+      updateCoords();
+
+      btnListo.addEventListener('click', function() {
+        var pos = marker.getLatLng();
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'mapa-picker-done', lat: pos.lat, lng: pos.lng }, '*');
+          }
+        } catch (e) {}
+      });
+      var btnMyLoc = document.getElementById('btnMyLocation');
+      if (btnMyLoc) {
+        btnMyLoc.addEventListener('click', function() {
+          if (!navigator.geolocation) return;
+          btnMyLoc.disabled = true;
+          navigator.geolocation.getCurrentPosition(
+            function(pos) {
+              var p = [pos.coords.latitude, pos.coords.longitude];
+              marker.setLatLng(p);
+              map.setView(p, 17);
+              updateCoords();
+              btnMyLoc.disabled = false;
+            },
+            function() { btnMyLoc.disabled = false; }
+          );
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
