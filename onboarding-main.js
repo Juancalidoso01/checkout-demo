@@ -812,6 +812,7 @@
       );
     });
   }
+  window.__obInitAddressMap = initAddressMapIfNeeded;
   var mapModal = document.getElementById('mapModal');
   var btnOpenMap = document.getElementById('btnOpenMap');
   var mapModalClose = document.getElementById('mapModalClose');

@@ -881,7 +881,7 @@
                   <label class="pp-label">Ubicación en mapa *</label>
                   <p class="text-xs text-slate-500 mb-2">Haga clic en &quot;Abrir mapa&quot; para ubicar el negocio. Arrastre el pin azul al lugar exacto y cierre con &quot;Listo&quot;.</p>
                   <div class="flex flex-wrap gap-2 items-center">
-                    <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
+                    <button type="button" id="btnOpenMap" class="pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm" onclick="var m=document.getElementById('mapModal');if(m){m.style.display='flex';m.setAttribute('aria-hidden','false');setTimeout(function(){if(window.__obInitAddressMap)window.__obInitAddressMap();},100);}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
                     <span id="mapCoordsDisplay" class="text-xs text-slate-600"></span>
                   </div>
                   <input type="hidden" name="addressLat" id="addressLat">
