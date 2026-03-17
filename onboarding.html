@@ -43,6 +43,7 @@
   <script src="https://web-button.metamap.com/button.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script src="compliance-lists.js"></script>
   <style>
     html,body{background:#fff !important}
     body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
@@ -97,6 +98,10 @@
         <div class="text-xs ob-nav-sub">Registro de nuevo aliado</div>
       </div>
       <div class="flex items-center gap-3">
+        <a id="whatsappBtn" href="https://wa.me/50762761874" target="_blank" rel="noopener noreferrer" class="pp-btn ob-nav-btn h-[42px] rounded-[14px] px-4 inline-flex items-center gap-2" style="background:#25d366;color:#fff;border:none">
+          <i class="fa-brands fa-whatsapp text-xl"></i>
+          <span>¿Dudas? Escríbenos</span>
+        </a>
         <a id="portalLink" href="pp-admin-entry.html" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4">Portal credenciales</a>
       </div>
     </div>
@@ -600,6 +605,20 @@
                       <input name="confirmPhoneOwnership" type="checkbox" class="ob-checkbox-input w-5 h-5 rounded border-2 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 shrink-0" style="accent-color:#5462e6">
                       <span class="text-sm text-slate-700">Confirmo que este número me pertenece y es correcto.</span>
                     </label>
+                  </div>
+                </div>
+                <div class="ob-grid pt-2">
+                  <div class="relative">
+                    <label class="pp-label">Ocupación del representante legal *</label>
+                    <input name="repOcupacion" id="repOcupacion" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción" autocomplete="off">
+                    <span class="text-xs text-slate-500 block mt-1">Obligatorio. Seleccione de la lista o &quot;Ocupación no listada&quot;.</span>
+                    <ul id="repOcupacion-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Ocupaciones"></ul>
+                  </div>
+                  <div class="relative">
+                    <label class="pp-label">Actividad del representante legal *</label>
+                    <input name="repActividad" id="repActividad" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción" autocomplete="off">
+                    <span class="text-xs text-slate-500 block mt-1">Obligatorio. Seleccione de la lista o &quot;Actividad no listada&quot;.</span>
+                    <ul id="repActividad-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Actividades"></ul>
                   </div>
                 </div>
                 <div class="pt-4 mt-4 border-t border-gray-200">
@@ -1135,6 +1154,8 @@
           ['Representante', `${data.repName || ''} · ${data.repEmail || ''}`],
           ['Tel. atención clientes', data.companyPhone || '—'],
           ['Celular representante', data.repCellPhone || '—'],
+          ['Ocupación rep. legal', data.repOcupacion || '—'],
+          ['Actividad rep. legal', data.repActividad || '—'],
           ['Ubicación', [data.country, data.region, data.city, data.district].filter(Boolean).join(' / ')],
           ['Canal principal', data.channelType],
           ['Ventas estimadas', data.estimatedMonthlySales],
