@@ -396,10 +396,27 @@
     }
     return true;
   }
+  function getFieldLabel(field){
+    const id = field.id;
+    if (id) {
+      const label = document.querySelector('label[for="' + id + '"]');
+      if (label) return label.textContent.replace(/\s*\*$/, '').trim();
+    }
+    const parent = field.closest('div');
+    if (parent) {
+      const label = parent.querySelector('label');
+      if (label) return label.textContent.replace(/\s*\*$/, '').trim();
+    }
+    const name = field.name;
+    const labels = { businessLegalName: 'Razón social', businessTradeName: 'Nombre comercial', taxId: 'RUT / NIT', businessType: 'Tipo de empresa', industry: 'Industria / rubro', yearsOperating: 'Años operando', businessDescriptionPdf: 'Aviso de operaciones (PDF)' };
+    return labels[name] || name || 'campo';
+  }
   function validateStep(stepIndex){
     const fields = getStepFields(stepIndex);
     for (const field of fields) {
       if (!field.checkValidity()) {
+        const label = getFieldLabel(field);
+        setMsg('Falta completar: ' + label + '.', true);
         field.focus();
         field.scrollIntoView({ behavior: 'smooth', block: 'center' });
         field.reportValidity();
@@ -428,7 +445,6 @@
   }
   function goNext(){
     if (!validateStep(currentStep)) {
-      setMsg('Completa los campos obligatorios antes de avanzar.', true);
       return;
     }
     currentStep = Math.min(currentStep + 1, stepEls.length - 1);
@@ -542,7 +558,16 @@
   }
 
   prevBtn.addEventListener('click', function(e) { e.preventDefault(); goPrev(); });
-  nextBtn.addEventListener('click', function(e) { e.preventDefault(); goNext(); });
+  nextBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      goNext();
+    } catch (err) {
+      console.error('goNext error:', err);
+      setMsg('Error al avanzar. Abra la consola (F12) para más detalles.', true);
+    }
+  });
   saveDraftBtn.addEventListener('click', () => {
     try {
       persist('draft');

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Test Onboarding (bypass acceso)</title>
+</head>
+<body>
+  <h1>Test: Simular acceso para onboarding</h1>
+  <p>Este archivo configura localStorage con datos de acceso y redirige a onboarding.html para probar el flujo.</p>
+  <script>
+    (function(){
+      const ACCESS_KEY = 'pp_onboarding_access_v1';
+      const mockAccess = {
+        email: 'test@ejemplo.com',
+        emailVerified: true,
+        businessName: 'Test S.A.',
+        phone: '+507 61234567'
+      };
+      try {
+        localStorage.setItem(ACCESS_KEY, JSON.stringify(mockAccess));
+        console.log('Access configurado:', mockAccess);
+        window.location.href = 'onboarding.html';
+      } catch (e) {
+        document.body.innerHTML += '<p style="color:red">Error: ' + e.message + '</p>';
+      }
+    })();
+  </script>
+</body>
+</html>
