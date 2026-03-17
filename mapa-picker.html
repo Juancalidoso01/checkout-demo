@@ -70,20 +70,22 @@
       if (btnListo) {
         btnListo.onclick = function() {
           var pos = marker ? marker.getLatLng() : { lat: lat, lng: lng };
+          var latVal = typeof pos.lat === 'number' ? pos.lat : parseFloat(pos.lat) || lat;
+          var lngVal = typeof pos.lng === 'number' ? pos.lng : parseFloat(pos.lng) || lng;
           try {
             if (window.parent !== window) {
-              var received = false;
               if (typeof window.parent.__obReceiveMapCoords === 'function') {
                 try {
-                  window.parent.__obReceiveMapCoords(pos.lat, pos.lng);
-                  received = true;
+                  window.parent.__obReceiveMapCoords(latVal, lngVal);
                 } catch (e) {}
+              } else {
+                window.parent.postMessage({ type: 'mapa-picker-done', lat: latVal, lng: lngVal }, '*');
               }
-              if (!received) {
-                window.parent.postMessage({ type: 'mapa-picker-done', lat: pos.lat, lng: pos.lng }, '*');
-              }
+              try {
+                window.parent.location.hash = 'mapa-done-' + latVal + ',' + lngVal;
+              } catch (e) {}
             } else {
-              var txt = pos.lat.toFixed(6) + ', ' + pos.lng.toFixed(6);
+              var txt = latVal.toFixed(6) + ', ' + lngVal.toFixed(6);
               if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(txt).then(function() {
                   alert('Coordenadas copiadas: ' + txt + '\n\nPara guardarlas en el formulario, abra onboarding.html, vaya al paso Dirección y haga clic en "Abrir mapa". Dentro del mapa, haga clic en "Listo".');
@@ -100,21 +102,49 @@
         };
       }
 
+      function movePinTo(lat, lng) {
+        if (!marker || !map) return;
+        var p = [lat, lng];
+        marker.setLatLng(p);
+        map.setView(p, 17);
+        updateCoords();
+      }
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 0 && window.innerWidth < 1024);
       var btnMyLoc = document.getElementById('btnMyLocation');
       if (btnMyLoc && map && marker) {
         btnMyLoc.onclick = function() {
-          if (!navigator.geolocation) return;
-          this.disabled = true;
-          navigator.geolocation.getCurrentPosition(
-            function(pos) {
-              var p = [pos.coords.latitude, pos.coords.longitude];
-              marker.setLatLng(p);
-              map.setView(p, 17);
-              updateCoords();
-              btnMyLoc.disabled = false;
-            },
-            function() { btnMyLoc.disabled = false; }
-          );
+          var self = this;
+          self.disabled = true;
+          function done() { self.disabled = false; }
+          function tryIp() {
+            fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){
+              var la = d.latitude, ln = d.longitude;
+              if (la != null && ln != null) { movePinTo(la, ln); done(); return null; }
+              return fetch('https://reallyfreegeoip.org/json/').then(function(r2){return r2.json();});
+            }).then(function(d2){
+              if (d2) {
+                var la = d2.latitude != null ? d2.latitude : d2.lat, ln = d2.longitude != null ? d2.longitude : d2.lon;
+                if (la != null && ln != null) movePinTo(la, ln);
+              }
+              done();
+            }).catch(function(){ done(); });
+          }
+          if (!isMobile) {
+            tryIp();
+            return;
+          }
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              function(pos) {
+                movePinTo(pos.coords.latitude, pos.coords.longitude);
+                done();
+              },
+              tryIp,
+              { timeout: 5000, maximumAge: 60000 }
+            );
+          } else {
+            tryIp();
+          }
         };
       }
     })();

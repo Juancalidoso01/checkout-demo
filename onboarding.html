@@ -1034,6 +1034,33 @@
     <iframe id="mapPickerFrame" src="about:blank" class="flex-1 w-full min-h-[65vh] border-0 relative z-0" title="Mapa para ubicar el negocio"></iframe>
   </div>
 
+  <script>
+  (function(){
+    function applyMapCoordsFromHash(){
+      var h = (window.location.hash || '').replace(/^#/, '');
+      if (h.indexOf('mapa-done-') !== 0) return;
+      var rest = h.replace('mapa-done-', '');
+      var parts = rest.split(',');
+      var lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
+      if (isNaN(lat) || isNaN(lng)) return;
+      var latEl = document.getElementById('addressLat');
+      var lngEl = document.getElementById('addressLng');
+      var cd = document.getElementById('mapCoordsDisplay');
+      var box = document.getElementById('mapCoordsBox');
+      var modal = document.getElementById('mapModal');
+      var frame = document.getElementById('mapPickerFrame');
+      if (latEl) latEl.value = lat.toFixed(6);
+      if (lngEl) lngEl.value = lng.toFixed(6);
+      if (cd) cd.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
+      if (box) { box.style.display = 'flex'; box.classList.remove('hidden'); }
+      if (modal) { modal.style.display = 'none'; modal.classList.add('hidden'); modal.setAttribute('aria-hidden','true'); }
+      if (frame) frame.src = 'about:blank';
+      try { history.replaceState(null,'',location.pathname+location.search); } catch(e){ location.hash = ''; }
+    }
+    window.addEventListener('hashchange', applyMapCoordsFromHash);
+    if (window.location.hash.indexOf('mapa-done-') === 1) applyMapCoordsFromHash();
+  })();
+  </script>
   <script src="auth.js"></script>
   <script src="onboarding-main.js"></script>
 
