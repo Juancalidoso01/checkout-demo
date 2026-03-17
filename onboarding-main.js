@@ -1,4 +1,4 @@
-(function(){
+!function(){
   function init(){
   const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
   const ACCESS_KEY = 'pp_onboarding_access_v1';
@@ -34,7 +34,7 @@
   let applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
 
   function now(){ return Date.now(); }
-  function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] || c; }); }
   function readApplications(){
     try {
       const raw = localStorage.getItem(APPLICATIONS_KEY);
@@ -56,16 +56,23 @@
     }
   }
   function readFormData(){
-    const fd = new FormData(form);
-    const data = {};
-    for (const [key, value] of fd.entries()) {
-      if (data[key] !== undefined) continue;
-      if (value instanceof File || value instanceof Blob) continue;
-      data[key] = value;
+    var data = {};
+    var els = form.elements;
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var name = el.name;
+      if (!name) continue;
+      if (el.type === 'checkbox') { data[name] = el.checked; continue; }
+      if (el.type === 'radio') { if (el.checked) data[name] = el.value; continue; }
+      if (el.type === 'file' || el.type === 'submit' || el.type === 'button') continue;
+      if (el.value !== undefined && el.value !== null) data[name] = el.value;
     }
-    data.acceptTerms = form.elements.acceptTerms.checked;
-    data.needsApiIntegration = form.elements.needsApiIntegration.checked;
-    data.confirmPhoneOwnership = (form.elements.confirmPhoneOwnership && form.elements.confirmPhoneOwnership.checked) || false;
+    var acc = form.elements.acceptTerms;
+    data.acceptTerms = acc ? acc.checked : false;
+    var needApi = form.elements.needsApiIntegration;
+    data.needsApiIntegration = needApi ? needApi.checked : false;
+    var conf = form.elements.confirmPhoneOwnership;
+    data.confirmPhoneOwnership = (conf && conf.checked) || false;
     if (pdfInput && pdfInput.files && pdfInput.files[0]) {
       data.businessDescriptionPdfName = pdfInput.files[0].name;
     }
@@ -177,14 +184,14 @@
   }
   function renderIndicator(){
     if (!indicator) return;
-    const html = steps.map((step, idx) => `
+    var html = steps.map(function(step, idx) { return `
       <div class="ob-step ${idx === currentStep ? '-active' : ''} cursor-pointer" data-step-idx="${idx}" role="button" tabindex="0">
         <div class="ob-step-index">${idx + 1}</div>
         <div>
           <div class="font-extrabold text-sm">${esc(step.title)}</div>
           <div class="text-xs text-slate-500 mt-1">${esc(step.desc)}</div>
         </div>
-      </div>`).join('');
+      </div>`; }).join('');
     if (!html) return;
     indicator.innerHTML = html;
     indicator.querySelectorAll('.ob-step[data-step-idx]').forEach(function(el) {
@@ -218,7 +225,7 @@
       const raw = localStorage.getItem(KYC_STATUS_KEY);
       const all = raw ? JSON.parse(raw) : {};
       if (data == null) { delete all[applicationId]; }
-      else { all[applicationId] = { ...data, updatedAt: Date.now() }; }
+      else { var o = {}; for (var kk in data) o[kk] = data[kk]; o.updatedAt = Date.now(); all[applicationId] = o; }
       localStorage.setItem(KYC_STATUS_KEY, JSON.stringify(all));
     } catch (e) {}
   }
@@ -226,7 +233,10 @@
     try {
       const raw = localStorage.getItem(KYC_STATUS_KEY);
       const all = raw ? JSON.parse(raw) : {};
-      all[appId] = { ...(all[appId] || {}), ...payload, updatedAt: Date.now() };
+      var cur = all[appId] || {};
+      for (var pk in payload) { cur[pk] = payload[pk]; }
+      cur.updatedAt = Date.now();
+      all[appId] = cur;
       localStorage.setItem(KYC_STATUS_KEY, JSON.stringify(all));
       if (appId === applicationId) renderKycStatus();
     } catch (e) {}
@@ -236,7 +246,9 @@
     try {
       const raw = localStorage.getItem(KYC_STATUS_KEY);
       const all = raw ? JSON.parse(raw) : {};
-      return Object.entries(all).map(([appId, kyc]) => ({
+      var arr = [];
+      for (var ak in all) { arr.push([ak, all[ak]]); }
+      return arr.map(function(kv) { var appId = kv[0]; var kyc = kv[1]; return {
         application_id: appId,
         identity_id: kyc.identityId || null,
         verification_id: kyc.verificationId || null,
@@ -246,7 +258,7 @@
         error_type: (kyc.error && kyc.error.type) || null,
         completed_at: kyc.completedAt || null,
         updated_at: kyc.updatedAt || null
-      }));
+      }; });
     } catch (e) { return []; }
   };
   function renderKycStatus(){
@@ -285,10 +297,10 @@
         }
       }
     }
-    stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
+    stepEls.forEach(function(el, idx) { el.classList.toggle('is-hidden', idx !== currentStep); });
     prevBtn.disabled = currentStep === 0;
     nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
-    const canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3].every(i => validateStepSilent(i));
+    var canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3].every(function(i){ return validateStepSilent(i); });
     submitBtn.classList.toggle('is-hidden', !canShowSubmit);
     submitBtn.setAttribute('aria-hidden', canShowSubmit ? 'false' : 'true');
     if (currentStep === stepEls.length - 1) renderSummary();
@@ -367,7 +379,7 @@
   function getStepFields(stepIndex){
     const stepEl = stepEls[stepIndex];
     if (!stepEl) return [];
-    return Array.from(stepEl.querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
+    return Array.from(stepEl.querySelectorAll('input, select, textarea')).filter(function(el){ return el.type !== 'button' && el.type !== 'submit' && !el.disabled; });
   }
   function isValidPanamaMobile(v){
     const digits = (v||'').replace(/\D/g,'');
@@ -386,9 +398,9 @@
   }
   /** Validación silenciosa (sin reportValidity) para comprobar si un paso está completo */
   function validateStepSilent(stepIndex){
-    const fields = getStepFields(stepIndex);
-    for (const field of fields) {
-      if (!field.checkValidity()) return false;
+    var fields = getStepFields(stepIndex);
+    for (var fi = 0; fi < fields.length; fi++) {
+      if (!fields[fi].checkValidity()) return false;
     }
     if (stepIndex === 2) {
       var elLat = form.elements.addressLat;
@@ -426,8 +438,9 @@
     return labels[name] || name || 'campo';
   }
   function validateStep(stepIndex){
-    const fields = getStepFields(stepIndex);
-    for (const field of fields) {
+    var fields = getStepFields(stepIndex);
+    for (var fi = 0; fi < fields.length; fi++) {
+      var field = fields[fi];
       if (!field.checkValidity()) {
         var label = getFieldLabel(field);
         setMsg('Falta completar: ' + label + '.', true);
@@ -501,7 +514,7 @@
       ['Integración API', data.needsApiIntegration ? 'Sí' : 'No'],
       ['Notas', data.additionalNotes || '—']
     ];
-    summaryList.innerHTML = items.map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value || '—')}</dd>`).join('');
+    summaryList.innerHTML = items.map(function(it){ return '<dt>' + esc(it[0]) + '</dt><dd>' + esc(it[1] || '—') + '</dd>'; }).join('');
   }
   function buildApplication(status){
     const data = readFormData();
@@ -539,7 +552,7 @@
   function persist(status){
     const items = readApplications();
     const payload = buildApplication(status);
-    const idx = items.findIndex(item => item.id === applicationId);
+    var idx = items.findIndex(function(item){ return item.id === applicationId; });
     if (idx >= 0) {
       payload.createdAt = items[idx].createdAt || payload.createdAt;
       payload.credentials = items[idx].credentials || payload.credentials;
@@ -784,4 +797,4 @@
   } else {
     init();
   }
-})();
+}();
