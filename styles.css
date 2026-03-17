@@ -149,12 +149,6 @@
   transform: translateY(-2px) scale(1.012);
   outline-color: rgba(84,98,230,0.18);
 }
-}
-.prep-block:hover {
-  box-shadow: 0 16px 48px rgba(84,98,230,0.18), 0 2.5px 0 rgba(84,98,230,0.12);
-  transform: translateY(-2px) scale(1.012);
-}
-}
 .prep-block-img {
   flex: 0 0 320px;
   display: flex;
@@ -180,7 +174,6 @@
   justify-content: center;
   border-radius: 20px;
   background: rgba(255,255,255,0.02);
-}
 }
 .prep-block-content h3 {
   color: #fff;
