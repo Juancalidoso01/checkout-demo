@@ -257,12 +257,25 @@
     addrInput.value = savedValue;
     addrInput.dataset.addressSelected = savedValue ? 'true' : 'false';
   }
+  function getFirstIncompleteStepBefore(targetIdx){
+    for (var i = 0; i < targetIdx; i++) {
+      if (!validateStepSilent(i)) return i;
+    }
+    return -1;
+  }
   function goToStep(idx){
     if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
     if (metamapModalOpen) return;
+    var firstIncomplete = getFirstIncompleteStepBefore(idx);
+    if (firstIncomplete >= 0) {
+      currentStep = firstIncomplete;
+      renderSteps();
+      setMsg('No puede entrar a "' + steps[idx].title + '" todavía. Complete antes la etapa "' + steps[firstIncomplete].title + '".', true);
+      return;
+    }
     currentStep = idx;
     renderSteps();
-    setMsg('');
+    setMsg('', false);
     saveRecovery();
   }
   window.__obGoToStep = goToStep;
