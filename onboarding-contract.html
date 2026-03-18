@@ -82,6 +82,55 @@
     .contract-fill{display:inline-block;max-width:100%;min-width:160px;padding:0 .15rem;border-bottom:1px solid rgba(15,23,42,.35);font-weight:800;color:#0f172a;vertical-align:baseline}
     .contract-fill.-long{min-width:280px}
     .contract-fill.-short{min-width:100px}
+    .contract-inline-edit{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-width:148px;
+      max-width:100%;
+      padding:0 .15rem .08rem;
+      border-bottom:1px solid rgba(15,23,42,.35);
+      vertical-align:baseline;
+      transition:border-color .18s ease, background-color .18s ease, box-shadow .18s ease;
+    }
+    .contract-inline-edit.-long{min-width:238px}
+    .contract-inline-edit.-short{min-width:112px}
+    .contract-inline-edit:focus-within{
+      border-bottom-color:rgba(84,98,230,.65);
+      box-shadow:inset 0 -1px 0 rgba(84,98,230,.45);
+      background:rgba(84,98,230,.04);
+    }
+    .contract-inline-edit.-filled{
+      border-bottom-color:rgba(16,185,129,.55);
+      background:rgba(16,185,129,.05);
+    }
+    .contract-inline-input{
+      width:100%;
+      min-width:0;
+      border:0;
+      outline:0;
+      background:transparent;
+      padding:0;
+      margin:0;
+      font:inherit;
+      font-weight:800;
+      color:#0f172a;
+      line-height:1.2;
+    }
+    .contract-inline-input::placeholder{color:#cbd5e1}
+    .contract-inline-check{
+      flex:0 0 auto;
+      color:#10b981;
+      font-size:.82rem;
+      font-weight:900;
+      opacity:0;
+      transform:scale(.82);
+      transition:opacity .16s ease, transform .16s ease;
+    }
+    .contract-inline-edit.-filled .contract-inline-check{
+      opacity:1;
+      transform:scale(1);
+    }
     .contract-intro .contract-fill{min-width:110px}
     .contract-intro .contract-fill.-long{min-width:210px}
     .contract-clause-title{font-weight:900;color:#0f172a;text-transform:uppercase}
@@ -139,6 +188,9 @@
       .contract-main-head{padding:18px 20px 10px}
       .contract-main-card .pp-card-body{padding:8px 20px 26px}
       .contract-main-card .pp-card-body::before{inset:560px 0 0 0;background-size:320px auto}
+      .contract-inline-edit{min-width:120px}
+      .contract-inline-edit.-long{min-width:170px}
+      .contract-inline-edit.-short{min-width:92px}
       .contract-intro .contract-fill{min-width:90px}
       .contract-intro .contract-fill.-long{min-width:150px}
       .contract-fill.-long{min-width:200px}
@@ -162,7 +214,7 @@
           <div id="contractStatus" class="mb-6 contract-status hidden"></div>
 
           <article class="contract-content">
-            <p class="contract-intro">Entre los suscritos a saber señor(a) <span id="fillRepName" class="contract-fill -long">____________________________</span>, de nacionalidad <span id="fillNationality" class="contract-fill">________________</span> mayor de edad, estado civil <span id="fillCivilStatus" class="contract-fill">___________________</span>, con cédula de identidad personal/Pasaporte número <span id="fillRepId" class="contract-fill -long">____________________________</span>, con domicilio en <span id="fillDomicile" class="contract-fill -long">__________________________________________________</span>, quien actúa en nombre y representación de la sociedad <span id="fillBusinessLegalName" class="contract-fill -long">_______________________________________________</span> inscrita a Folio mercantil número <span id="fillMercantileFolio" class="contract-fill">_____________</span> de la sección Mercantil del Registro Público de Panamá, en calidad de Representante Legal, a quien en adelante y para los efectos del presente contrato se le conocerá como <span class="contract-inline">EL AGENTE EXTERNO</span> por una parte, y por la otra, <span class="contract-inline">ANDREY GORSKIY</span>, varón mayor de edad, portador del documento de identificación personal, cédula No. E-8-152790, actuando en su calidad de Representante legal y en nombre y representación de <span class="contract-inline">PUNTO PAGO PANAMA S.A</span> constituida e incorporada de conformidad con las leyes de la República de Panamá, debidamente inscrita a la Ficha 725026, Documento 1914582, de la Sección Mercantil del Registro Público, y con el Aviso de Operaciones No. 1914582-1-725026-2012-354258 y oficinas ubicadas en Obarrio, Edificio Sortis Business Tower, Oficina 17H, de la ciudad de Panamá, República de Panamá, en adelante <span class="contract-inline">PUNTO PAGO</span>, convienen en celebrar el presente <span class="contract-inline">CONTRATO DE SERVICIOS DE RECARGAS ELECTRONICAS</span>, conforme las cláusulas y condiciones descritas a continuación.</p>
+            <p class="contract-intro">Entre los suscritos a saber señor(a) <span id="fillRepName" class="contract-fill -long">____________________________</span>, de nacionalidad <span class="contract-inline-edit -short"><input id="fillNationality" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Nacionalidad"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span> mayor de edad, estado civil <span class="contract-inline-edit"><input id="fillCivilStatus" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Estado civil"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span>, con cédula de identidad personal/Pasaporte número <span class="contract-inline-edit -long"><input id="fillRepId" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Cédula o pasaporte"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span>, con domicilio en <span id="fillDomicile" class="contract-fill -long">__________________________________________________</span>, quien actúa en nombre y representación de la sociedad <span id="fillBusinessLegalName" class="contract-fill -long">_______________________________________________</span> inscrita a Folio mercantil número <span class="contract-inline-edit -short"><input id="fillMercantileFolio" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Folio mercantil"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span> de la sección Mercantil del Registro Público de Panamá, en calidad de Representante Legal, a quien en adelante y para los efectos del presente contrato se le conocerá como <span class="contract-inline">EL AGENTE EXTERNO</span> por una parte, y por la otra, <span class="contract-inline">ANDREY GORSKIY</span>, varón mayor de edad, portador del documento de identificación personal, cédula No. E-8-152790, actuando en su calidad de Representante legal y en nombre y representación de <span class="contract-inline">PUNTO PAGO PANAMA S.A</span> constituida e incorporada de conformidad con las leyes de la República de Panamá, debidamente inscrita a la Ficha 725026, Documento 1914582, de la Sección Mercantil del Registro Público, y con el Aviso de Operaciones No. 1914582-1-725026-2012-354258 y oficinas ubicadas en Obarrio, Edificio Sortis Business Tower, Oficina 17H, de la ciudad de Panamá, República de Panamá, en adelante <span class="contract-inline">PUNTO PAGO</span>, convienen en celebrar el presente <span class="contract-inline">CONTRATO DE SERVICIOS DE RECARGAS ELECTRONICAS</span>, conforme las cláusulas y condiciones descritas a continuación.</p>
 
           <p><span class="contract-clause-title">PRIMERA:</span> Declara EL AGENTE EXTERNO será el responsable por el uso del software y servicio de recargas electrónicas con lo cual podrá beneficiarse con una comisión según el estándar tarifario descrito en el ANEXO 1.</p>
 
@@ -365,6 +417,13 @@
       const fillRepSignatureImageEl = document.getElementById('fillRepSignatureImage');
       const fillRepNameFooterEl = document.getElementById('fillRepNameFooter');
       const fillBusinessLegalNameFooterEl = document.getElementById('fillBusinessLegalNameFooter');
+      const editableContractFields = [
+        { key: 'contractNationality', el: fillNationalityEl },
+        { key: 'contractCivilStatus', el: fillCivilStatusEl },
+        { key: 'contractRepId', el: fillRepIdEl },
+        { key: 'contractMercantileFolio', el: fillMercantileFolioEl }
+      ].filter(item => item.el);
+      let persistContractFieldsTimer = null;
 
       function esc(value){
         return String(value || '')
@@ -382,7 +441,47 @@
 
       function fillText(el, value, fallback){
         if (!el) return;
+        if (el.tagName === 'INPUT') {
+          el.value = value || '';
+          syncEditableIndicator(el);
+          return;
+        }
         el.textContent = value || fallback || '________________';
+      }
+
+      function syncEditableIndicator(inputEl){
+        if (!inputEl) return;
+        const wrap = inputEl.closest('.contract-inline-edit');
+        if (!wrap) return;
+        wrap.classList.toggle('-filled', !!String(inputEl.value || '').trim());
+      }
+
+      function collectEditableContractData(){
+        return editableContractFields.reduce(function(acc, item){
+          acc[item.key] = (item.el.value || '').trim();
+          return acc;
+        }, {});
+      }
+
+      function persistEditableContractData(){
+        if (!app || !app.id) return;
+        const apps = window.PPAuth.loadApplications();
+        const idx = apps.findIndex(function(item){ return item && item.id === app.id; });
+        if (idx < 0) return;
+        apps[idx] = {
+          ...apps[idx],
+          onboarding: {
+            ...(apps[idx].onboarding || {}),
+            ...collectEditableContractData()
+          },
+          updatedAt: Date.now()
+        };
+        window.PPAuth.saveApplications(apps);
+      }
+
+      function queuePersistEditableContractData(){
+        clearTimeout(persistContractFieldsTimer);
+        persistContractFieldsTimer = setTimeout(persistEditableContractData, 180);
       }
 
       function formatBankType(value){
@@ -427,12 +526,12 @@
         fillText(summaryIssueDateEl, issueDateText, 'Pendiente');
         fillText(summaryStateEl, formatStateLabel(item), 'Pendiente');
         if (fillRepNameEl) fillRepNameEl.textContent = repName;
-        fillText(fillNationalityEl, '', '________________');
-        fillText(fillCivilStatusEl, '', '___________________');
-        fillText(fillRepIdEl, '', '____________________________');
+        fillText(fillNationalityEl, data.contractNationality || data.nationality, '');
+        fillText(fillCivilStatusEl, data.contractCivilStatus || data.civilStatus, '');
+        fillText(fillRepIdEl, data.contractRepId || data.repId || data.repDocumentNumber, '');
         fillText(fillDomicileEl, domicilio, '__________________________________________________');
         fillText(fillBusinessLegalNameEl, legalName, '_______________________________________________');
-        fillText(fillMercantileFolioEl, '', '_____________');
+        fillText(fillMercantileFolioEl, data.contractMercantileFolio || data.mercantileFolio, '');
         fillText(fillBankHolderEl, data.bankAccountHolder, '_____________________________________');
         fillText(fillBankNameEl, data.bankName, '______________________________________');
         fillText(fillBankNumberEl, data.bankAccountNumber, '_____________________________________');
@@ -479,6 +578,16 @@
         });
       }
 
+      editableContractFields.forEach(function(item){
+        syncEditableIndicator(item.el);
+        ['input', 'change', 'blur'].forEach(function(eventName){
+          item.el.addEventListener(eventName, function(){
+            syncEditableIndicator(item.el);
+            queuePersistEditableContractData();
+          });
+        });
+      });
+
       continueBtn.addEventListener('click', function(){
         if ((app.status || '') === 'pending_review' || (app.status || '') === 'pending') {
           location.href = window.PPAuth.buildPendingReviewUrl(app.id || '');
@@ -491,6 +600,10 @@
             ...apps[idx],
             status: 'pending_review',
             submittedAt: apps[idx].submittedAt || Date.now(),
+            onboarding: {
+              ...(apps[idx].onboarding || {}),
+              ...collectEditableContractData()
+            },
             review: {
               ...(apps[idx].review || {}),
               state: 'pending',
