@@ -131,6 +131,10 @@
     return val === 'pending_review' || val === 'pending';
   }
 
+  function isContractPendingStatus(status){
+    return (status || '').toString().toLowerCase() === 'contract_pending';
+  }
+
   function findApplicationById(id){
     if (!id) return null;
     const apps = loadApplications();
@@ -155,7 +159,7 @@
     const apps = loadApplications();
     for (let i = apps.length - 1; i >= 0; i -= 1) {
       const app = apps[i];
-      if (!app || !isPendingApplicationStatus(app.status)) continue;
+      if (!app || (!isPendingApplicationStatus(app.status) && !isContractPendingStatus(app.status))) continue;
       const credentials = app.credentials || {};
       const usernames = [normalize(credentials.username)];
       const emails = getApplicationEmails(app);
@@ -169,7 +173,7 @@
     const users = loadUsers();
     const user = users.find(x => x && x.id === session.userId);
     const onboarding = user && user.onboarding ? user.onboarding : null;
-    if (onboarding && isPendingApplicationStatus(onboarding.status)) {
+    if (onboarding && (isPendingApplicationStatus(onboarding.status) || isContractPendingStatus(onboarding.status))) {
       return findApplicationById(onboarding.applicationId) || {
         id: onboarding.applicationId || '',
         status: onboarding.status
@@ -183,8 +187,84 @@
     return buildAppUrl(`onboarding-review-pending.html${suffix}`);
   }
 
+  function buildContractUrl(applicationId){
+    const suffix = applicationId ? `?applicationId=${encodeURIComponent(applicationId)}` : '';
+    return buildAppUrl(`onboarding-contract.html${suffix}`);
+  }
+
+  function redirectToContract(applicationId){
+    location.href = buildContractUrl(applicationId);
+  }
+
   function redirectToPendingReview(applicationId){
     location.href = buildPendingReviewUrl(applicationId);
+  }
+
+  function getPostSubmissionRoute(application){
+    if (!application) return null;
+    if (isContractPendingStatus(application.status)) {
+      return { type: 'contract', applicationId: application.id || '' };
+    }
+    if (isPendingApplicationStatus(application.status)) {
+      return { type: 'review', applicationId: application.id || '' };
+    }
+    return null;
+  }
+
+  function redirectForApplication(application){
+    const route = getPostSubmissionRoute(application);
+    if (!route) return false;
+    if (route.type === 'contract') redirectToContract(route.applicationId);
+    else redirectToPendingReview(route.applicationId);
+    return true;
+  }
+
+  function buildPreviewApplication(overrides){
+    const baseId = (overrides && overrides.id) || 'demo_app_preview';
+    const timestamp = now();
+    return {
+      id: baseId,
+      type: 'agent_onboarding',
+      status: 'pending_review',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      submittedAt: timestamp,
+      onboarding: {
+        businessTradeName: 'Comercio Demo Preview',
+        businessLegalName: 'Comercio Demo Preview, S.A.',
+        repEmail: 'preview@puntopago.test',
+        opsContactEmail: 'operaciones@puntopago.test',
+        settlementEmail: 'liquidaciones@puntopago.test',
+        taxId: '155677889-2-2026 DV 88',
+        ...(overrides && overrides.onboarding ? overrides.onboarding : {})
+      },
+      review: {
+        state: 'pending_review',
+        approvedBy: null,
+        approvedAt: null,
+        rejectionReason: '',
+        notes: 'Solicitud de vista previa local.',
+        ...(overrides && overrides.review ? overrides.review : {})
+      },
+      credentials: {
+        username: '',
+        temporaryPassword: '',
+        linkedUserId: null,
+        ...(overrides && overrides.credentials ? overrides.credentials : {})
+      },
+      ...(overrides || {})
+    };
+  }
+
+  function ensurePreviewApplication(overrides){
+    const previewApp = buildPreviewApplication(overrides);
+    const apps = loadApplications();
+    const idx = apps.findIndex(app => app && app.id === previewApp.id);
+    if (idx >= 0) apps[idx] = { ...apps[idx], ...previewApp, updatedAt: now() };
+    else apps.push(previewApp);
+    saveApplications(apps);
+    setLastSubmittedApplicationId(previewApp.id);
+    return previewApp;
   }
 
   function signIn(username, password){
@@ -196,11 +276,13 @@
     if (!user) {
       const pendingApp = findPendingApplicationByIdentifier(u);
       if (pendingApp) {
+        const pendingRoute = getPostSubmissionRoute(pendingApp);
         return {
           ok: false,
-          errorKey: 'login_err_pending_review',
-          error: 'Tu solicitud todavía está en revisión.',
-          pendingReview: true,
+          errorKey: pendingRoute && pendingRoute.type === 'contract' ? 'login_err_contract_pending' : 'login_err_pending_review',
+          error: pendingRoute && pendingRoute.type === 'contract' ? 'Tu solicitud está pendiente de aceptar contrato.' : 'Tu solicitud todavía está en revisión.',
+          pendingReview: pendingRoute && pendingRoute.type === 'review',
+          contractPending: pendingRoute && pendingRoute.type === 'contract',
           applicationId: pendingApp.id
         };
       }
@@ -208,12 +290,17 @@
     }
     if (!user.active) return { ok:false, errorKey: 'login_err_disabled', error: 'Usuario deshabilitado.' };
     if ((user.password || '') !== p) return { ok:false, errorKey: 'login_err_invalid', error: 'Usuario o contraseña inválidos.' };
-    if (user.onboarding && isPendingApplicationStatus(user.onboarding.status)) {
+    if (user.onboarding && (isPendingApplicationStatus(user.onboarding.status) || isContractPendingStatus(user.onboarding.status))) {
+      const pendingRoute = getPostSubmissionRoute({
+        id: user.onboarding.applicationId || '',
+        status: user.onboarding.status
+      });
       return {
         ok: false,
-        errorKey: 'login_err_pending_review',
-        error: 'Tu solicitud todavía está en revisión.',
-        pendingReview: true,
+        errorKey: pendingRoute && pendingRoute.type === 'contract' ? 'login_err_contract_pending' : 'login_err_pending_review',
+        error: pendingRoute && pendingRoute.type === 'contract' ? 'Tu solicitud está pendiente de aceptar contrato.' : 'Tu solicitud todavía está en revisión.',
+        pendingReview: pendingRoute && pendingRoute.type === 'review',
+        contractPending: pendingRoute && pendingRoute.type === 'contract',
         applicationId: user.onboarding.applicationId || ''
       };
     }
@@ -243,7 +330,7 @@
 
     const pendingApp = getPendingApplicationForSession(session);
     if (pendingApp){
-      redirectToPendingReview(pendingApp.id || '');
+      redirectForApplication(pendingApp);
       return null;
     }
 
@@ -264,7 +351,7 @@
     const s = getSession();
     const pendingApp = getPendingApplicationForSession(s);
     if (pendingApp) {
-      redirectToPendingReview(pendingApp.id || '');
+      redirectForApplication(pendingApp);
       return;
     }
     if (next) {
@@ -317,8 +404,15 @@
     getPendingApplicationForSession,
     getLastSubmittedApplicationId,
     setLastSubmittedApplicationId,
+    buildPreviewApplication,
+    ensurePreviewApplication,
+    isContractPendingStatus,
+    getPostSubmissionRoute,
+    buildContractUrl,
+    redirectToContract,
     buildPendingReviewUrl,
     redirectToPendingReview,
+    redirectForApplication,
     ensureLogoutButton,
     renderSessionBadge,
   };

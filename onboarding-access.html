@@ -926,6 +926,15 @@
             setTimeout(() => { location.href = 'login.html'; }, 700);
             return;
           }
+          if (status === 'contract_pending') {
+            setGateMsg('Tu solicitud quedó pendiente de aceptar el contrato.', false);
+            setStatus('-warn', 'Debes aceptar el contrato de servicio antes de que podamos procesar la revisión.');
+            setNextStep('Te llevaremos al contrato pendiente para que completes el paso final.', false);
+            setTimeout(() => {
+              window.PPAuth.redirectToContract(existingApp.id || '');
+            }, 700);
+            return;
+          }
           if (status === 'pending_review' || status === 'pending') {
             setGateMsg('Ya existe una solicitud en revisión para este correo.', false);
             setStatus('-warn', 'Tu solicitud ya está en evaluación. No necesitas completar otra.');

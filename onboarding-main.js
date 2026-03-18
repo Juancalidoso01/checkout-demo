@@ -65,6 +65,34 @@
       else localStorage.setItem(LAST_SUBMITTED_APPLICATION_KEY, id);
     } catch (e) {}
   }
+  function redirectIfSubmissionLocked(){
+    try {
+      var currentId = getCurrentApplicationId();
+      var items = readApplications();
+      var saved = null;
+      if (currentId) {
+        saved = items.find(function(item){
+          return item && item.type === 'agent_onboarding' && item.id === currentId;
+        }) || null;
+      }
+      if (!saved) {
+        saved = items.find(function(item){
+          return item && item.type === 'agent_onboarding' && (item.status === 'contract_pending' || item.status === 'pending_review' || item.status === 'pending');
+        }) || null;
+      }
+      if (!saved) return false;
+      setLastSubmittedApplicationId(saved.id || '');
+      if (saved.status === 'contract_pending') {
+        location.href = 'onboarding-contract.html?applicationId=' + encodeURIComponent(saved.id || '');
+        return true;
+      }
+      if (saved.status === 'pending_review' || saved.status === 'pending') {
+        location.href = 'onboarding-review-pending.html?applicationId=' + encodeURIComponent(saved.id || '');
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  }
   function readAccessContext(){
     try {
       const raw = localStorage.getItem(ACCESS_KEY);
@@ -207,7 +235,7 @@
       setKycStatus(saved.kycVerification);
     }
     applicationCodeEl.textContent = applicationId;
-    draftStatusEl.textContent = saved.status === 'pending_review' ? 'Enviado a revisión' : 'Guardado';
+    draftStatusEl.textContent = saved.status === 'pending_review' ? 'Enviado a revisión' : (saved.status === 'contract_pending' ? 'Contrato pendiente' : 'Guardado');
     draftStatusEl.classList.remove('ob-status-unsaved');
     draftStatusEl.classList.add('ob-status-saved');
     setCurrentApplicationId(applicationId);
@@ -230,7 +258,7 @@
       }
       if (!saved) {
         saved = items.find(function(item){
-          return item && item.type === 'agent_onboarding' && (item.status === 'draft' || item.status === 'pending_review');
+          return item && item.type === 'agent_onboarding' && (item.status === 'draft' || item.status === 'contract_pending' || item.status === 'pending_review');
         }) || null;
       }
       return applySavedApplication(saved);
@@ -809,7 +837,7 @@
       updatedAt: now(),
       createdAt: now(),
       review: {
-        state: status === 'pending_review' ? 'pending' : 'draft',
+        state: status === 'pending_review' ? 'pending' : (status === 'contract_pending' ? 'contract_pending' : 'draft'),
         approvedBy: null,
         approvedAt: null,
         rejectionReason: ''
@@ -846,7 +874,7 @@
     writeApplications(items);
     setCurrentApplicationId(applicationId);
     applicationCodeEl.textContent = applicationId;
-    draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : 'Guardado';
+    draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : (status === 'contract_pending' ? 'Contrato pendiente' : 'Guardado');
     draftStatusEl.classList.remove('ob-status-unsaved');
     draftStatusEl.classList.add('ob-status-saved');
     return payload;
@@ -1024,9 +1052,9 @@
       if (!dataUrl) { setMsg('Debe firmar antes de enviar.', true); return; }
       submitBtn.disabled = true;
       closeSignatureModal();
-      var payload = persist('pending_review', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
+      var payload = persist('contract_pending', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
       setLastSubmittedApplicationId(payload && payload.id ? payload.id : applicationId);
-      setMsg('Solicitud enviada a revisión. Redirigiendo al contrato de servicio...', false);
+      setMsg('Solicitud lista para contrato. Redirigiendo al contrato de servicio...', false);
       location.href = 'onboarding-contract.html?applicationId=' + encodeURIComponent((payload && payload.id) ? payload.id : applicationId);
     });
   })();
@@ -1101,6 +1129,10 @@
 
   if (!accessContext.emailVerified && !modoPrueba) {
     location.href = 'onboarding-access.html';
+    return;
+  }
+
+  if (!/[?&]preview=firma/i.test(window.location.search || '') && redirectIfSubmissionLocked()) {
     return;
   }
 

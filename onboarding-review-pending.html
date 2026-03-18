@@ -5,54 +5,213 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
   <title>Documentos enviados para revisión - Punto Pago</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body{margin:0;background:radial-gradient(circle at top,#eef2ff 0%,#f8fafc 38%,#f8fafc 100%);font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:#0f172a}
-    .pending-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .pending-card{width:min(100%,760px);background:#fff;border:1px solid rgba(148,163,184,.18);border-radius:32px;box-shadow:0 28px 64px rgba(15,23,42,.12);padding:32px}
-    .pending-badge{display:inline-flex;align-items:center;gap:.55rem;padding:.55rem .9rem;border-radius:999px;background:#ecfdf5;color:#047857;font-size:.8125rem;font-weight:800}
+    html,body{background:#fff !important}
+    body{margin:0;font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:#0f172a}
+    main.pp-page{background:#fff !important}
+    .pending-shell{max-width:1180px;margin:0 auto;padding:24px}
+    .pending-hero{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(84,98,230,.10);
+      background:
+        radial-gradient(circle at top left,rgba(97,113,255,.14),transparent 28%),
+        linear-gradient(135deg,#ffffff 0%,#eef3ff 44%,#ffffff 100%);
+      box-shadow:0 34px 80px rgba(15,23,42,.08);
+    }
+    .pending-hero::before{
+      content:'';
+      position:absolute;
+      inset:auto auto -42px -42px;
+      width:200px;
+      height:200px;
+      border-radius:999px;
+      background:rgba(84,98,230,.10);
+      filter:blur(18px);
+    }
+    .pending-hero::after{
+      content:'';
+      position:absolute;
+      inset:-52px -28px auto auto;
+      width:240px;
+      height:240px;
+      border-radius:999px;
+      background:rgba(59,130,246,.10);
+      filter:blur(24px);
+    }
+    .pending-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:center}
+    .pending-kicker{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;background:#ecfdf5;border:1px solid #a7f3d0;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#047857}
+    .pending-title{font-family:'Montserrat',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:clamp(2.2rem,4.7vw,4.3rem);line-height:.94;letter-spacing:-.085em;font-weight:700;color:#111827;max-width:10ch;margin:16px 0 12px;text-wrap:pretty;text-rendering:optimizeLegibility}
+    .pending-title .accent{color:#5b63f6}
+    .pending-copy{font-size:15px;line-height:1.65;color:#475569;max-width:58ch}
+    .pending-hero-steps{display:grid;gap:12px}
+    .pending-step{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(148,163,184,.12)}
+    .pending-step:last-child{border-bottom:0;padding-bottom:0}
+    .pending-step-badge{width:32px;height:32px;border-radius:999px;background:linear-gradient(135deg,rgba(84,98,230,.16),rgba(59,130,246,.12));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:var(--pp-primary,#5462e6);flex:0 0 auto}
+    .pending-step strong{display:block;color:#0f172a;font-size:14px}
+    .pending-step p{margin:3px 0 0;font-size:12px;line-height:1.45;color:#64748b}
+    .pending-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start;margin-top:20px}
+    .pending-main-card,.pending-side-card{border-radius:28px}
+    .pending-main-head{background:linear-gradient(180deg,rgba(84,98,230,.06),rgba(255,255,255,.96))}
+    .pending-mini-kicker{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(84,98,230,.08);border:1px solid rgba(84,98,230,.12);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--pp-primary,#5462e6)}
+    .pending-alert{border:1px solid rgba(148,163,184,.18);border-radius:20px;background:#f8fafc;color:#334155}
     .pending-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    .pending-item{border:1px solid rgba(148,163,184,.16);border-radius:18px;padding:14px 16px;background:#f8fafc}
+    .pending-item{border:1px solid rgba(148,163,184,.16);border-radius:18px;padding:14px 16px;background:#fff}
     .pending-label{display:block;font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#64748b}
     .pending-value{display:block;margin-top:.35rem;font-size:.98rem;font-weight:700;color:#0f172a;word-break:break-word}
+    .pending-next-grid{display:grid;gap:12px}
+    .pending-next-item{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:20px;background:#f8fafc;border:1px solid rgba(148,163,184,.16)}
+    .pending-next-icon{width:30px;height:30px;border-radius:999px;background:rgba(84,98,230,.12);color:var(--pp-primary,#5462e6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:0 0 auto}
+    .pending-next-item strong{display:block;color:#0f172a;font-size:13px}
+    .pending-next-item p{margin:3px 0 0;color:#64748b;font-size:12px;line-height:1.5}
+    .pending-side-card{position:sticky;top:24px}
+    .pending-status-box{border:1px solid rgba(16,185,129,.18);background:linear-gradient(180deg,#ecfdf5,#ffffff);border-radius:24px;padding:18px}
+    .pending-status-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+    .pending-actions{display:grid;gap:12px}
+    @media (max-width: 960px){
+      .pending-hero-grid,.pending-layout{grid-template-columns:1fr}
+      .pending-side-card{position:static}
+      .pending-title{max-width:12ch}
+    }
+    @media (max-width: 640px){
+      .pending-shell{padding:16px}
+      .pending-title{font-size:clamp(2rem,10vw,3rem);line-height:.98;letter-spacing:-.07em}
+    }
   </style>
 </head>
-<body>
-  <main class="pending-shell">
-    <section class="pending-card">
-      <div class="pending-badge">Documentos enviados para revisión</div>
-      <h1 class="mt-5 text-3xl font-extrabold tracking-tight">Recibimos tu solicitud correctamente</h1>
-      <p class="mt-3 text-base leading-7 text-slate-600">Tu expediente quedó en revisión. No necesitas volver a completar el formulario. Cuando el proceso sea aprobado, podrás usar tus credenciales activas en el portal.</p>
+<body class="pp-page">
+  <main class="pp-shell pending-shell">
+    <section class="pending-hero pp-card overflow-hidden">
+      <div class="px-6 py-7 sm:px-8 sm:py-8">
+        <div class="pending-hero-grid">
+          <div>
+            <div class="pending-kicker">Solicitud enviada</div>
+            <h1 class="pending-title">Tu onboarding está <span class="accent">en revisión</span></h1>
+            <p class="pending-copy">Recibimos correctamente el expediente y el contrato aceptado. Desde aquí solo necesitas seguir el estado de la solicitud mientras el equipo valida información, documentos y habilitación comercial.</p>
+          </div>
 
-      <div id="pendingAlert" class="mt-5 hidden rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700"></div>
-      <div id="pendingSummary" class="pending-grid mt-8"></div>
-
-      <div class="mt-8 rounded-3xl border border-slate-200 bg-slate-50 p-5">
-        <h2 class="text-sm font-extrabold uppercase tracking-wide text-slate-500">Qué sigue</h2>
-        <div class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <p>Validaremos la información, la firma y los documentos cargados.</p>
-          <p>Si hace falta algún ajuste, el equipo podrá solicitar información adicional.</p>
-          <p>Las credenciales del portal se habilitarán únicamente después de la aprobación.</p>
+          <div class="pp-card -soft overflow-hidden bg-white/90">
+            <div class="pp-card-head">
+              <span class="pending-mini-kicker">Qué revisaremos</span>
+            </div>
+            <div class="pp-card-body pending-hero-steps">
+              <div class="pending-step">
+                <span class="pending-step-badge">1</span>
+                <div>
+                  <strong>Datos del comercio</strong>
+                  <p>Confirmamos la información capturada durante el onboarding y su consistencia general.</p>
+                </div>
+              </div>
+              <div class="pending-step">
+                <span class="pending-step-badge">2</span>
+                <div>
+                  <strong>Documentos y contrato</strong>
+                  <p>Validamos la documentación subida y la aceptación registrada en el paso anterior.</p>
+                </div>
+              </div>
+              <div class="pending-step">
+                <span class="pending-step-badge">3</span>
+                <div>
+                  <strong>Habilitación de acceso</strong>
+                  <p>Cuando la solicitud sea aprobada, el acceso al portal quedará disponible con credenciales activas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a id="goToLoginBtn" href="login.html" class="pp-btn pp-btn-secondary">Ir al login</a>
-        <a href="onboarding-access.html" class="pp-btn pp-btn-secondary">Volver al acceso</a>
-        <button id="logoutBtn" type="button" class="pp-btn pp-btn-primary hidden">Cerrar sesión</button>
-      </div>
     </section>
+
+    <div class="pending-layout">
+      <section class="pp-card overflow-hidden pending-main-card">
+        <div class="pp-card-head pending-main-head">
+          <span class="pending-mini-kicker">Estado del expediente</span>
+          <h2 class="mt-3 text-2xl font-extrabold tracking-tight text-slate-900">Recibimos tu solicitud correctamente</h2>
+          <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-600">Esta pantalla consolida el expediente ya enviado y te permite regresar al acceso o al login según el estado actual de la revisión.</p>
+        </div>
+
+        <div class="pp-card-body">
+          <div id="pendingAlert" class="pending-alert hidden px-4 py-3 text-sm"></div>
+          <div id="pendingSummary" class="pending-grid mt-6"></div>
+
+          <div class="mt-8">
+            <span class="pending-mini-kicker">Qué sigue</span>
+            <div class="pending-next-grid mt-4">
+              <div class="pending-next-item">
+                <span class="pending-next-icon">A</span>
+                <div>
+                  <strong>Validación interna</strong>
+                  <p>El equipo revisará información general, firma y documentos cargados en el expediente.</p>
+                </div>
+              </div>
+              <div class="pending-next-item">
+                <span class="pending-next-icon">B</span>
+                <div>
+                  <strong>Ajustes si fueran necesarios</strong>
+                  <p>Si hace falta completar o corregir algo, podrán pedir información adicional antes de aprobar.</p>
+                </div>
+              </div>
+              <div class="pending-next-item">
+                <span class="pending-next-icon">C</span>
+                <div>
+                  <strong>Activación del portal</strong>
+                  <p>Las credenciales del portal se habilitarán únicamente después de la aprobación del onboarding.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="pending-side-card space-y-5">
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <span class="pending-mini-kicker">Seguimiento</span>
+          </div>
+          <div class="pp-card-body">
+            <div class="pending-status-box">
+              <span class="pending-status-pill">Revisión en curso</span>
+              <h2 class="mt-4 text-xl font-extrabold tracking-tight text-slate-900">Tu expediente queda guardado</h2>
+              <p class="mt-2 text-sm leading-6 text-slate-600">No necesitas repetir el formulario. Esta misma solicitud seguirá siendo la referencia hasta que cambie a aprobada o rechazada.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="pp-card -soft overflow-hidden">
+          <div class="pp-card-head">
+            <span class="pending-mini-kicker">Acciones</span>
+          </div>
+          <div class="pp-card-body">
+            <div class="pending-actions">
+              <a id="goToLoginBtn" href="login.html" class="pp-btn pp-btn-secondary justify-center">Ir al login</a>
+              <a href="onboarding-access.html" class="pp-btn pp-btn-secondary justify-center">Volver al acceso</a>
+              <button id="logoutBtn" type="button" class="pp-btn pp-btn-primary -full hidden">Cerrar sesión</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
   </main>
 
   <script src="auth.js"></script>
   <script>
     (function(){
       const params = new URLSearchParams(location.search);
+      const isPreview = /(?:^|[?&])preview=1(?:&|$)/i.test(location.search || '');
       const session = window.PPAuth.getSession();
       const sessionPending = window.PPAuth.getPendingApplicationForSession(session);
-      const appId = params.get('applicationId') || (sessionPending && sessionPending.id) || window.PPAuth.getLastSubmittedApplicationId();
-      const app = window.PPAuth.findApplicationById(appId);
+      const previewApp = isPreview ? window.PPAuth.ensurePreviewApplication({
+        id: 'demo_review_preview',
+        status: 'pending_review',
+        review: { state: 'pending' }
+      }) : null;
+      const appId = isPreview ? previewApp.id : (params.get('applicationId') || (sessionPending && sessionPending.id) || window.PPAuth.getLastSubmittedApplicationId());
+      const app = isPreview ? previewApp : window.PPAuth.findApplicationById(appId);
       const summaryEl = document.getElementById('pendingSummary');
       const alertEl = document.getElementById('pendingAlert');
       const logoutBtn = document.getElementById('logoutBtn');
@@ -108,7 +267,18 @@
       }
 
       window.PPAuth.setLastSubmittedApplicationId(app.id || '');
+      if (!isPreview && window.PPAuth.isContractPendingStatus(app.status)) {
+        showAlert('Esta solicitud todavía requiere aceptar el contrato. Te llevaremos al paso pendiente.');
+        setTimeout(function(){
+          window.PPAuth.redirectToContract(app.id || '');
+        }, 700);
+        return;
+      }
       renderSummary(app);
+      if (isPreview) {
+        showAlert('Modo preview local activo. Esta pantalla usa una solicitud mock para que puedas ajustar diseño y textos.');
+        return;
+      }
 
       if ((app.status || '') === 'approved') {
         showAlert('Esta solicitud ya fue aprobada. Ya puedes ingresar al login regular.');
