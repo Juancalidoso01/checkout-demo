@@ -1095,10 +1095,15 @@
     var fields = getStepFields(currentStep);
     for (var i = 0; i < fields.length; i++) {
       var field = fields[i];
+      if (!field || field.type === 'checkbox' || field.type === 'radio' || field.type === 'hidden' || field.type === 'file') continue;
       var wrap = field.closest('.ob-field-wrap');
       if (!wrap) continue;
       var check = wrap.querySelector('.ob-field-check');
       if (!check) continue;
+      if (!field.required) {
+        check.classList.remove('-ok');
+        continue;
+      }
       var valid = field.checkValidity();
       if (currentStep === 1 && field.name === 'repCellPhone') {
         valid = valid && isValidPanamaMobile(field.value || '').valid;
@@ -1119,7 +1124,9 @@
       var fields = stepEl.querySelectorAll('input, select, textarea');
       for (var i = 0; i < fields.length; i++) {
         var field = fields[i];
-        if (field.type === 'button' || field.type === 'submit' || field.type === 'file' || field.disabled) continue;
+        if (!field || field.disabled) continue;
+        if (field.tagName === 'INPUT' && ['button','submit','file','checkbox','radio','hidden'].indexOf(field.type) >= 0) continue;
+        if (!field.required) continue;
         var wrap = field.closest('.ob-field-wrap');
         if (!wrap) {
           wrap = document.createElement('div');
