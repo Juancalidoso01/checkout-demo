@@ -99,6 +99,9 @@
     /* Listas desplegables: encima del contenido, sin recorte */
     .form-step{overflow:visible !important}
     #industry-suggestions,#repOcupacion-suggestions,#repActividad-suggestions,#addressSuggestions{z-index:9999 !important;position:absolute !important;box-shadow:0 12px 28px rgba(0,0,0,.15) !important}
+    .ob-address-loading{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#64748b;margin-top:8px}
+    .ob-address-loading.hidden{display:none}
+    .ob-address-spinner{width:16px;height:16px;border:2px solid rgba(84,98,230,.18);border-top-color:#5462e6;border-radius:50%;animation:kyc-spin .8s linear infinite;flex:0 0 auto}
     /* Cursor ring + efectos visuales (como onboarding-access) */
     .cursor-ring{position:fixed;top:0;left:0;width:58px;height:58px;border-radius:999px;border:2px solid rgba(84,98,230,.82);background:transparent;pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .18s ease,height .18s ease,opacity .18s ease,border-color .18s ease,box-shadow .18s ease}
     .cursor-ring.-visible{opacity:1}
@@ -769,8 +772,12 @@
                   <p class="text-sm text-slate-700 mb-3">Detalle la dirección lo más exacta posible. Escriba y seleccione una sugerencia, o complete manualmente.</p>
                   <div class="relative">
                     <label class="pp-label">Dirección *</label>
-                    <input id="addressSearch" type="text" class="pp-field" placeholder="Escriba calle, barrio, ciudad... Ej: Av. Central, Bella Vista, Panamá" autocomplete="off">
+                    <input id="addressSearch" type="text" class="pp-field" placeholder="Escriba calle, barrio, ciudad... Ej: Av. Central, Bella Vista, Panamá" autocomplete="off" required>
                     <ul id="addressSuggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-slate-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de dirección"></ul>
+                  </div>
+                  <div id="addressLookupLoading" class="ob-address-loading hidden" aria-live="polite">
+                    <span class="ob-address-spinner" aria-hidden="true"></span>
+                    <span>Buscando direcciones...</span>
                   </div>
                   <input type="hidden" name="province" id="province">
                   <input type="hidden" name="district" id="district">
@@ -788,27 +795,47 @@
                       var corregimientoEl = document.getElementById('corregimiento');
                       var businessAddressEl = document.getElementById('businessAddress');
                       var addressParsed = document.getElementById('addressParsed');
+                      var addressLookupLoading = document.getElementById('addressLookupLoading');
                       var debounceTimer = null;
+                      var requestSeq = 0;
+                      var selectedAddressValue = '';
                       function getApiKey(){ return ((window.PPSupabaseConfig || {}).geoapifyApiKey || '').trim(); }
                       if (!input || !suggestions) return;
                       function syncBusinessAddr(v){ if (businessAddressEl) businessAddressEl.value = (v || '').trim(); }
                       function showParsed(t){ if (addressParsed){ addressParsed.textContent = t || ''; addressParsed.classList.toggle('hidden', !t); } }
+                      function finalizeAddressSelection(value){
+                        selectedAddressValue = (value || '').trim();
+                        input.dataset.addressSelected = selectedAddressValue ? 'true' : 'false';
+                        requestSeq++;
+                        clearTimeout(debounceTimer);
+                        setLookupLoading(false);
+                        suggestions.innerHTML = '';
+                        suggestions.classList.add('hidden');
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                        input.blur();
+                      }
+                      function setLookupLoading(open){
+                        if (addressLookupLoading) addressLookupLoading.classList.toggle('hidden', !open);
+                      }
+                      function renderLoadingSuggestion(){
+                        suggestions.innerHTML = '<li class="px-4 py-3 text-sm text-slate-500 flex items-center gap-2"><span class="ob-address-spinner" aria-hidden="true"></span><span>Consultando servicio de direcciones...</span></li>';
+                        suggestions.classList.remove('hidden');
+                      }
                       function setFromLocal(value){
                         input.value = value;
                         syncBusinessAddr(value);
-                        suggestions.classList.add('hidden');
+                        showParsed('');
                         if (value !== 'Otra dirección (especificar)') {
                           var m = value.match(/^(.+),\s*(.+)$/);
                           if (m) { if (corregimientoEl) corregimientoEl.value = m[1].trim(); if (provinceEl) provinceEl.value = m[2].trim(); }
                         }
-                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                        finalizeAddressSelection(value);
                       }
                       function setFromGeoapify(item){
                         var fmt = item.formatted || item.address_line1 || '';
                         if (item.address_line2) fmt += ', ' + item.address_line2;
                         input.value = fmt;
                         syncBusinessAddr(fmt);
-                        suggestions.classList.add('hidden');
                         if (provinceEl) provinceEl.value = (item.state || item.county || '') + '';
                         if (districtEl) districtEl.value = (item.county || item.district || '') + '';
                         if (corregimientoEl) corregimientoEl.value = (item.suburb || item.district || item.city || '') + '';
@@ -820,11 +847,12 @@
                         if (item.lat != null && item.lon != null && typeof window.__obSetAddressFromGeocode === 'function') {
                           window.__obSetAddressFromGeocode(parseFloat(item.lat), parseFloat(item.lon));
                         }
-                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                        finalizeAddressSelection(fmt);
                       }
                       function renderLocalSuggestions(value){
                         var raw = (value || '').trim();
                         var lower = raw.toLowerCase();
+                        setLookupLoading(false);
                         suggestions.innerHTML = '';
                         if (!raw) { suggestions.classList.add('hidden'); return; }
                         var matches = addressList.filter(function(a){ return a.toLowerCase().indexOf(lower) >= 0; });
@@ -856,14 +884,24 @@
                       }
                       function onInput(){
                         var val = (input.value || '').trim();
+                        if (selectedAddressValue && val !== selectedAddressValue) {
+                          selectedAddressValue = '';
+                          input.dataset.addressSelected = 'false';
+                        }
                         syncBusinessAddr(val);
                         clearTimeout(debounceTimer);
-                        if (!val) { suggestions.innerHTML = ''; suggestions.classList.add('hidden'); return; }
+                        requestSeq++;
+                        if (!val) { setLookupLoading(false); suggestions.innerHTML = ''; suggestions.classList.add('hidden'); return; }
                         if (getApiKey() && val.length >= 2) {
+                          var currentRequest = requestSeq;
+                          setLookupLoading(true);
+                          renderLoadingSuggestion();
                           debounceTimer = setTimeout(function(){
                             fetchGeoapify(val, function(items){
+                              if (currentRequest !== requestSeq) return;
                               suggestions.innerHTML = '';
                               if (items && items.length > 0) {
+                                setLookupLoading(false);
                                 items.forEach(function(it){
                                   var li = document.createElement('li');
                                   li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50 border-t border-slate-100';
@@ -888,8 +926,17 @@
                         }
                       }
                       input.addEventListener('input', onInput);
-                      input.addEventListener('blur', function(){ setTimeout(function(){ suggestions.classList.add('hidden'); }, 150); });
-                      input.addEventListener('focus', function(){ if ((input.value || '').trim()) onInput(); });
+                      input.addEventListener('blur', function(){ setTimeout(function(){ setLookupLoading(false); suggestions.classList.add('hidden'); }, 150); });
+                      input.addEventListener('focus', function(){
+                        if (selectedAddressValue && (input.value || '').trim() === selectedAddressValue) return;
+                        if ((input.value || '').trim()) onInput();
+                      });
+                      if ((input.value || '').trim() && businessAddressEl && (businessAddressEl.value || '').trim() === (input.value || '').trim()) {
+                        selectedAddressValue = (input.value || '').trim();
+                        input.dataset.addressSelected = 'true';
+                      } else {
+                        input.dataset.addressSelected = 'false';
+                      }
                       }
                       if (document.readyState === 'loading') {
                         document.addEventListener('DOMContentLoaded', run);

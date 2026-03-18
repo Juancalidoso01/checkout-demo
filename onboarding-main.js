@@ -1105,6 +1105,9 @@
         continue;
       }
       var valid = field.checkValidity();
+      if (field.id === 'addressSearch') {
+        valid = valid && field.dataset.addressSelected === 'true';
+      }
       if (currentStep === 1 && field.name === 'repCellPhone') {
         valid = valid && isValidPanamaMobile(field.value || '').valid;
       }
