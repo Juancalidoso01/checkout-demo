@@ -175,6 +175,7 @@
         else if (el.type === 'radio') el.checked = (el.value === d[k]);
         else if (el.value !== d[k]) el.value = d[k] || '';
       }
+      syncAddressFieldFromStoredValue();
       applicationCodeEl.textContent = applicationId;
       renderSteps();
       setMsg('Progreso restaurado. Puede continuar donde lo dejó.', false);
@@ -194,6 +195,7 @@
       else if (el.type === 'radio') el.checked = (el.value === d[k]);
       else if (el.type !== 'file' && el.value !== d[k]) el.value = d[k] || '';
     }
+    syncAddressFieldFromStoredValue();
     if (saved.kycVerification) {
       setKycStatus(saved.kycVerification);
     }
@@ -246,6 +248,14 @@
         formMsg.classList.remove('hidden');
       }
     }
+  }
+  function syncAddressFieldFromStoredValue(){
+    var addrInput = document.getElementById('addressSearch');
+    var addrHidden = document.getElementById('businessAddress');
+    if (!addrInput || !addrHidden) return;
+    var savedValue = (addrHidden.value || '').trim();
+    addrInput.value = savedValue;
+    addrInput.dataset.addressSelected = savedValue ? 'true' : 'false';
   }
   function goToStep(idx){
     if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
@@ -876,11 +886,11 @@
   function triggerSignatureFlow() {
     var preview = /[?&]preview=firma/i.test(window.location.search || '');
     if (!preview) {
-      for (let i = 0; i < stepEls.length - 1; i += 1) {
+      for (let i = 0; i < stepEls.length; i += 1) {
         if (!validateStep(i)) {
           currentStep = i;
           renderSteps();
-          setMsg('No se puede abrir la firma: debe completar todas las etapas anteriores (Comercio, Contactos, Dirección y Cuenta para liquidación) con los datos obligatorios.', true);
+          setMsg('No se puede abrir la firma: debe completar Comercio, Contactos, Dirección, Cuenta para liquidación y Conocimiento del cliente con los datos obligatorios.', true);
           return;
         }
       }
