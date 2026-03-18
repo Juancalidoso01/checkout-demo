@@ -1219,8 +1219,8 @@
         var f=fields[i];
         if(f.required&&!f.checkValidity()){
           var lbl=LABELS[f.name]||f.name||'Campo';
-          if(msgEl){msgEl.textContent='Falta: '+lbl;msgEl.className='text-sm min-h-[20px] mt-2 text-red-600 font-semibold p-3 rounded-lg bg-red-50 border border-red-200';}
           if(banner){banner.textContent='Falta completar: '+lbl;banner.classList.remove('hidden');}
+          if(msgEl){msgEl.textContent='';msgEl.classList.add('hidden');}
           f.focus();
           return;
         }
@@ -1228,8 +1228,8 @@
       if(idx===0){
         var pdf=document.getElementById('businessDescriptionPdf');
         if(!pdf||!pdf.files||!pdf.files[0]){
-          if(msgEl){msgEl.textContent='Falta cargar el aviso de operaciones (PDF).';msgEl.className='text-sm min-h-[20px] mt-2 text-red-600 font-semibold p-3 rounded-lg bg-red-50 border border-red-200';}
-          if(banner){banner.textContent='Falta cargar el aviso de operaciones (PDF).';banner.classList.remove('hidden');}
+          if(banner){banner.textContent='Falta completar: Aviso de operaciones (PDF). Debe cargar el documento.';banner.classList.remove('hidden');}
+          if(msgEl){msgEl.textContent='';msgEl.classList.add('hidden');}
           if(pdf)pdf.focus();
           return;
         }

@@ -171,25 +171,23 @@
     } catch (e) { return false; }
   }
   function setMsg(msg, isError){
-    if (formMsg) {
-      formMsg.textContent = msg || '';
-      formMsg.className = 'text-sm min-h-[20px] mt-2 ' + (isError ? 'text-red-600 font-semibold p-3 rounded-lg bg-red-50 border border-red-200' : 'text-slate-600');
-      formMsg.setAttribute('role', isError ? 'alert' : 'status');
-    }
     var banner = document.getElementById('ob-step-error-banner');
     if (banner) {
       banner.textContent = msg || '';
       banner.classList.toggle('hidden', !(msg && isError));
       if (msg && isError) {
-        try {
-          if (document.body) banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } catch (e) {}
+        try { if (document.body) banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
       }
     }
-    if (msg && isError && formMsg) {
-      try {
-        if (document.body) formMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } catch (e) {}
+    if (formMsg) {
+      if (isError) {
+        formMsg.textContent = '';
+        formMsg.classList.add('hidden');
+      } else {
+        formMsg.textContent = msg || '';
+        formMsg.className = 'text-sm min-h-[20px] mt-2 text-slate-600';
+        formMsg.classList.remove('hidden');
+      }
     }
   }
   function goToStep(idx){
