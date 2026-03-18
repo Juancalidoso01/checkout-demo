@@ -2,27 +2,31 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Test Onboarding (bypass acceso)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Acceso directo — Onboarding etapas</title>
+  <style>
+    body{font-family:system-ui,sans-serif;margin:0;padding:24px;background:linear-gradient(135deg,#f8fafc,#e2e8f0);min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .box{background:#fff;border-radius:16px;padding:32px;max-width:420px;box-shadow:0 4px 24px rgba(0,0,0,.08);border:1px solid #e2e8f0}
+    h1{font-size:1.35rem;color:#1e293b;margin:0 0 8px}
+    p{color:#64748b;font-size:0.95rem;margin:0 0 24px;line-height:1.5}
+    .btn{display:inline-flex;align-items:center;gap:10px;background:#5462e6;color:#fff;border:0;padding:14px 24px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none}
+    .btn:hover{filter:brightness(1.05)}
+    .note{font-size:0.8rem;color:#94a3b8;margin-top:16px}
+  </style>
 </head>
 <body>
-  <h1>Test: Simular acceso para onboarding</h1>
-  <p>Este archivo configura localStorage con datos de acceso y redirige a onboarding.html para probar el flujo.</p>
+  <div class="box">
+    <h1>Acceso directo al onboarding</h1>
+    <p>Pasará directamente al formulario de etapas sin validación de acceso.</p>
+    <a href="onboarding.html" id="btnIr" class="btn">Ir al onboarding de etapas</a>
+    <p class="note">Se configurará un acceso de prueba y modo prueba (KYC simulado). Redirige a onboarding.html?modo_prueba=1</p>
+  </div>
   <script>
     (function(){
-      const ACCESS_KEY = 'pp_onboarding_access_v1';
-      const mockAccess = {
-        email: 'test@ejemplo.com',
-        emailVerified: true,
-        businessName: 'Test S.A.',
-        phone: '+507 61234567'
-      };
-      try {
-        localStorage.setItem(ACCESS_KEY, JSON.stringify(mockAccess));
-        console.log('Access configurado:', mockAccess);
-        window.location.href = 'onboarding.html';
-      } catch (e) {
-        document.body.innerHTML += '<p style="color:red">Error: ' + e.message + '</p>';
-      }
+      var ACCESS_KEY='pp_onboarding_access_v1';
+      var mockAccess={email:'test@ejemplo.com',emailVerified:true,businessName:'Test S.A.',phone:'+50761234567'};
+      try{localStorage.setItem(ACCESS_KEY,JSON.stringify(mockAccess));}catch(e){}
+      window.location.replace('onboarding.html?modo_prueba=1');
     })();
   </script>
 </body>
