@@ -929,7 +929,10 @@
           if (status === 'pending_review' || status === 'pending') {
             setGateMsg('Ya existe una solicitud en revisión para este correo.', false);
             setStatus('-warn', 'Tu solicitud ya está en evaluación. No necesitas completar otra.');
-            setNextStep('No necesitas hacer nada más por ahora. Tu solicitud ya está en revisión.', false);
+            setNextStep('No necesitas hacer nada más por ahora. Te mostraremos el estado actual de tu solicitud.', false);
+            setTimeout(() => {
+              window.PPAuth.redirectToPendingReview(existingApp.id || '');
+            }, 700);
             return;
           }
           if (status === 'rejected') {

@@ -4,6 +4,7 @@
   const ACCESS_KEY = 'pp_onboarding_access_v1';
   const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
   const CURRENT_APPLICATION_KEY = 'pp_onboarding_current_app_v1';
+  const LAST_SUBMITTED_APPLICATION_KEY = 'pp_onboarding_last_submitted_v1';
   const steps = [
     { title: 'Comercio', desc: 'Estructura, empresa y aviso de operaciones (PDF)' },
     { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
@@ -56,6 +57,12 @@
     try {
       if (!id) localStorage.removeItem(CURRENT_APPLICATION_KEY);
       else localStorage.setItem(CURRENT_APPLICATION_KEY, id);
+    } catch (e) {}
+  }
+  function setLastSubmittedApplicationId(id){
+    try {
+      if (!id) localStorage.removeItem(LAST_SUBMITTED_APPLICATION_KEY);
+      else localStorage.setItem(LAST_SUBMITTED_APPLICATION_KEY, id);
     } catch (e) {}
   }
   function readAccessContext(){
@@ -1015,10 +1022,12 @@
     if (submitBtn) submitBtn.addEventListener('click', function() {
       var dataUrl = captureSignatureDataUrl();
       if (!dataUrl) { setMsg('Debe firmar antes de enviar.', true); return; }
+      submitBtn.disabled = true;
       closeSignatureModal();
-      persist('pending_review', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
-      setMsg('Solicitud enviada a revisión. Las credenciales se asignarán solo después de aprobación.');
-      resetFormAfterSubmit();
+      var payload = persist('pending_review', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
+      setLastSubmittedApplicationId(payload && payload.id ? payload.id : applicationId);
+      setMsg('Solicitud enviada a revisión. Redirigiendo al contrato de servicio...', false);
+      location.href = 'onboarding-contract.html?applicationId=' + encodeURIComponent((payload && payload.id) ? payload.id : applicationId);
     });
   })();
 

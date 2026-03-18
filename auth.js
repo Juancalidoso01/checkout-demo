@@ -15,6 +15,8 @@
 (function(){
   const USERS_KEY = 'pp_users_v1';
   const SESSION_KEY = 'pp_auth_session_v1';
+  const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
+  const LAST_SUBMITTED_APPLICATION_KEY = 'pp_onboarding_last_submitted_v1';
 
   function now(){ return Date.now(); }
 
@@ -99,15 +101,122 @@
     localStorage.removeItem(SESSION_KEY);
   }
 
+  function normalize(value){
+    return (value || '').toString().trim().toLowerCase();
+  }
+
+  function loadApplications(){
+    const apps = safeJsonParse(localStorage.getItem(APPLICATIONS_KEY), null);
+    return Array.isArray(apps) ? apps : [];
+  }
+
+  function saveApplications(apps){
+    localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(apps || []));
+  }
+
+  function getLastSubmittedApplicationId(){
+    try { return localStorage.getItem(LAST_SUBMITTED_APPLICATION_KEY) || ''; }
+    catch (e) { return ''; }
+  }
+
+  function setLastSubmittedApplicationId(id){
+    try {
+      if (!id) localStorage.removeItem(LAST_SUBMITTED_APPLICATION_KEY);
+      else localStorage.setItem(LAST_SUBMITTED_APPLICATION_KEY, id);
+    } catch (e) {}
+  }
+
+  function isPendingApplicationStatus(status){
+    const val = (status || '').toString().toLowerCase();
+    return val === 'pending_review' || val === 'pending';
+  }
+
+  function findApplicationById(id){
+    if (!id) return null;
+    const apps = loadApplications();
+    for (let i = 0; i < apps.length; i += 1) {
+      if (apps[i] && apps[i].id === id) return apps[i];
+    }
+    return null;
+  }
+
+  function getApplicationEmails(app){
+    const data = (app && app.onboarding) || {};
+    return [
+      normalize(data.repEmail),
+      normalize(data.opsContactEmail),
+      normalize(data.settlementEmail)
+    ].filter(Boolean);
+  }
+
+  function findPendingApplicationByIdentifier(identifier){
+    const needle = normalize(identifier);
+    if (!needle) return null;
+    const apps = loadApplications();
+    for (let i = apps.length - 1; i >= 0; i -= 1) {
+      const app = apps[i];
+      if (!app || !isPendingApplicationStatus(app.status)) continue;
+      const credentials = app.credentials || {};
+      const usernames = [normalize(credentials.username)];
+      const emails = getApplicationEmails(app);
+      if (usernames.indexOf(needle) >= 0 || emails.indexOf(needle) >= 0) return app;
+    }
+    return null;
+  }
+
+  function getPendingApplicationForSession(session){
+    if (!session) return null;
+    const users = loadUsers();
+    const user = users.find(x => x && x.id === session.userId);
+    const onboarding = user && user.onboarding ? user.onboarding : null;
+    if (onboarding && isPendingApplicationStatus(onboarding.status)) {
+      return findApplicationById(onboarding.applicationId) || {
+        id: onboarding.applicationId || '',
+        status: onboarding.status
+      };
+    }
+    return findPendingApplicationByIdentifier(session.username);
+  }
+
+  function buildPendingReviewUrl(applicationId){
+    const suffix = applicationId ? `?applicationId=${encodeURIComponent(applicationId)}` : '';
+    return buildAppUrl(`onboarding-review-pending.html${suffix}`);
+  }
+
+  function redirectToPendingReview(applicationId){
+    location.href = buildPendingReviewUrl(applicationId);
+  }
+
   function signIn(username, password){
-    const u = (username || '').trim().toLowerCase();
+    const u = normalize(username);
     const p = (password || '').toString();
     const users = loadUsers();
 
     const user = users.find(x => (x.username || '').toLowerCase() === u);
-    if (!user) return { ok:false, errorKey: 'login_err_invalid', error: 'Usuario o contraseña inválidos.' };
+    if (!user) {
+      const pendingApp = findPendingApplicationByIdentifier(u);
+      if (pendingApp) {
+        return {
+          ok: false,
+          errorKey: 'login_err_pending_review',
+          error: 'Tu solicitud todavía está en revisión.',
+          pendingReview: true,
+          applicationId: pendingApp.id
+        };
+      }
+      return { ok:false, errorKey: 'login_err_invalid', error: 'Usuario o contraseña inválidos.' };
+    }
     if (!user.active) return { ok:false, errorKey: 'login_err_disabled', error: 'Usuario deshabilitado.' };
     if ((user.password || '') !== p) return { ok:false, errorKey: 'login_err_invalid', error: 'Usuario o contraseña inválidos.' };
+    if (user.onboarding && isPendingApplicationStatus(user.onboarding.status)) {
+      return {
+        ok: false,
+        errorKey: 'login_err_pending_review',
+        error: 'Tu solicitud todavía está en revisión.',
+        pendingReview: true,
+        applicationId: user.onboarding.applicationId || ''
+      };
+    }
 
     const session = {
       userId: user.id,
@@ -132,6 +241,12 @@
       return null;
     }
 
+    const pendingApp = getPendingApplicationForSession(session);
+    if (pendingApp){
+      redirectToPendingReview(pendingApp.id || '');
+      return null;
+    }
+
     if (role){
       const allowed = Array.isArray(role) ? role : [role];
       if (allowed.indexOf(session.role) < 0){
@@ -146,6 +261,12 @@
   }
 
   function redirectAfterLogin(next){
+    const s = getSession();
+    const pendingApp = getPendingApplicationForSession(s);
+    if (pendingApp) {
+      redirectToPendingReview(pendingApp.id || '');
+      return;
+    }
     if (next) {
       try {
         const url = new URL(next, location.origin);
@@ -153,7 +274,6 @@
         return;
       } catch(e) {}
     }
-    const s = getSession();
     if (s?.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
     else location.href = buildAppUrl('agents/recharge.html');
   }
@@ -181,13 +301,24 @@
   window.PPAuth = {
     USERS_KEY,
     SESSION_KEY,
+    APPLICATIONS_KEY,
+    LAST_SUBMITTED_APPLICATION_KEY,
     loadUsers,
     saveUsers,
+    loadApplications,
+    saveApplications,
     getSession,
     signIn,
     signOut,
     requireAuth,
     redirectAfterLogin,
+    findApplicationById,
+    findPendingApplicationByIdentifier,
+    getPendingApplicationForSession,
+    getLastSubmittedApplicationId,
+    setLastSubmittedApplicationId,
+    buildPendingReviewUrl,
+    redirectToPendingReview,
     ensureLogoutButton,
     renderSessionBadge,
   };
