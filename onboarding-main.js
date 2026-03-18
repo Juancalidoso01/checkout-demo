@@ -3,6 +3,7 @@
   const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
   const ACCESS_KEY = 'pp_onboarding_access_v1';
   const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
+  const CURRENT_APPLICATION_KEY = 'pp_onboarding_current_app_v1';
   const steps = [
     { title: 'Comercio', desc: 'Estructura, empresa y aviso de operaciones (PDF)' },
     { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
@@ -46,6 +47,16 @@
   }
   function writeApplications(items){
     localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items || []));
+  }
+  function getCurrentApplicationId(){
+    try { return localStorage.getItem(CURRENT_APPLICATION_KEY) || ''; }
+    catch (e) { return ''; }
+  }
+  function setCurrentApplicationId(id){
+    try {
+      if (!id) localStorage.removeItem(CURRENT_APPLICATION_KEY);
+      else localStorage.setItem(CURRENT_APPLICATION_KEY, id);
+    } catch (e) {}
   }
   function readAccessContext(){
     try {
@@ -102,6 +113,7 @@
     };
     req.onerror = function(){ if (cb) cb(); };
   } catch(e){ if (cb) cb(); }
+  }
   function restorePdfFromIndexedDB(cb){
     try {
       const req = indexedDB.open(IDB_NAME, 1);
@@ -168,6 +180,51 @@
       setMsg('Progreso restaurado. Puede continuar donde lo dejó.', false);
       restorePdfFromIndexedDB(function(){});
       return true;
+    } catch (e) { return false; }
+  }
+  function applySavedApplication(saved){
+    if (!saved || !saved.onboarding) return false;
+    applicationId = saved.id || applicationId;
+    currentStep = Math.min(Math.max(0, saved.currentStep || 0), stepEls.length - 1);
+    const d = saved.onboarding || {};
+    for (const k in d) {
+      const el = form.elements[k];
+      if (!el) continue;
+      if (el.type === 'checkbox') el.checked = !!d[k];
+      else if (el.type === 'radio') el.checked = (el.value === d[k]);
+      else if (el.type !== 'file' && el.value !== d[k]) el.value = d[k] || '';
+    }
+    if (saved.kycVerification) {
+      setKycStatus(saved.kycVerification);
+    }
+    applicationCodeEl.textContent = applicationId;
+    draftStatusEl.textContent = saved.status === 'pending_review' ? 'Enviado a revisión' : 'Guardado';
+    draftStatusEl.classList.remove('ob-status-unsaved');
+    draftStatusEl.classList.add('ob-status-saved');
+    setCurrentApplicationId(applicationId);
+    renderSteps();
+    restorePdfFromIndexedDB(function(){});
+    updateFieldChecks();
+    setMsg('Borrador guardado restaurado. Puede continuar donde lo dejó.', false);
+    return true;
+  }
+  function restoreSavedApplication(){
+    try {
+      const items = readApplications();
+      if (!items.length) return false;
+      const currentId = getCurrentApplicationId();
+      var saved = null;
+      if (currentId) {
+        saved = items.find(function(item){
+          return item && item.type === 'agent_onboarding' && item.id === currentId;
+        }) || null;
+      }
+      if (!saved) {
+        saved = items.find(function(item){
+          return item && item.type === 'agent_onboarding' && (item.status === 'draft' || item.status === 'pending_review');
+        }) || null;
+      }
+      return applySavedApplication(saved);
     } catch (e) { return false; }
   }
   function setMsg(msg, isError){
@@ -260,6 +317,21 @@
       localStorage.setItem(KYC_STATUS_KEY, JSON.stringify(all));
     } catch (e) {}
   }
+  function markKycAsSent(identityId, verificationId){
+    setKycStatus({
+      status: 'enviado',
+      identityId: identityId || null,
+      verificationId: verificationId || null,
+      completedAt: Date.now()
+    });
+    renderKycStatus();
+    setMsg('Tu verificación fue enviada. Puede continuar con el proceso.', false);
+  }
+  function markKycAsPending(){
+    setKycStatus(null);
+    renderKycStatus();
+    setMsg('La verificación no fue completada. Puede intentarlo nuevamente.', true);
+  }
   window.setKycResult = function(appId, payload){
     try {
       const raw = localStorage.getItem(KYC_STATUS_KEY);
@@ -276,6 +348,18 @@
     if (/[?&]modo_prueba=1/i.test(window.location.search || '')) return true;
     const k = getKycStatus();
     return !!(k && (k.verificationId || k.status === 'enviado' || k.status === 'submitted' || k.status === 'completed'));
+  }
+  function renderKycSentPanel(panelEl){
+    if (!panelEl) return;
+    panelEl.innerHTML = [
+      '<div class="kyc-status-loading kyc-status-approved flex items-center gap-3 p-4 rounded-xl">',
+      '  <i class="fa-solid fa-circle-check text-emerald-600 text-2xl"></i>',
+      '  <div>',
+      '    <div class="font-semibold text-emerald-800">Verificación enviada</div>',
+      '    <div class="text-sm text-emerald-700 mt-0.5">Su verificación fue enviada correctamente. Puede continuar con el proceso.</div>',
+      '  </div>',
+      '</div>'
+    ].join('');
   }
   window.getKycVerificationsForSupabase = function(){
     try {
@@ -300,6 +384,7 @@
     const completed = isKycCompleted();
     const panelEl = document.getElementById('kyc-status-panel');
     const pendingWrap = document.getElementById('kyc-pending-wrap');
+    if (completed) renderKycSentPanel(panelEl);
     if (panelEl) panelEl.classList.toggle('hidden', !completed);
     if (pendingWrap) pendingWrap.classList.toggle('hidden', !!completed);
   }
@@ -706,6 +791,7 @@
         linkedUserId: null
       },
       onboarding: onboardingData,
+      currentStep: currentStep,
       kycVerification: kyc ? {
         identityId: kyc.identityId,
         verificationId: kyc.verificationId,
@@ -728,8 +814,9 @@
       items.unshift(payload);
     }
     writeApplications(items);
+    setCurrentApplicationId(applicationId);
     applicationCodeEl.textContent = applicationId;
-    draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : 'Borrador guardado';
+    draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : 'Guardado';
     draftStatusEl.classList.remove('ob-status-unsaved');
     draftStatusEl.classList.add('ob-status-saved');
     return payload;
@@ -740,6 +827,7 @@
     form.reset();
     currentStep = 0;
     applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
+    setCurrentApplicationId(applicationId);
     applicationCodeEl.textContent = applicationId;
     draftStatusEl.textContent = 'Sin guardar';
     draftStatusEl.classList.remove('ob-status-saved');
@@ -985,7 +1073,7 @@
   }
 
   applicationCodeEl.textContent = applicationId;
-  if (!restoreRecovery()) {
+  if (!restoreRecovery() && !restoreSavedApplication()) {
     prefillFromAccess();
     renderSteps();
   }
@@ -1339,18 +1427,11 @@
       var d = e.detail || {};
       var identityId = d.identityId || d.identity_id;
       var verificationId = d.verificationId || d.verification_id;
-      setKycStatus({
-        status: verificationId ? 'completed' : 'enviado',
-        identityId: identityId || null,
-        verificationId: verificationId || null,
-        completedAt: Date.now()
-      });
-      renderKycStatus();
-      setMsg('Tu verificación fue enviada. Puede continuar con el proceso.', false);
+      markKycAsSent(identityId, verificationId);
     });
     metamapBtn.addEventListener('metamap:exitedSdk', function() {
       setMetamapModalOpen(false);
-      setMsg('', false);
+      markKycAsPending();
     });
   }
   }

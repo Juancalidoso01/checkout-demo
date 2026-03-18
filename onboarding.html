@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <!-- Bloquea sdk.metamap.com/tracker.js. El botón KYC usa Mati (web-button.getmati.com) para etapa 2 - Contactos -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://web-button.getmati.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com https://reallyfreegeoip.org https://ipapi.co; frame-src 'self' https://*.metamap.com https://*.getmati.com https://signup.metamap.com https://signup.getmati.com; img-src 'self' data: blob: https: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com;">
+  <!-- Solo bloquea tracker.js; permite el SDK oficial de MetaMap -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://web-button.getmati.com https://sdk.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com https://reallyfreegeoip.org https://ipapi.co; frame-src 'self' https://*.metamap.com https://*.getmati.com https://signup.metamap.com https://signup.getmati.com; img-src 'self' data: blob: https: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com;">
   <title>Onboarding aliado — Punto Pago</title>
   <script>
     (function(){
-      function blockTracker(url){return !!(url&&String(url).indexOf('tracker')>=0||(url&&String(url).indexOf('sdk.metamap.com')>=0));}
+      function blockTracker(url){
+        return !!(url && /tracker(\.js)?(\?|$)/i.test(String(url)));
+      }
       var origCreateElement=document.createElement.bind(document);
       document.createElement=function(tag){
         var el=origCreateElement(tag);
@@ -743,9 +745,9 @@
                           clientid="612566a0a0be80001b035915"
                           flowId="69b84638b43624798a4477fd"
                           metadata="{}"
-                          style="position:absolute;inset:0;opacity:0;z-index:0;min-width:200px;min-height:56px"
+                          style="position:absolute;inset:0;opacity:0;z-index:20;min-width:200px;min-height:56px;display:block;cursor:pointer"
                         ></metamap-button>
-                        <button type="button" id="kyc-trigger-btn" class="relative z-10 w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border-0 cursor-pointer hover:from-indigo-600 hover:to-purple-700" style="animation:kycBtnPulse 2.5s ease-in-out infinite">
+                        <button type="button" id="kyc-trigger-btn" class="relative z-10 w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border-0 cursor-pointer hover:from-indigo-600 hover:to-purple-700" style="animation:kycBtnPulse 2.5s ease-in-out infinite;pointer-events:none">
                           <i class="fa-solid fa-camera text-3xl" aria-hidden="true"></i>
                           <span>Verificarme con selfie y documento</span>
                         </button>
