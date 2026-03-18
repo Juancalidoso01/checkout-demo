@@ -1317,8 +1317,81 @@
   }, true);
   var metamapBtn = document.getElementById('metamap-btn');
   var kycTriggerBtn = document.getElementById('kyc-trigger-btn');
-  if (kycTriggerBtn && metamapBtn) {
-    kycTriggerBtn.addEventListener('click', function() { metamapBtn.click(); });
+  function startMetamapVerification(){
+    function doStart(){
+      updateMetamapMetadata();
+      if (typeof window.MetamapVerification === 'function') {
+        var repEmail = (form.elements.repEmail && form.elements.repEmail.value) || '';
+        var config = {
+          clientId: '612566a0a0be80001b035915',
+          flowId: '69b84638b43624798a4477fd',
+          metadata: { onboardingId: applicationId, email: repEmail }
+        };
+        var verification = new window.MetamapVerification(config);
+        verification.on('metamap:userStartedSdk', function() {
+          setMetamapModalOpen(true);
+          setMsg('Complete la verificación. No cierre ni actualice la página.', false);
+        });
+        verification.on('metamap:userFinishedSdk', function(e) {
+          setMetamapModalOpen(false);
+          var d = (e && e.detail) || {};
+          var identityId = d.identityId || d.identity_id;
+          var verificationId = d.verificationId || d.verification_id;
+          setKycStatus({
+            status: verificationId ? 'completed' : 'enviado',
+            identityId: identityId || null,
+            verificationId: verificationId || null,
+            completedAt: Date.now()
+          });
+          renderKycStatus();
+          setMsg('Tu verificación fue enviada. Puede continuar con el proceso.', false);
+        });
+        verification.on('metamap:exitedSdk', function() {
+          setMetamapModalOpen(false);
+          setMsg('', false);
+        });
+        verification.start();
+        return;
+      }
+      var btn = document.getElementById('metamap-btn');
+      if (btn) {
+        btn.click();
+      } else {
+        setMsg('Verificación no disponible. Recargue la página e intente de nuevo.', true);
+      }
+    }
+    if (typeof window.MetamapVerification === 'function') {
+      doStart();
+      return;
+    }
+    setMsg('Cargando verificación...', false);
+    var attempts = 0;
+    var maxAttempts = 25;
+    var iv = setInterval(function(){
+      attempts++;
+      if (typeof window.MetamapVerification === 'function') {
+        clearInterval(iv);
+        setMsg('', false);
+        doStart();
+        return;
+      }
+      if (attempts >= maxAttempts) {
+        clearInterval(iv);
+        setMsg('', false);
+        if (typeof window.MetamapVerification !== 'function') {
+          var script = document.createElement('script');
+          script.src = 'https://web-button.metamap.com/button.js';
+          script.onload = function(){ setTimeout(doStart, 100); };
+          script.onerror = function(){ setMsg('No se pudo cargar la verificación. Recargue la página.', true); };
+          document.head.appendChild(script);
+        } else {
+          doStart();
+        }
+      }
+    }, 200);
+  }
+  if (kycTriggerBtn) {
+    kycTriggerBtn.addEventListener('click', function() { startMetamapVerification(); });
   }
   if (metamapBtn) {
     metamapBtn.addEventListener('metamap:userStartedSdk', function() {
