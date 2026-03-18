@@ -748,18 +748,29 @@
       console.error('persist error:', err);
     }
   });
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    for (let i = 0; i < stepEls.length - 1; i += 1) {
-      if (!validateStep(i)) {
-        currentStep = i;
-        renderSteps();
-        setMsg('Completa los campos obligatorios antes de enviar.', true);
-        return;
+  function triggerSignatureFlow() {
+    var preview = /[?&]preview=firma/i.test(window.location.search || '');
+    if (!preview) {
+      for (let i = 0; i < stepEls.length - 1; i += 1) {
+        if (!validateStep(i)) {
+          currentStep = i;
+          renderSteps();
+          setMsg('No se puede abrir la firma: debe completar todas las etapas anteriores (Comercio, Contactos, Dirección y Cuenta para liquidación) con los datos obligatorios.', true);
+          return;
+        }
       }
     }
     renderSummary();
     openSignatureModal();
+  }
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    triggerSignatureFlow();
+  });
+  var btnOpenSig = document.getElementById('btnOpenSignatureModal');
+  if (btnOpenSig) btnOpenSig.addEventListener('click', function(e) {
+    e.preventDefault();
+    triggerSignatureFlow();
   });
 
   function openSignatureModal() {

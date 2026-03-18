@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Vista previa — Modal de firma</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{font-family:system-ui,sans-serif;padding:24px;background:#f1f5f9}
+    .preview-banner{background:#fef3c7;border:1px solid #f59e0b;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px}
+    .pp-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;padding:0 20px;height:48px;border-radius:12px;font-size:16px;font-weight:600;text-decoration:none}
+    .pp-btn-primary{background:#5462e6;color:#fff}
+    .pp-btn-primary:hover{filter:brightness(1.05)}
+    .pp-btn-secondary{background:#e2e8f0;color:#334155}
+    .pp-btn-secondary:hover{background:#cbd5e1}
+    .ob-summary dl{display:grid;grid-template-columns:minmax(0,140px) 1fr;gap:8px 16px;font-size:13px}
+    .ob-summary dt{color:#64748b;font-weight:600}
+    .ob-summary dd{margin:0;color:#1e293b}
+  </style>
+</head>
+<body>
+  <div class="preview-banner">
+    <strong>Vista previa</strong> — Solo para revisión del modal de firma. No envía datos.
+  </div>
+  <div class="max-w-lg">
+    <h1 class="text-xl font-bold text-slate-800 mb-4">Modal de firma digital</h1>
+    <p class="text-slate-600 mb-4">Use este enlace para revisar el modal sin llenar todo el formulario.</p>
+    <p class="text-sm text-slate-500 mb-6">En el onboarding real, puede usar <code class="bg-slate-200 px-1 rounded">?preview=firma</code> en la URL (ej: onboarding.html?preview=firma) para abrir el modal sin validar etapas.</p>
+    <button type="button" id="btnAbrir" class="pp-btn pp-btn-primary inline-flex items-center gap-2">
+      <i class="fa-solid fa-pen-fancy"></i> Abrir modal de firma
+    </button>
+  </div>
+
+  <!-- Modal: firma digital y consentimiento -->
+  <div id="signatureModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" aria-hidden="true" style="display:none;background:rgba(0,0,0,.5)">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="signatureModalTitle">
+      <div class="p-5 border-b border-slate-200 flex-shrink-0">
+        <h2 id="signatureModalTitle" class="text-xl font-extrabold text-slate-900">Confirmación y firma</h2>
+        <p class="text-sm text-slate-600 mt-1">Revise el resumen, acepte la declaración y firme para enviar su solicitud.</p>
+      </div>
+      <div class="p-5 overflow-y-auto flex-1 min-h-0 space-y-4">
+        <div class="ob-summary text-sm max-h-[120px] overflow-y-auto rounded-xl p-3 bg-slate-50">
+          <dl id="signatureModalSummary">
+            <dt>Razón social</dt><dd>Ejemplo S.A.</dd>
+            <dt>Nombre comercial</dt><dd>Ejemplo</dd>
+            <dt>Representante</dt><dd>Juan Pérez · juan@ejemplo.com</dd>
+          </dl>
+        </div>
+        <div class="rounded-xl p-4 border-2 border-slate-200 bg-slate-50">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="signatureConsentCheck" class="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600">
+            <span class="text-sm text-slate-700">Confirmo que he revisado la información anterior y que los datos proporcionados son <strong>verdadero y completos</strong>. Autorizo el tratamiento de mi información según la política de privacidad de Punto Pago.</span>
+          </label>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Firma digital *</label>
+          <div class="border-2 border-slate-200 rounded-xl overflow-hidden bg-white" style="touch-action:none">
+            <canvas id="signatureCanvas" width="450" height="180" class="block w-full" style="max-width:100%;height:180px;cursor:crosshair"></canvas>
+          </div>
+          <button type="button" id="signatureClearBtn" class="mt-2 text-sm text-slate-600 hover:text-slate-900 underline">Limpiar firma</button>
+        </div>
+      </div>
+      <div class="p-5 border-t border-slate-200 flex gap-3 flex-shrink-0">
+        <button type="button" id="signatureModalCancel" class="pp-btn pp-btn-secondary flex-1">Cancelar</button>
+        <button type="button" id="signatureModalSubmit" class="pp-btn pp-btn-primary flex-1" disabled>Firmar y enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var modal=document.getElementById('signatureModal');
+    var canvas=document.getElementById('signatureCanvas');
+    var consentChk=document.getElementById('signatureConsentCheck');
+    var clearBtn=document.getElementById('signatureClearBtn');
+    var cancelBtn=document.getElementById('signatureModalCancel');
+    var submitBtn=document.getElementById('signatureModalSubmit');
+    var signatureHasStroke=false;
+    var ctx=canvas?canvas.getContext('2d'):null;
+
+    function openModal(){
+      if(modal){modal.style.display='flex';modal.classList.remove('hidden');}
+      if(consentChk)consentChk.checked=false;
+      if(submitBtn)submitBtn.disabled=true;
+      signatureHasStroke=false;
+      if(ctx&&canvas){ctx.clearRect(0,0,canvas.width,canvas.height);}
+      updateState();
+    }
+    function closeModal(){
+      if(modal){modal.style.display='none';modal.classList.add('hidden');}
+    }
+    function updateState(){
+      if(submitBtn)submitBtn.disabled=!(consentChk&&consentChk.checked&&signatureHasStroke);
+    }
+
+    var btnAbrir=document.getElementById('btnAbrir');
+    if(btnAbrir)btnAbrir.addEventListener('click',openModal);
+    if(cancelBtn)cancelBtn.addEventListener('click',closeModal);
+
+    if(canvas&&ctx){
+      ctx.strokeStyle='#1e293b';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+      var drawing=false,lastX=0,lastY=0;
+      function getPos(e){
+        var r=canvas.getBoundingClientRect(),sX=canvas.width/r.width,sY=canvas.height/r.height;
+        if(e.touches&&e.touches[0])return{x:(e.touches[0].clientX-r.left)*sX,y:(e.touches[0].clientY-r.top)*sY};
+        return{x:(e.clientX-r.left)*sX,y:(e.clientY-r.top)*sY};
+      }
+      function start(e){e.preventDefault();drawing=true;var p=getPos(e);lastX=p.x;lastY=p.y;}
+      function draw(e){e.preventDefault();if(!drawing)return;var p=getPos(e);ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(p.x,p.y);ctx.stroke();lastX=p.x;lastY=p.y;signatureHasStroke=true;updateState();}
+      function end(e){e.preventDefault();drawing=false;}
+      canvas.addEventListener('mousedown',start);
+      canvas.addEventListener('mousemove',draw);
+      canvas.addEventListener('mouseup',end);
+      canvas.addEventListener('mouseout',end);
+      canvas.addEventListener('touchstart',start,{passive:false});
+      canvas.addEventListener('touchmove',draw,{passive:false});
+      canvas.addEventListener('touchend',end,{passive:false});
+    }
+    if(clearBtn)clearBtn.addEventListener('click',function(){if(ctx&&canvas){ctx.clearRect(0,0,canvas.width,canvas.height);}signatureHasStroke=false;updateState();});
+    if(consentChk)consentChk.addEventListener('change',updateState);
+    if(submitBtn)submitBtn.addEventListener('click',function(){alert('Vista previa: no se envía nada.');closeModal();});
+  })();
+  </script>
+</body>
+</html>
