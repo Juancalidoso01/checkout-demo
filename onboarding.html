@@ -161,7 +161,7 @@
           <i class="fa-brands fa-whatsapp text-xl"></i>
           <span>¿Dudas? Escríbenos</span>
         </a>
-        <a id="portalLink" href="pp-admin-entry.html" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4">Portal credenciales</a>
+        <button type="button" id="btnRegresar" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i>Regresar</button>
       </div>
     </div>
   </nav>
@@ -227,15 +227,15 @@
               <div class="ob-step cursor-pointer" data-step-idx="3" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(3);return false;">
                 <div class="ob-step-index">4</div>
                 <div>
-                  <div class="font-extrabold text-sm">Compliance</div>
-                  <div class="text-xs text-slate-500 mt-1">Cuenta bancaria y validaciones</div>
+                  <div class="font-extrabold text-sm">Cuenta para liquidación</div>
+                  <div class="text-xs text-slate-500 mt-1">Banco o fintech donde recibirá sus comisiones</div>
                 </div>
               </div>
               <div class="ob-step cursor-pointer" data-step-idx="4" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(4);return false;">
                 <div class="ob-step-index">5</div>
                 <div>
-                  <div class="font-extrabold text-sm">Resumen</div>
-                  <div class="text-xs text-slate-500 mt-1">Confirmación para revisión</div>
+                  <div class="font-extrabold text-sm">Conocimiento del cliente</div>
+                  <div class="text-xs text-slate-500 mt-1">Ingresos, montos, origen y procedencia de fondos</div>
                 </div>
               </div>
             </div>
@@ -937,27 +937,71 @@
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="3">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">4. Datos bancarios y compliance</h2>
-                <p class="text-sm text-gray-500 mt-1">Para evaluación y futura liquidación.</p>
+                <h2 class="text-xl font-extrabold">4. Cuenta para liquidación</h2>
+                <p class="text-sm text-gray-500 mt-1">Los fondos de sus comisiones se transferirán de forma automática a esta cuenta una vez estén disponibles.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
                   <div>
-                    <label class="pp-label">Banco *</label>
-                    <input name="bankName" class="pp-field" type="text" required>
+                    <label class="pp-label">Banco o fintech *</label>
+                    <select name="bankName" id="bankName" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <optgroup label="Bancos (ACH / Telered)">
+                        <option value="BAC Credomatic">BAC Credomatic</option>
+                        <option value="Banco Aliado">Banco Aliado</option>
+                        <option value="Banco Azteca">Banco Azteca</option>
+                        <option value="Banco Delta">Banco Delta</option>
+                        <option value="Banco Ficohsa">Banco Ficohsa</option>
+                        <option value="Banco General">Banco General</option>
+                        <option value="Banco La Hipotecaria">Banco La Hipotecaria</option>
+                        <option value="Banco LAFISE">Banco LAFISE</option>
+                        <option value="Banco Nacional de Panamá">Banco Nacional de Panamá</option>
+                        <option value="Banco Pichincha">Banco Pichincha</option>
+                        <option value="Bancolombia">Bancolombia</option>
+                        <option value="Banesco">Banesco</option>
+                        <option value="Banisi">Banisi</option>
+                        <option value="Banistmo">Banistmo</option>
+                        <option value="BBP Bank">BBP Bank</option>
+                        <option value="BCT Bank">BCT Bank</option>
+                        <option value="Bibank Panamá">Bibank Panamá</option>
+                        <option value="Bicsa">Bicsa</option>
+                        <option value="Caja de Ahorros">Caja de Ahorros</option>
+                        <option value="Canal Bank">Canal Bank</option>
+                        <option value="Citibank N.A.">Citibank N.A.</option>
+                        <option value="Credicorp Bank">Credicorp Bank</option>
+                        <option value="DAVIbank">DAVIbank</option>
+                        <option value="Davivienda">Davivienda</option>
+                        <option value="Global Bank">Global Bank</option>
+                        <option value="Mercantil Bank">Mercantil Bank</option>
+                        <option value="Metrobank">Metrobank</option>
+                        <option value="MMG Bank">MMG Bank</option>
+                        <option value="Multibank">Multibank</option>
+                        <option value="Pacific Bank">Pacific Bank</option>
+                        <option value="Prival Bank">Prival Bank</option>
+                        <option value="Scotiabank">Scotiabank</option>
+                        <option value="St. Georges Bank">St. Georges Bank</option>
+                        <option value="Tower Bank">Tower Bank</option>
+                        <option value="Unibank">Unibank</option>
+                      </optgroup>
+                      <optgroup label="Fintechs">
+                        <option value="Kali">Kali</option>
+                        <option value="Punto Pago APP">Punto Pago APP</option>
+                        <option value="Wally">Wally</option>
+                        <option value="Zinli">Zinli</option>
+                      </optgroup>
+                    </select>
                   </div>
-                  <div>
+                  <div id="bankAccountTypeWrap">
                     <label class="pp-label">Tipo de cuenta *</label>
                     <select name="bankAccountType" class="pp-field -select" required>
                       <option value="">Selecciona</option>
-                      <option>Cuenta corriente</option>
-                      <option>Cuenta vista</option>
-                      <option>Cuenta de ahorro</option>
+                      <option value="Corriente">Corriente</option>
+                      <option value="Ahorros">Ahorros</option>
                     </select>
                   </div>
                   <div>
-                    <label class="pp-label">Número de cuenta *</label>
-                    <input name="bankAccountNumber" class="pp-field" type="text" required>
+                    <label id="bankAccountNumberLabel" class="pp-label">Número de cuenta *</label>
+                    <input name="bankAccountNumber" id="bankAccountNumber" class="pp-field" type="text" required placeholder="">
                   </div>
                   <div>
                     <label class="pp-label">Titular de la cuenta *</label>
@@ -965,41 +1009,164 @@
                   </div>
                   <div>
                     <label class="pp-label">Correo para liquidaciones *</label>
-                    <input name="settlementEmail" class="pp-field" type="email" required>
-                  </div>
-                  <div>
-                    <label class="pp-label">Beneficiario final *</label>
-                    <input name="beneficialOwner" class="pp-field" type="text" required>
+                    <input name="settlementEmail" id="settlementEmail" class="pp-field" type="email" required placeholder="ejemplo@correo.com" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                    <p class="text-xs text-slate-500 mt-1">Para notificarle cuando se gestione el pago de sus comisiones y para reportes contables.</p>
+                    <span id="settlementEmailError" class="text-xs text-red-600 hidden mt-1 block"></span>
                   </div>
                 </div>
                 <div class="ob-grid">
                   <label class="flex items-start gap-3 text-sm text-slate-700">
                     <input name="acceptTerms" type="checkbox" class="mt-1" required>
-                    <span>Confirmo que la información entregada es verídica y autorizo su revisión para evaluación comercial y cumplimiento.</span>
+                    <span>Confirmo que no soy persona políticamente expuesta (PEP).</span>
                   </label>
                   <label class="flex items-start gap-3 text-sm text-slate-700">
                     <input name="needsApiIntegration" type="checkbox" class="mt-1">
-                    <span>Requerimos integración técnica / API y acompañamiento de implementación.</span>
+                    <span>Autorizo ser revisado por APC, con el fin de poder evaluar créditos o préstamos relativos al servicio.</span>
                   </label>
                 </div>
-                <div>
-                  <label class="pp-label">Comentarios adicionales</label>
-                  <textarea name="additionalNotes" class="pp-field -area" placeholder="Adjuntos pendientes, particularidades del comercio, requerimientos especiales..."></textarea>
-                </div>
               </div>
+              <script>
+              (function(){
+                var F = ['Kali','Punto Pago APP','Wally','Zinli'];
+                function run(){
+                  var sel=document.getElementById('bankName');
+                  var wrap=document.getElementById('bankAccountTypeWrap');
+                  var lbl=document.getElementById('bankAccountNumberLabel');
+                  var inp=document.getElementById('bankAccountNumber');
+                  var typ=document.querySelector('[name="bankAccountType"]');
+                  if(!sel||!wrap||!lbl||!inp)return;
+                  var v=(sel.value||'').trim();
+                  var isF=F.indexOf(v)>=0;
+                  wrap.style.display=isF?'none':'block';
+                  wrap.classList.toggle('hidden',!!isF);
+                  lbl.textContent=isF?'Número de teléfono *':'Número de cuenta *';
+                  inp.type=isF?'tel':'text';
+                  inp.placeholder=isF?'+507 6XXX XXXX':'';
+                  if(typ){typ.required=!isF;if(isF)typ.value='';}
+                }
+                function init(){
+                  var s=document.getElementById('bankName');
+                  if(s){s.onchange=run;s.oninput=run;run();}
+                }
+                if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+                else setTimeout(init,0);
+              })();
+              </script>
             </section>
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="4">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">5. Resumen y envío</h2>
-                <p class="text-sm text-gray-500 mt-1">Revisa antes de dejar el comercio en evaluación.</p>
+                <h2 class="text-xl font-extrabold">5. Conocimiento del cliente</h2>
+                <p class="text-sm text-gray-500 mt-1">Información sobre ingresos, montos de operaciones y origen de los fondos.</p>
               </div>
               <div class="pp-card-body space-y-5">
-                <div class="pp-card rounded-[20px] p-4 ob-summary bg-slate-50/70">
-                  <dl id="summaryList"></dl>
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">Ingresos mensuales *</label>
+                    <select name="monthlyIncome" id="monthlyIncome" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option value="menos_500">Menos de $500</option>
+                      <option value="500_1000">$500 – $1,000</option>
+                      <option value="1000_2500">$1,000 – $2,500</option>
+                      <option value="2500_5000">$2,500 – $5,000</option>
+                      <option value="5000_10000">$5,000 – $10,000</option>
+                      <option value="mas_10000">Más de $10,000</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">Montos de envíos o movimientos mensuales *</label>
+                    <select name="monthlyTransfersAmount" id="monthlyTransfersAmount" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option value="menos_500">Menos de $500</option>
+                      <option value="500_1000">$500 – $1,000</option>
+                      <option value="1000_2500">$1,000 – $2,500</option>
+                      <option value="2500_5000">$2,500 – $5,000</option>
+                      <option value="5000_10000">$5,000 – $10,000</option>
+                      <option value="mas_10000">Más de $10,000</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">De dónde proviene el dinero que transfiere *</label>
+                    <select name="fundsSource" id="fundsSource" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option value="salario">Salario</option>
+                      <option value="familiares">Familiares</option>
+                      <option value="negocio_propio">Negocio propio</option>
+                      <option value="inversiones">Inversiones</option>
+                      <option value="herencia">Herencia</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                    <div id="fundsSourceOtherWrap" class="mt-3" style="display:none">
+                      <label class="pp-label">Especifique a qué se refiere *</label>
+                      <input name="fundsSourceOther" id="fundsSourceOther" class="pp-field" type="text" placeholder="Ej: Remesas, venta de activos, etc.">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="pp-label">Origen de los fondos *</label>
+                    <select name="fundsOrigin" id="fundsOrigin" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option value="panama">Panamá</option>
+                      <option value="extranjero">Extranjero</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">Procedencia de los fondos (país) *</label>
+                    <select name="fundsCountry" id="fundsCountry" class="pp-field -select" required>
+                      <option value="">Selecciona país</option>
+                      <option value="Panamá">Panamá</option>
+                      <option value="Estados Unidos">Estados Unidos</option>
+                      <option value="Colombia">Colombia</option>
+                      <option value="Costa Rica">Costa Rica</option>
+                      <option value="México">México</option>
+                      <option value="Venezuela">Venezuela</option>
+                      <option value="Nicaragua">Nicaragua</option>
+                      <option value="Honduras">Honduras</option>
+                      <option value="El Salvador">El Salvador</option>
+                      <option value="Guatemala">Guatemala</option>
+                      <option value="República Dominicana">República Dominicana</option>
+                      <option value="Perú">Perú</option>
+                      <option value="Ecuador">Ecuador</option>
+                      <option value="Argentina">Argentina</option>
+                      <option value="Chile">Chile</option>
+                      <option value="Brasil">Brasil</option>
+                      <option value="Canadá">Canadá</option>
+                      <option value="España">España</option>
+                      <option value="China">China</option>
+                      <option value="India">India</option>
+                      <option value="Otro">Otro</option>
+                    </select>
+                    <div id="fundsCountryOtherWrap" class="mt-3" style="display:none">
+                      <label class="pp-label">Especifique el país *</label>
+                      <input name="fundsCountryOther" id="fundsCountryOther" class="pp-field" type="text" placeholder="Ej: Jamaica, Bahamas, etc.">
+                    </div>
+                  </div>
                 </div>
-                <div class="pp-card rounded-[20px] p-4 bg-amber-50 border border-amber-200 text-sm text-amber-900">
-                  Al enviar, el registro se guardará como <strong>pending_review</strong>. Todavía no se crearán las credenciales finales del cliente; eso ocurre solo cuando el superadmin apruebe el caso desde el portal administrativo.
+                <script>
+                (function(){
+                  function run(){
+                    var fs=document.getElementById('fundsSource'),fc=document.getElementById('fundsCountry');
+                    var ws=document.getElementById('fundsSourceOtherWrap'),wc=document.getElementById('fundsCountryOtherWrap');
+                    var is=document.getElementById('fundsSourceOther'),ic=document.getElementById('fundsCountryOther');
+                    function update(){
+                      if(!ws||!wc)return;
+                      var showS=fs&&String(fs.value)==='otro',showC=fc&&String(fc.value)==='Otro';
+                      ws.style.display=showS?'block':'none';wc.style.display=showC?'block':'none';
+                      if(is){is.required=showS;if(!showS)is.value='';}
+                      if(ic){ic.required=showC;if(!showC)ic.value='';}
+                    }
+                    if(fs)fs.addEventListener('change',update);
+                    if(fc)fc.addEventListener('change',update);
+                  }
+                  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);
+                  else setTimeout(run,0);
+                })();
+                </script>
+                <div class="pt-4 border-t border-slate-200">
+                  <h3 class="text-sm font-semibold text-slate-700 mb-3">Verificación y firma</h3>
+                  <p class="text-sm text-slate-600 mb-3">Al hacer clic en &quot;Enviar a revisión&quot; se abrirá una ventana para que confirme los datos y firme digitalmente.</p>
+                  <div class="pp-card rounded-[20px] p-4 ob-summary bg-slate-50/70 max-h-[200px] overflow-y-auto">
+                    <dl id="summaryList"></dl>
+                  </div>
                 </div>
               </div>
             </section>
@@ -1026,6 +1193,38 @@
   <script>
   window.__obStepClick=function(i){var s=document.querySelectorAll('.form-step');var c=document.querySelector('.form-step:not(.is-hidden)');if(!c||!s[i])return;c.classList.add('is-hidden');s[i].classList.remove('is-hidden');var ind=document.querySelectorAll('.ob-step[data-step-idx]');for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===i);var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn'),b=document.getElementById('submitBtn');if(p)p.disabled=(i===0);if(n)n.classList.toggle('is-hidden',i===s.length-1);if(b)b.classList.toggle('is-hidden',i!==s.length-1);var pct=Math.round(((i+1)/s.length)*100);var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');if(lab)lab.textContent=pct+'%';if(fil)fil.style.width=pct+'%';if(window.__obSetStep)window.__obSetStep(i);};
   </script>
+  <!-- Modal: firma digital y consentimiento -->
+  <div id="signatureModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 hidden" aria-hidden="true" style="display:none;background:rgba(0,0,0,.5)">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="signatureModalTitle">
+      <div class="p-5 border-b border-slate-200 flex-shrink-0">
+        <h2 id="signatureModalTitle" class="text-xl font-extrabold text-slate-900">Confirmación y firma</h2>
+        <p class="text-sm text-slate-600 mt-1">Revise el resumen, acepte la declaración y firme para enviar su solicitud.</p>
+      </div>
+      <div class="p-5 overflow-y-auto flex-1 min-h-0 space-y-4">
+        <div class="ob-summary text-sm max-h-[120px] overflow-y-auto rounded-xl p-3 bg-slate-50">
+          <dl id="signatureModalSummary"></dl>
+        </div>
+        <div class="rounded-xl p-4 border-2 border-slate-200 bg-slate-50">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="signatureConsentCheck" class="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600">
+            <span class="text-sm text-slate-700">Confirmo que he revisado la información anterior y que los datos proporcionados son <strong>verdadero y completos</strong>. Autorizo el tratamiento de mi información según la política de privacidad de Punto Pago.</span>
+          </label>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-slate-700 mb-2">Firma digital *</label>
+          <div class="border-2 border-slate-200 rounded-xl overflow-hidden bg-white" style="touch-action:none">
+            <canvas id="signatureCanvas" width="450" height="180" class="block w-full" style="max-width:100%;height:180px;cursor:crosshair"></canvas>
+          </div>
+          <button type="button" id="signatureClearBtn" class="mt-2 text-sm text-slate-600 hover:text-slate-900 underline">Limpiar firma</button>
+        </div>
+      </div>
+      <div class="p-5 border-t border-slate-200 flex gap-3 flex-shrink-0">
+        <button type="button" id="signatureModalCancel" class="pp-btn pp-btn-secondary flex-1">Cancelar</button>
+        <button type="button" id="signatureModalSubmit" class="pp-btn pp-btn-primary flex-1" disabled>Firmar y enviar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: mapa en iframe (mapa-picker.html aísla Leaflet del CSS del onboarding) -->
   <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex flex-col bg-white" aria-hidden="true" style="display:none">
     <div class="flex items-center justify-end p-2 border-b border-slate-100 flex-shrink-0 relative z-10 bg-white">

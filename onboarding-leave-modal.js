@@ -2,9 +2,9 @@
   var form = document.getElementById('onboardingForm');
   var formDirty = false;
   var formSaved = false;
-  var pendingHref = null;
+  var pendingBack = false;
   var backdrop = document.getElementById('leaveConfirmBackdrop');
-  var portalLink = document.getElementById('portalLink');
+  var btnRegresar = document.getElementById('btnRegresar');
 
   function markDirty(){ formDirty = true; window.__formSavedAfterDraft = false; }
   function markSaved(){ formSaved = true; formDirty = false; window.__formSavedAfterDraft = true; }
@@ -17,24 +17,35 @@
   window.addEventListener('beforeunload', function(e){
     if (window.__formSavedAfterDraft) return;
     if (window.__metamapModalOpen) e.preventDefault();
-    // No bloquear recarga: sessionStorage recupera progreso al refrescar
   });
 
-  function showLeaveModal(href){
+  function showLeaveModal(isBack){
     if (!backdrop) return;
-    pendingHref = href;
+    pendingBack = !!isBack;
     backdrop.classList.remove('hidden');
   }
   function hideLeaveModal(){
     if (backdrop) backdrop.classList.add('hidden');
-    pendingHref = null;
+    pendingBack = false;
   }
 
-  if (portalLink) {
-    portalLink.addEventListener('click', function(e){
-      if (!formDirty || formSaved) return;
+  function doRegresar(){
+    if (history.length > 1) history.back();
+    else location.href = 'onboarding-access.html';
+  }
+
+  window.__obTriggerRegresar = function(){
+    if (!formDirty || formSaved) {
+      doRegresar();
+      return;
+    }
+    showLeaveModal(true);
+  };
+
+  if (btnRegresar) {
+    btnRegresar.addEventListener('click', function(e){
       e.preventDefault();
-      showLeaveModal(this.getAttribute('href'));
+      window.__obTriggerRegresar && window.__obTriggerRegresar();
     });
   }
 
@@ -44,13 +55,13 @@
       var btn = document.getElementById('saveDraftBtn');
       if (btn) { btn.click(); markSaved(); }
       hideLeaveModal();
-      if (pendingHref) location.href = pendingHref;
+      if (pendingBack) doRegresar();
     });
     var btnDiscard = document.getElementById('leaveConfirmDiscard');
     if (btnDiscard) btnDiscard.addEventListener('click', function(){
-      var h = pendingHref;
+      var goBack = pendingBack;
       hideLeaveModal();
-      if (h) location.href = h;
+      if (goBack) doRegresar();
     });
     var btnCancel = document.getElementById('leaveConfirmCancel');
     if (btnCancel) btnCancel.addEventListener('click', function(){

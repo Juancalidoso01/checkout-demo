@@ -7,8 +7,8 @@
     { title: 'Comercio', desc: 'Estructura, empresa y aviso de operaciones (PDF)' },
     { title: 'Contactos', desc: 'Representante, teléfono empresa y celular' },
     { title: 'Dirección', desc: 'Provincia, distrito, mapa y ubicación exacta' },
-    { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
-    { title: 'Resumen', desc: 'Confirmación para revisión' }
+    { title: 'Cuenta para liquidación', desc: 'Banco o fintech donde recibirá sus comisiones' },
+    { title: 'Conocimiento del cliente', desc: 'Ingresos, montos, origen y procedencia de fondos' }
   ];
 
   const stepEls = Array.from(document.querySelectorAll('.form-step'));
@@ -333,7 +333,7 @@
     stepEls.forEach(function(el, idx) { el.classList.toggle('is-hidden', idx !== currentStep); });
     prevBtn.disabled = currentStep === 0;
     nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
-    var canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3].every(function(i){ return validateStepSilent(i); });
+    var canShowSubmit = (currentStep === stepEls.length - 1) && [0,1,2,3,4].every(function(i){ return validateStepSilent(i); });
     submitBtn.classList.toggle('is-hidden', !canShowSubmit);
     submitBtn.setAttribute('aria-hidden', canShowSubmit ? 'false' : 'true');
     if (currentStep === stepEls.length - 1) renderSummary();
@@ -348,6 +348,8 @@
         box.classList.remove('hidden');
       }
     }
+    if (currentStep === 3) updateBankFintechFields();
+    if (currentStep === 4) updateKycOtroFields();
     renderIndicator();
     updateProgress();
     updateFieldChecks();
@@ -438,6 +440,13 @@
     const el = document.getElementById(fieldName + 'Error');
     if (el) { el.textContent = msg || ''; el.classList.toggle('hidden', !msg); }
   }
+  function isValidEmail(v) {
+    var s = (v || '').toString().trim();
+    if (!s) return { valid: false, message: 'Ingrese un correo válido.' };
+    var re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!re.test(s)) return { valid: false, message: 'Formato de correo inválido (ej: nombre@dominio.com).' };
+    return { valid: true };
+  }
   /** Validación silenciosa (sin reportValidity) para comprobar si un paso está completo */
   function validateStepSilent(stepIndex){
     var fields = getStepFields(stepIndex);
@@ -465,6 +474,20 @@
       if (!isKycCompleted()) return false;
       if (!elConfirm || !elConfirm.checked) return false;
     }
+    if (stepIndex === 3) {
+      var elSett = form.elements.settlementEmail;
+      if (!isValidEmail(elSett ? elSett.value : '').valid) return false;
+    }
+    if (stepIndex === 4) {
+      if (form.elements.fundsSource && form.elements.fundsSource.value === 'otro') {
+        var otherSource = (form.elements.fundsSourceOther && form.elements.fundsSourceOther.value) ? String(form.elements.fundsSourceOther.value).trim() : '';
+        if (!otherSource) return false;
+      }
+      if (form.elements.fundsCountry && form.elements.fundsCountry.value === 'Otro') {
+        var otherCountry = (form.elements.fundsCountryOther && form.elements.fundsCountryOther.value) ? String(form.elements.fundsCountryOther.value).trim() : '';
+        if (!otherCountry) return false;
+      }
+    }
     return true;
   }
   function getFieldLabel(field){
@@ -479,7 +502,7 @@
       if (label) return label.textContent.replace(/\s*\*$/, '').trim();
     }
     const name = field.name;
-    const labels = { businessLegalName: 'Razón social', businessTradeName: 'Nombre comercial', taxId: 'RUT / NIT', businessType: 'Tipo de empresa', industry: 'Industria / rubro', yearsOperating: 'Años operando', businessDescriptionPdf: 'Aviso de operaciones (PDF)' };
+    const labels = { businessLegalName: 'Razón social', businessTradeName: 'Nombre comercial', taxId: 'RUT / NIT', businessType: 'Tipo de empresa', industry: 'Industria / rubro', yearsOperating: 'Años operando', businessDescriptionPdf: 'Aviso de operaciones (PDF)', monthlyIncome: 'Ingresos mensuales', monthlyTransfersAmount: 'Montos de envíos o movimientos mensuales', fundsSource: 'De dónde proviene el dinero', fundsOrigin: 'Origen de los fondos', fundsCountry: 'Procedencia de los fondos (país)' };
     return labels[name] || name || 'campo';
   }
   function validateStep(stepIndex){
@@ -532,6 +555,39 @@
           if (!isKycCompleted()) { setMsg('Debe completar la verificación de identidad para continuar.', true); return false; }
           if (!elConfirm2 || !elConfirm2.checked) { setMsg('Debe confirmar que el número de celular es correcto.', true); return false; }
         }
+        if (stepIndex === 3) {
+          var elSett2 = form.elements.settlementEmail;
+          var emailRes = isValidEmail(elSett2 ? elSett2.value : '');
+          if (!emailRes.valid) {
+            var errEl = document.getElementById('settlementEmailError');
+            if (errEl) { errEl.textContent = emailRes.message; errEl.classList.remove('hidden'); }
+            setMsg(emailRes.message, true);
+            if (elSett2) elSett2.focus();
+            return false;
+          }
+          var errEl2 = document.getElementById('settlementEmailError');
+          if (errEl2) { errEl2.textContent = ''; errEl2.classList.add('hidden'); }
+        }
+        if (stepIndex === 4) {
+          if (form.elements.fundsSource && form.elements.fundsSource.value === 'otro') {
+            var otherSource2 = (form.elements.fundsSourceOther && form.elements.fundsSourceOther.value) ? String(form.elements.fundsSourceOther.value).trim() : '';
+            if (!otherSource2) {
+              setMsg('Debe especificar a qué se refiere en "De dónde proviene el dinero".', true);
+              var elOther = form.elements.fundsSourceOther;
+              if (elOther) { elOther.focus(); elOther.reportValidity(); }
+              return false;
+            }
+          }
+          if (form.elements.fundsCountry && form.elements.fundsCountry.value === 'Otro') {
+            var otherCountry2 = (form.elements.fundsCountryOther && form.elements.fundsCountryOther.value) ? String(form.elements.fundsCountryOther.value).trim() : '';
+            if (!otherCountry2) {
+              setMsg('Debe especificar el país de procedencia de los fondos.', true);
+              var elOtherC = form.elements.fundsCountryOther;
+              if (elOtherC) { elOtherC.focus(); elOtherC.reportValidity(); }
+              return false;
+            }
+          }
+        }
     return true;
   }
   function goNext(){
@@ -548,6 +604,16 @@
     renderSteps();
     setMsg('');
     saveRecovery();
+  }
+  var KYC_LABELS = {
+    monthlyIncome: { menos_500: 'Menos de $500', '500_1000': '$500 – $1,000', '1000_2500': '$1,000 – $2,500', '2500_5000': '$2,500 – $5,000', '5000_10000': '$5,000 – $10,000', mas_10000: 'Más de $10,000' },
+    fundsSource: { salario: 'Salario', familiares: 'Familiares', negocio_propio: 'Negocio propio', inversiones: 'Inversiones', herencia: 'Herencia', otro: 'Otro' },
+    fundsOrigin: { panama: 'Panamá', extranjero: 'Extranjero' }
+  };
+  function formatKycValue(field, val) {
+    if (!val) return '—';
+    var map = KYC_LABELS[field];
+    return (map && map[val]) ? map[val] : val;
   }
   function renderSummary(){
     const data = readFormData();
@@ -567,15 +633,26 @@
       ['Coordenadas', (data.addressLat && data.addressLng) ? `${data.addressLat}, ${data.addressLng}` : '—'],
       ['Canal principal', data.channelType],
       ['Ventas estimadas', data.estimatedMonthlySales],
-      ['Banco / cuenta', [data.bankName, data.bankAccountType, data.bankAccountNumber].filter(Boolean).join(' · ')],
-      ['Integración API', data.needsApiIntegration ? 'Sí' : 'No'],
-      ['Notas', data.additionalNotes || '—']
+      ['Banco / fintech', (FINTECHS.indexOf(data.bankName) >= 0 ? [data.bankName, 'Tel: ' + (data.bankAccountNumber || '')] : [data.bankName, data.bankAccountType, data.bankAccountNumber]).filter(Boolean).join(' · ')],
+      ['Correo liquidaciones', data.settlementEmail || '—'],
+      ['Autorización APC', data.needsApiIntegration ? 'Sí' : 'No'],
+      ['Ingresos mensuales', formatKycValue('monthlyIncome', data.monthlyIncome)],
+      ['Montos de envíos/movimientos mensuales', formatKycValue('monthlyIncome', data.monthlyTransfersAmount)],
+      ['Origen del dinero', (data.fundsSource === 'otro' && data.fundsSourceOther) ? 'Otro: ' + data.fundsSourceOther : formatKycValue('fundsSource', data.fundsSource)],
+      ['Origen de fondos', formatKycValue('fundsOrigin', data.fundsOrigin)],
+      ['Procedencia (país)', (data.fundsCountry === 'Otro' && data.fundsCountryOther) ? 'Otro: ' + data.fundsCountryOther : (data.fundsCountry || '—')]
     ];
     summaryList.innerHTML = items.map(function(it){ return '<dt>' + esc(it[0]) + '</dt><dd>' + esc(it[1] || '—') + '</dd>'; }).join('');
   }
-  function buildApplication(status){
+  function buildApplication(status, opts){
     const data = readFormData();
     const kyc = getKycStatus();
+    var onboardingData = Object.assign({}, data);
+    if (opts && (opts.signatureDataUrl || opts.consentAccepted !== undefined)) {
+      onboardingData.signatureDataUrl = opts.signatureDataUrl || null;
+      onboardingData.consentAccepted = !!opts.consentAccepted;
+      onboardingData.consentedAt = opts.consentedAt || null;
+    }
     return {
       id: applicationId,
       type: 'agent_onboarding',
@@ -595,7 +672,7 @@
         linkedAgentId: null,
         linkedUserId: null
       },
-      onboarding: data,
+      onboarding: onboardingData,
       kycVerification: kyc ? {
         identityId: kyc.identityId,
         verificationId: kyc.verificationId,
@@ -606,9 +683,9 @@
       } : null
     };
   }
-  function persist(status){
+  function persist(status, opts){
     const items = readApplications();
-    const payload = buildApplication(status);
+    const payload = buildApplication(status, opts);
     var idx = items.findIndex(function(item){ return item.id === applicationId; });
     if (idx >= 0) {
       payload.createdAt = items[idx].createdAt || payload.createdAt;
@@ -681,10 +758,166 @@
         return;
       }
     }
-    persist('pending_review');
-    setMsg('Solicitud enviada a revisión. Las credenciales se asignarán solo después de aprobación.');
-    resetFormAfterSubmit();
+    renderSummary();
+    openSignatureModal();
   });
+
+  function openSignatureModal() {
+    var modal = document.getElementById('signatureModal');
+    var summaryTarget = document.getElementById('signatureModalSummary');
+    if (summaryTarget && summaryList) summaryTarget.innerHTML = summaryList.innerHTML;
+    var consentChk = document.getElementById('signatureConsentCheck');
+    var submitBtn = document.getElementById('signatureModalSubmit');
+    var canvas = document.getElementById('signatureCanvas');
+    if (consentChk) consentChk.checked = false;
+    if (submitBtn) submitBtn.disabled = true;
+    if (canvas) {
+      var ctx = canvas.getContext('2d');
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      window.__signatureHasStroke = false;
+    }
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    updateSignatureSubmitState();
+  }
+  function closeSignatureModal() {
+    var modal = document.getElementById('signatureModal');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+  function updateSignatureSubmitState() {
+    var consentChk = document.getElementById('signatureConsentCheck');
+    var submitBtn = document.getElementById('signatureModalSubmit');
+    var canSubmit = consentChk && consentChk.checked && (window.__signatureHasStroke === true);
+    if (submitBtn) submitBtn.disabled = !canSubmit;
+  }
+  function captureSignatureDataUrl() {
+    var canvas = document.getElementById('signatureCanvas');
+    if (!canvas || !window.__signatureHasStroke) return null;
+    try { return canvas.toDataURL('image/png'); } catch (e) { return null; }
+  }
+
+  (function setupSignaturePad() {
+    var canvas = document.getElementById('signatureCanvas');
+    var consentChk = document.getElementById('signatureConsentCheck');
+    var clearBtn = document.getElementById('signatureClearBtn');
+    var cancelBtn = document.getElementById('signatureModalCancel');
+    var submitBtn = document.getElementById('signatureModalSubmit');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    var drawing = false;
+    var lastX = 0, lastY = 0;
+    function getPos(e) {
+      var r = canvas.getBoundingClientRect();
+      var scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+      if (e.touches && e.touches[0]) {
+        return { x: (e.touches[0].clientX - r.left) * scaleX, y: (e.touches[0].clientY - r.top) * scaleY };
+      }
+      return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+    }
+    function startDraw(e) { e.preventDefault(); drawing = true; var p = getPos(e); lastX = p.x; lastY = p.y; }
+    function draw(e) {
+      e.preventDefault();
+      if (!drawing) return;
+      var p = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      lastX = p.x; lastY = p.y;
+      window.__signatureHasStroke = true;
+      updateSignatureSubmitState();
+    }
+    function endDraw(e) { e.preventDefault(); drawing = false; }
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseout', endDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', endDraw, { passive: false });
+    if (clearBtn) clearBtn.addEventListener('click', function() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      window.__signatureHasStroke = false;
+      updateSignatureSubmitState();
+    });
+    if (consentChk) consentChk.addEventListener('change', updateSignatureSubmitState);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeSignatureModal);
+    if (submitBtn) submitBtn.addEventListener('click', function() {
+      var dataUrl = captureSignatureDataUrl();
+      if (!dataUrl) { setMsg('Debe firmar antes de enviar.', true); return; }
+      closeSignatureModal();
+      persist('pending_review', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
+      setMsg('Solicitud enviada a revisión. Las credenciales se asignarán solo después de aprobación.');
+      resetFormAfterSubmit();
+    });
+  })();
+
+  var FINTECHS = ['Kali', 'Punto Pago APP', 'Wally', 'Zinli'];
+  function updateBankFintechFields() {
+    var bankEl = document.getElementById('bankName') || form.elements.bankName;
+    var typeWrap = document.getElementById('bankAccountTypeWrap');
+    var numLabel = document.getElementById('bankAccountNumberLabel');
+    var numInput = document.getElementById('bankAccountNumber') || form.elements.bankAccountNumber;
+    var typeEl = form.elements.bankAccountType;
+    var val = bankEl ? (bankEl.value || '').trim() : '';
+    var isFintech = FINTECHS.indexOf(val) >= 0;
+    if (typeWrap) {
+      typeWrap.style.display = isFintech ? 'none' : 'block';
+      typeWrap.classList.toggle('hidden', !!isFintech);
+      typeWrap.setAttribute('aria-hidden', isFintech ? 'true' : 'false');
+    }
+    if (numLabel) numLabel.textContent = isFintech ? 'Número de teléfono *' : 'Número de cuenta *';
+    if (numInput) {
+      numInput.type = isFintech ? 'tel' : 'text';
+      numInput.placeholder = isFintech ? '+507 6XXX XXXX' : '';
+      numInput.setAttribute('inputmode', isFintech ? 'tel' : 'text');
+      numInput.setAttribute('aria-label', isFintech ? 'Número de teléfono' : 'Número de cuenta');
+    }
+    if (typeEl) {
+      typeEl.required = !isFintech;
+      if (isFintech) typeEl.value = '';
+    }
+  }
+  window.__obUpdateBankFintechFields = updateBankFintechFields;
+
+  function updateKycOtroFields() {
+    var fundsSourceEl = document.getElementById('fundsSource') || form.elements.fundsSource;
+    var fundsCountryEl = document.getElementById('fundsCountry') || form.elements.fundsCountry;
+    var wrapSource = document.getElementById('fundsSourceOtherWrap');
+    var wrapCountry = document.getElementById('fundsCountryOtherWrap');
+    var inputSource = document.getElementById('fundsSourceOther') || form.elements.fundsSourceOther;
+    var inputCountry = document.getElementById('fundsCountryOther') || form.elements.fundsCountryOther;
+    var showSource = (fundsSourceEl && String(fundsSourceEl.value) === 'otro');
+    var showCountry = (fundsCountryEl && String(fundsCountryEl.value) === 'Otro');
+    if (wrapSource) {
+      wrapSource.classList.toggle('hidden', !showSource);
+      wrapSource.style.display = showSource ? 'block' : 'none';
+    }
+    if (wrapCountry) {
+      wrapCountry.classList.toggle('hidden', !showCountry);
+      wrapCountry.style.display = showCountry ? 'block' : 'none';
+    }
+    if (inputSource) {
+      inputSource.required = !!showSource;
+      if (!showSource) inputSource.value = '';
+    }
+    if (inputCountry) {
+      inputCountry.required = !!showCountry;
+      if (!showCountry) inputCountry.value = '';
+    }
+  }
+  window.__obUpdateKycOtroFields = updateKycOtroFields;
 
   const accessContext = readAccessContext();
   if (!accessContext) {
@@ -703,7 +936,16 @@
     renderSteps();
   }
   form.addEventListener('input', function(){ saveRecovery(); updateFieldChecks(); });
-  form.addEventListener('change', function(){ saveRecovery(); updateFieldChecks(); });
+  form.addEventListener('change', function(e){
+    saveRecovery();
+    updateFieldChecks();
+    if (e.target && e.target.name === 'bankName') updateBankFintechFields();
+    if (e.target && (e.target.name === 'fundsSource' || e.target.name === 'fundsCountry')) updateKycOtroFields();
+  });
+  var elFundsSource = document.getElementById('fundsSource');
+  var elFundsCountry = document.getElementById('fundsCountry');
+  if (elFundsSource) elFundsSource.addEventListener('change', updateKycOtroFields);
+  if (elFundsCountry) elFundsCountry.addEventListener('change', updateKycOtroFields);
 
   function updateFieldChecks() {
     var stepEl = stepEls[currentStep];
@@ -722,6 +964,9 @@
       if (currentStep === 1 && field.name === 'confirmPhoneOwnership') {
         var elCell = form.elements.repCellPhone;
         valid = valid && elCell && isValidPanamaMobile(elCell.value).valid && field.checked;
+      }
+      if (currentStep === 3 && field.name === 'settlementEmail') {
+        valid = valid && isValidEmail(field.value || '').valid;
       }
       check.classList.toggle('-ok', !!valid);
     }
@@ -753,6 +998,20 @@
   if (elPhone) elPhone.addEventListener('blur', function(){ if ((this.value||'').trim()) showPhoneError('companyPhone', ''); });
   var elCell = form.elements.repCellPhone;
   if (elCell) { elCell.addEventListener('blur', function(){ var r = isValidPanamaMobile(this.value); showPhoneError('repCellPhone', r.valid ? '' : r.message); }); elCell.addEventListener('input', function(){ if (isValidPanamaMobile(this.value).valid) showPhoneError('repCellPhone', ''); }); }
+  var elSettlementEmail = form.elements.settlementEmail;
+  if (elSettlementEmail) {
+    elSettlementEmail.addEventListener('blur', function(){
+      var r = isValidEmail(this.value);
+      var errEl = document.getElementById('settlementEmailError');
+      if (errEl) { errEl.textContent = r.valid ? '' : r.message; errEl.classList.toggle('hidden', r.valid); }
+    });
+    elSettlementEmail.addEventListener('input', function(){
+      if (isValidEmail(this.value).valid) {
+        var errEl = document.getElementById('settlementEmailError');
+        if (errEl) { errEl.textContent = ''; errEl.classList.add('hidden'); }
+      }
+    });
+  }
   setupPdfUpload();
   let addressMapInstance = null;
   let addressMarker = null;
@@ -994,8 +1253,8 @@
   window.addEventListener('beforeunload', function(e) {
     if (window.__metamapModalOpen) e.preventDefault();
   });
-  var portalLink = document.getElementById('portalLink');
-  if (portalLink) portalLink.addEventListener('click', function(e) {
+  var btnRegresar = document.getElementById('btnRegresar');
+  if (btnRegresar) btnRegresar.addEventListener('click', function(e) {
     if (window.__metamapModalOpen) {
       e.preventDefault();
       e.stopPropagation();
