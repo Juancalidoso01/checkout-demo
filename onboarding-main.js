@@ -35,6 +35,11 @@
   let currentStep = 0;
   let applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
 
+  /** Solo `?modo_prueba=1`: demo seguro (sin Supabase, sin bloqueo por solicitud previa, validación relajada). */
+  function isModoPruebaDemo(){
+    try { return /[?&]modo_prueba=1/i.test(window.location.search || ''); } catch (e) { return false; }
+  }
+
   function now(){ return Date.now(); }
   function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] || c; }); }
   function readApplications(){
@@ -301,12 +306,14 @@
   function goToStep(idx){
     if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
     if (metamapModalOpen) return;
-    var firstIncomplete = getFirstIncompleteStepBefore(idx);
-    if (firstIncomplete >= 0) {
-      currentStep = firstIncomplete;
-      renderSteps();
-      setMsg('No puede entrar a "' + steps[idx].title + '" todavía. Complete antes la etapa "' + steps[firstIncomplete].title + '".', true);
-      return;
+    if (!isModoPruebaDemo()) {
+      var firstIncomplete = getFirstIncompleteStepBefore(idx);
+      if (firstIncomplete >= 0) {
+        currentStep = firstIncomplete;
+        renderSteps();
+        setMsg('No puede entrar a "' + steps[idx].title + '" todavía. Complete antes la etapa "' + steps[firstIncomplete].title + '".', true);
+        return;
+      }
     }
     currentStep = idx;
     renderSteps();
@@ -598,8 +605,125 @@
     if (!re.test(s)) return { valid: false, message: 'Formato de correo inválido (ej: nombre@dominio.com).' };
     return { valid: true };
   }
+  /** Rellena el formulario con datos ficticios válidos para recorrer el flujo sin archivos reales ni KYC. */
+  function applyModoPruebaDemoFill(){
+    var ctx = readAccessContext() || {};
+    var email = (ctx.email || 'test@ejemplo.com').toString().trim();
+    var phone = (ctx.phone || '+50761234567').toString().trim();
+    var biz = (ctx.businessName || 'Comercio Demo Prueba S.A.').toString().trim();
+
+    if (pdfInput) {
+      try {
+        var b64 = 'JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0tpZHNbMyAwIFJdL0NvdW50IDE+PgplbmRvYmoKMyAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDIgMCBSL01lZGlhQm94WzAgMCA2MTIgNzkyXT4+CmVuZG9iagp4cmVmCjAgNAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDA2MSAwMDAwMCBuIAowMDAwMDAwMTEyIDAwMDAwIG4gCnRyYWlsZXIKPDwvU2l6ZS80L1Jvb3QgMSAwIFI+PgpzdGFydHhyZWYKMTY5CiUlRU9G';
+        var bin = atob(b64);
+        var arr = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        var demoFile = new File([arr], 'aviso-demo-prueba.pdf', { type: 'application/pdf' });
+        var dt = new DataTransfer();
+        dt.items.add(demoFile);
+        pdfInput.files = dt.files;
+      } catch (e2) { console.warn('Modo prueba: no se pudo adjuntar PDF demo', e2); }
+    }
+    var pdfChk = document.getElementById('pdf-check');
+    if (pdfChk) pdfChk.classList.add('-ok');
+    if (pdfInfo) {
+      pdfInfo.textContent = 'Modo prueba: PDF ficticio (demo).';
+      pdfInfo.classList.remove('hidden');
+    }
+    if (pdfDropzone) pdfDropzone.classList.remove('ob-field-invalid');
+
+    function setVal(name, value){
+      var el = form.elements[name];
+      if (!el) return;
+      if (el.type === 'checkbox') { el.checked = !!value; return; }
+      el.value = value != null ? String(value) : '';
+    }
+
+    setVal('businessLegalName', biz);
+    setVal('businessTradeName', biz.replace(/,?\s*S\.?A\.?$/i, '') || 'Demo Trade');
+    setVal('taxId', '155555555-2-2025');
+    setVal('businessType', 'Sociedad Anónima (S.A.)');
+    setVal('industry', 'Catering');
+    setVal('yearsOperating', '3');
+
+    setVal('repName', 'Representante Demo');
+    setVal('repEmail', email);
+    setVal('companyPhone', '+507 300-1234');
+    setVal('repCellPhone', phone.indexOf('507') >= 0 ? phone : ('+50761234567'));
+    setVal('repOcupacion', 'Comerciante');
+    setVal('repActividad', 'Restaurantes');
+    setVal('confirmPhoneOwnership', true);
+
+    var addrSearch = document.getElementById('addressSearch');
+    var addrLine = 'Bella Vista, Panamá';
+    if (addrSearch) {
+      addrSearch.value = addrLine;
+      addrSearch.dataset.addressSelected = 'true';
+    }
+    setVal('businessAddress', addrLine);
+    setVal('addressLandmarks', 'Frente a parque demo (prueba)');
+    setVal('province', 'Panamá');
+    setVal('district', 'Panamá');
+    setVal('corregimiento', 'Bella Vista');
+    setVal('addressLat', '8.983850');
+    setVal('addressLng', '-79.518871');
+    var mapBox = document.getElementById('mapCoordsBox');
+    var mapDisp = document.getElementById('mapCoordsDisplay');
+    if (mapBox && mapDisp) {
+      mapDisp.textContent = '8.983850, -79.518871';
+      mapBox.style.display = 'flex';
+      mapBox.classList.remove('hidden');
+    }
+
+    setVal('bankName', 'Banco General');
+    setVal('bankAccountType', 'Corriente');
+    setVal('bankAccountNumber', '03-45-67-8901');
+    setVal('bankAccountHolder', biz);
+    setVal('settlementEmail', email);
+
+    setVal('monthlyIncome', '1000_2500');
+    setVal('monthlyTransfersAmount', '500_1000');
+    setVal('fundsSource', 'negocio_propio');
+    setVal('fundsOrigin', 'panama');
+    setVal('fundsCountry', 'Panamá');
+    setVal('fundsSourceOther', '');
+    setVal('fundsCountryOther', '');
+    setVal('acceptTerms', true);
+
+    try {
+      setKycStatus({
+        status: 'enviado',
+        verificationId: 'demo_verification_prueba',
+        identityId: 'demo_identity_prueba',
+        completedAt: Date.now()
+      });
+    } catch (e3) {}
+
+    var indInp = document.getElementById('industry-autocomplete');
+    if (indInp) indInp.setCustomValidity('');
+    var occInp = document.getElementById('repOcupacion');
+    if (occInp) occInp.setCustomValidity('');
+    var actInp = document.getElementById('repActividad');
+    if (actInp) actInp.setCustomValidity('');
+
+    if (typeof updateBankFintechFields === 'function') updateBankFintechFields();
+    if (typeof updateKycOtroFields === 'function') updateKycOtroFields();
+    if (typeof updateMetamapMetadata === 'function') updateMetamapMetadata();
+    if (typeof renderKycStatus === 'function') renderKycStatus();
+    if (typeof syncAddressFieldFromStoredValue === 'function') syncAddressFieldFromStoredValue();
+  }
+
+  window.__obFillModoPrueba = function(){
+    if (!isModoPruebaDemo()) return;
+    applyModoPruebaDemoFill();
+    renderSteps();
+    updateFieldChecks();
+    setMsg('Modo prueba: datos de ejemplo recargados.', false);
+  };
+
   /** Validación silenciosa (sin reportValidity) para comprobar si un paso está completo */
   function validateStepSilent(stepIndex){
+    if (isModoPruebaDemo()) return true;
     var fields = getStepFields(stepIndex);
     for (var fi = 0; fi < fields.length; fi++) {
       if (!fields[fi].checkValidity()) return false;
@@ -662,6 +786,7 @@
   }
   function validateStep(stepIndex){
     clearFieldInvalidClass();
+    if (isModoPruebaDemo()) return true;
     var fields = getStepFields(stepIndex);
     for (var fi = 0; fi < fields.length; fi++) {
       var field = fields[fi];
@@ -880,6 +1005,9 @@
     return payload;
   }
   async function syncApplicationToSupabase(payload){
+    if (isModoPruebaDemo()) {
+      return { ok: false, skipped: true, reason: 'modo_prueba' };
+    }
     if (!payload || !window.PPApplications || !window.PPApplications.isEnabled()) {
       return { ok: false, skipped: true };
     }
@@ -1070,7 +1198,7 @@
       closeSignatureModal();
       var payload = persist('contract_pending', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
       await syncApplicationToSupabase(payload);
-      if (window.PPApplications && window.PPApplications.isEnabled()) {
+      if (!isModoPruebaDemo() && window.PPApplications && window.PPApplications.isEnabled()) {
         await window.PPApplications.recordReviewEvent({
           applicationId: payload.id,
           action: 'contract_pending',
@@ -1158,12 +1286,19 @@
     return;
   }
 
-  if (!/[?&]preview=firma/i.test(window.location.search || '') && redirectIfSubmissionLocked()) {
+  if (!/[?&]preview=firma/i.test(window.location.search || '') && !isModoPruebaDemo() && redirectIfSubmissionLocked()) {
     return;
   }
 
   applicationCodeEl.textContent = applicationId;
-  if (!restoreRecovery() && !restoreSavedApplication()) {
+  var needModoPruebaFill = false;
+  if (isModoPruebaDemo()) {
+    try { sessionStorage.removeItem(RECOVERY_KEY); } catch (eR) {}
+    applicationId = 'oba_prueba_' + Math.random().toString(16).slice(2, 8) + '_' + Date.now().toString(16);
+    setCurrentApplicationId(applicationId);
+    applicationCodeEl.textContent = applicationId;
+    needModoPruebaFill = true;
+  } else if (!restoreRecovery() && !restoreSavedApplication()) {
     prefillFromAccess();
     renderSteps();
   }
@@ -1236,6 +1371,14 @@
     }
   }
   setupFieldChecks();
+  setupPdfUpload();
+  if (needModoPruebaFill) {
+    prefillFromAccess();
+    applyModoPruebaDemoFill();
+    renderSteps();
+    updateFieldChecks();
+    setMsg('Modo prueba: datos ficticios cargados. Avance con «Siguiente» o salte de paso desde el menú lateral. No se sincroniza con Supabase.', false);
+  }
   var elPhone = form.elements.companyPhone;
   if (elPhone) elPhone.addEventListener('blur', function(){ if ((this.value||'').trim()) showPhoneError('companyPhone', ''); });
   var elCell = form.elements.repCellPhone;
@@ -1254,7 +1397,6 @@
       }
     });
   }
-  setupPdfUpload();
   let addressMapInstance = null;
   let addressMarker = null;
   const PANAMA_CENTER = [8.9945, -79.5199];
