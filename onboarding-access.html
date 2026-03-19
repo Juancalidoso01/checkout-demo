@@ -635,6 +635,48 @@
           autoRefreshToken: true
         }
       }) : null;
+
+      /** URL exacta que Supabase debe tener en Authentication → URL Configuration → Redirect URLs */
+      function getMagicLinkRedirectUrl(){
+        let u = (sbCfg.redirectTo || '').trim();
+        if (!u) {
+          try {
+            u = `${window.location.origin}${window.location.pathname}`;
+          } catch (e) {
+            u = (typeof location !== 'undefined' && location.href) ? location.href : '';
+          }
+        }
+        u = u.split('#')[0];
+        const q = u.indexOf('?');
+        if (q >= 0) u = u.slice(0, q);
+        return u.replace(/\/+$/, '') || u;
+      }
+
+      function explainMagicLinkError(error){
+        const msg = ((error && error.message) ? error.message : String(error || '')).toLowerCase();
+        const status = (error && error.status) ? Number(error.status) : 0;
+        const lines = [];
+        if (msg.includes('redirect') || (msg.includes('url') && msg.includes('allow')) || msg.includes('not allowed')) {
+          lines.push('En Supabase Dashboard → Authentication → URL Configuration, agrega esta URL en “Redirect URLs”:');
+          lines.push(getMagicLinkRedirectUrl());
+        }
+        if (msg.includes('rate') || msg.includes('too many') || msg.includes('seconds') || status === 429) {
+          lines.push('Límite de envío de correos: espera 1–2 minutos y vuelve a intentar, o revisa el plan/cuota de Auth en Supabase.');
+        }
+        if (msg.includes('smtp') || msg.includes('mail') && msg.includes('send') || msg.includes('email provider')) {
+          lines.push('Revisa en Supabase → Project Settings → Auth el proveedor de correo (SMTP personalizado o el predeterminado).');
+        }
+        if (msg.includes('sign up') && msg.includes('disabled') || msg.includes('signup_disabled')) {
+          lines.push('Puede que “Sign ups” esté deshabilitado en Authentication → Providers → Email.');
+        }
+        if (msg.includes('already been registered') || msg.includes('already registered') || msg.includes('user already exists')) {
+          lines.push('Este correo ya existe en Auth: prueba “Iniciar sesión” o usa otro correo para una solicitud nueva.');
+        }
+        if (!lines.length) {
+          lines.push('Revisa Supabase → Authentication → Logs (o la consola de red) para el detalle del rechazo.');
+        }
+        return lines;
+      }
     let waitUntil = 0;
     let countdownTimer = null;
     let pollingTimer = null;
@@ -754,8 +796,19 @@
         }
       }
       function normalize(v){ return (v || '').toString().trim().toLowerCase(); }
+      function escHtml(v){
+        return (v || '').toString()
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
       function setGateMsg(msg, isError){
         els.gateMsg.textContent = msg || '';
+        els.gateMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
+      }
+      function setGateHtml(html, isError){
+        els.gateMsg.innerHTML = html || '';
         els.gateMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
       }
       function setModalStep(active){
@@ -930,11 +983,12 @@
         setStatus('-pending', 'Enviando enlace de confirmación al correo...');
         setGateMsg('Estamos enviando el enlace de confirmación.', false);
         let error = null;
+        const redirectTo = getMagicLinkRedirectUrl();
         try {
           const result = await supabaseClient.auth.signInWithOtp({
-            email,
+            email: email.trim(),
             options: {
-              emailRedirectTo: sbCfg.redirectTo || location.href,
+              emailRedirectTo: redirectTo,
               shouldCreateUser: true,
               data: {
                 phone,
@@ -948,10 +1002,16 @@
           error = e;
         }
         if (error) {
-          const detail = error.message || String(error) || 'No pudimos enviar el correo de confirmación.';
-          setGateMsg(`Error Supabase: ${detail}`, true);
-          setStatus('-error', 'Falló el envío del magic link. Revisa la configuración de Supabase y la sección de Email.');
-          console.error('Supabase magic link error:', error);
+          const detail = (error && error.message) ? error.message : String(error || 'No pudimos enviar el correo de confirmación.');
+          const hints = explainMagicLinkError(error);
+          const gateHtml = [
+            `<strong>No se pudo enviar el enlace.</strong> ${escHtml(detail)}`,
+            '<ul class="mt-2 ml-4 list-disc text-sm space-y-1">' + hints.map(function(h){ return '<li>' + escHtml(h) + '</li>'; }).join('') + '</ul>',
+            '<p class="mt-2 text-xs text-slate-500">Redirect usado: <code class="mono">' + escHtml(redirectTo) + '</code></p>'
+          ].join('');
+          setGateHtml(gateHtml, true);
+          setStatus('-error', `No se envió el correo: ${detail}`);
+          console.error('Supabase magic link error:', error, { emailRedirectTo: redirectTo });
           return;
         }
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
