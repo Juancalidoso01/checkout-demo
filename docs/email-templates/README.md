@@ -11,10 +11,51 @@ Diseño con **banner en gradiente** (colores Punto Pago), texto claro en españo
 3. Abre la plantilla **Magic Link** (a veces el envío por `signInWithOtp` usa esta u otra similar según versión; si no ves “Magic Link”, revisa también **Confirm signup**).
 4. **Subject** (asunto), por ejemplo:
    - `Confirma tu correo para continuar con Punto Pago`
-5. En el cuerpo del mensaje:
-   - Si el editor tiene modo **HTML / Source**, pega el contenido del archivo `magic-link-punto-pago.html`.
-   - Algunas versiones solo aceptan fragmento: copia desde `<table role="presentation" width="100%"` del primer bloque grande hasta el cierre de esa tabla exterior (o prueba pegando el `<body>` completo sin las etiquetas `<body>` externas).
+5. En el cuerpo del mensaje (**Body**), sigue el **[paso 6 detallado](#paso-6-pegar-el-html-en-supabase)** abajo.
 6. **No elimines** las variables `{{ .ConfirmationURL }}` ni `{{ .Email }}` (y `{{ .SiteURL }}` si las usas en otro bloque).
+
+---
+
+## Paso 6: pegar el HTML en Supabase (paso a paso)
+
+### A) Abrir el texto para copiar
+
+En tu computadora, abre el archivo del proyecto:
+
+**`docs/email-templates/PARA-PEGAR-EN-SUPABASE.html`**
+
+(En GitHub: entra al repo → carpeta `docs/email-templates` → abre ese archivo → botón **Raw** para ver solo el código.)
+
+### B) Qué copiar
+
+1. Baja hasta la línea que empieza con **`<table role="presentation"`** (la primera `<table` grande).
+2. Selecciona desde ahí hasta el **último `</table>`** del archivo (todo el bloque del correo).
+3. **Copiar** (Ctrl+C o Cmd+C).  
+   *No copies el comentario `<!--` de arriba si te resulta más fácil; lo importante es el bloque `<table>...</table>`.*
+
+### C) Dónde pegarlo en Supabase
+
+1. En el Dashboard: **Authentication** → **Email templates**.
+2. Haz clic en **Magic link** en la lista (nombre exacto puede ser *Magic Link*).
+3. Verás algo como:
+   - **Subject** → ahí va solo el asunto (texto plano).
+   - **Body** / **Message** / **Email body** → ahí va el HTML.
+
+4. **Cómo pegar según lo que veas:**
+   - Si ves un recuadro grande de texto y al lado o arriba dice **Source**, **HTML**, **`</>`** o **Edit as HTML**: haz clic ahí y **pega** el bloque que copiaste.
+   - Si solo ves un editor tipo Word (negritas, listas): busca en la esquina un icono **`</>`** o menú **⋮** → *Edit HTML* / *Source* y pega ahí.
+   - Si al pegar se ve código raro con etiquetas `<table`: está bien; Supabase envía eso como HTML al correo.
+
+5. Pulsa **Save** (Guardar) abajo o arriba de la plantilla.
+
+### D) Probar
+
+Pide un magic link otra vez desde tu página de acceso. El correo nuevo debería verse con el banner morado y el botón.
+
+### Si algo falla
+
+- Si al guardar Supabase muestra error, prueba pegando **menos**: solo desde la primera `<table` hasta la última `</table>` sin líneas vacías al final.
+- Si el correo llega sin diseño (solo texto), tu cliente de correo a veces simplifica la vista; abre el correo en **“ver en navegador”** o en otro cliente (Gmail web suele respetar tablas e inline styles).
 
 ### Variables útiles (Go templates de Supabase)
 
