@@ -78,7 +78,40 @@
     }
     .contract-content ol{padding-left:1.15rem;color:#334155}
     .contract-content li{margin:.45rem 0;line-height:1.7;text-align:justify;text-justify:inter-word}
+    @keyframes contractGlow{
+      0%,100%{background-position:0% 50%;box-shadow:0 8px 18px rgba(84,98,230,.06)}
+      50%{background-position:100% 50%;box-shadow:0 10px 24px rgba(84,98,230,.11)}
+    }
     .contract-inline{font-weight:800;color:#0f172a}
+    .contract-brand,
+    .contract-action{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.14rem .56rem;
+      border-radius:999px;
+      font-weight:900;
+      letter-spacing:.01em;
+      vertical-align:baseline;
+      white-space:nowrap;
+      background-size:200% 200%;
+      animation:contractGlow 8s ease-in-out infinite;
+    }
+    .contract-brand.-ally{
+      color:#4338ca;
+      background-image:linear-gradient(135deg,rgba(84,98,230,.18),rgba(129,140,248,.08),rgba(84,98,230,.16));
+      box-shadow:inset 0 0 0 1px rgba(84,98,230,.10);
+    }
+    .contract-brand.-pp{
+      color:#0f3b8f;
+      background-image:linear-gradient(135deg,rgba(14,116,144,.12),rgba(59,130,246,.08),rgba(14,116,144,.14));
+      box-shadow:inset 0 0 0 1px rgba(14,116,144,.10);
+    }
+    .contract-action{
+      color:#0f766e;
+      background-image:linear-gradient(135deg,rgba(16,185,129,.16),rgba(45,212,191,.08),rgba(16,185,129,.14));
+      box-shadow:inset 0 0 0 1px rgba(16,185,129,.10);
+    }
     .contract-fill{display:inline-block;max-width:100%;min-width:160px;padding:0 .15rem;border-bottom:1px solid rgba(15,23,42,.35);font-weight:800;color:#0f172a;vertical-align:baseline}
     .contract-fill.-long{min-width:280px}
     .contract-fill.-short{min-width:100px}
@@ -133,7 +166,16 @@
     }
     .contract-intro .contract-fill{min-width:110px}
     .contract-intro .contract-fill.-long{min-width:210px}
-    .contract-clause-title{font-weight:900;color:#0f172a;text-transform:uppercase}
+    .contract-clause-title{
+      display:inline-block;
+      padding:.12rem .5rem;
+      border-radius:10px;
+      font-weight:900;
+      color:#0f172a;
+      text-transform:uppercase;
+      background:linear-gradient(180deg,rgba(84,98,230,.08),rgba(84,98,230,.02));
+      box-shadow:inset 0 0 0 1px rgba(84,98,230,.08);
+    }
     .contract-bank-box{margin-top:16px;border:1px solid rgba(148,163,184,.18);border-radius:22px;background:#f8fafc;padding:16px 18px}
     .contract-bank-box p{margin:.5rem 0}
     .contract-sign-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:2rem}
@@ -195,6 +237,10 @@
       .contract-intro .contract-fill.-long{min-width:150px}
       .contract-fill.-long{min-width:200px}
     }
+    @media (prefers-reduced-motion: reduce){
+      .contract-brand,
+      .contract-action{animation:none}
+    }
   </style>
 </head>
 <body class="pp-page">
@@ -206,7 +252,7 @@
             <span class="contract-mini-kicker">Documento legal</span>
             <span class="contract-mini-kicker">Paso final antes de revisión</span>
           </div>
-          <h1 id="contractDocTitle" class="contract-doc-title">Contrato de <span class="accent">agente externo</span></h1>
+          <h1 id="contractDocTitle" class="contract-doc-title">Contrato de <span class="accent">Punto Aliado</span></h1>
           <p id="contractDocSubtitle" class="contract-doc-subtitle">Revisa el documento legal asociado a tu solicitud, confirma que corresponde a tu negocio y acepta para pasar al estado de revisión interna.</p>
         </div>
 
@@ -214,35 +260,35 @@
           <div id="contractStatus" class="mb-6 contract-status hidden"></div>
 
           <article class="contract-content">
-            <p class="contract-intro">Entre los suscritos a saber señor(a) <span id="fillRepName" class="contract-fill -long">____________________________</span>, de nacionalidad <span class="contract-inline-edit -short"><input id="fillNationality" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Nacionalidad"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span> mayor de edad, estado civil <span class="contract-inline-edit"><input id="fillCivilStatus" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Estado civil"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span>, con cédula de identidad personal/Pasaporte número <span class="contract-inline-edit -long"><input id="fillRepId" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Cédula o pasaporte"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span>, con domicilio en <span id="fillDomicile" class="contract-fill -long">__________________________________________________</span>, quien actúa en nombre y representación de la sociedad <span id="fillBusinessLegalName" class="contract-fill -long">_______________________________________________</span> inscrita a Folio mercantil número <span class="contract-inline-edit -short"><input id="fillMercantileFolio" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Folio mercantil"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span> de la sección Mercantil del Registro Público de Panamá, en calidad de Representante Legal, a quien en adelante y para los efectos del presente contrato se le conocerá como <span class="contract-inline">EL AGENTE EXTERNO</span> por una parte, y por la otra, <span class="contract-inline">ANDREY GORSKIY</span>, varón mayor de edad, portador del documento de identificación personal, cédula No. E-8-152790, actuando en su calidad de Representante legal y en nombre y representación de <span class="contract-inline">PUNTO PAGO PANAMA S.A</span> constituida e incorporada de conformidad con las leyes de la República de Panamá, debidamente inscrita a la Ficha 725026, Documento 1914582, de la Sección Mercantil del Registro Público, y con el Aviso de Operaciones No. 1914582-1-725026-2012-354258 y oficinas ubicadas en Obarrio, Edificio Sortis Business Tower, Oficina 17H, de la ciudad de Panamá, República de Panamá, en adelante <span class="contract-inline">PUNTO PAGO</span>, convienen en celebrar el presente <span class="contract-inline">CONTRATO DE SERVICIOS DE RECARGAS ELECTRONICAS</span>, conforme las cláusulas y condiciones descritas a continuación.</p>
+            <p class="contract-intro">Entre los suscritos a saber señor(a) <span id="fillRepName" class="contract-fill -long">____________________________</span>, de nacionalidad <span class="contract-inline-edit -short"><input id="fillNationality" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Nacionalidad"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span> mayor de edad, estado civil <span class="contract-inline-edit"><input id="fillCivilStatus" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Estado civil"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span>, con cédula de identidad personal/Pasaporte número <span class="contract-inline-edit -long"><input id="fillRepId" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Cédula o pasaporte"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span>, con domicilio en <span id="fillDomicile" class="contract-fill -long">__________________________________________________</span>, quien actúa en nombre y representación de la sociedad <span id="fillBusinessLegalName" class="contract-fill -long">_______________________________________________</span> inscrita a Folio mercantil número <span class="contract-inline-edit -short"><input id="fillMercantileFolio" class="contract-inline-input" type="text" inputmode="text" placeholder="" aria-label="Folio mercantil"><span class="contract-inline-check" aria-hidden="true">&#10003;</span></span> de la sección Mercantil del Registro Público de Panamá, en calidad de Representante Legal, a quien en adelante y para los efectos del presente contrato se le conocerá como <span class="contract-brand -ally">EL PUNTO ALIADO</span> por una parte, y por la otra, <span class="contract-inline">ANDREY GORSKIY</span>, varón mayor de edad, portador del documento de identificación personal, cédula No. E-8-152790, actuando en su calidad de Representante legal y en nombre y representación de <span class="contract-brand -pp">PUNTO PAGO PANAMA S.A</span> constituida e incorporada de conformidad con las leyes de la República de Panamá, debidamente inscrita a la Ficha 725026, Documento 1914582, de la Sección Mercantil del Registro Público, y con el Aviso de Operaciones No. 1914582-1-725026-2012-354258 y oficinas ubicadas en Obarrio, Edificio Sortis Business Tower, Oficina 17H, de la ciudad de Panamá, República de Panamá, en adelante <span class="contract-brand -pp">PUNTO PAGO</span>, convienen en celebrar el presente <span class="contract-action">CONTRATO DE SERVICIOS DE RECARGAS ELECTRONICAS</span>, conforme las cláusulas y condiciones descritas a continuación.</p>
 
-          <p><span class="contract-clause-title">PRIMERA:</span> Declara EL AGENTE EXTERNO será el responsable por el uso del software y servicio de recargas electrónicas con lo cual podrá beneficiarse con una comisión según el estándar tarifario descrito en el ANEXO 1.</p>
+          <p><span class="contract-clause-title">PRIMERA:</span> Declara <span class="contract-brand -ally">EL PUNTO ALIADO</span> será el responsable por el uso del software y servicio de recargas electrónicas, con lo cual podrá beneficiarse de las comisiones que se reflejen en el portal Punto Aliado conforme a su esquema comercial vigente.</p>
 
-          <p><span class="contract-clause-title">SEGUNDA:</span> Declara EL AGENTE EXTERNO quien será el responsable por recaudar, cobrar y realizar transacciones en efectivos o pagos procedentes de los usuarios y a su vez son clientes de las grandes empresas de la República de Panamá, lo cual su atención disposición y trato hacia los mismos deberá darse bajo un estándar adecuado de servicio para garantizar buenas relaciones entre las empresas vinculadas y convenidas con PUNTO PAGO.</p>
+          <p><span class="contract-clause-title">SEGUNDA:</span> Declara <span class="contract-brand -ally">EL PUNTO ALIADO</span> quien será el responsable por recaudar, cobrar y realizar transacciones en efectivos o pagos procedentes de los usuarios y a su vez son clientes de las grandes empresas de la República de Panamá, lo cual su atención disposición y trato hacia los mismos deberá darse bajo un estándar adecuado de servicio para garantizar buenas relaciones entre las empresas vinculadas y convenidas con <span class="contract-brand -pp">PUNTO PAGO</span>.</p>
 
-          <p><span class="contract-clause-title">TERCERA:</span> EL AGENTE EXTERNO se compromete a hacer buen uso de la plataforma dispuesta por la empresa PUNTO PAGO PANAMA, S.A. y utilizar sólo para los proveedores enunciados en el ANEXO 1 y/o cualquier otro proveedor que se vaya vinculando a la red de PUNTO PAGO en el futuro.</p>
+          <p><span class="contract-clause-title">TERCERA:</span> <span class="contract-brand -ally">EL PUNTO ALIADO</span> se compromete a hacer buen uso de la plataforma dispuesta por la empresa <span class="contract-brand -pp">PUNTO PAGO PANAMA, S.A.</span> y reconoce que, a través del portal Punto Aliado, podrá visualizar los proveedores disponibles para operar, las comisiones aplicables según su esquema comercial vigente y el balance correspondiente para la gestión de sus operaciones.</p>
 
-          <p><span class="contract-clause-title">CUARTA:</span> Al firmar el presente Contrato, EL AGENTE EXTERNO permite a los clientes de PUNTO PAGO la libre entrada o consulta de información en el establecimiento o locación para lo cual tiene destinado EL AGENTE EXTERNO, con la finalidad de que el cliente pueda identificar a EL AGENTE EXTERNO, como un aliado estratégico para el cobro y recepción de recaudo de PUNTO PAGO y buen nombre para lo cual se realiza el siguiente convenio.</p>
+          <p><span class="contract-clause-title">CUARTA:</span> Al aceptar el presente Contrato por medios digitales, EL PUNTO ALIADO permite a los clientes de PUNTO PAGO la libre entrada o consulta de información en el establecimiento o locación para lo cual tiene destinado EL PUNTO ALIADO, con la finalidad de que el cliente pueda identificar a EL PUNTO ALIADO como un aliado estratégico para el cobro y recepción de recaudo de PUNTO PAGO y buen nombre para lo cual se realiza el siguiente convenio.</p>
 
-          <p><span class="contract-clause-title">QUINTA:</span> Es responsabilidad de EL AGENTE EXTERNO, disponer de los medios necesarios para poder operar el SOFTWARE DE SERVICIOS DE RECARGAS ELECTRONICAS, como por ejemplo el servicio de internet, dispositivos móviles, o PC, Laptop o cualquier otra herramienta disponible para acceder a la plataforma de PUNTO PAGO.</p>
+          <p><span class="contract-clause-title">QUINTA:</span> Es responsabilidad de EL PUNTO ALIADO, disponer de los medios necesarios para poder operar el SOFTWARE DE SERVICIOS DE RECARGAS ELECTRONICAS, como por ejemplo el servicio de internet, dispositivos móviles, o PC, Laptop o cualquier otra herramienta disponible para acceder a la plataforma de PUNTO PAGO.</p>
 
-          <p><span class="contract-clause-title">SEXTA: RECLAMOS.</span> Cualquier reclamo por parte del AGENTE EXTERNO deberá ser dirigido mediante correo electrónico a las siguientes direcciones <span class="contract-inline">hola@puntopago.net</span> y <span class="contract-inline">asistente@puntopago.net</span>.</p>
+          <p><span class="contract-clause-title">SEXTA: RECLAMOS.</span> Cualquier reclamo, consulta o gestión relacionada con comisiones por parte del <span class="contract-brand -ally">PUNTO ALIADO</span> podrá ser canalizada directamente desde el portal Punto Aliado, el cual contará con un <span class="contract-action">chat en vivo</span> de atención para brindar soporte y dar seguimiento a cualquier solicitud relacionada con la operación del servicio.</p>
 
-          <p><span class="contract-clause-title">SEPTIMA: VINCULACIÓN DEL SERVICIO.</span> EL AGENTE EXTERNO deberá de realizar un depósito para poder disponer de saldo en su balance, dicho balance le servirá para poder Prepagar y realizar transacciones o pagos procedentes de los usuarios. La plataforma de pagos indica el saldo total que tiene, el registro de operaciones débito y crédito.</p>
+          <p><span class="contract-clause-title">SEPTIMA: VINCULACIÓN DEL SERVICIO.</span> EL PUNTO ALIADO deberá realizar un depósito para poder disponer de saldo en su balance, el cual le servirá para prepagar y realizar transacciones o pagos procedentes de los usuarios. El portal Punto Aliado reflejará el saldo total disponible, así como el registro de operaciones débito y crédito.</p>
 
-          <p><span class="contract-clause-title">OCTAVA:</span> PUNTO PAGO se compromete a brindar soporte al personal de EL AGENTE EXTERNO mediante nuestro centro de atención al cliente vía llamada, o a través de nuestros canales digitales de forma remota, brindándoles un archivo instructivo sobre el correcto uso de las herramientas.</p>
+          <p><span class="contract-clause-title">OCTAVA:</span> <span class="contract-brand -pp">PUNTO PAGO</span> se compromete a brindar soporte al personal de <span class="contract-brand -ally">EL PUNTO ALIADO</span> a través de sus canales de atención y medios digitales habilitados, incluyendo el <span class="contract-action">chat en vivo</span> disponible en el portal Punto Aliado, así como orientación sobre el correcto uso de las herramientas.</p>
 
-          <p><span class="contract-clause-title">NOVENA:</span> EL AGENTE EXTERNO deberá diligenciar el documento ANEXO 2, con el ánimo de certificar al AGENTE EXTERNO, y tomar declaración jurada de sus operaciones las cuales solo será para fines comerciales y será penalizado por las autoridades por cualquier uso ilícito del servicio en aras de cumplir la reglamentación dispuesta por la ley 23 del 27 de abril del 2015.</p>
+          <p><span class="contract-clause-title">NOVENA:</span> EL PUNTO ALIADO reconoce y acepta que la información, documentación y declaraciones requeridas para su vinculación, validación y cumplimiento regulatorio serán suministradas de forma digital dentro del proceso de registro y en el portal Punto Aliado, para fines comerciales y en cumplimiento de la reglamentación dispuesta por la ley 23 del 27 de abril del 2015.</p>
 
-          <p><span class="contract-clause-title">DECIMA: RECIBOS DE PAGO.</span> La plataforma ofrece la opción de generar comprobante de pago al cliente, por lo cual, deberá disponer, de una impresora o acordar con el cliente suministrarlo por correo electrónico o por WhatsApp, en dado caso de que el usuario requiera alguna constancia de la transacción.</p>
+          <p><span class="contract-clause-title">DECIMA: RECIBOS DE PAGO.</span> El portal Punto Aliado ofrece la opción de generar comprobantes de pago para el cliente, los cuales podrán ser consultados, descargados o compartidos por medios digitales cuando el usuario requiera constancia de la transacción.</p>
 
           <div>
-            <p><span class="contract-clause-title">DECIMA PRIMERA: COMISIONES.</span> El reembolso por pago de comisiones, pactadas en la cláusula PRIMERA del presente contrato, se realizará por solicitud de EL AGENTE EXTERNO contra factura presentada, como se describe a continuación:</p>
+            <p><span class="contract-clause-title">DECIMA PRIMERA: COMISIONES.</span> Las comisiones generadas a favor de <span class="contract-brand -ally">EL PUNTO ALIADO</span> podrán ser visualizadas dentro del portal Punto Aliado, en el cual se reflejarán los montos acumulados, los importes disponibles para retiro y el estado de las solicitudes gestionadas. Una vez dichas comisiones se encuentren habilitadas para retiro, <span class="contract-brand -ally">EL PUNTO ALIADO</span> podrá realizar la solicitud correspondiente desde la opción <span class="contract-action">"Solicitar comisiones"</span>, conforme al siguiente procedimiento:</p>
             <ol class="list-decimal pl-5 text-slate-700 space-y-2">
-              <li>EL AGENTE EXTERNO envía un e-mail a: <span class="contract-inline">facturas@puntopago.net</span> y <span class="contract-inline">asistente@puntopago.net</span> con la solicitud de reembolso por el periodo pasado, mínimo de tres (3) meses.</li>
-              <li>Luego de recibir la confirmación del monto pendiente por pagar, EL AGENTE EXTERNO emite la factura fiscal y envía a PUNTO PAGO en formato escaneado o físico.</li>
-              <li>PUNTO PAGO realizará el reembolso mediante el depósito ACH a la cuenta proporcionada por EL AGENTE EXTERNO.</li>
-              <li>El reembolso de la comisión se realiza vía transferencia bancaria únicamente a la siguiente cuenta del Agente:</li>
+              <li><span class="contract-brand -ally">EL PUNTO ALIADO</span> podrá consultar en el portal Punto Aliado el saldo de comisiones acumuladas, el monto disponible para retiro y el detalle correspondiente a sus operaciones.</li>
+              <li>Cuando existan comisiones habilitadas para retiro, <span class="contract-brand -ally">EL PUNTO ALIADO</span> podrá gestionar la solicitud directamente desde el portal Punto Aliado mediante la opción <span class="contract-action">"Solicitar comisiones"</span>.</li>
+              <li>Recibida la solicitud, PUNTO PAGO validará la información y, de ser necesario para efectos administrativos o fiscales, podrá requerir la documentación de soporte correspondiente para completar el proceso.</li>
+              <li>Una vez aprobada la solicitud, PUNTO PAGO realizará el reembolso mediante depósito ACH únicamente a la cuenta bancaria registrada por EL PUNTO ALIADO, detallada a continuación:</li>
             </ol>
             <div class="contract-bank-box text-slate-700">
               <p>Nombre de la cuenta: <span id="fillBankHolder" class="contract-fill -long">_____________________________________</span></p>
@@ -252,18 +298,18 @@
             </div>
           </div>
 
-          <p><span class="contract-clause-title">DECIMA SEGUNDA: VIGENCIA.</span> El presente contrato tendrá una vigencia de un (1) año contado a partir de la fecha de firma. EL AGENTE EXTERNO podrá finalizar el contrato en cualquier momento, aún antes de cumplirse el término de duración del mismo, y sin que medie motivo alguno, sin perjuicio ni responsabilidad, tan sólo comunicando su intención a PUNTO PAGO, con al menos siete (7) días de anticipación a la fecha de su retiro.</p>
+          <p><span class="contract-clause-title">DECIMA SEGUNDA: VIGENCIA.</span> El presente contrato tendrá una vigencia de un (1) año contado a partir de la fecha de su aceptación digital. EL PUNTO ALIADO podrá finalizar el contrato en cualquier momento, aún antes de cumplirse el término de duración del mismo, y sin que medie motivo alguno, sin perjuicio ni responsabilidad, tan sólo comunicando su intención a PUNTO PAGO, con al menos siete (7) días de anticipación a la fecha de su retiro.</p>
 
-          <p><span class="contract-clause-title">DECIMA TERCERA:</span> Cualquier modificación en el contrato se realizará solamente después de presentar a PUNTO PAGO una solicitud escrita y firmada por EL AGENTE EXTERNO. Cualquier modificación realizada a mano o información tachada no tendrá validez.</p>
+          <p><span class="contract-clause-title">DECIMA TERCERA:</span> Cualquier modificación en el contrato se realizará solamente después de que EL PUNTO ALIADO presente una solicitud a través de los canales autorizados por PUNTO PAGO y esta sea aceptada por los medios correspondientes. Cualquier alteración no autorizada al contenido digital del presente contrato no tendrá validez.</p>
 
-          <p>EN FE DE LO CUAL, las partes expiden y firman el presente contrato en dos (2) ejemplares del mismo tenor, en la ciudad de Panamá, República de Panamá el día <span id="fillDay" class="contract-fill -short">____</span> del mes <span id="fillMonth" class="contract-fill">________________</span> del año <span id="fillYear" class="contract-fill -short">20___</span>.</p>
+          <p>EN FE DE LO CUAL, las partes dejan constancia de su aceptación del presente contrato por medios digitales, en la ciudad de Panamá, República de Panamá, el día <span id="fillDay" class="contract-fill -short">____</span> del mes <span id="fillMonth" class="contract-fill">________________</span> del año <span id="fillYear" class="contract-fill -short">20___</span>.</p>
 
           <div class="contract-sign-grid">
             <div class="contract-sign-box">
               <div id="fillRepSignatureImageWrap" class="contract-signature-art">
                 <img id="fillRepSignatureImage" alt="Firma del representante legal">
               </div>
-              <span class="contract-sign-line" id="fillRepSignature">EL AGENTE EXTERNO</span>
+              <span class="contract-sign-line" id="fillRepSignature">EL PUNTO ALIADO</span>
               <p class="mt-2 text-sm text-slate-600">Representante legal: <span id="fillRepNameFooter" class="contract-inline">____________________________</span></p>
               <p class="text-sm text-slate-600">Sociedad: <span id="fillBusinessLegalNameFooter" class="contract-inline">____________________________</span></p>
             </div>
@@ -378,6 +424,8 @@
           businessLegalName: 'Comercio Demo Preview, S.A.',
           repName: 'el representante legal registrado',
           repEmail: 'test@ejemplo.com',
+          businessAddress: 'Av. Central, Bella Vista, Panamá',
+          addressLandmarks: 'PH 5, Local 3, frente al super',
           bankName: 'Banco General',
           bankAccountType: 'corriente',
           bankAccountNumber: '0123456789',
@@ -546,11 +594,11 @@
         fillText(fillDayEl, String(issueDate.getDate()), '____');
         fillText(fillMonthEl, months[issueDate.getMonth()], '________________');
         fillText(fillYearEl, String(issueDate.getFullYear()), '20___');
-        fillText(fillRepSignatureEl, repName, 'EL AGENTE EXTERNO');
+        fillText(fillRepSignatureEl, repName, 'EL PUNTO ALIADO');
         renderSignature(data.signatureDataUrl || item.signatureDataUrl || (data.consentAccepted ? previewSignatureDataUrl : ''));
         fillText(fillRepNameFooterEl, repName, '____________________________');
         fillText(fillBusinessLegalNameFooterEl, legalName, '____________________________');
-        if (docTitleEl) docTitleEl.innerHTML = 'Contrato de <span class="accent">agente externo</span>';
+        if (docTitleEl) docTitleEl.innerHTML = 'Contrato de <span class="accent">Punto Aliado</span>';
         if (docSubtitleEl) docSubtitleEl.textContent = 'Entre PUNTO PAGO PANAMA, S.A. y ' + repName + ', en representación de ' + legalName + '.';
       }
 
