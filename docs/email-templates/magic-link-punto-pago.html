@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Confirma tu correo — Punto Pago</title>
+  <!--
+    PLANTILLA PARA SUPABASE AUTH
+    =============================
+    1. Supabase Dashboard → Authentication → Email Templates
+    2. Elige la plantilla "Magic Link" (o "Confirm signup" si tu proyecto usa esa para OTP).
+    3. Asunto sugerido (Subject): Confirma tu correo para continuar con Punto Pago
+    4. Pega el CONTENIDO del <body> (desde la tabla principal) en el editor HTML,
+       o el documento completo si tu versión de Supabase lo permite.
+
+    Variables de Supabase (no las borres):
+      {{ .ConfirmationURL }}  → enlace mágico
+      {{ .SiteURL }}         → URL del sitio del proyecto
+      {{ .Email }}           → correo del destinatario
+  -->
+</head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f1f5f9;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;background-color:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(15,23,42,.08);border:1px solid #e2e8f0;">
+          <!-- Banner -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#5462e6 0%,#4352d4 45%,#3738ab 100%);padding:28px 32px;text-align:center;">
+              <p style="margin:0 0 8px 0;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85);">Punto Pago</p>
+              <h1 style="margin:0;font-size:22px;font-weight:800;line-height:1.3;color:#ffffff;">Confirma tu correo para seguir</h1>
+              <p style="margin:12px 0 0 0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.92);">Estás a un paso de continuar con el registro de tu comercio como aliado.</p>
+            </td>
+          </tr>
+          <!-- Cuerpo -->
+          <tr>
+            <td style="padding:32px 32px 24px 32px;">
+              <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#334155;">Hola,</p>
+              <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#334155;">Gracias por confiar en <strong style="color:#1e293b;">Punto Pago</strong>. Para proteger tu cuenta y poder avanzar con el onboarding de tu negocio, necesitamos confirmar que este correo es tuyo.</p>
+              <p style="margin:0 0 28px 0;font-size:15px;line-height:1.6;color:#64748b;">Haz clic en el botón de abajo. El enlace caduca por seguridad; si expira, puedes solicitar uno nuevo desde la misma pantalla donde empezaste.</p>
+              <!-- CTA -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 28px auto;">
+                <tr>
+                  <td style="border-radius:14px;background:linear-gradient(135deg,#5462e6,#4352d4);box-shadow:0 4px 14px rgba(84,98,230,.35);">
+                    <a href="{{ .ConfirmationURL }}" target="_blank" rel="noopener" style="display:inline-block;padding:16px 36px;font-size:16px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:14px;">Confirmar mi correo y continuar</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0 0 8px 0;font-size:13px;line-height:1.5;color:#94a3b8;">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
+              <p style="margin:0 0 24px 0;font-size:12px;line-height:1.5;color:#5462e6;word-break:break-all;">{{ .ConfirmationURL }}</p>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+                <tr>
+                  <td style="padding:16px 18px;">
+                    <p style="margin:0;font-size:13px;line-height:1.55;color:#64748b;"><strong style="color:#475569;">¿No solicitaste este mensaje?</strong><br>Puedes ignorar este correo con tranquilidad. No se hará ningún cambio en tu cuenta.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Pie -->
+          <tr>
+            <td style="padding:20px 32px 28px 32px;border-top:1px solid #f1f5f9;">
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#94a3b8;text-align:center;">Este mensaje lo envía <strong style="color:#64748b;">Punto Pago</strong> de forma automática y segura.<br>Correo asociado al proceso: {{ .Email }}</p>
+            </td>
+          </tr>
+        </table>
+        <p style="margin:20px 0 0 0;font-size:11px;color:#94a3b8;text-align:center;max-width:560px;">Si tienes dudas, contacta al equipo que te acompaña en la afiliación.</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

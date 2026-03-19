@@ -1,5 +1,16 @@
 # Magic link en `onboarding-access.html` (Supabase Auth)
 
+## Diseño del correo al cliente (banner + texto)
+
+El aspecto del correo **no se edita en el código del sitio**: se configura en Supabase.
+
+- Plantilla HTML lista para pegar: **[`docs/email-templates/magic-link-punto-pago.html`](./email-templates/magic-link-punto-pago.html)**  
+- Instrucciones paso a paso: **[`docs/email-templates/README.md`](./email-templates/README.md)**
+
+Incluye banner con gradiente Punto Pago, mensaje amable en español, botón de confirmación y enlace alternativo.
+
+---
+
 Si aparece **“No se pudo enviar el enlace”** o un error al pedir el magic link, revisa en el proyecto Supabase:
 
 ## 1. Redirect URL permitida
