@@ -499,6 +499,13 @@
         return status || 'Pendiente';
       }
 
+      function buildDomicile(data){
+        const address = (data && data.businessAddress ? String(data.businessAddress) : '').trim();
+        const landmarks = (data && data.addressLandmarks ? String(data.addressLandmarks) : '').trim();
+        if (address && landmarks) return address + ', ' + landmarks;
+        return address || landmarks || '';
+      }
+
       function renderSignature(signatureDataUrl){
         const hasSignature = !!signatureDataUrl;
         if (fillRepSignatureImageWrapEl) {
@@ -519,7 +526,7 @@
         const issueDate = new Date(item.updatedAt || item.submittedAt || Date.now());
         const issueDateText = issueDate.toLocaleString('es-PA');
         const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-        const domicilio = data.businessAddress || '';
+        const domicilio = buildDomicile(data);
         fillText(summaryApplicationIdEl, item.id, 'Sin código');
         fillText(summaryBusinessEl, business, 'Comercio sin nombre');
         fillText(summaryRepNameEl, repName, 'Pendiente');
