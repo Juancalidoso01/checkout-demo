@@ -172,7 +172,7 @@
               </article>
             </div>
 
-            <div class="module-nav" role="tablist" aria-label="Módulos del portal admin">
+            <div class="module-nav flex-wrap items-center gap-3" role="tablist" aria-label="Módulos del portal admin">
               <button type="button" class="module-button" data-module-target="preregistro">
                 <i class="fas fa-envelope-open-text"></i>
                 <span>Preregistro</span>
@@ -185,7 +185,11 @@
                 <i class="fas fa-store"></i>
                 <span>Comercios</span>
               </button>
+              <button type="button" id="refreshBandejasBtn" class="pp-btn pp-btn-secondary ml-auto text-sm py-2 px-4 rounded-[14px]" title="Sincronizar con Supabase / almacenamiento local">
+                <i class="fas fa-rotate"></i> Actualizar bandejas
+              </button>
             </div>
+            <p id="bandejasSyncHint" class="text-xs text-slate-500 -mt-2 hidden-by-state" aria-live="polite"></p>
           </div>
         </section>
 
@@ -200,8 +204,9 @@
                 <p>Aquí se concentran los casos en captura incompleta, envío inicial o pendiente de aceptación de contrato, sin mezclarlos con la revisión formal ni con comercios ya autorizados.</p>
                 <dl class="review-kv">
                   <dt>Qué muestra</dt><dd>Identificador del caso, contacto, fechas y avance de verificación cuando aplique.</dd>
-                  <dt>Estados</dt><dd><code>draft</code>, <code>submitted</code> y <code>contract_pending</code>.</dd>
-                  <dt>Siguiente paso</dt><dd>Al cumplir criterios de completitud y contrato, el expediente pasa a <strong>Solicitudes</strong> para revisión.</dd>
+                  <dt>Estados en esta bandeja</dt><dd><code>draft</code>, <code>submitted</code> y <code>contract_pending</code> (captura o contrato, aún no en cola de revisión manual).</dd>
+                  <dt>Importante</dt><dd>Cuando el aliado <strong>envía el expediente a revisión</strong>, el estado pasa a <code>pending_review</code> y el caso aparece en <strong>Solicitudes</strong>, no aquí.</dd>
+                  <dt>Siguiente paso</dt><dd>Tras contrato y envío formal, la revisión ocurre en <strong>Solicitudes</strong>.</dd>
                 </dl>
               </div>
             </section>
@@ -462,11 +467,15 @@
         rejectBtn: document.getElementById('rejectBtn'),
         reviewMsg: document.getElementById('reviewMsg'),
         merchantSummary: document.getElementById('merchantSummary'),
-        merchantsTable: document.getElementById('merchantsTable')
+        merchantsTable: document.getElementById('merchantsTable'),
+        refreshBandejasBtn: document.getElementById('refreshBandejasBtn'),
+        bandejasSyncHint: document.getElementById('bandejasSyncHint')
       };
       let activeModule = 'solicitudes';
       let selectedApplicationId = null;
       let applicationsCache = [];
+      let applicationsRefreshTimer = null;
+      let renderInProgress = false;
 
       function appUrl(relativePath){
         const base = location.pathname.slice(0, location.pathname.lastIndexOf('/') + 1);
@@ -475,6 +484,14 @@
       }
 
       function showLogin(){
+        if (applicationsRefreshTimer) {
+          clearInterval(applicationsRefreshTimer);
+          applicationsRefreshTimer = null;
+        }
+        if (els.bandejasSyncHint) {
+          els.bandejasSyncHint.classList.add('hidden-by-state');
+          els.bandejasSyncHint.textContent = '';
+        }
         loginView.classList.remove('hidden-by-state');
         portalView.classList.add('hidden-by-state');
         navGuestActions.classList.remove('hidden-by-state');
@@ -488,6 +505,11 @@
         navGuestActions.classList.add('hidden-by-state');
         if (window.PPAuth.renderSessionBadge) window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
         setActiveModule(getHashModule() || activeModule, { updateHash: false });
+        if (!applicationsRefreshTimer) {
+          applicationsRefreshTimer = setInterval(function(){
+            if (!portalView.classList.contains('hidden-by-state')) void render();
+          }, 20000);
+        }
       }
 
       function showError(msg){
@@ -605,6 +627,12 @@
           const status = normalizeStatus(item && item.status);
           return status === 'pending_review' || status === 'needs_changes' || status === 'rejected';
         }));
+      }
+      function getColaRevisionCount(){
+        return applicationsCache.filter(function(item){
+          const status = normalizeStatus(item && item.status);
+          return status === 'pending_review' || status === 'needs_changes';
+        }).length;
       }
       function getMerchantItems(){
         return sortRecent(applicationsCache.filter(function(item){
@@ -772,7 +800,26 @@
       function renderPreregistro(){
         const items = getPreregistroItems();
         if (!items.length) {
-          els.preregistroList.innerHTML = '<div class="text-sm text-gray-500">No hay casos de preregistro con la clasificación actual.</div>';
+          const cola = getColaRevisionCount();
+          const supabaseOn = window.PPApplications && window.PPApplications.isEnabled && window.PPApplications.isEnabled();
+          let extra = '';
+          if (cola > 0) {
+            extra = `<div class="mt-4 p-4 rounded-[16px] bg-amber-50 border border-amber-100 text-sm text-amber-950">
+              <strong>¿Acaba de enviar un expediente a revisión?</strong> Ese estado (<code class="mono text-xs">pending_review</code>) no se lista aquí.
+              Hay <strong>${cola}</strong> expediente(s) en la bandeja <strong>Solicitudes</strong>.
+              <button type="button" class="pp-btn pp-btn-primary mt-3 text-sm py-2 px-4 rounded-[12px]" data-module-target="solicitudes" data-jump-solicitudes="1">Ir a Solicitudes</button>
+            </div>`;
+          } else if (!supabaseOn) {
+            extra = `<div class="mt-4 p-4 rounded-[16px] bg-slate-50 border border-slate-200 text-sm text-slate-700">
+              <strong>Sincronización:</strong> si el aliado completó el onboarding en otro dispositivo, active <strong>Supabase</strong> en <code class="mono text-xs">supabase-config.js</code> y use <strong>Actualizar bandejas</strong> para ver datos remotos. Sin Supabase, solo se ven solicitudes guardadas en este navegador.
+            </div>`;
+          }
+          els.preregistroList.innerHTML = `<div class="text-sm text-gray-500">No hay expedientes en captura, envío inicial o contrato pendiente.</div>${extra}`;
+          els.preregistroList.querySelectorAll('[data-jump-solicitudes]').forEach(function(btn){
+            btn.addEventListener('click', function(){
+              setActiveModule('solicitudes');
+            });
+          });
           return;
         }
         els.preregistroList.innerHTML = items.map(function(item){
@@ -930,13 +977,24 @@
       }
 
       async function render(){
-        const users = managedUsers();
-        renderUsers(users);
-        await refreshApplications();
-        renderOverview();
-        renderPreregistro();
-        renderApplications();
-        renderMerchants(users);
+        if (renderInProgress) return;
+        renderInProgress = true;
+        try {
+          const users = managedUsers();
+          renderUsers(users);
+          await refreshApplications();
+          renderOverview();
+          renderPreregistro();
+          renderApplications();
+          renderMerchants(users);
+          if (els.bandejasSyncHint) {
+            const t = formatDateTime(Date.now());
+            els.bandejasSyncHint.textContent = `Última sincronización: ${t} · ${applicationsCache.length} expediente(s) cargados.`;
+            els.bandejasSyncHint.classList.remove('hidden-by-state');
+          }
+        } finally {
+          renderInProgress = false;
+        }
       }
 
       async function approveSelected(){
@@ -1257,7 +1315,20 @@
       window.addEventListener('hashchange', function(){
         const next = getHashModule();
         if (next) setActiveModule(next, { updateHash: false });
+        if (!portalView.classList.contains('hidden-by-state')) void render();
       });
+
+      document.addEventListener('visibilitychange', function(){
+        if (document.visibilityState === 'visible' && !portalView.classList.contains('hidden-by-state')) void render();
+      });
+
+      if (els.refreshBandejasBtn) {
+        els.refreshBandejasBtn.addEventListener('click', function(){
+          const btn = els.refreshBandejasBtn;
+          btn.disabled = true;
+          void render().finally(function(){ btn.disabled = false; });
+        });
+      }
 
       setTimeout(function(){
         try { $u.focus(); } catch (e) {}
