@@ -405,9 +405,12 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="supabase-applications.js"></script>
   <script src="auth.js"></script>
   <script>
-    (function(){
+    (async function(){
       const params = new URLSearchParams(location.search);
       const isPreview = /(?:^|[?&])preview=1(?:&|$)/i.test(location.search || '');
       const previewSignatureDataUrl = "data:image/svg+xml;utf8," + encodeURIComponent(
@@ -435,7 +438,11 @@
         review: { state: 'contract_pending' }
       }) : null;
       const appId = isPreview ? previewApp.id : (params.get('applicationId') || window.PPAuth.getLastSubmittedApplicationId());
-      const app = isPreview ? previewApp : window.PPAuth.findApplicationById(appId);
+      let app = isPreview ? previewApp : (window.PPAuth.findApplicationById(appId) || null);
+      if (!isPreview && appId && window.PPApplications) {
+        const remoteApp = await window.PPApplications.getApplication(appId);
+        if (remoteApp) app = remoteApp;
+      }
       const statusEl = document.getElementById('contractStatus');
       const acceptEl = document.getElementById('acceptContract');
       const continueBtn = document.getElementById('contractContinueBtn');
@@ -525,11 +532,19 @@
           updatedAt: Date.now()
         };
         window.PPAuth.saveApplications(apps);
+        app = apps[idx];
+        if (window.PPApplications && window.PPApplications.isEnabled()) {
+          return window.PPApplications.upsertApplication(app);
+        }
       }
 
       function queuePersistEditableContractData(){
         clearTimeout(persistContractFieldsTimer);
-        persistContractFieldsTimer = setTimeout(persistEditableContractData, 180);
+        persistContractFieldsTimer = setTimeout(function(){
+          Promise.resolve(persistEditableContractData()).catch(function(err){
+            console.warn('No se pudo sincronizar el contrato con Supabase:', err);
+          });
+        }, 180);
       }
 
       function formatBankType(value){
@@ -643,7 +658,7 @@
         });
       });
 
-      continueBtn.addEventListener('click', function(){
+      continueBtn.addEventListener('click', async function(){
         if ((app.status || '') === 'pending_review' || (app.status || '') === 'pending') {
           location.href = window.PPAuth.buildPendingReviewUrl(app.id || '');
           return;
@@ -668,6 +683,17 @@
             updatedAt: Date.now()
           };
           window.PPAuth.saveApplications(apps);
+          app = apps[idx];
+          if (window.PPApplications && window.PPApplications.isEnabled()) {
+            await window.PPApplications.upsertApplication(app);
+            await window.PPApplications.recordReviewEvent({
+              applicationId: app.id,
+              action: 'pending_review',
+              actor: 'applicant',
+              notes: 'Contrato aceptado y enviado a revisión.',
+              payload: {}
+            });
+          }
         }
         location.href = window.PPAuth.buildPendingReviewUrl(app.id || '');
       });

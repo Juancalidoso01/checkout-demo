@@ -879,6 +879,17 @@
     draftStatusEl.classList.add('ob-status-saved');
     return payload;
   }
+  async function syncApplicationToSupabase(payload){
+    if (!payload || !window.PPApplications || !window.PPApplications.isEnabled()) {
+      return { ok: false, skipped: true };
+    }
+    try {
+      return await window.PPApplications.upsertApplication(payload);
+    } catch (err) {
+      console.warn('No se pudo sincronizar onboarding con Supabase:', err);
+      return { ok: false, error: err };
+    }
+  }
   function resetFormAfterSubmit(){
     try { sessionStorage.removeItem(RECOVERY_KEY); } catch(_){}
     clearPdfFromIndexedDB(function(){});
@@ -920,12 +931,17 @@
       }
     });
   }
-  if (saveDraftBtn) saveDraftBtn.addEventListener('click', function() {
+  if (saveDraftBtn) saveDraftBtn.addEventListener('click', async function() {
     try {
-      persist('draft');
+      const payload = persist('draft');
+      const syncResult = await syncApplicationToSupabase(payload);
       window.__metamapModalOpen = false;
       window.__formSavedAfterDraft = true;
-      setMsg('Borrador guardado. Puede recargar sin perder datos.', false);
+      if (syncResult && syncResult.ok) {
+        setMsg('Borrador guardado y sincronizado. Puede recargar sin perder datos.', false);
+      } else {
+        setMsg('Borrador guardado. Si no hay conexión con Supabase, seguirá disponible localmente en este navegador.', false);
+      }
     } catch (err) {
       setMsg('Error al guardar. Revise la consola (F12).', true);
       console.error('persist error:', err);
@@ -1047,12 +1063,22 @@
     });
     if (consentChk) consentChk.addEventListener('change', updateSignatureSubmitState);
     if (cancelBtn) cancelBtn.addEventListener('click', closeSignatureModal);
-    if (submitBtn) submitBtn.addEventListener('click', function() {
+    if (submitBtn) submitBtn.addEventListener('click', async function() {
       var dataUrl = captureSignatureDataUrl();
       if (!dataUrl) { setMsg('Debe firmar antes de enviar.', true); return; }
       submitBtn.disabled = true;
       closeSignatureModal();
       var payload = persist('contract_pending', { signatureDataUrl: dataUrl, consentAccepted: true, consentedAt: now() });
+      await syncApplicationToSupabase(payload);
+      if (window.PPApplications && window.PPApplications.isEnabled()) {
+        await window.PPApplications.recordReviewEvent({
+          applicationId: payload.id,
+          action: 'contract_pending',
+          actor: 'applicant',
+          notes: 'Solicitud enviada al paso de contrato.',
+          payload: {}
+        });
+      }
       setLastSubmittedApplicationId(payload && payload.id ? payload.id : applicationId);
       setMsg('Solicitud lista para contrato. Redirigiendo al contrato de servicio...', false);
       location.href = 'onboarding-contract.html?applicationId=' + encodeURIComponent((payload && payload.id) ? payload.id : applicationId);

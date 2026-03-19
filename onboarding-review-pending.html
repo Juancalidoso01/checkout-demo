@@ -198,9 +198,12 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="supabase-applications.js"></script>
   <script src="auth.js"></script>
   <script>
-    (function(){
+    (async function(){
       const params = new URLSearchParams(location.search);
       const isPreview = /(?:^|[?&])preview=1(?:&|$)/i.test(location.search || '');
       const session = window.PPAuth.getSession();
@@ -211,7 +214,11 @@
         review: { state: 'pending' }
       }) : null;
       const appId = isPreview ? previewApp.id : (params.get('applicationId') || (sessionPending && sessionPending.id) || window.PPAuth.getLastSubmittedApplicationId());
-      const app = isPreview ? previewApp : window.PPAuth.findApplicationById(appId);
+      let app = isPreview ? previewApp : (window.PPAuth.findApplicationById(appId) || null);
+      if (!isPreview && appId && window.PPApplications) {
+        const remoteApp = await window.PPApplications.getApplication(appId);
+        if (remoteApp) app = remoteApp;
+      }
       const summaryEl = document.getElementById('pendingSummary');
       const alertEl = document.getElementById('pendingAlert');
       const logoutBtn = document.getElementById('logoutBtn');
