@@ -57,7 +57,7 @@
     <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
       <div class="min-w-0">
         <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Portal admin</div>
-        <div class="text-xs text-white/80">Preregistro, solicitudes y comercios</div>
+        <div class="text-xs text-white/80">Onboarding comercial · preregistro, revisión y operación</div>
       </div>
 
       <div id="navGuestActions">
@@ -79,8 +79,8 @@
           <div class="pp-card-head space-y-4">
             <div>
               <div class="admin-login-kicker">Punto Pago</div>
-              <h1 class="text-2xl font-extrabold pp-type mt-2">Portal admin del onboarding</h1>
-              <p class="text-sm text-gray-500 mt-2">Este acceso interno concentra la operación del portal admin y separa la gestión por módulos para no mezclar preregistro, revisión y comercios aprobados.</p>
+              <h1 class="text-2xl font-extrabold pp-type mt-2">Administración del onboarding</h1>
+              <p class="text-sm text-gray-500 mt-2">Panel interno para gestionar el ciclo de vida de los aliados: captura inicial, revisión de expedientes y operación de comercios autorizados.</p>
             </div>
             <div class="admin-login-note rounded-[18px] p-4 text-sm text-slate-600">
               Solo el rol <strong>superadmin</strong> puede continuar. Si inicias con otro rol, el sistema te enviará a su portal operativo.
@@ -119,12 +119,12 @@
           <div class="pp-card-body space-y-5">
             <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
               <div class="max-w-3xl">
-                <div class="text-xs uppercase tracking-[0.18em] text-[var(--pp-primary)] font-extrabold">Home admin</div>
-                <h1 class="text-3xl font-extrabold mt-2">Portal con navegación clara por etapa</h1>
-                <p class="text-sm text-slate-600 mt-3">El flujo ahora se separa en <strong>Preregistro</strong> para seguimiento temprano, <strong>Solicitudes</strong> para revisión del expediente y <strong>Comercios</strong> para operación posterior a la aprobación.</p>
+                <div class="text-xs uppercase tracking-[0.18em] text-[var(--pp-primary)] font-extrabold">Panel de control</div>
+                <h1 class="text-3xl font-extrabold mt-2">Centro de operaciones del onboarding</h1>
+                <p class="text-sm text-slate-600 mt-3">Tres espacios de trabajo alineados al estado del expediente: <strong>Preregistro</strong> (seguimiento de captura y contrato), <strong>Solicitudes</strong> (revisión, riesgo y decisión) y <strong>Comercios</strong> (aliados aprobados, invitaciones y operación).</p>
               </div>
               <div class="module-note rounded-[20px] px-4 py-3 text-sm max-w-md">
-                Esta ruta interna sigue reutilizando la base actual. Los módulos se derivan de los estados ya capturados mientras llega la división completa en vistas separadas.
+                Cada bandeja muestra únicamente los casos que corresponden a su etapa, para priorizar la carga operativa y mantener separadas la revisión de riesgo y la gestión comercial del día a día.
               </div>
             </div>
 
@@ -138,7 +138,7 @@
                     </div>
                     <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl"><i class="fas fa-envelope-open-text"></i></div>
                   </div>
-                  <p id="statPreregistroLabel" class="text-sm text-slate-600">Casos en etapa previa o incompleta.</p>
+                  <p id="statPreregistroLabel" class="text-sm text-slate-600">Expedientes en captura, envío o firma de contrato.</p>
                   <button type="button" class="pp-btn pp-btn-secondary w-full justify-center" data-module-target="preregistro">Ir a preregistro</button>
                 </div>
               </article>
@@ -152,7 +152,7 @@
                     </div>
                     <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl"><i class="fas fa-folder-open"></i></div>
                   </div>
-                  <p id="statSolicitudesLabel" class="text-sm text-slate-600">Casos listos para revisión manual.</p>
+                  <p id="statSolicitudesLabel" class="text-sm text-slate-600">En cola para análisis y decisión del equipo.</p>
                   <button type="button" class="pp-btn pp-btn-secondary w-full justify-center" data-module-target="solicitudes">Ir a solicitudes</button>
                 </div>
               </article>
@@ -166,7 +166,7 @@
                     </div>
                     <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl"><i class="fas fa-store"></i></div>
                   </div>
-                  <p id="statComerciosLabel" class="text-sm text-slate-600">Aprobados y listos para operación.</p>
+                  <p id="statComerciosLabel" class="text-sm text-slate-600">Aprobados: invitación, credenciales y seguimiento.</p>
                   <button type="button" class="pp-btn pp-btn-secondary w-full justify-center" data-module-target="comercios">Ir a comercios</button>
                 </div>
               </article>
@@ -194,14 +194,14 @@
             <section class="pp-card -soft overflow-hidden">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">Etapa previa</h2>
-                <p class="text-sm text-gray-500 mt-1">Seguimiento inicial antes de que el expediente entre a revisión formal.</p>
+                <p class="text-sm text-gray-500 mt-1">Seguimiento de expedientes que aún no están en bandeja de decisión.</p>
               </div>
               <div class="pp-card-body space-y-4 text-sm text-slate-600">
-                <p>Esta bandeja se alimenta desde estados tempranos del flujo actual para separar la captura inicial del trabajo de revisión.</p>
+                <p>Aquí se concentran los casos en captura incompleta, envío inicial o pendiente de aceptación de contrato, sin mezclarlos con la revisión formal ni con comercios ya autorizados.</p>
                 <dl class="review-kv">
-                  <dt>Qué muestra</dt><dd>Correo, fecha, verificación disponible y señal de inicio del onboarding.</dd>
+                  <dt>Qué muestra</dt><dd>Identificador del caso, contacto, fechas y avance de verificación cuando aplique.</dd>
                   <dt>Estados</dt><dd><code>draft</code>, <code>submitted</code> y <code>contract_pending</code>.</dd>
-                  <dt>Siguiente paso</dt><dd>Cuando el expediente queda listo para revisión manual, pasa a <strong>Solicitudes</strong>.</dd>
+                  <dt>Siguiente paso</dt><dd>Al cumplir criterios de completitud y contrato, el expediente pasa a <strong>Solicitudes</strong> para revisión.</dd>
                 </dl>
               </div>
             </section>
@@ -209,7 +209,7 @@
             <section class="pp-card -soft overflow-hidden">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">Bandeja de preregistro</h2>
-                <p class="text-sm text-gray-500 mt-1">Casos en etapa temprana derivados del onboarding actual.</p>
+                <p class="text-sm text-gray-500 mt-1">Listado operativo de expedientes en etapa inicial.</p>
               </div>
               <div class="pp-card-body">
                 <div id="preregistroList" class="space-y-3"></div>
@@ -224,7 +224,7 @@
               <div class="pp-card-head flex items-center justify-between gap-3">
                 <div>
                   <h2 class="text-xl font-extrabold">Solicitudes</h2>
-                  <p class="text-sm text-gray-500 mt-1">Bandeja principal de revisión del onboarding, separada del preregistro y de la operación comercial.</p>
+                  <p class="text-sm text-gray-500 mt-1">Bandeja de revisión: análisis del expediente, comentarios internos y decisión (aprobación o rechazo).</p>
                 </div>
                 <a href="onboarding.html" class="pp-btn pp-btn-secondary">Abrir formulario</a>
               </div>
@@ -236,7 +236,7 @@
             <section class="pp-card -soft overflow-hidden">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">Detalle del caso</h2>
-                <p class="text-sm text-gray-500 mt-1">Revisa el expediente completo y toma la decisión sin mezclar esta tarea con credenciales operativas.</p>
+                <p class="text-sm text-gray-500 mt-1">Vista consolidada del expediente; la activación de credenciales e invitaciones se gestiona en <strong>Comercios</strong> tras aprobar.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div id="applicationEmpty" class="text-sm text-gray-500">Selecciona una solicitud para ver sus datos.</div>
@@ -285,7 +285,7 @@
             <section class="pp-card -soft overflow-hidden">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">Operación comercial</h2>
-                <p class="text-sm text-gray-500 mt-1">Vista para entidades aprobadas o activadas.</p>
+                <p class="text-sm text-gray-500 mt-1">Aliados aprobados: estado comercial, invitaciones y usuarios del portal.</p>
               </div>
               <div class="pp-card-body">
                 <div id="merchantSummary" class="space-y-4 text-sm text-slate-600"></div>
@@ -295,7 +295,7 @@
             <section class="pp-card -soft overflow-hidden">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">Comercios aprobados</h2>
-                <p class="text-sm text-gray-500 mt-1">Resumen comercial e invitación o estado de credenciales.</p>
+                <p class="text-sm text-gray-500 mt-1">Tablero de comercios activos con resumen de invitación y credenciales según política interna.</p>
               </div>
               <div class="pp-card-body">
                 <div class="overflow-x-auto">
@@ -321,13 +321,13 @@
               <div class="pp-card-head flex items-center justify-between gap-3">
                 <div>
                   <h2 class="text-xl font-extrabold">Usuarios y credenciales</h2>
-                  <p class="text-sm text-gray-500 mt-1">Gestión integral de usuarios operativos del demo, con visibilidad de credenciales creadas.</p>
+                  <p class="text-sm text-gray-500 mt-1">Alta y mantenimiento de usuarios del portal aliado (agentes y equipo), con trazabilidad de credenciales para activación y soporte.</p>
                 </div>
-                <button id="seedBtn" type="button" class="pp-btn pp-btn-secondary">Crear demo</button>
+                <button id="seedBtn" type="button" class="pp-btn pp-btn-secondary">Usuario de ejemplo</button>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="module-note rounded-[18px] p-4 text-sm">
-                  Los usuarios creados muestran aquí su <strong>usuario</strong> y <strong>contraseña</strong> para pruebas internas del prototipo.
+                  Las credenciales mostradas se usan para onboarding y soporte al aliado. Compártalas solo por canales seguros y según la política de seguridad de su organización.
                 </div>
                 <div class="overflow-x-auto">
                   <table class="w-full text-sm">
@@ -996,7 +996,7 @@
             applicationId: item.id
           });
           if (cred.ok) {
-            portalCredSuffix = ` Credenciales en el listado (demo): usuario «${cred.username}», contraseña «${cred.password}».`;
+            portalCredSuffix = ` Credenciales registradas en el listado del portal: usuario «${cred.username}», contraseña «${cred.password}».`;
             try {
               const fresh = await window.PPApplications.getApplication(item.id);
               if (fresh) {
@@ -1129,7 +1129,7 @@
         }
         writeUsers(users);
         resetForm();
-        setMsg(editId ? 'Usuario actualizado en el prototipo.' : 'Usuario guardado en el prototipo.');
+        setMsg(editId ? 'Usuario actualizado correctamente.' : 'Usuario guardado correctamente.');
         showCredentialPreview(savedUser);
         void render();
       }
@@ -1160,7 +1160,7 @@
         const users = readUsers();
         const taken = users.some(function(user){ return (user.username || '').toLowerCase() === 'agente02'; });
         if (taken) {
-          setMsg('El demo ya existe.', true);
+          setMsg('Ya existe un usuario de ejemplo con ese identificador.', true);
           return;
         }
         const id = uuid();
@@ -1169,7 +1169,7 @@
           username: 'agente02',
           password: '1234',
           role: 'agent',
-          displayName: 'Agente 02 Demo',
+          displayName: 'Agente ejemplo 02',
           agentId: id,
           active: true,
           onboarding: { status: 'pending', updatedAt: now() },
@@ -1177,7 +1177,7 @@
           updatedAt: now()
         });
         writeUsers(users);
-        setMsg('Agente demo creado.');
+        setMsg('Usuario de ejemplo creado.');
         showCredentialPreview(users[users.length - 1]);
         void render();
       }
