@@ -267,6 +267,84 @@
     return previewApp;
   }
 
+  function generatePortalTempPassword(){
+    return 'tmp-' + Math.random().toString(36).slice(2, 10);
+  }
+
+  function suggestPortalUsernameFromEmail(email){
+    const e = normalize(email);
+    const local = (e.split('@')[0] || 'agente').replace(/[^a-z0-9._-]/g, '') || 'agente';
+    return local.slice(0, 24);
+  }
+
+  /**
+   * Crea o actualiza un usuario agente en el demo (localStorage) al aprobar una solicitud,
+   * para que el admin vea usuario y contraseña en el listado del portal.
+   */
+  function ensureAgentUserFromApproval(options){
+    const opts = options || {};
+    const inviteEmail = normalize(opts.inviteEmail || opts.email || '');
+    if (!inviteEmail) return { ok: false, error: 'inviteEmail requerido' };
+    const displayName = (opts.displayName || '').trim() || inviteEmail.split('@')[0] || 'Punto Aliado';
+    const applicationId = (opts.applicationId || '').trim();
+    const password = (opts.password || '').toString().trim() || generatePortalTempPassword();
+    const users = loadUsers();
+    let username = (opts.username || '').toString().trim().toLowerCase();
+    if (!username) {
+      const base = suggestPortalUsernameFromEmail(inviteEmail);
+      let candidate = base;
+      let n = 1;
+      while (users.some(u => normalize(u.username) === normalize(candidate))) {
+        n += 1;
+        candidate = (base.slice(0, 14) || 'agente') + n;
+      }
+      username = candidate;
+    } else if (users.some(u => normalize(u.username) === normalize(username) && u.id !== opts.existingUserId)) {
+      return { ok: false, error: 'Ese usuario ya existe.' };
+    }
+    const byEmailIdx = users.findIndex(u => u.email && normalize(u.email) === inviteEmail);
+    const byUserIdx = users.findIndex(u => normalize(u.username) === normalize(username));
+    const idx = byEmailIdx >= 0 ? byEmailIdx : byUserIdx;
+    const onboarding = {
+      status: 'approved',
+      updatedAt: now(),
+      ...(applicationId ? { applicationId: applicationId } : {})
+    };
+    if (idx >= 0) {
+      const id = users[idx].id;
+      users[idx] = {
+        ...users[idx],
+        username: username,
+        password: password,
+        displayName: displayName,
+        email: inviteEmail,
+        role: 'agent',
+        agentId: id,
+        active: true,
+        onboarding: onboarding,
+        updatedAt: now()
+      };
+      saveUsers(users);
+      return { ok: true, username: username, password: password, inviteEmail: inviteEmail, displayName: displayName, userId: id, created: false };
+    }
+    const id = 'u_agent_' + Math.random().toString(16).slice(2, 8) + '_' + Date.now().toString(16);
+    users.push({
+      id: id,
+      username: username,
+      password: password,
+      role: 'agent',
+      displayName: displayName,
+      email: inviteEmail,
+      agentId: id,
+      active: true,
+      onboarding: onboarding,
+      createdAt: now(),
+      updatedAt: now()
+    });
+    saveUsers(users);
+    return { ok: true, username: username, password: password, inviteEmail: inviteEmail, displayName: displayName, userId: id, created: true };
+  }
+
   function signIn(username, password){
     const u = normalize(username);
     const p = (password || '').toString();
@@ -415,5 +493,7 @@
     redirectForApplication,
     ensureLogoutButton,
     renderSessionBadge,
+    ensureAgentUserFromApproval,
+    generatePortalTempPassword
   };
 })();

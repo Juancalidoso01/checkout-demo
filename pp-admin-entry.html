@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <title>Acceso admin — Punto Pago</title>
+  <title>Portal admin — Punto Pago</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
@@ -14,19 +14,28 @@
     .admin-login-hero{background:linear-gradient(180deg, rgba(84,98,230,.08), rgba(255,255,255,0) 220px)}
     .admin-login-note{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.05)}
     .admin-login-kicker{font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--pp-primary,#5462e6)}
-    .cred-shell{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+    .cred-shell{max-width:1180px;margin:0 auto;padding:24px 16px 72px}
     .cred-grid{display:grid;grid-template-columns:360px 1fr;gap:18px}
-    .cred-note{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.06);color:#334155}
+    .overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .portal-stack{display:grid;gap:18px}
+    .module-nav{display:flex;flex-wrap:wrap;gap:12px}
+    .module-button{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:18px;border:1px solid rgba(0,0,0,.07);background:#fff;color:#334155;font-weight:800;transition:all .12s ease}
+    .module-button:hover{transform:translateY(-1px);box-shadow:0 12px 24px rgba(15,23,42,.08)}
+    .module-button.-active{background:linear-gradient(135deg,rgba(84,98,230,.12),rgba(84,98,230,.05));border-color:rgba(84,98,230,.32);color:var(--pp-primary,#5462e6);box-shadow:0 16px 30px rgba(84,98,230,.12)}
+    .module-note{border:1px dashed rgba(84,98,230,.28);background:rgba(84,98,230,.06);color:#334155}
+    .overview-stat{font-size:2rem;line-height:1;font-weight:900;color:#0f172a}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
     .hidden-by-state{display:none}
-    .portal-stack{display:grid;gap:18px}
     .review-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
     .status-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
     .status-pill.-draft{background:#f3f4f6;color:#475569}
-    .status-pill.-pending_review,.status-pill.-pending{background:#fff7ed;color:#c2410c}
-    .status-pill.-approved{background:#ecfdf5;color:#047857}
+    .status-pill.-submitted,.status-pill.-contract_pending{background:#eff6ff;color:#1d4ed8}
+    .status-pill.-pending_review,.status-pill.-pending,.status-pill.-needs_changes{background:#fff7ed;color:#c2410c}
+    .status-pill.-approved,.status-pill.-active{background:#ecfdf5;color:#047857}
     .status-pill.-rejected{background:#fef2f2;color:#b91c1c}
-    .review-item{border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:14px;background:#fff;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease}
+    .status-pill.-unknown{background:#f8fafc;color:#475569}
+    .review-item{border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:14px;background:#fff;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease}
+    button.review-item{cursor:pointer}
     .review-item:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(0,0,0,.08)}
     .review-item.-active{border-color:rgba(84,98,230,.35);box-shadow:0 16px 34px rgba(84,98,230,.14)}
     .review-kv{display:grid;grid-template-columns:minmax(0,150px) 1fr;gap:10px 16px}
@@ -38,17 +47,28 @@
     .review-section{border:1px solid rgba(0,0,0,.06);border-radius:18px;padding:14px 16px;background:#f8fafc}
     .review-section-title{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(84,98,230,.10);color:var(--pp-primary,#5462e6);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
     .review-section .review-kv{margin-top:12px}
-    @media (max-width: 920px){ .cred-grid,.review-grid{grid-template-columns:1fr} }
+    @media (max-width: 920px){
+      .cred-grid,.review-grid,.overview-grid{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
   <nav class="bg-punto-pago text-white p-4 shadow-lg sticky top-0 z-40 pp-type">
-    <div class="mx-auto flex justify-between items-center w-full max-w-5xl px-4 gap-4">
+    <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
       <div class="min-w-0">
-        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Acceso admin</div>
-        <div class="text-xs text-white/80">Ruta interna del prototipo</div>
+        <div class="text-lg md:text-xl font-extrabold tracking-wide uppercase whitespace-nowrap">Portal admin</div>
+        <div class="text-xs text-white/80">Preregistro, solicitudes y comercios</div>
       </div>
-      <a href="login.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Login general</a>
+
+      <div id="navGuestActions">
+        <a href="login.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Login general</a>
+      </div>
+
+      <div id="navPortalActions" class="hidden-by-state flex items-center gap-3">
+        <div class="hidden md:block text-xs text-white/85"><span data-pp-session></span></div>
+        <a href="onboarding.html" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Abrir onboarding</a>
+        <button id="logoutBtn" type="button" class="pp-btn pp-btn-secondary bg-white/10 text-white border border-white/20 h-[42px] rounded-[14px] px-4">Salir</button>
+      </div>
     </div>
   </nav>
 
@@ -59,8 +79,8 @@
           <div class="pp-card-head space-y-4">
             <div>
               <div class="admin-login-kicker">Punto Pago</div>
-              <h1 class="text-2xl font-extrabold pp-type mt-2">Portal privado de credenciales</h1>
-              <p class="text-sm text-gray-500 mt-2">Este acceso está separado del flujo principal y ahora consulta las solicitudes reales del onboarding desde Supabase.</p>
+              <h1 class="text-2xl font-extrabold pp-type mt-2">Portal admin del onboarding</h1>
+              <p class="text-sm text-gray-500 mt-2">Este acceso interno concentra la operación del portal admin y separa la gestión por módulos para no mezclar preregistro, revisión y comercios aprobados.</p>
             </div>
             <div class="admin-login-note rounded-[18px] p-4 text-sm text-slate-600">
               Solo el rol <strong>superadmin</strong> puede continuar. Si inicias con otro rol, el sistema te enviará a su portal operativo.
@@ -78,7 +98,7 @@
               <input id="password" type="password" class="pp-field" autocomplete="current-password" placeholder="••••">
             </div>
 
-            <button id="loginBtn" type="button" class="pp-btn pp-btn-primary -full">Entrar al portal oculto</button>
+            <button id="loginBtn" type="button" class="pp-btn pp-btn-primary -full">Entrar al portal admin</button>
 
             <p id="error" class="text-sm text-red-600 hidden"></p>
 
@@ -94,144 +114,296 @@
     </div>
 
     <div id="portalView" class="cred-shell hidden-by-state">
-      <div class="pp-card cred-note rounded-[24px] p-4 mb-5">
-        <div class="flex items-start gap-3">
-          <i class="fas fa-lock mt-1 text-[var(--pp-primary)]"></i>
-          <div class="text-sm leading-relaxed">
-            Esta página no está enlazada desde la interfaz del demo. Está pensada para revisar solicitudes reales, aprobar expedientes y preparar la creación segura de credenciales.
-          </div>
-        </div>
-      </div>
-
       <div class="portal-stack">
-      <div class="cred-grid">
         <section class="pp-card -soft overflow-hidden">
-          <div class="pp-card-head">
-            <h1 class="text-xl font-extrabold">Nuevo agente</h1>
-            <p class="text-sm text-gray-500 mt-1">Versión mínima: usuario, clave temporal y estado de onboarding.</p>
-          </div>
-          <div class="pp-card-body space-y-4">
-            <div>
-              <label class="pp-label">Nombre visible</label>
-              <input id="displayName" class="pp-field" type="text" placeholder="Ej: Agente Santiago Centro">
-            </div>
-            <div>
-              <label class="pp-label">Usuario</label>
-              <input id="agentUsername" class="pp-field" type="text" placeholder="Ej: agente02" autocomplete="off">
-            </div>
-            <div>
-              <label class="pp-label">Clave temporal</label>
-              <input id="agentPassword" class="pp-field" type="text" placeholder="Ej: 1234-temp" autocomplete="off">
-            </div>
-            <div>
-              <label class="pp-label">Estado onboarding</label>
-              <select id="onboardingStatus" class="pp-field">
-                <option value="draft">draft</option>
-                <option value="pending">pending</option>
-                <option value="review">review</option>
-                <option value="approved">approved</option>
-              </select>
+          <div class="pp-card-body space-y-5">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div class="max-w-3xl">
+                <div class="text-xs uppercase tracking-[0.18em] text-[var(--pp-primary)] font-extrabold">Home admin</div>
+                <h1 class="text-3xl font-extrabold mt-2">Portal con navegación clara por etapa</h1>
+                <p class="text-sm text-slate-600 mt-3">El flujo ahora se separa en <strong>Preregistro</strong> para seguimiento temprano, <strong>Solicitudes</strong> para revisión del expediente y <strong>Comercios</strong> para operación posterior a la aprobación.</p>
+              </div>
+              <div class="module-note rounded-[20px] px-4 py-3 text-sm max-w-md">
+                Esta ruta interna sigue reutilizando la base actual. Los módulos se derivan de los estados ya capturados mientras llega la división completa en vistas separadas.
+              </div>
             </div>
 
-            <div class="flex gap-3">
-              <button id="saveAgentBtn" type="button" class="pp-btn pp-btn-primary -full">Guardar agente</button>
-              <button id="resetFormBtn" type="button" class="pp-btn pp-btn-secondary -full">Limpiar</button>
-            </div>
-
-            <p id="formMsg" class="text-sm text-gray-600 min-h-[20px]"></p>
-          </div>
-        </section>
-
-        <section class="pp-card -soft overflow-hidden">
-          <div class="pp-card-head flex items-center justify-between gap-3">
-            <div>
-              <h2 class="text-xl font-extrabold">Agentes registrados</h2>
-              <p class="text-sm text-gray-500 mt-1">Se almacenan en <code class="mono">localStorage</code> usando la misma base de usuarios del demo.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="hidden md:block text-xs text-slate-500"><span data-pp-session></span></div>
-              <button id="seedBtn" type="button" class="pp-btn pp-btn-secondary">Crear demo</button>
-              <button id="logoutBtn" type="button" class="pp-btn pp-btn-secondary">Salir</button>
-            </div>
-          </div>
-          <div class="pp-card-body">
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="text-gray-500 border-b">
-                    <th class="text-left py-3 pr-3">Usuario</th>
-                    <th class="text-left py-3 pr-3">Nombre</th>
-                    <th class="text-left py-3 pr-3">Onboarding</th>
-                    <th class="text-left py-3 pr-3">Estado</th>
-                    <th class="text-right py-3">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="agentsTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="review-grid">
-        <section class="pp-card -soft overflow-hidden">
-          <div class="pp-card-head flex items-center justify-between gap-3">
-            <div>
-              <h2 class="text-xl font-extrabold">Bandeja de onboarding</h2>
-              <p class="text-sm text-gray-500 mt-1">Solicitudes capturadas en `onboarding.html` y persistidas en Supabase.</p>
-            </div>
-            <a href="onboarding.html" class="pp-btn pp-btn-secondary">Abrir formulario</a>
-          </div>
-          <div class="pp-card-body space-y-3">
-            <div id="applicationsList" class="space-y-3"></div>
-          </div>
-        </section>
-
-        <section class="pp-card -soft overflow-hidden">
-          <div class="pp-card-head">
-            <h2 class="text-xl font-extrabold">Detalle del caso</h2>
-            <p class="text-sm text-gray-500 mt-1">Aprueba o rechaza después de validar la información y deja preparada la invitación segura de acceso.</p>
-          </div>
-          <div class="pp-card-body space-y-4">
-            <div id="applicationEmpty" class="text-sm text-gray-500">Selecciona una solicitud para ver sus datos.</div>
-            <div id="applicationDetail" class="hidden-by-state space-y-4">
-              <div class="flex items-start justify-between gap-3 flex-wrap">
-                <div>
-                  <div class="text-xs uppercase tracking-[0.18em] text-slate-400 font-extrabold">Solicitud</div>
-                  <h3 id="detailTitle" class="text-lg font-extrabold mt-1">—</h3>
-                  <p id="detailSubtitle" class="text-sm text-gray-500 mt-1">—</p>
+            <div class="overview-grid">
+              <article class="pp-card -soft overflow-hidden">
+                <div class="pp-card-body space-y-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-slate-400 font-extrabold">Preregistro</div>
+                      <div id="statPreregistro" class="overview-stat">0</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl"><i class="fas fa-envelope-open-text"></i></div>
+                  </div>
+                  <p id="statPreregistroLabel" class="text-sm text-slate-600">Casos en etapa previa o incompleta.</p>
+                  <button type="button" class="pp-btn pp-btn-secondary w-full justify-center" data-module-target="preregistro">Ir a preregistro</button>
                 </div>
-                <div id="detailStatus"></div>
-              </div>
+              </article>
 
-              <dl id="detailFields" class="review-kv"></dl>
-
-              <div class="ob-grid">
-                <div>
-                  <label class="pp-label">Correo para invitación</label>
-                  <input id="approvalUsername" class="pp-field" type="email" placeholder="Ej: agente@comercio.com" autocomplete="off">
+              <article class="pp-card -soft overflow-hidden">
+                <div class="pp-card-body space-y-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-slate-400 font-extrabold">Solicitudes</div>
+                      <div id="statSolicitudes" class="overview-stat">0</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl"><i class="fas fa-folder-open"></i></div>
+                  </div>
+                  <p id="statSolicitudesLabel" class="text-sm text-slate-600">Casos listos para revisión manual.</p>
+                  <button type="button" class="pp-btn pp-btn-secondary w-full justify-center" data-module-target="solicitudes">Ir a solicitudes</button>
                 </div>
-                <div>
-                  <label class="pp-label">Nombre visible de la cuenta</label>
-                  <input id="approvalPassword" class="pp-field" type="text" placeholder="Ej: Comercio Demo Preview" autocomplete="off">
+              </article>
+
+              <article class="pp-card -soft overflow-hidden">
+                <div class="pp-card-body space-y-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-slate-400 font-extrabold">Comercios</div>
+                      <div id="statComercios" class="overview-stat">0</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl"><i class="fas fa-store"></i></div>
+                  </div>
+                  <p id="statComerciosLabel" class="text-sm text-slate-600">Aprobados y listos para operación.</p>
+                  <button type="button" class="pp-btn pp-btn-secondary w-full justify-center" data-module-target="comercios">Ir a comercios</button>
                 </div>
-              </div>
+              </article>
+            </div>
 
-              <div>
-                <label class="pp-label">Comentario de revisión</label>
-                <textarea id="reviewNotes" class="pp-field review-textarea" placeholder="Observaciones internas, motivo de rechazo o notas para activación..."></textarea>
-              </div>
-
-              <div class="review-actions">
-                <button id="approveBtn" type="button" class="pp-btn pp-btn-primary">Aprobar solicitud</button>
-                <button id="rejectBtn" type="button" class="pp-btn pp-btn-secondary">Rechazar solicitud</button>
-              </div>
-
-              <p id="reviewMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
+            <div class="module-nav" role="tablist" aria-label="Módulos del portal admin">
+              <button type="button" class="module-button" data-module-target="preregistro">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>Preregistro</span>
+              </button>
+              <button type="button" class="module-button" data-module-target="solicitudes">
+                <i class="fas fa-folder-open"></i>
+                <span>Solicitudes</span>
+              </button>
+              <button type="button" class="module-button" data-module-target="comercios">
+                <i class="fas fa-store"></i>
+                <span>Comercios</span>
+              </button>
             </div>
           </div>
         </section>
-      </div>
+
+        <section data-module-section="preregistro" class="portal-stack hidden-by-state">
+          <div class="grid grid-cols-1 lg:grid-cols-[320px,1fr] gap-5">
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">Etapa previa</h2>
+                <p class="text-sm text-gray-500 mt-1">Seguimiento inicial antes de que el expediente entre a revisión formal.</p>
+              </div>
+              <div class="pp-card-body space-y-4 text-sm text-slate-600">
+                <p>Esta bandeja se alimenta desde estados tempranos del flujo actual para separar la captura inicial del trabajo de revisión.</p>
+                <dl class="review-kv">
+                  <dt>Qué muestra</dt><dd>Correo, fecha, verificación disponible y señal de inicio del onboarding.</dd>
+                  <dt>Estados</dt><dd><code>draft</code>, <code>submitted</code> y <code>contract_pending</code>.</dd>
+                  <dt>Siguiente paso</dt><dd>Cuando el expediente queda listo para revisión manual, pasa a <strong>Solicitudes</strong>.</dd>
+                </dl>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">Bandeja de preregistro</h2>
+                <p class="text-sm text-gray-500 mt-1">Casos en etapa temprana derivados del onboarding actual.</p>
+              </div>
+              <div class="pp-card-body">
+                <div id="preregistroList" class="space-y-3"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section data-module-section="solicitudes" class="portal-stack hidden-by-state">
+          <div class="review-grid">
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head flex items-center justify-between gap-3">
+                <div>
+                  <h2 class="text-xl font-extrabold">Solicitudes</h2>
+                  <p class="text-sm text-gray-500 mt-1">Bandeja principal de revisión del onboarding, separada del preregistro y de la operación comercial.</p>
+                </div>
+                <a href="onboarding.html" class="pp-btn pp-btn-secondary">Abrir formulario</a>
+              </div>
+              <div class="pp-card-body space-y-3">
+                <div id="applicationsList" class="space-y-3"></div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">Detalle del caso</h2>
+                <p class="text-sm text-gray-500 mt-1">Revisa el expediente completo y toma la decisión sin mezclar esta tarea con credenciales operativas.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div id="applicationEmpty" class="text-sm text-gray-500">Selecciona una solicitud para ver sus datos.</div>
+                <div id="applicationDetail" class="hidden-by-state space-y-4">
+                  <div class="flex items-start justify-between gap-3 flex-wrap">
+                    <div>
+                      <div class="text-xs uppercase tracking-[0.18em] text-slate-400 font-extrabold">Solicitud</div>
+                      <h3 id="detailTitle" class="text-lg font-extrabold mt-1">—</h3>
+                      <p id="detailSubtitle" class="text-sm text-gray-500 mt-1">—</p>
+                    </div>
+                    <div id="detailStatus"></div>
+                  </div>
+
+                  <dl id="detailFields" class="review-kv"></dl>
+
+                  <div class="ob-grid">
+                    <div>
+                      <label class="pp-label">Correo para invitación</label>
+                      <input id="approvalUsername" class="pp-field" type="email" placeholder="Ej: agente@comercio.com" autocomplete="off">
+                    </div>
+                    <div>
+                      <label class="pp-label">Nombre visible de la cuenta</label>
+                      <input id="approvalPassword" class="pp-field" type="text" placeholder="Ej: Comercio Demo Preview" autocomplete="off">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="pp-label">Comentario de revisión</label>
+                    <textarea id="reviewNotes" class="pp-field review-textarea" placeholder="Observaciones internas, motivo de rechazo o notas para activación..."></textarea>
+                  </div>
+
+                  <div class="review-actions">
+                    <button id="approveBtn" type="button" class="pp-btn pp-btn-primary">Aprobar solicitud</button>
+                    <button id="rejectBtn" type="button" class="pp-btn pp-btn-secondary">Rechazar solicitud</button>
+                  </div>
+
+                  <p id="reviewMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section data-module-section="comercios" class="portal-stack hidden-by-state">
+          <div class="grid grid-cols-1 lg:grid-cols-[320px,1fr] gap-5">
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">Operación comercial</h2>
+                <p class="text-sm text-gray-500 mt-1">Vista para entidades aprobadas o activadas.</p>
+              </div>
+              <div class="pp-card-body">
+                <div id="merchantSummary" class="space-y-4 text-sm text-slate-600"></div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">Comercios aprobados</h2>
+                <p class="text-sm text-gray-500 mt-1">Resumen comercial e invitación o estado de credenciales.</p>
+              </div>
+              <div class="pp-card-body">
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="text-gray-500 border-b">
+                        <th class="text-left py-3 pr-3">Comercio</th>
+                        <th class="text-left py-3 pr-3">Estado comercial</th>
+                        <th class="text-left py-3 pr-3">Credenciales</th>
+                        <th class="text-left py-3 pr-3">Representante</th>
+                        <th class="text-left py-3">Actualizado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="merchantsTable"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <section class="pp-card -soft overflow-hidden lg:col-span-2">
+              <div class="pp-card-head flex items-center justify-between gap-3">
+                <div>
+                  <h2 class="text-xl font-extrabold">Usuarios y credenciales</h2>
+                  <p class="text-sm text-gray-500 mt-1">Gestión integral de usuarios operativos del demo, con visibilidad de credenciales creadas.</p>
+                </div>
+                <button id="seedBtn" type="button" class="pp-btn pp-btn-secondary">Crear demo</button>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <div class="module-note rounded-[18px] p-4 text-sm">
+                  Los usuarios creados muestran aquí su <strong>usuario</strong> y <strong>contraseña</strong> para pruebas internas del prototipo.
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead>
+                      <tr class="text-gray-500 border-b">
+                        <th class="text-left py-3 pr-3">Usuario</th>
+                        <th class="text-left py-3 pr-3">Contraseña</th>
+                        <th class="text-left py-3 pr-3">Nombre</th>
+                        <th class="text-left py-3 pr-3">Rol</th>
+                        <th class="text-left py-3 pr-3">Agente padre</th>
+                        <th class="text-left py-3 pr-3">Onboarding</th>
+                        <th class="text-left py-3 pr-3">Estado</th>
+                        <th class="text-right py-3">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <section class="pp-card -soft overflow-hidden">
+              <div class="pp-card-head">
+                <h2 class="text-xl font-extrabold">Crear / editar usuario</h2>
+                <p class="text-sm text-gray-500 mt-1">Puedes crear agentes o empleados y dejar visibles sus credenciales para el equipo.</p>
+              </div>
+              <div class="pp-card-body space-y-4">
+                <input id="editId" type="hidden">
+                <div>
+                  <label class="pp-label">Usuario</label>
+                  <input id="fUsername" class="pp-field" type="text" placeholder="Ej: agente02" autocomplete="off">
+                </div>
+                <div>
+                  <label class="pp-label">Nombre visible</label>
+                  <input id="fDisplayName" class="pp-field" type="text" placeholder="Ej: Agente 02">
+                </div>
+                <div>
+                  <label class="pp-label">Rol</label>
+                  <select id="fRole" class="pp-field">
+                    <option value="agent">Agent</option>
+                    <option value="employee">Employee</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="pp-label">Agente padre (solo employee)</label>
+                  <select id="fAgent" class="pp-field"></select>
+                </div>
+                <div>
+                  <label class="pp-label">Contraseña</label>
+                  <input id="fPassword" class="pp-field mono" type="text" placeholder="Ej: 1234-temp" autocomplete="off">
+                </div>
+                <div>
+                  <label class="pp-label">Estado onboarding base</label>
+                  <select id="onboardingStatus" class="pp-field">
+                    <option value="draft">draft</option>
+                    <option value="pending">pending</option>
+                    <option value="review">review</option>
+                    <option value="approved">approved</option>
+                  </select>
+                </div>
+
+                <div class="flex gap-3">
+                  <button id="saveUserBtn" type="button" class="pp-btn pp-btn-primary -full">Guardar</button>
+                  <button id="resetFormBtn" type="button" class="pp-btn pp-btn-secondary -full">Limpiar</button>
+                </div>
+
+                <div id="credentialPreview" class="module-note rounded-[18px] p-4 text-sm hidden-by-state">
+                  <div class="font-extrabold text-slate-900">Credencial más reciente</div>
+                  <div id="credentialPreviewBody" class="mt-2 text-slate-700"></div>
+                </div>
+
+                <p id="formMsg" class="text-sm text-gray-600 min-h-[20px]"></p>
+              </div>
+            </section>
+          </div>
+        </section>
       </div>
     </div>
   </main>
@@ -242,24 +414,40 @@
   <script src="auth.js"></script>
   <script>
     (function(){
+      const MODULES = ['preregistro', 'solicitudes', 'comercios'];
       const loginView = document.getElementById('loginView');
       const portalView = document.getElementById('portalView');
+      const navGuestActions = document.getElementById('navGuestActions');
+      const navPortalActions = document.getElementById('navPortalActions');
       const $u = document.getElementById('username');
       const $p = document.getElementById('password');
       const $btn = document.getElementById('loginBtn');
       const $err = document.getElementById('error');
-      const USERS_KEY = window.PPAuth && window.PPAuth.USERS_KEY ? window.PPAuth.USERS_KEY : 'pp_users_v1';
+      const moduleButtons = Array.from(document.querySelectorAll('[data-module-target]'));
+      const moduleSections = Array.from(document.querySelectorAll('[data-module-section]'));
       const els = {
-        displayName: document.getElementById('displayName'),
-        username: document.getElementById('agentUsername'),
-        password: document.getElementById('agentPassword'),
+        editId: document.getElementById('editId'),
+        username: document.getElementById('fUsername'),
+        displayName: document.getElementById('fDisplayName'),
+        role: document.getElementById('fRole'),
+        agentId: document.getElementById('fAgent'),
+        password: document.getElementById('fPassword'),
         onboardingStatus: document.getElementById('onboardingStatus'),
-        saveAgentBtn: document.getElementById('saveAgentBtn'),
+        saveUserBtn: document.getElementById('saveUserBtn'),
         resetFormBtn: document.getElementById('resetFormBtn'),
         formMsg: document.getElementById('formMsg'),
-        agentsTable: document.getElementById('agentsTable'),
+        usersTable: document.getElementById('usersTable'),
         seedBtn: document.getElementById('seedBtn'),
         logoutBtn: document.getElementById('logoutBtn'),
+        credentialPreview: document.getElementById('credentialPreview'),
+        credentialPreviewBody: document.getElementById('credentialPreviewBody'),
+        statPreregistro: document.getElementById('statPreregistro'),
+        statSolicitudes: document.getElementById('statSolicitudes'),
+        statComercios: document.getElementById('statComercios'),
+        statPreregistroLabel: document.getElementById('statPreregistroLabel'),
+        statSolicitudesLabel: document.getElementById('statSolicitudesLabel'),
+        statComerciosLabel: document.getElementById('statComerciosLabel'),
+        preregistroList: document.getElementById('preregistroList'),
         applicationsList: document.getElementById('applicationsList'),
         applicationEmpty: document.getElementById('applicationEmpty'),
         applicationDetail: document.getElementById('applicationDetail'),
@@ -272,20 +460,34 @@
         reviewNotes: document.getElementById('reviewNotes'),
         approveBtn: document.getElementById('approveBtn'),
         rejectBtn: document.getElementById('rejectBtn'),
-        reviewMsg: document.getElementById('reviewMsg')
+        reviewMsg: document.getElementById('reviewMsg'),
+        merchantSummary: document.getElementById('merchantSummary'),
+        merchantsTable: document.getElementById('merchantsTable')
       };
+      let activeModule = 'solicitudes';
       let selectedApplicationId = null;
       let applicationsCache = [];
+
+      function appUrl(relativePath){
+        const base = location.pathname.slice(0, location.pathname.lastIndexOf('/') + 1);
+        const clean = (relativePath || '').replace(/^\/+/, '');
+        return `${location.origin}${base}${clean}`;
+      }
 
       function showLogin(){
         loginView.classList.remove('hidden-by-state');
         portalView.classList.add('hidden-by-state');
+        navGuestActions.classList.remove('hidden-by-state');
+        navPortalActions.classList.add('hidden-by-state');
       }
 
       function showPortal(){
         portalView.classList.remove('hidden-by-state');
         loginView.classList.add('hidden-by-state');
+        navPortalActions.classList.remove('hidden-by-state');
+        navGuestActions.classList.add('hidden-by-state');
         if (window.PPAuth.renderSessionBadge) window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
+        setActiveModule(getHashModule() || activeModule, { updateHash: false });
       }
 
       function showError(msg){
@@ -294,19 +496,165 @@
       }
 
       function now(){ return Date.now(); }
-      function uuid(){ return 'u_agent_' + Math.random().toString(16).slice(2, 8) + '_' + Date.now().toString(16); }
+      function uuid(){ return 'u_' + Math.random().toString(16).slice(2, 8) + '_' + Date.now().toString(16); }
       function readUsers(){ return window.PPAuth.loadUsers(); }
       function writeUsers(users){ window.PPAuth.saveUsers(users); }
-      function agentUsers(){ return readUsers().filter(u => u.role === 'agent'); }
-      function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+      function managedUsers(){ return readUsers().filter(function(user){ return user.role !== 'superadmin'; }); }
+      function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+      function normalizeStatus(status){ return (status || 'draft').toString().trim().toLowerCase().replace(/\s+/g, '_'); }
+      function formatStatusLabel(status){ return normalizeStatus(status).replace(/_/g, ' '); }
+      function formatDateTime(value){
+        if (!value) return 'Sin fecha';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return String(value);
+        return date.toLocaleString('es-PA');
+      }
+      function formatBoolean(value){ return value ? 'Sí' : 'No'; }
+      function statusBadge(status){
+        const value = normalizeStatus(status) || 'unknown';
+        return `<span class="status-pill -${esc(value)}">${esc(formatStatusLabel(value))}</span>`;
+      }
+      function getHashModule(){
+        const hash = (location.hash || '').replace(/^#/, '');
+        return MODULES.indexOf(hash) >= 0 ? hash : '';
+      }
+      function setActiveModule(module, options){
+        const next = MODULES.indexOf(module) >= 0 ? module : 'solicitudes';
+        const updateHash = !(options && options.updateHash === false);
+        activeModule = next;
+        moduleButtons.forEach(function(btn){
+          const isActive = btn.getAttribute('data-module-target') === next;
+          btn.classList.toggle('-active', isActive);
+          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        moduleSections.forEach(function(section){
+          section.classList.toggle('hidden-by-state', section.getAttribute('data-module-section') !== next);
+        });
+        if (updateHash && location.hash !== `#${next}`) {
+          history.replaceState(null, '', `${location.pathname}${location.search}#${next}`);
+        }
+      }
       function setReviewMsg(text, isError){
         els.reviewMsg.textContent = text || '';
         els.reviewMsg.className = 'text-sm min-h-[20px] ' + (isError ? 'text-red-600' : 'text-slate-600');
       }
-      function normalizeStatus(status){ return (status || 'draft').toString(); }
-      function statusBadge(status){
-        const value = normalizeStatus(status);
-        return `<span class="status-pill -${esc(value)}">${esc(value.replace(/_/g, ' '))}</span>`;
+      function setMsg(text, isError){
+        els.formMsg.textContent = text || '';
+        els.formMsg.className = 'text-sm min-h-[20px] ' + (isError ? 'text-red-600' : 'text-gray-600');
+      }
+      function showCredentialPreview(user){
+        if (!user) {
+          els.credentialPreview.classList.add('hidden-by-state');
+          els.credentialPreviewBody.innerHTML = '';
+          return;
+        }
+        els.credentialPreview.classList.remove('hidden-by-state');
+        els.credentialPreviewBody.innerHTML = `
+          <div><strong>Usuario:</strong> <code>${esc(user.username || '')}</code></div>
+          <div><strong>Contraseña:</strong> <code>${esc(user.password || '')}</code></div>
+          <div><strong>Rol:</strong> ${esc(user.role === 'employee' ? 'Employee' : 'Agent')}</div>
+        `;
+      }
+      function syncAgentsSelect(){
+        const agents = readUsers().filter(function(user){ return user.role === 'agent'; });
+        els.agentId.innerHTML = agents.map(function(agent){
+          return `<option value="${esc(agent.id)}">${esc(agent.username)} — ${esc(agent.displayName || '')}</option>`;
+        }).join('');
+        if (!agents.length) {
+          els.agentId.innerHTML = '<option value="">(no hay agentes)</option>';
+        }
+        if (els.role.value === 'agent') {
+          els.agentId.value = agents[0] ? agents[0].id : '';
+        }
+      }
+      function resetForm(){
+        els.editId.value = '';
+        els.displayName.value = '';
+        els.username.value = '';
+        els.role.value = 'agent';
+        els.password.value = '';
+        els.onboardingStatus.value = 'draft';
+        setMsg('');
+        syncAgentsSelect();
+      }
+      function getSortTime(item){
+        return item && (item.updatedAt || item.submittedAt || item.createdAt) || 0;
+      }
+      function sortRecent(items){
+        return (items || []).slice().sort(function(a, b){ return getSortTime(b) - getSortTime(a); });
+      }
+      function findApplication(id){
+        return applicationsCache.find(function(app){ return app && app.id === id; }) || null;
+      }
+      function getPrimaryEmail(item){
+        const data = (item && item.onboarding) || {};
+        return data.repEmail || data.opsContactEmail || data.settlementEmail || 'Sin correo';
+      }
+      function getBusinessLabel(item){
+        const data = (item && item.onboarding) || {};
+        return data.businessTradeName || data.businessLegalName || item.id || 'Solicitud sin nombre';
+      }
+      function getPreregistroItems(){
+        return sortRecent(applicationsCache.filter(function(item){
+          const status = normalizeStatus(item && item.status);
+          return status === 'draft' || status === 'submitted' || status === 'contract_pending';
+        }));
+      }
+      function getSolicitudItems(){
+        return sortRecent(applicationsCache.filter(function(item){
+          const status = normalizeStatus(item && item.status);
+          return status === 'pending_review' || status === 'needs_changes' || status === 'rejected';
+        }));
+      }
+      function getMerchantItems(){
+        return sortRecent(applicationsCache.filter(function(item){
+          const status = normalizeStatus(item && item.status);
+          return status === 'approved' || status === 'active';
+        }));
+      }
+      function getEmailValidationLabel(item){
+        const data = (item && item.onboarding) || {};
+        if (data.emailVerified === true) return 'Verificado';
+        if (data.emailVerified === false) return 'Pendiente';
+        if (data.verificationMethod) return `Pendiente (${String(data.verificationMethod).replace(/_/g, ' ')})`;
+        return 'Sin confirmación';
+      }
+      function getOnboardingStartLabel(item){
+        const step = Number.isFinite(item && item.currentStep) ? item.currentStep : 0;
+        const status = normalizeStatus(item && item.status);
+        if (step > 0) return `Iniciado · paso ${step + 1}`;
+        if (status === 'draft') return 'Pendiente de completar';
+        if (status === 'submitted') return 'Formulario enviado';
+        if (status === 'contract_pending') return 'Contrato pendiente';
+        return formatStatusLabel(status);
+      }
+      function getCredentialStatus(item){
+        const credentials = (item && item.credentials) || {};
+        return credentials.invitationStatus || item.credentialStatus || 'not_invited';
+      }
+      function getAddressSummary(data){
+        return [
+          data.businessAddress,
+          data.addressLandmarks,
+          data.corregimiento,
+          data.district,
+          data.province,
+          data.country
+        ].filter(Boolean).join(' / ');
+      }
+      function formatFieldValue(key, data){
+        const raw = data[key];
+        if (raw == null || raw === '') return '';
+        if (key === 'confirmPhoneOwnership' || key === 'needsApiIntegration' || key === 'consentAccepted' || key === 'acceptTerms') {
+          return formatBoolean(!!raw);
+        }
+        if (key === 'signatureDataUrl') return raw ? 'Sí, firma capturada' : 'No';
+        if (key === 'consentedAt') return formatDateTime(raw);
+        if (key === 'fundsSource' && raw === 'otro' && data.fundsSourceOther) return `Otro: ${data.fundsSourceOther}`;
+        if (key === 'fundsCountry' && raw === 'Otro' && data.fundsCountryOther) return `Otro: ${data.fundsCountryOther}`;
+        if (key === 'bankAccountType') return String(raw).replace(/^./, function(ch){ return ch.toUpperCase(); });
+        if (key === 'addressLat' || key === 'addressLng') return String(raw);
+        return String(raw);
       }
       const FIELD_LABELS = {
         businessLegalName: 'Razón social',
@@ -357,93 +705,28 @@
         acceptTerms: 'Aceptación de términos'
       };
       const DETAIL_GROUPS = [
-        {
-          title: '1. Comercio',
-          fields: ['businessLegalName', 'businessTradeName', 'taxId', 'businessType', 'industry', 'yearsOperating', 'businessDescriptionPdfName']
-        },
-        {
-          title: '2. Contactos',
-          fields: ['repName', 'repEmail', 'companyPhone', 'repCellPhone', 'confirmPhoneOwnership', 'repOcupacion', 'repActividad']
-        },
-        {
-          title: '3. Dirección',
-          fields: ['country', 'province', 'district', 'corregimiento', 'businessAddress', 'addressLandmarks', 'addressLat', 'addressLng']
-        },
-        {
-          title: '4. Liquidación y operación',
-          fields: ['estimatedMonthlySales', 'averageTicket', 'channelType', 'bankName', 'bankAccountType', 'bankAccountNumber', 'bankAccountHolder', 'settlementEmail', 'needsApiIntegration']
-        },
-        {
-          title: '5. Conocimiento del cliente',
-          fields: ['monthlyIncome', 'monthlyTransfersAmount', 'fundsSource', 'fundsSourceOther', 'fundsOrigin', 'fundsCountry', 'fundsCountryOther']
-        },
-        {
-          title: 'Contrato',
-          fields: ['contractNationality', 'contractCivilStatus', 'contractRepId', 'contractMercantileFolio', 'consentAccepted', 'consentedAt', 'signatureDataUrl', 'acceptTerms']
-        }
+        { title: '1. Comercio', fields: ['businessLegalName', 'businessTradeName', 'taxId', 'businessType', 'industry', 'yearsOperating', 'businessDescriptionPdfName'] },
+        { title: '2. Contactos', fields: ['repName', 'repEmail', 'companyPhone', 'repCellPhone', 'confirmPhoneOwnership', 'repOcupacion', 'repActividad'] },
+        { title: '3. Dirección', fields: ['country', 'province', 'district', 'corregimiento', 'businessAddress', 'addressLandmarks', 'addressLat', 'addressLng'] },
+        { title: '4. Liquidación y operación', fields: ['estimatedMonthlySales', 'averageTicket', 'channelType', 'bankName', 'bankAccountType', 'bankAccountNumber', 'bankAccountHolder', 'settlementEmail', 'needsApiIntegration'] },
+        { title: '5. Conocimiento del cliente', fields: ['monthlyIncome', 'monthlyTransfersAmount', 'fundsSource', 'fundsSourceOther', 'fundsOrigin', 'fundsCountry', 'fundsCountryOther'] },
+        { title: 'Contrato', fields: ['contractNationality', 'contractCivilStatus', 'contractRepId', 'contractMercantileFolio', 'consentAccepted', 'consentedAt', 'signatureDataUrl', 'acceptTerms'] }
       ];
-      function findApplication(id){ return applicationsCache.find(app => app && app.id === id) || null; }
-
-      async function refreshApplications(){
-        if (window.PPApplications) {
-          applicationsCache = await window.PPApplications.listApplications();
-        } else {
-          applicationsCache = [];
-        }
-        if (!selectedApplicationId || !applicationsCache.some(item => item && item.id === selectedApplicationId)) {
-          selectedApplicationId = applicationsCache[0] ? applicationsCache[0].id : null;
-        }
-      }
-      function formatDateTime(value){
-        if (!value) return '';
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return String(value);
-        return date.toLocaleString('es-PA');
-      }
-      function formatBoolean(value){
-        return value ? 'Sí' : 'No';
-      }
-      function getAddressSummary(data){
-        return [
-          data.businessAddress,
-          data.addressLandmarks,
-          data.corregimiento,
-          data.district,
-          data.province,
-          data.country
-        ].filter(Boolean).join(' / ');
-      }
-      function formatFieldValue(key, data, item){
-        const raw = data[key];
-        if (raw == null || raw === '') return '';
-        if (key === 'confirmPhoneOwnership' || key === 'needsApiIntegration' || key === 'consentAccepted' || key === 'acceptTerms') {
-          return formatBoolean(!!raw);
-        }
-        if (key === 'signatureDataUrl') return raw ? 'Sí, firma capturada' : 'No';
-        if (key === 'consentedAt') return formatDateTime(raw);
-        if (key === 'fundsSource' && raw === 'otro' && data.fundsSourceOther) return `Otro: ${data.fundsSourceOther}`;
-        if (key === 'fundsCountry' && raw === 'Otro' && data.fundsCountryOther) return `Otro: ${data.fundsCountryOther}`;
-        if (key === 'bankAccountType') return String(raw).replace(/^./, function(ch){ return ch.toUpperCase(); });
-        if (key === 'addressLat' || key === 'addressLng') return String(raw);
-        return String(raw);
-      }
       function buildSectionHtml(title, pairs){
         if (!pairs.length) return '';
         return `
           <section class="review-section">
             <span class="review-section-title">${esc(title)}</span>
             <dl class="review-kv">
-              ${pairs.map(function(pair){
-                return `<dt>${esc(pair[0])}</dt><dd>${esc(pair[1])}</dd>`;
-              }).join('')}
+              ${pairs.map(function(pair){ return `<dt>${esc(pair[0])}</dt><dd>${esc(pair[1])}</dd>`; }).join('')}
             </dl>
           </section>`;
       }
-      function buildDetailSections(data, item){
+      function buildDetailSections(data){
         const usedKeys = new Set();
         const sections = DETAIL_GROUPS.map(function(group){
           const pairs = group.fields.reduce(function(acc, key){
-            const value = formatFieldValue(key, data, item);
+            const value = formatFieldValue(key, data);
             if (!value) return acc;
             usedKeys.add(key);
             acc.push([FIELD_LABELS[key] || key, value]);
@@ -453,7 +736,7 @@
         }).filter(Boolean);
         const extras = Object.keys(data).reduce(function(acc, key){
           if (usedKeys.has(key)) return acc;
-          const value = formatFieldValue(key, data, item);
+          const value = formatFieldValue(key, data);
           if (!value) return acc;
           acc.push([FIELD_LABELS[key] || key, value]);
           return acc;
@@ -462,64 +745,77 @@
         return sections.join('');
       }
 
-      function setMsg(text, isError){
-        els.formMsg.textContent = text || '';
-        els.formMsg.className = 'text-sm min-h-[20px] ' + (isError ? 'text-red-600' : 'text-gray-600');
-      }
-
-      function resetForm(){
-        els.displayName.value = '';
-        els.username.value = '';
-        els.password.value = '';
-        els.onboardingStatus.value = 'draft';
-        setMsg('');
-      }
-
-      async function render(){
-        const rows = agentUsers();
-        if (!rows.length){
-          els.agentsTable.innerHTML = '<tr><td colspan="5" class="py-6 text-gray-500">No hay agentes creados todavía.</td></tr>';
+      async function refreshApplications(){
+        if (window.PPApplications) {
+          applicationsCache = await window.PPApplications.listApplications();
         } else {
-          els.agentsTable.innerHTML = rows.map(user => {
-            const onboarding = user.onboarding && user.onboarding.status ? user.onboarding.status : 'draft';
-            return `
-              <tr class="border-b last:border-0">
-                <td class="py-3 pr-3 font-bold">${esc(user.username)}</td>
-                <td class="py-3 pr-3">${esc(user.displayName || '')}</td>
-                <td class="py-3 pr-3"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mono">${esc(onboarding)}</span></td>
-                <td class="py-3 pr-3">${user.active ? '<span class="text-emerald-600 font-bold">activo</span>' : '<span class="text-gray-500 font-bold">inactivo</span>'}</td>
-                <td class="py-3 text-right space-x-2">
-                  <button data-act="toggle" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">${user.active ? 'Desactivar' : 'Activar'}</button>
-                  <button data-act="reset" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">Reset clave</button>
-                </td>
-              </tr>`;
-          }).join('');
+          applicationsCache = [];
         }
-        await refreshApplications();
-        renderApplications();
+        const solicitudItems = getSolicitudItems();
+        if (!selectedApplicationId || !solicitudItems.some(function(item){ return item && item.id === selectedApplicationId; })) {
+          selectedApplicationId = solicitudItems[0] ? solicitudItems[0].id : null;
+        }
+      }
+
+      function renderOverview(){
+        const preregistroItems = getPreregistroItems();
+        const solicitudItems = getSolicitudItems();
+        const merchantItems = getMerchantItems();
+        els.statPreregistro.textContent = String(preregistroItems.length);
+        els.statSolicitudes.textContent = String(solicitudItems.length);
+        els.statComercios.textContent = String(merchantItems.length);
+        els.statPreregistroLabel.textContent = preregistroItems.length ? `${preregistroItems.length} caso(s) previos al expediente formal.` : 'Sin casos en etapa previa.';
+        els.statSolicitudesLabel.textContent = solicitudItems.length ? `${solicitudItems.length} caso(s) en revisión manual.` : 'Sin casos pendientes de revisión.';
+        els.statComerciosLabel.textContent = merchantItems.length ? `${merchantItems.length} comercio(s) aprobados o activos.` : 'Sin comercios aprobados aún.';
+      }
+
+      function renderPreregistro(){
+        const items = getPreregistroItems();
+        if (!items.length) {
+          els.preregistroList.innerHTML = '<div class="text-sm text-gray-500">No hay casos de preregistro con la clasificación actual.</div>';
+          return;
+        }
+        els.preregistroList.innerHTML = items.map(function(item){
+          return `
+            <article class="review-item cursor-default">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="font-extrabold text-sm text-slate-900">${esc(getBusinessLabel(item))}</div>
+                  <div class="text-xs text-slate-500 mt-1">${esc(getPrimaryEmail(item))}</div>
+                </div>
+                <div>${statusBadge(item.status)}</div>
+              </div>
+              <dl class="review-kv mt-4">
+                <dt>Correo</dt><dd>${esc(getPrimaryEmail(item))}</dd>
+                <dt>Fecha de preregistro</dt><dd>${esc(formatDateTime(item.createdAt || item.submittedAt || item.updatedAt))}</dd>
+                <dt>Validación de correo</dt><dd>${esc(getEmailValidationLabel(item))}</dd>
+                <dt>Inicio onboarding</dt><dd>${esc(getOnboardingStartLabel(item))}</dd>
+              </dl>
+            </article>`;
+        }).join('');
       }
 
       function renderApplications(){
-        const items = applicationsCache.slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
-        if (!items.length){
-          els.applicationsList.innerHTML = '<div class="text-sm text-gray-500">No hay solicitudes de onboarding todavía o Supabase no devolvió resultados.</div>';
+        const items = getSolicitudItems();
+        if (!items.length) {
+          els.applicationsList.innerHTML = '<div class="text-sm text-gray-500">No hay solicitudes en revisión. Los casos tempranos quedan en <strong>Preregistro</strong> y los aprobados pasan a <strong>Comercios</strong>.</div>';
           renderApplicationDetail(null);
           return;
         }
 
-        els.applicationsList.innerHTML = items.map(item => {
+        els.applicationsList.innerHTML = items.map(function(item){
           const data = item.onboarding || {};
           const isActive = item.id === selectedApplicationId;
           return `
             <button type="button" class="review-item ${isActive ? '-active' : ''} w-full text-left" data-app-id="${esc(item.id)}">
               <div class="flex items-start justify-between gap-3">
                 <div>
-                  <div class="font-extrabold text-sm text-slate-900">${esc(data.businessTradeName || data.businessLegalName || item.id)}</div>
-                  <div class="text-xs text-slate-500 mt-1">${esc(data.taxId || 'Sin identificación')} · ${esc(data.repEmail || 'Sin correo')}</div>
+                  <div class="font-extrabold text-sm text-slate-900">${esc(getBusinessLabel(item))}</div>
+                  <div class="text-xs text-slate-500 mt-1">${esc(data.taxId || 'Sin identificación')} · ${esc(getPrimaryEmail(item))}</div>
                 </div>
                 <div>${statusBadge(item.status)}</div>
               </div>
-              <div class="text-xs text-slate-500 mt-3">Actualizado: ${esc(new Date(item.updatedAt || item.createdAt || Date.now()).toLocaleString('es-CL'))}</div>
+              <div class="text-xs text-slate-500 mt-3">Actualizado: ${esc(formatDateTime(getSortTime(item)))}</div>
             </button>`;
         }).join('');
 
@@ -537,8 +833,8 @@
         const credentials = item.credentials || {};
         els.applicationEmpty.classList.add('hidden-by-state');
         els.applicationDetail.classList.remove('hidden-by-state');
-        els.detailTitle.textContent = data.businessTradeName || data.businessLegalName || 'Solicitud sin nombre';
-        els.detailSubtitle.textContent = `${data.taxId || 'Sin RUT'} · ${data.repName || 'Sin representante'} · ${data.repEmail || 'Sin correo'}`;
+        els.detailTitle.textContent = getBusinessLabel(item);
+        els.detailSubtitle.textContent = `${data.taxId || 'Sin RUT'} · ${data.repName || 'Sin representante'} · ${getPrimaryEmail(item)}`;
         els.detailStatus.innerHTML = statusBadge(item.status);
         els.detailFields.innerHTML = [
           ['Razón social', data.businessLegalName],
@@ -550,32 +846,97 @@
           ['Ventas estimadas', data.estimatedMonthlySales],
           ['Banco', [data.bankName, data.bankAccountType, data.bankAccountNumber].filter(Boolean).join(' · ')],
           ['Integración API', data.needsApiIntegration ? 'Sí' : 'No'],
-          ['Correo de invitación', credentials.inviteEmail || data.repEmail || data.opsContactEmail || '—'],
-          ['Estado de credenciales', credentials.invitationStatus || item.credentialStatus || 'not_invited'],
+          ['Correo de invitación', credentials.inviteEmail || getPrimaryEmail(item) || '—'],
+          ['Estado de credenciales', getCredentialStatus(item)],
           ['Observaciones', item.review && item.review.notes ? item.review.notes : data.additionalNotes || '—']
-        ].map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value || '—')}</dd>`).join('') +
-        `<dt>Expediente por etapas</dt><dd><div class="review-sections">${buildDetailSections(data, item)}</div></dd>`;
+        ].map(function(pair){
+          return `<dt>${esc(pair[0])}</dt><dd>${esc(pair[1] || '—')}</dd>`;
+        }).join('') + `<dt>Expediente por etapas</dt><dd><div class="review-sections">${buildDetailSections(data)}</div></dd>`;
 
-        els.approvalUsername.value = credentials.inviteEmail || data.repEmail || data.opsContactEmail || '';
-        els.approvalPassword.value = credentials.displayName || data.businessTradeName || data.businessLegalName || 'Punto Aliado';
+        els.approvalUsername.value = credentials.inviteEmail || getPrimaryEmail(item) || '';
+        els.approvalPassword.value = credentials.displayName || getBusinessLabel(item) || 'Punto Aliado';
         els.reviewNotes.value = item.review && item.review.notes ? item.review.notes : '';
         setReviewMsg('');
       }
 
-      function suggestUsername(base){
-        const normalized = (base || 'agente').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '').slice(0, 10) || 'agente';
-        const users = readUsers();
-        let i = 1;
-        let candidate = `${normalized}${i.toString().padStart(2, '0')}`;
-        while (users.some(u => (u.username || '').toLowerCase() === candidate.toLowerCase())) {
-          i += 1;
-          candidate = `${normalized}${i.toString().padStart(2, '0')}`;
+      function renderMerchants(users){
+        const items = getMerchantItems();
+        const activeAgents = (users || []).filter(function(user){ return user.role === 'agent' && user.active; }).length;
+        const pendingInvites = items.filter(function(item){
+          const status = normalizeStatus(getCredentialStatus(item));
+          return status !== 'invite_sent' && status !== 'active';
+        }).length;
+
+        els.merchantSummary.innerHTML = `
+          <p>Este módulo concentra los comercios ya aprobados y la preparación de sus accesos operativos.</p>
+          <dl class="review-kv">
+            <dt>Comercios aprobados</dt><dd>${esc(String(items.length))}</dd>
+            <dt>Invitaciones pendientes</dt><dd>${esc(String(pendingInvites))}</dd>
+            <dt>Agentes activos</dt><dd>${esc(String(activeAgents))}</dd>
+          </dl>
+          <p class="text-xs text-slate-500">La configuración profunda de proveedores, comisiones y liquidación quedará en la siguiente fase.</p>
+        `;
+
+        if (!items.length) {
+          els.merchantsTable.innerHTML = '<tr><td colspan="5" class="py-6 text-gray-500">Todavía no hay comercios aprobados o activos.</td></tr>';
+          return;
         }
-        return candidate;
+
+        els.merchantsTable.innerHTML = items.map(function(item){
+          const data = item.onboarding || {};
+          return `
+            <tr class="border-b last:border-0 align-top">
+              <td class="py-3 pr-3">
+                <div class="font-bold">${esc(getBusinessLabel(item))}</div>
+                <div class="text-xs text-slate-500 mt-1">${esc(data.taxId || 'Sin identificación')}</div>
+              </td>
+              <td class="py-3 pr-3">${statusBadge(item.status)}</td>
+              <td class="py-3 pr-3">
+                <div class="font-semibold">${esc(formatStatusLabel(getCredentialStatus(item)))}</div>
+                <div class="text-xs text-slate-500 mt-1">${esc(item.credentials && item.credentials.inviteEmail ? item.credentials.inviteEmail : 'Sin correo de invitación')}</div>
+              </td>
+              <td class="py-3 pr-3">${esc(data.repName || getPrimaryEmail(item))}</td>
+              <td class="py-3">${esc(formatDateTime(getSortTime(item)))}</td>
+            </tr>`;
+        }).join('');
       }
 
-      function suggestPassword(){
-        return `tmp-${Math.random().toString(36).slice(2, 8)}`;
+      function renderUsers(users){
+        const rows = users || [];
+        if (!rows.length) {
+          els.usersTable.innerHTML = '<tr><td colspan="8" class="py-6 text-gray-500">No hay usuarios creados todavía.</td></tr>';
+          return;
+        }
+        const byId = Object.fromEntries(rows.map(function(user){ return [user.id, user]; }));
+        els.usersTable.innerHTML = rows.map(function(user){
+          const onboarding = user.onboarding && user.onboarding.status ? user.onboarding.status : 'draft';
+          const parent = user.role === 'employee' ? ((byId[user.agentId] && byId[user.agentId].username) || '—') : '—';
+          return `
+            <tr class="border-b last:border-0">
+              <td class="py-3 pr-3 font-bold">${esc(user.username)}</td>
+              <td class="py-3 pr-3"><code class="mono">${esc(user.password || '—')}</code></td>
+              <td class="py-3 pr-3">${esc(user.displayName || '')}</td>
+              <td class="py-3 pr-3">${esc(user.role === 'employee' ? 'Employee' : 'Agent')}</td>
+              <td class="py-3 pr-3">${esc(parent)}</td>
+              <td class="py-3 pr-3"><span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mono">${esc(onboarding)}</span></td>
+              <td class="py-3 pr-3">${user.active ? '<span class="text-emerald-600 font-bold">activo</span>' : '<span class="text-gray-500 font-bold">inactivo</span>'}</td>
+              <td class="py-3 text-right space-x-2">
+                <button data-act="edit" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">Editar</button>
+                <button data-act="toggle" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">${user.active ? 'Desactivar' : 'Activar'}</button>
+                <button data-act="reset" data-id="${esc(user.id)}" class="pp-btn pp-btn-secondary" style="padding:8px 12px;height:auto;">Reset clave</button>
+              </td>
+            </tr>`;
+        }).join('');
+      }
+
+      async function render(){
+        const users = managedUsers();
+        renderUsers(users);
+        await refreshApplications();
+        renderOverview();
+        renderPreregistro();
+        renderApplications();
+        renderMerchants(users);
       }
 
       async function approveSelected(){
@@ -595,25 +956,26 @@
           setReviewMsg('Supabase no está disponible en esta pantalla.', true);
           return;
         }
-        const actor = window.PPAuth.getSession()?.username || 'superadmin';
+        const actor = window.PPAuth.getSession() && window.PPAuth.getSession().username || 'superadmin';
+        const resolvedDisplayName = displayName || (item.onboarding && (item.onboarding.businessTradeName || item.onboarding.businessLegalName)) || 'Punto Aliado';
         await window.PPApplications.approveApplication({
           applicationId: item.id,
           inviteEmail: inviteEmail,
-          displayName: displayName,
+          displayName: resolvedDisplayName,
           notes: notes,
           actor: actor
         });
         const inviteResult = await window.PPApplications.inviteApprovedApplication({
           applicationId: item.id,
           inviteEmail: inviteEmail,
-          displayName: displayName
+          displayName: resolvedDisplayName
         });
         if (inviteResult && inviteResult.ok) {
           await window.PPApplications.recordReviewEvent({
             applicationId: item.id,
             action: 'invite_sent',
             actor: actor,
-            notes: 'Invitación enviada desde el portal de credenciales.',
+            notes: 'Invitación enviada desde el portal admin.',
             payload: { inviteEmail: inviteEmail }
           });
         } else {
@@ -625,11 +987,40 @@
             payload: { inviteEmail: inviteEmail }
           });
         }
-        await refreshApplications();
-        renderApplications();
-        setReviewMsg(inviteResult && inviteResult.ok
-          ? 'Solicitud aprobada e invitación enviada correctamente.'
-          : 'Solicitud aprobada y persistida en Supabase. La invitación segura quedó marcada como pendiente.');
+
+        let portalCredSuffix = '';
+        if (window.PPAuth.ensureAgentUserFromApproval) {
+          const cred = window.PPAuth.ensureAgentUserFromApproval({
+            inviteEmail: inviteEmail,
+            displayName: resolvedDisplayName,
+            applicationId: item.id
+          });
+          if (cred.ok) {
+            portalCredSuffix = ` Credenciales en el listado (demo): usuario «${cred.username}», contraseña «${cred.password}».`;
+            try {
+              const fresh = await window.PPApplications.getApplication(item.id);
+              if (fresh) {
+                await window.PPApplications.upsertApplication({
+                  ...fresh,
+                  credentials: {
+                    ...(fresh.credentials || {}),
+                    portalDemoUsername: cred.username,
+                    portalDemoPassword: cred.password
+                  }
+                });
+              }
+            } catch (e) {
+              console.warn('No se pudo persistir credenciales demo en la solicitud:', e);
+            }
+          }
+        }
+
+        await render();
+        setActiveModule('comercios');
+        const baseReviewMsg = inviteResult && inviteResult.ok
+          ? 'Solicitud aprobada e invitación enviada por correo (Supabase Auth).'
+          : 'Solicitud aprobada en Supabase. La invitación por correo puede estar pendiente si la Edge Function no está desplegada.';
+        setReviewMsg(baseReviewMsg + portalCredSuffix, false);
       }
 
       async function rejectSelected(){
@@ -650,54 +1041,102 @@
         await window.PPApplications.rejectApplication({
           applicationId: item.id,
           notes: notes,
-          actor: window.PPAuth.getSession()?.username || 'superadmin'
+          actor: window.PPAuth.getSession() && window.PPAuth.getSession().username || 'superadmin'
         });
-        await refreshApplications();
-        renderApplications();
-        setReviewMsg('Solicitud rechazada y comentario guardado en Supabase.');
+        await render();
+        setActiveModule('solicitudes');
       }
 
-      function saveAgent(){
+      function loadUserToForm(id){
+        const users = managedUsers();
+        const user = users.find(function(item){ return item.id === id; });
+        if (!user) return;
+        els.editId.value = user.id || '';
+        els.username.value = user.username || '';
+        els.displayName.value = user.displayName || '';
+        els.role.value = user.role || 'agent';
+        els.password.value = user.password || '';
+        els.onboardingStatus.value = user.onboarding && user.onboarding.status ? user.onboarding.status : 'draft';
+        syncAgentsSelect();
+        if (user.role === 'employee') {
+          els.agentId.value = user.agentId || '';
+        }
+        showCredentialPreview(user);
+      }
+
+      function saveUser(){
+        const editId = (els.editId.value || '').trim();
         const displayName = (els.displayName.value || '').trim();
         const username = (els.username.value || '').trim();
+        const role = (els.role.value || 'agent').trim();
+        const agentId = role === 'employee' ? (els.agentId.value || '').trim() : null;
         const password = (els.password.value || '').trim();
         const onboardingStatus = els.onboardingStatus.value;
-
-        if (!displayName || !username || !password){
+        if (!displayName || !username || !password) {
           setMsg('Completa nombre, usuario y clave temporal.', true);
+          return;
+        }
+        if (role === 'employee' && !agentId) {
+          setMsg('Selecciona el agente padre para este employee.', true);
           return;
         }
 
         const users = readUsers();
-        const exists = users.find(u => (u.username || '').toLowerCase() === username.toLowerCase());
-        if (exists){
+        const exists = users.find(function(user){
+          return (user.username || '').toLowerCase() === username.toLowerCase() && user.id !== editId;
+        });
+        if (exists) {
           setMsg('Ese usuario ya existe.', true);
           return;
         }
 
-        const id = uuid();
-        users.push({
-          id,
-          username,
-          password,
-          role: 'agent',
-          displayName,
-          agentId: id,
-          active: true,
-          onboarding: { status: onboardingStatus, updatedAt: now() },
-          createdAt: now(),
-          updatedAt: now()
-        });
-
+        let savedUser;
+        if (!editId) {
+          const id = uuid();
+          savedUser = {
+            id: id,
+            username: username,
+            password: password,
+            role: role,
+            displayName: displayName,
+            agentId: role === 'agent' ? id : agentId,
+            active: true,
+            onboarding: { status: onboardingStatus, updatedAt: now() },
+            createdAt: now(),
+            updatedAt: now()
+          };
+          users.push(savedUser);
+        } else {
+          const idx = users.findIndex(function(user){ return user.id === editId; });
+          if (idx < 0) {
+            setMsg('No existe el usuario a editar.', true);
+            return;
+          }
+          const current = users[idx];
+          savedUser = {
+            ...current,
+            username: username,
+            password: password,
+            role: role,
+            displayName: displayName,
+            agentId: role === 'agent' ? editId : agentId,
+            onboarding: role === 'agent'
+              ? { ...(current.onboarding || {}), status: onboardingStatus, updatedAt: now() }
+              : current.onboarding,
+            updatedAt: now()
+          };
+          users[idx] = savedUser;
+        }
         writeUsers(users);
-        void render();
         resetForm();
-        setMsg('Agente guardado en el prototipo.');
+        setMsg(editId ? 'Usuario actualizado en el prototipo.' : 'Usuario guardado en el prototipo.');
+        showCredentialPreview(savedUser);
+        void render();
       }
 
-      function toggleAgent(id){
+      function toggleUser(id){
         const users = readUsers();
-        const idx = users.findIndex(u => u.id === id && u.role === 'agent');
+        const idx = users.findIndex(function(user){ return user.id === id && user.role !== 'superadmin'; });
         if (idx < 0) return;
         users[idx] = { ...users[idx], active: !users[idx].active, updatedAt: now() };
         writeUsers(users);
@@ -708,24 +1147,25 @@
         const temp = prompt('Nueva clave temporal para este agente:', '1234');
         if (!temp) return;
         const users = readUsers();
-        const idx = users.findIndex(u => u.id === id && u.role === 'agent');
+        const idx = users.findIndex(function(user){ return user.id === id && user.role !== 'superadmin'; });
         if (idx < 0) return;
         users[idx] = { ...users[idx], password: temp, updatedAt: now() };
         writeUsers(users);
         setMsg('Clave temporal actualizada.');
+        showCredentialPreview(users[idx]);
         void render();
       }
 
       function seedExample(){
         const users = readUsers();
-        const taken = users.some(u => (u.username || '').toLowerCase() === 'agente02');
-        if (taken){
+        const taken = users.some(function(user){ return (user.username || '').toLowerCase() === 'agente02'; });
+        if (taken) {
           setMsg('El demo ya existe.', true);
           return;
         }
         const id = uuid();
         users.push({
-          id,
+          id: id,
           username: 'agente02',
           password: '1234',
           role: 'agent',
@@ -737,19 +1177,20 @@
           updatedAt: now()
         });
         writeUsers(users);
-        void render();
         setMsg('Agente demo creado.');
+        showCredentialPreview(users[users.length - 1]);
+        void render();
       }
 
       function doLogin(){
         showError('');
         const res = window.PPAuth.signIn($u.value, $p.value);
-        if (!res.ok){
+        if (!res.ok) {
           showError(res.error || 'No fue posible iniciar sesión.');
           return;
         }
         if (res.user && res.user.role !== 'superadmin') {
-          location.href = `${location.origin}/checkout-demo/agents/recharge.html`;
+          location.href = appUrl('agents/recharge.html');
           return;
         }
         showPortal();
@@ -763,7 +1204,7 @@
           return;
         }
         if (session.role !== 'superadmin') {
-          location.href = `${location.origin}/checkout-demo/agents/recharge.html`;
+          location.href = appUrl('agents/recharge.html');
           return;
         }
         showPortal();
@@ -771,16 +1212,25 @@
       }
 
       $btn.addEventListener('click', doLogin);
-      [$u, $p].forEach(el => el.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') doLogin();
-      }));
+      [$u, $p].forEach(function(el){
+        el.addEventListener('keydown', function(e){
+          if (e.key === 'Enter') doLogin();
+        });
+      });
 
-      els.saveAgentBtn.addEventListener('click', saveAgent);
+      moduleButtons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          setActiveModule(btn.getAttribute('data-module-target'));
+        });
+      });
+
+      els.saveUserBtn.addEventListener('click', saveUser);
       els.resetFormBtn.addEventListener('click', resetForm);
+      els.role.addEventListener('change', syncAgentsSelect);
       els.seedBtn.addEventListener('click', seedExample);
       els.approveBtn.addEventListener('click', approveSelected);
       els.rejectBtn.addEventListener('click', rejectSelected);
-      els.logoutBtn.addEventListener('click', () => {
+      els.logoutBtn.addEventListener('click', function(){
         window.PPAuth.signOut();
         showLogin();
         showError('');
@@ -788,22 +1238,28 @@
         setReviewMsg('');
         resetForm();
       });
-      els.applicationsList.addEventListener('click', (e) => {
+      els.applicationsList.addEventListener('click', function(e){
         const card = e.target.closest('[data-app-id]');
         if (!card) return;
         selectedApplicationId = card.getAttribute('data-app-id');
         renderApplications();
       });
-      els.agentsTable.addEventListener('click', (e) => {
+      els.usersTable.addEventListener('click', function(e){
         const btn = e.target.closest('button[data-act]');
         if (!btn) return;
         const id = btn.getAttribute('data-id');
         const act = btn.getAttribute('data-act');
-        if (act === 'toggle') toggleAgent(id);
+        if (act === 'edit') loadUserToForm(id);
+        if (act === 'toggle') toggleUser(id);
         if (act === 'reset') resetPassword(id);
       });
 
-      setTimeout(() => {
+      window.addEventListener('hashchange', function(){
+        const next = getHashModule();
+        if (next) setActiveModule(next, { updateHash: false });
+      });
+
+      setTimeout(function(){
         try { $u.focus(); } catch (e) {}
       }, 100);
 

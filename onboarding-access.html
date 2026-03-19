@@ -627,10 +627,37 @@
       };
       const sbCfg = window.PPSupabaseConfig || {};
       const hasSupabase = !!(window.supabase && sbCfg.enabled && sbCfg.url && sbCfg.anonKey);
-      const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey) : null;
+      const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey, {
+        auth: {
+          detectSessionInUrl: true,
+          persistSession: true,
+          storage: window.localStorage,
+          autoRefreshToken: true
+        }
+      }) : null;
     let waitUntil = 0;
     let countdownTimer = null;
     let pollingTimer = null;
+    let autoOnboardingScheduled = false;
+    let authListenerBound = false;
+
+      (function captureAuthReturnForAutoOnboarding(){
+        try {
+          const h = window.location.hash || '';
+          const q = window.location.search || '';
+          if (/access_token|refresh_token|type=/i.test(h) || q.includes('code=')) {
+            sessionStorage.setItem('pp_expect_onboarding_auto', '1');
+          }
+        } catch (e) {}
+      })();
+
+      function shouldAutoContinueAfterEmailVerify(){
+        try {
+          return sessionStorage.getItem('pp_expect_onboarding_auto') === '1';
+        } catch (e) {
+          return false;
+        }
+      }
 
       if (desktopCursor && cursorRing) {
         let rafId = null;
@@ -814,7 +841,39 @@
         renderCountdown();
         stopTimers();
         countdownTimer = setInterval(renderCountdown, 1000);
-        pollingTimer = setInterval(() => { handleSupabaseReturn(true); }, 4000);
+        pollingTimer = setInterval(() => { handleSupabaseReturn(true); }, 1500);
+      }
+
+      function scheduleAutoContinueToOnboarding(){
+        if (autoOnboardingScheduled) return;
+        if (!shouldAutoContinueAfterEmailVerify()) return;
+        autoOnboardingScheduled = true;
+        try { sessionStorage.removeItem('pp_expect_onboarding_auto'); } catch (e) {}
+        setGateMsg('Correo confirmado. Te llevamos al formulario de onboarding…', false);
+        setTimeout(() => {
+          try { continueToOnboarding(); } catch (e) { console.warn(e); }
+        }, 700);
+      }
+
+      function applyMagicLinkSession(session){
+        if (!session || !session.user || !session.user.email) return false;
+        const ctx = getAccessContext();
+        storeVerifiedSession({ email: session.user.email, provider: 'supabase_magic_link' });
+        storeAccessContext({
+          ...(ctx || {}),
+          email: session.user.email,
+          emailVerified: true,
+          verificationMethod: 'supabase_magic_link',
+          supabaseUserId: session.user.id
+        });
+        stopTimers();
+        setWaitingMode(false);
+        setWaitingEmail(session.user.email);
+        setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
+        setStatus('-ok', `Correo verificado: ${session.user.email}`);
+        setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
+        updateContinueButton(true);
+        return true;
       }
 
       async function handleSupabaseReturn(silent){
@@ -824,23 +883,9 @@
           if (error) throw error;
           const session = data && data.session;
           if (!session || !session.user || !session.user.email) return false;
-          const ctx = getAccessContext();
-          storeVerifiedSession({ email: session.user.email, provider: 'supabase_magic_link' });
-          storeAccessContext({
-            ...(ctx || {}),
-            email: session.user.email,
-            emailVerified: true,
-            verificationMethod: 'supabase_magic_link',
-            supabaseUserId: session.user.id
-          });
-          stopTimers();
-          setWaitingMode(false);
-          setWaitingEmail(session.user.email);
-          setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
-          setStatus('-ok', `Correo verificado: ${session.user.email}`);
-          setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
-          updateContinueButton(true);
-          return true;
+          const applied = applyMagicLinkSession(session);
+          if (applied && shouldAutoContinueAfterEmailVerify()) scheduleAutoContinueToOnboarding();
+          return applied;
         } catch (e) {
           if (!silent) {
             setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
@@ -849,6 +894,35 @@
           }
           return false;
         }
+      }
+
+      function bindSupabaseAuthListener(){
+        if (!supabaseClient || authListenerBound) return;
+        authListenerBound = true;
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_IN' && session && session.user && session.user.email) {
+            const applied = applyMagicLinkSession(session);
+            if (applied && shouldAutoContinueAfterEmailVerify()) scheduleAutoContinueToOnboarding();
+          }
+        });
+      }
+
+      function runMagicLinkReturnBurst(){
+        if (!supabaseClient) return;
+        const h = location.hash || '';
+        const q = location.search || '';
+        const looksLikeAuthReturn = h.includes('access_token') || h.includes('refresh_token') || h.includes('type=') || q.includes('code=');
+        if (!looksLikeAuthReturn) return;
+        let tries = 0;
+        const max = 40;
+        const tick = () => {
+          tries += 1;
+          handleSupabaseReturn(true).then((ok) => {
+            if (ok || tries >= max) return;
+            setTimeout(tick, 250);
+          });
+        };
+        tick();
       }
 
       async function sendMagicLink(email, phone, business){
@@ -883,6 +957,7 @@
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
         setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
         setNextStep('Abre tu correo desde este mismo celular o computador. Cuando vuelvas aquí con el enlace confirmado, podrás continuar.', false);
+        try { sessionStorage.setItem('pp_expect_onboarding_auto', '1'); } catch (e) {}
         startWaitingWindow(email);
         updateContinueButton(false);
       }
@@ -980,10 +1055,7 @@
         validateAndContinue();
       });
       els.resendBtn.addEventListener('click', () => {
-        const email = normalize(els.email.value);
-        const phone = (els.phone.value || '').trim();
-        const business = (els.business.value || '').trim();
-        validateAndContinue(email, phone, business);
+        validateAndContinue();
       });
       els.continueBtn.addEventListener('click', () => {
         const ctx = getAccessContext();
@@ -1067,6 +1139,8 @@
         }
       })();
 
+      bindSupabaseAuthListener();
+      runMagicLinkReturnBurst();
       handleSupabaseReturn();
     })();
   </script>
