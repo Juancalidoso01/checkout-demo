@@ -73,6 +73,13 @@ Si configuras **SMTP** en *Project Settings → Auth*, el mismo HTML se envía p
 
 Tras guardar, usa **Send test** en el dashboard o pide un magic link desde `onboarding-access.html` y revisa el correo en bandeja de entrada y spam.
 
+### Bienvenida agente con credenciales (`bienvenida-agente-PEGA-AQUI.html`)
+
+Correo **no** es plantilla nativa de Supabase Auth: sirve para pegar en Resend/SendGrid, envío manual o tu Edge Function. Incluye credenciales, CTA al login y bullets “qué puedes hacer”.
+
+- Archivo: **[`bienvenida-agente-PEGA-AQUI.html`](./bienvenida-agente-PEGA-AQUI.html)**
+- Guía y marcadores: **[`../correo-bienvenida-agente.md`](../correo-bienvenida-agente.md)**
+
 ### Animaciones (PEGAR-EN-SUPABASE-SOLO-ESTO)
 
 La plantilla incluye un bloque `<style>` con animaciones suaves (entrada de la tarjeta, brillo del banner, pulso del botón, punto verde tipo “estamos listos”) inspiradas en la landing de validación. **Gmail y algunos clientes pueden quitar `<style>`**: el correo se ve igual de cuidado, solo sin movimiento. En **Apple Mail** y otros suelen verse las animaciones.

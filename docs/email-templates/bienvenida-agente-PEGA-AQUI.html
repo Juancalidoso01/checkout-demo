@@ -1,0 +1,123 @@
+<style type="text/css">
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
+  @media screen {
+    .pp-w-card { animation: ppwFadeUp 0.65s ease-out both; }
+    .pp-w-banner { animation: ppwBannerGlow 3.5s ease-in-out infinite; }
+    .pp-w-btn { animation: ppwBtnGlow 2.2s ease-in-out infinite; }
+    .pp-w-dot { animation: ppwDotPulse 1.75s ease-in-out infinite; }
+  }
+  @keyframes ppwFadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ppwBannerGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.06); }
+  }
+  @keyframes ppwBtnGlow {
+    0%, 100% { box-shadow: 0 10px 28px rgba(84, 98, 230, 0.42); }
+    50% { box-shadow: 0 14px 36px rgba(84, 98, 230, 0.55); }
+  }
+  @keyframes ppwDotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
+    50% { opacity: 0.9; transform: scale(1.12); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  }
+</style>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#eef2ff;background-image:radial-gradient(circle at 0% 0%, rgba(97,113,255,0.18) 0%, transparent 42%),radial-gradient(circle at 100% 20%, rgba(59,130,246,0.12) 0%, transparent 38%),linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #f1f5f9 100%);padding:36px 16px;font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" class="pp-w-card" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:580px;background-color:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(15,23,42,0.1),0 0 0 1px rgba(84,98,230,0.08);border:1px solid rgba(148,163,184,0.2);">
+        <tr>
+          <td class="pp-w-banner" style="background-color:#5462e6;background-image:radial-gradient(circle at 15% 20%, rgba(255,255,255,0.22) 0%, transparent 42%),radial-gradient(circle at 88% 80%, rgba(59,130,246,0.45) 0%, transparent 48%),linear-gradient(135deg,#586af4 0%,#5462e6 35%,#4352d4 65%,#3738ab 100%);padding:32px 28px 28px 28px;text-align:center;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 14px auto;">
+              <tr>
+                <td style="border-radius:999px;padding:8px 14px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);">
+                  <span style="font-size:10px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.95);">Punto Pago</span>
+                  <span style="font-size:10px;font-weight:800;color:rgba(255,255,255,0.5);">&nbsp;·&nbsp;</span>
+                  <span style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.88);">Aliados</span>
+                </td>
+              </tr>
+            </table>
+            <h1 style="margin:0;font-family:'Montserrat',-apple-system,sans-serif;font-size:24px;font-weight:800;line-height:1.25;color:#ffffff;letter-spacing:-0.03em;">¡Bienvenido, {{DISPLAY_NAME}}!</h1>
+            <p style="margin:12px 0 0 0;font-size:15px;line-height:1.55;color:rgba(255,255,255,0.92);max-width:440px;margin-left:auto;margin-right:auto;">Tu cuenta de <strong style="color:#fff;">agente</strong> ya está activa. Abajo tienes tus credenciales y un resumen de lo que puedes hacer en el portal.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:26px 28px 20px 28px;background-color:#ffffff;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom:16px;">
+              <tr>
+                <td width="36" valign="top" style="padding-top:4px;">
+                  <span class="pp-w-dot" style="display:inline-block;width:10px;height:10px;border-radius:999px;background:#22c55e;"></span>
+                </td>
+                <td style="font-size:14px;line-height:1.55;color:#64748b;padding-left:4px;">
+                  <strong style="color:#334155;">Acceso listo</strong> — guarda este correo en un lugar seguro o copia tus datos antes de cerrar.
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 18px 0;font-size:16px;line-height:1.65;color:#334155;">Hola <strong style="color:#1e293b;">{{DISPLAY_NAME}}</strong>,</p>
+            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.65;color:#475569;">Gracias por sumarte como aliado <strong style="color:#5462e6;">Punto Pago</strong>. Desde hoy puedes operar con tu comercio y tu equipo desde un solo lugar.</p>
+
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:linear-gradient(135deg,#f0f4ff 0%,#eef2ff 100%);border-radius:16px;border:1px solid rgba(84,98,230,0.22);margin-bottom:22px;">
+              <tr>
+                <td style="padding:18px 20px;">
+                  <p style="margin:0 0 10px 0;font-size:11px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#5462e6;">Tus credenciales de acceso</p>
+                  <p style="margin:0 0 8px 0;font-size:14px;color:#475569;"><strong style="color:#334155;">Usuario</strong></p>
+                  <p style="margin:0 0 14px 0;font-size:15px;font-weight:800;color:#0f172a;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;background:#fff;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">{{PORTAL_USERNAME}}</p>
+                  <p style="margin:0 0 8px 0;font-size:14px;color:#475569;"><strong style="color:#334155;">Contraseña temporal</strong></p>
+                  <p style="margin:0;font-size:15px;font-weight:800;color:#0f172a;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;background:#fff;padding:10px 12px;border-radius:10px;border:1px solid #e2e8f0;">{{PORTAL_PASSWORD}}</p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 20px 0;font-size:12px;line-height:1.5;color:#64748b;padding:12px 14px;background:#fffbeb;border-radius:12px;border:1px solid #fde68a;"><strong style="color:#92400e;">Seguridad:</strong> no reenvíes este correo. Te recomendamos cambiar la contraseña en cuanto entres al portal (o usar solo canales seguros si compartes el acceso con tu equipo).</p>
+
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:8px auto 26px auto;">
+              <tr>
+                <td class="pp-w-btn" style="border-radius:999px;background:linear-gradient(135deg,#586af4,#4454db);box-shadow:0 10px 28px rgba(84,98,230,0.42);">
+                  <a href="{{LOGIN_URL}}" target="_blank" rel="noopener" style="display:inline-block;padding:16px 40px;font-family:'Montserrat',-apple-system,sans-serif;font-size:15px;font-weight:800;color:#ffffff;text-decoration:none;border-radius:999px;letter-spacing:0.02em;">Entrar al portal de agentes →</a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 12px 0;font-size:13px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;">Qué puedes hacer como agente</p>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:8px;">
+              <tr>
+                <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
+                  <p style="margin:0;font-size:15px;font-weight:800;color:#334155;">Operar tu comercio</p>
+                  <p style="margin:4px 0 0 0;font-size:14px;line-height:1.5;color:#64748b;">Gestionar recargas, cobros y el día a día desde el <strong>portal de agentes</strong> pensado para Punto Pago.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
+                  <p style="margin:0;font-size:15px;font-weight:800;color:#334155;">Liquidez y movimientos</p>
+                  <p style="margin:4px 0 0 0;font-size:14px;line-height:1.5;color:#64748b;">Consultar flujos de efectivo, retiros y herramientas de <strong>cashout</strong> según lo habilitado para tu cuenta.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
+                  <p style="margin:0;font-size:15px;font-weight:800;color:#334155;">Tu equipo</p>
+                  <p style="margin:4px 0 0 0;font-size:14px;line-height:1.5;color:#64748b;">Dar de alta y administrar <strong>empleados</strong> vinculados a tu agente para repartir tareas con control.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;">
+                  <p style="margin:0;font-size:15px;font-weight:800;color:#334155;">Crecer con Punto Pago</p>
+                  <p style="margin:4px 0 0 0;font-size:14px;line-height:1.5;color:#64748b;">Centralizar operación, ofrecer mejor servicio a tus clientes y escalar con el ecosistema de productos que ya conoces.</p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:18px 0 0 0;font-size:12px;line-height:1.5;color:#94a3b8;">Acceso directo al inicio del portal (después de iniciar sesión):<br><a href="{{PORTAL_HOME_URL}}" style="color:#5462e6;font-weight:700;word-break:break-all;">{{PORTAL_HOME_URL}}</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:18px 28px 26px 28px;border-top:1px solid #f1f5f9;background:linear-gradient(180deg,#ffffff,#fafbff);">
+            <p style="margin:0;font-size:11px;line-height:1.55;color:#94a3b8;text-align:center;">Equipo <strong style="color:#64748b;">Punto Pago</strong> · Aliados<br><span style="color:#cbd5e1;">¿Necesitas ayuda? Responde a este correo o contacta a quien te dio de alta.</span></p>
+          </td>
+        </tr>
+      </table>
+      <p style="margin:22px 0 0 0;font-size:11px;color:#94a3b8;text-align:center;max-width:580px;line-height:1.45;">Este mensaje contiene información confidencial. Si lo recibiste por error, elimínalo y avísanos.</p>
+    </td>
+  </tr>
+</table>
