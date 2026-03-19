@@ -1,44 +1,89 @@
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f1f5f9;padding:32px 16px;">
+<style type="text/css">
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
+  @media screen {
+    .pp-e-card { animation: ppFadeUp 0.65s ease-out both; }
+    .pp-e-banner { animation: ppBannerGlow 3.5s ease-in-out infinite; }
+    .pp-e-btn-cell { animation: ppBtnGlow 2.2s ease-in-out infinite; }
+    .pp-e-dot { animation: ppDotPulse 1.75s ease-in-out infinite; }
+  }
+  @keyframes ppFadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ppBannerGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.06); }
+  }
+  @keyframes ppBtnGlow {
+    0%, 100% { box-shadow: 0 10px 28px rgba(84, 98, 230, 0.42); }
+    50% { box-shadow: 0 14px 36px rgba(84, 98, 230, 0.55); }
+  }
+  @keyframes ppDotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
+    50% { opacity: 0.9; transform: scale(1.12); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  }
+</style>
+<table role="presentation" class="pp-e-root" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#eef2ff;background-image:radial-gradient(circle at 0% 0%, rgba(97,113,255,0.18) 0%, transparent 42%),radial-gradient(circle at 100% 20%, rgba(59,130,246,0.12) 0%, transparent 38%),linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #f1f5f9 100%);padding:36px 16px;font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <tr>
     <td align="center">
-      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;background-color:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 12px 40px rgba(15,23,42,.08);border:1px solid #e2e8f0;">
+      <table role="presentation" class="pp-e-card" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:580px;background-color:#ffffff;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(15,23,42,0.1),0 0 0 1px rgba(84,98,230,0.08);border:1px solid rgba(148,163,184,0.2);">
         <tr>
-          <td style="background:linear-gradient(135deg,#5462e6 0%,#4352d4 45%,#3738ab 100%);padding:28px 32px;text-align:center;">
-            <p style="margin:0 0 8px 0;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85);">Punto Pago</p>
-            <h1 style="margin:0;font-size:22px;font-weight:800;line-height:1.3;color:#ffffff;">Confirma tu correo para seguir</h1>
-            <p style="margin:12px 0 0 0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.92);">Estás a un paso de continuar con el registro de tu comercio como aliado.</p>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:32px 32px 24px 32px;">
-            <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:#334155;">Hola,</p>
-            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#334155;">Gracias por confiar en <strong style="color:#1e293b;">Punto Pago</strong>. Para proteger tu cuenta y poder avanzar con el onboarding de tu negocio, necesitamos confirmar que este correo es tuyo.</p>
-            <p style="margin:0 0 28px 0;font-size:15px;line-height:1.6;color:#64748b;">Haz clic en el botón de abajo. El enlace caduca por seguridad; si expira, puedes solicitar uno nuevo desde la misma pantalla donde empezaste.</p>
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 28px auto;">
+          <td class="pp-e-banner" style="background-color:#5462e6;background-image:radial-gradient(circle at 15% 20%, rgba(255,255,255,0.22) 0%, transparent 42%),radial-gradient(circle at 88% 80%, rgba(59,130,246,0.45) 0%, transparent 48%),linear-gradient(135deg,#586af4 0%,#5462e6 35%,#4352d4 65%,#3738ab 100%);padding:32px 28px 30px 28px;text-align:center;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 16px auto;">
               <tr>
-                <td style="border-radius:14px;background:linear-gradient(135deg,#5462e6,#4352d4);box-shadow:0 4px 14px rgba(84,98,230,.35);">
-                  <a href="{{ .ConfirmationURL }}" target="_blank" rel="noopener" style="display:inline-block;padding:16px 36px;font-size:16px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:14px;">Confirmar mi correo y continuar</a>
+                <td style="border-radius:999px;padding:8px 14px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.28);">
+                  <span style="font-size:10px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.95);">Punto Pago</span>
+                  <span style="font-size:10px;font-weight:800;color:rgba(255,255,255,0.5);">&nbsp;·&nbsp;</span>
+                  <span style="font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.88);">Validación</span>
                 </td>
               </tr>
             </table>
-            <p style="margin:0 0 8px 0;font-size:13px;line-height:1.5;color:#94a3b8;">Si el botón no funciona, copia y pega este enlace en tu navegador:</p>
-            <p style="margin:0 0 24px 0;font-size:12px;line-height:1.5;color:#5462e6;word-break:break-all;">{{ .ConfirmationURL }}</p>
-            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+            <h1 style="margin:0;font-family:'Montserrat',-apple-system,sans-serif;font-size:24px;font-weight:800;line-height:1.25;color:#ffffff;letter-spacing:-0.03em;">Confirma tu correo<br><span style="font-size:17px;font-weight:700;opacity:0.95;">y sigue con tu registro</span></h1>
+            <p style="margin:14px 0 0 0;font-size:15px;line-height:1.55;color:rgba(255,255,255,0.92);max-width:420px;margin-left:auto;margin-right:auto;">Un paso más para proteger tu cuenta y continuar el <strong style="color:#fff;font-weight:800;">onboarding</strong> de tu comercio como aliado.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:8px 0 0 0;background:linear-gradient(180deg,rgba(84,98,230,0.06),rgba(255,255,255,0));height:8px;"></td>
+        </tr>
+        <tr>
+          <td style="padding:28px 28px 22px 28px;background-color:#ffffff;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom:18px;">
+              <tr>
+                <td width="36" valign="top" style="padding-top:4px;">
+                  <span class="pp-e-dot" style="display:inline-block;width:10px;height:10px;border-radius:999px;background:#22c55e;"></span>
+                </td>
+                <td style="font-size:14px;line-height:1.55;color:#64748b;padding-left:4px;">
+                  <strong style="color:#334155;">Casi listo</strong> — solo necesitamos verificar que este correo es tuyo antes de abrir el formulario.
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 14px 0;font-size:16px;line-height:1.6;color:#334155;">Hola,</p>
+            <p style="margin:0 0 16px 0;font-size:16px;line-height:1.65;color:#475569;">Gracias por confiar en <strong style="color:#5462e6;font-weight:800;">Punto Pago</strong>. Toca el botón para confirmar; el enlace vence por seguridad y siempre puedes pedir uno nuevo en la misma pantalla.</p>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:26px auto 28px auto;">
+              <tr>
+                <td class="pp-e-btn-cell" style="border-radius:999px;background:linear-gradient(135deg,#586af4,#4454db);box-shadow:0 10px 28px rgba(84,98,230,0.42);">
+                  <a href="{{ .ConfirmationURL }}" target="_blank" rel="noopener" style="display:inline-block;padding:16px 40px;font-family:'Montserrat',-apple-system,sans-serif;font-size:15px;font-weight:800;color:#ffffff;text-decoration:none;border-radius:999px;letter-spacing:0.02em;">Confirmar correo y continuar →</a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 6px 0;font-size:12px;line-height:1.5;color:#94a3b8;">Si el botón no responde, copia este enlace en el navegador:</p>
+            <p style="margin:0 0 22px 0;font-size:11px;line-height:1.45;color:#5462e6;word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">{{ .ConfirmationURL }}</p>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);border-radius:16px;border:1px solid #e2e8f0;">
               <tr>
                 <td style="padding:16px 18px;">
-                  <p style="margin:0;font-size:13px;line-height:1.55;color:#64748b;"><strong style="color:#475569;">¿No solicitaste este mensaje?</strong><br>Puedes ignorar este correo con tranquilidad. No se hará ningún cambio en tu cuenta.</p>
+                  <p style="margin:0;font-size:13px;line-height:1.55;color:#64748b;"><strong style="color:#475569;">¿No pediste este correo?</strong><br>Ignóralo con tranquilidad; no haremos ningún cambio.</p>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
         <tr>
-          <td style="padding:20px 32px 28px 32px;border-top:1px solid #f1f5f9;">
-            <p style="margin:0;font-size:12px;line-height:1.5;color:#94a3b8;text-align:center;">Este mensaje lo envía <strong style="color:#64748b;">Punto Pago</strong> de forma automática y segura.<br>Correo asociado al proceso: {{ .Email }}</p>
+          <td style="padding:18px 28px 26px 28px;border-top:1px solid #f1f5f9;background:linear-gradient(180deg,#ffffff,#fafbff);">
+            <p style="margin:0;font-size:11px;line-height:1.55;color:#94a3b8;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">Mensaje automático de <strong style="color:#64748b;">Punto Pago</strong><br><span style="color:#cbd5e1;">{{ .Email }}</span></p>
           </td>
         </tr>
       </table>
-      <p style="margin:20px 0 0 0;font-size:11px;color:#94a3b8;text-align:center;max-width:560px;">Si tienes dudas, contacta al equipo que te acompaña en la afiliación.</p>
+      <p style="margin:22px 0 0 0;font-size:11px;color:#94a3b8;text-align:center;max-width:580px;line-height:1.45;">¿Dudas? Escribe al equipo que te acompaña en la afiliación.</p>
     </td>
   </tr>
 </table>
