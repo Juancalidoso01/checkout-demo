@@ -416,7 +416,7 @@
       const allowed = Array.isArray(role) ? role : [role];
       if (allowed.indexOf(session.role) < 0){
         // If user lacks permissions, bounce to their appropriate home
-        if (session.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
+        if (session.role === 'superadmin') location.href = buildAppUrl('pp-admin-entry.html');
         else location.href = buildAppUrl('agents/recharge.html');
         return null;
       }
@@ -439,7 +439,7 @@
         return;
       } catch(e) {}
     }
-    if (s?.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
+    if (s?.role === 'superadmin') location.href = buildAppUrl('pp-admin-entry.html');
     else location.href = buildAppUrl('agents/recharge.html');
   }
 

@@ -4,8 +4,9 @@
 
 No es una plantilla que venga lista en **Supabase Auth** como el magic link. El correo de **bienvenida con usuario y contraseña** lo debes enviar tú, por ejemplo:
 
-- **Manual**: copias la plantilla, reemplazas los marcadores y lo envías desde tu correo (solo pruebas).
-- **Automático (recomendado en serio)**: una **Edge Function** o servicio (Resend, SendGrid, etc.) que, al aprobar al aliado, arme el HTML y envíe el mensaje.
+- **Gratis, sin APIs** (ya en el admin): al aprobar en `pp-admin-entry.html` aparece un aviso con **Copiar mensaje** y **Borrador de correo**. El segundo abre tu cliente de correo (Gmail, Outlook, Apple Mail…) con el **Para**, **Asunto** y **cuerpo** ya armados; solo pulsas Enviar. No pagas nada ni necesitas Resend/SendGrid.
+- **Manual con HTML**: copias la plantilla, reemplazas los marcadores y lo envías desde tu correo (solo pruebas).
+- **Automático (recomendado en serio a escala)**: una **Edge Function** o servicio (Resend, SendGrid, etc.) que, al aprobar al aliado, arme el HTML y envíe el mensaje. Muchos tienen **capa gratuita** con límite mensual si más adelante quieres que salga sin abrir tu correo.
 
 En el repo tienes el HTML listo en:
 
@@ -48,6 +49,6 @@ html = html
 
 ## Relación con lo que ya tienes en el demo
 
-En `pp-admin-entry.html`, al aprobar, el sistema puede generar usuario/contraseña demo (`ensureAgentUserFromApproval`). Ese flujo **no envía** este HTML automáticamente hoy: habría que **llamar a tu función de correo** pasando `username` y `password` que ya calculas ahí.
+En `pp-admin-entry.html`, al aprobar, el sistema genera usuario/contraseña demo (`ensureAgentUserFromApproval`) y muestra el aviso para **copiar** o abrir **borrador de correo** (`mailto:`). Eso **no** envía el HTML bonito de `bienvenida-agente-PEGA-AQUI.html` solo: si quieres ese diseño automático, habría que **llamar a tu función de correo** pasando `username` y `password`.
 
-Si quieres el siguiente paso en código (Edge Function `send-agent-welcome` + Resend), se puede añadir en otro cambio.
+Si quieres el siguiente paso en código (Edge Function `send-agent-welcome` + Resend u otro), se puede añadir en otro cambio.

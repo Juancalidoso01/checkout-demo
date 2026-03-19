@@ -122,7 +122,7 @@
       // Superadmin can view team page but it doesn't make sense without an agent context
       // We'll treat superadmin as read-only unless they impersonate; for now require an agentId.
       if (!session.agentId){
-        location.href = '../admin/index.html';
+        location.href = '../pp-admin-entry.html';
         return;
       }
 

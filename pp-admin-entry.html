@@ -114,6 +114,24 @@
     </div>
 
     <div id="portalView" class="cred-shell hidden-by-state">
+      <div id="postApproveCredToast" class="hidden-by-state z-50 mx-auto mb-4 max-w-3xl rounded-[20px] border border-emerald-200 bg-emerald-50/95 px-4 py-3 text-sm text-slate-800 shadow-lg backdrop-blur-sm" role="status" aria-live="polite">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div class="space-y-2 min-w-0">
+            <p class="font-extrabold text-emerald-900">Credenciales del portal listas</p>
+            <p class="text-slate-700">Envíalas al aliado. <strong>Sin costo:</strong> usa <strong>Copiar</strong> o <strong>Borrador de correo</strong> (se abre tu Gmail/Outlook con el mensaje armado).</p>
+            <div class="rounded-xl bg-white/80 px-3 py-2 font-mono text-xs break-all space-y-1 border border-emerald-100">
+              <div><span class="text-slate-500">Para:</span> <span id="postApproveCredTo"></span></div>
+              <div><span class="text-slate-500">Usuario:</span> <code id="postApproveCredUser" class="text-slate-900"></code></div>
+              <div><span class="text-slate-500">Contraseña:</span> <code id="postApproveCredPass" class="text-slate-900"></code></div>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 shrink-0 sm:flex-col sm:items-stretch">
+            <button type="button" id="postApproveCopyCreds" class="pp-btn pp-btn-secondary text-sm py-2 px-3 rounded-[14px]">Copiar mensaje</button>
+            <a id="postApproveMailto" href="#" class="pp-btn pp-btn-primary text-sm py-2 px-3 rounded-[14px] text-center no-underline">Borrador de correo</a>
+            <button type="button" id="postApproveCredDismiss" class="pp-btn pp-btn-secondary text-sm py-2 px-3 rounded-[14px]">Cerrar aviso</button>
+          </div>
+        </div>
+      </div>
       <div class="portal-stack">
         <section class="pp-card -soft overflow-hidden">
           <div class="pp-card-body space-y-5">
@@ -466,6 +484,13 @@
         approveBtn: document.getElementById('approveBtn'),
         rejectBtn: document.getElementById('rejectBtn'),
         reviewMsg: document.getElementById('reviewMsg'),
+        postApproveCredToast: document.getElementById('postApproveCredToast'),
+        postApproveCredTo: document.getElementById('postApproveCredTo'),
+        postApproveCredUser: document.getElementById('postApproveCredUser'),
+        postApproveCredPass: document.getElementById('postApproveCredPass'),
+        postApproveCopyCreds: document.getElementById('postApproveCopyCreds'),
+        postApproveMailto: document.getElementById('postApproveMailto'),
+        postApproveCredDismiss: document.getElementById('postApproveCredDismiss'),
         merchantSummary: document.getElementById('merchantSummary'),
         merchantsTable: document.getElementById('merchantsTable'),
         refreshBandejasBtn: document.getElementById('refreshBandejasBtn'),
@@ -484,6 +509,7 @@
       }
 
       function showLogin(){
+        hidePostApproveCredToast();
         if (applicationsRefreshTimer) {
           clearInterval(applicationsRefreshTimer);
           applicationsRefreshTimer = null;
@@ -559,6 +585,44 @@
       function setReviewMsg(text, isError){
         els.reviewMsg.textContent = text || '';
         els.reviewMsg.className = 'text-sm min-h-[20px] ' + (isError ? 'text-red-600' : 'text-slate-600');
+      }
+      let postApproveCredDraft = { plain: '', mailtoHref: '' };
+      function hidePostApproveCredToast(){
+        if (!els.postApproveCredToast) return;
+        els.postApproveCredToast.classList.add('hidden-by-state');
+        postApproveCredDraft = { plain: '', mailtoHref: '' };
+      }
+      function showPostApproveCredToast(payload){
+        if (!els.postApproveCredToast || !payload) return;
+        const inviteEmail = (payload.inviteEmail || '').trim();
+        const displayName = (payload.displayName || '').trim() || 'Aliado';
+        const username = (payload.username || '').trim();
+        const password = (payload.password || '').trim();
+        const loginUrl = appUrl('login.html');
+        const subject = 'Tu acceso al portal Punto Pago — credenciales';
+        const plain = [
+          `Hola ${displayName},`,
+          '',
+          'Tu solicitud fue aprobada. Credenciales para entrar al portal:',
+          '',
+          `Usuario: ${username}`,
+          `Contraseña: ${password}`,
+          '',
+          `Enlace de acceso: ${loginUrl}`,
+          '',
+          'Saludos,',
+          'Equipo Punto Pago'
+        ].join('\n');
+        const mailtoHref = `mailto:${inviteEmail.replace(/"/g, '')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(plain)}`;
+        postApproveCredDraft = { plain: plain, mailtoHref: mailtoHref };
+        els.postApproveCredTo.textContent = inviteEmail;
+        els.postApproveCredUser.textContent = username;
+        els.postApproveCredPass.textContent = password;
+        els.postApproveMailto.setAttribute('href', mailtoHref);
+        els.postApproveCredToast.classList.remove('hidden-by-state');
+        try {
+          els.postApproveCredToast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (e) { /* ignore */ }
       }
       function setMsg(text, isError){
         els.formMsg.textContent = text || '';
@@ -1047,6 +1111,7 @@
         }
 
         let portalCredSuffix = '';
+        let portalCredForToast = null;
         if (window.PPAuth.ensureAgentUserFromApproval) {
           const cred = window.PPAuth.ensureAgentUserFromApproval({
             inviteEmail: inviteEmail,
@@ -1054,6 +1119,12 @@
             applicationId: item.id
           });
           if (cred.ok) {
+            portalCredForToast = {
+              inviteEmail: inviteEmail,
+              displayName: resolvedDisplayName,
+              username: cred.username,
+              password: cred.password
+            };
             portalCredSuffix = ` Credenciales registradas en el listado del portal: usuario «${cred.username}», contraseña «${cred.password}».`;
             try {
               const fresh = await window.PPApplications.getApplication(item.id);
@@ -1079,6 +1150,11 @@
           ? 'Solicitud aprobada e invitación enviada por correo (Supabase Auth).'
           : 'Solicitud aprobada en Supabase. La invitación por correo puede estar pendiente si la Edge Function no está desplegada.';
         setReviewMsg(baseReviewMsg + portalCredSuffix, false);
+        if (portalCredForToast) {
+          showPostApproveCredToast(portalCredForToast);
+        } else {
+          hidePostApproveCredToast();
+        }
       }
 
       async function rejectSelected(){
@@ -1288,6 +1364,22 @@
       els.seedBtn.addEventListener('click', seedExample);
       els.approveBtn.addEventListener('click', approveSelected);
       els.rejectBtn.addEventListener('click', rejectSelected);
+      if (els.postApproveCopyCreds) {
+        els.postApproveCopyCreds.addEventListener('click', async function(){
+          if (!postApproveCredDraft.plain) return;
+          try {
+            await navigator.clipboard.writeText(postApproveCredDraft.plain);
+            const prev = els.postApproveCopyCreds.textContent;
+            els.postApproveCopyCreds.textContent = '¡Copiado!';
+            setTimeout(function(){ els.postApproveCopyCreds.textContent = prev; }, 2200);
+          } catch (err) {
+            alert('No se pudo copiar al portapapeles. Usa «Borrador de correo» o copia el texto manualmente.');
+          }
+        });
+      }
+      if (els.postApproveCredDismiss) {
+        els.postApproveCredDismiss.addEventListener('click', hidePostApproveCredToast);
+      }
       els.logoutBtn.addEventListener('click', function(){
         window.PPAuth.signOut();
         showLogin();
