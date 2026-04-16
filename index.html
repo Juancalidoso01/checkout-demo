@@ -228,7 +228,7 @@
       position: relative;
       z-index: 4;
       margin-bottom: 10px;
-      padding: 10px 12px 12px;
+      padding: 12px 14px 14px;
       border-radius: 18px;
       background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
       border: 1px solid rgba(226, 232, 240, 0.95);
@@ -236,6 +236,27 @@
         0 1px 0 rgba(255, 255, 255, 0.9) inset,
         0 10px 32px rgba(15, 23, 42, 0.06);
       animation: pp-fade-up 0.6s ease backwards;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      .pp-fase-head--with-aside {
+        grid-template-columns: minmax(0, 1.12fr) minmax(240px, 0.88fr);
+        gap: 14px 22px;
+      }
+    }
+    .pp-fase-head-main {
+      min-width: 0;
+    }
+    .pp-fase-head-aside {
+      min-width: 0;
+    }
+    @media (max-width: 767px) {
+      .pp-fase-head-aside {
+        width: 100%;
+      }
     }
     .pp-fase:nth-child(2) .pp-fase-head { animation-delay: 0.1s; }
     .pp-fase:nth-child(3) .pp-fase-head { animation-delay: 0.2s; }
@@ -260,7 +281,7 @@
       justify-content: center;
       font-size: 0.65rem;
     }
-    .pp-fase-head h3 {
+    .pp-fase-head-main h3 {
       margin: 0 0 4px;
       font-size: 1.05rem;
       font-weight: 800;
@@ -329,18 +350,45 @@
       align-items: stretch;
       gap: 10px;
     }
-    .pp-fase-head p {
+    .pp-fase-head-main p {
       margin: 0;
       font-size: 0.84rem;
       color: #64748b;
-      line-height: 1.45;
-      max-width: 52ch;
+      line-height: 1.5;
+      max-width: none;
     }
     .pp-fase-int {
       margin-top: 12px;
       padding-top: 12px;
       border-top: 1px dashed rgba(84, 98, 230, 0.2);
       max-width: min(56ch, 100%);
+    }
+    .pp-fase-head-aside .pp-fase-int {
+      margin-top: 0;
+      padding: 12px 12px 12px;
+      border-top: none;
+      max-width: none;
+      border-radius: 14px;
+      background: rgba(84, 98, 230, 0.06);
+      border: 1px solid rgba(84, 98, 230, 0.14);
+    }
+    .pp-fase[data-fase-index='1'] .pp-fase-head-aside .pp-fase-int {
+      background: rgba(124, 58, 237, 0.06);
+      border-color: rgba(124, 58, 237, 0.16);
+    }
+    .pp-fase[data-fase-index='2'] .pp-fase-head-aside .pp-fase-int {
+      background: rgba(13, 148, 136, 0.07);
+      border-color: rgba(13, 148, 136, 0.2);
+    }
+    .pp-fase-head-aside .pp-fase-int-chips {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .pp-fase-head-aside .pp-fase-int-chip {
+      width: 100%;
+      box-sizing: border-box;
+      justify-content: flex-start;
     }
     .pp-fase-int-kicker {
       display: flex;
@@ -780,24 +828,30 @@
         var journey = fase.journeyLabel
           ? '<div class="pp-fase-journey">' + esc(fase.journeyLabel) + '</div>'
           : '';
+        var intHtml = buildIntegracionesRow(fi);
+        var headCls = 'pp-fase-head' + (intHtml ? ' pp-fase-head--with-aside' : '');
         htmlFases +=
           '<div class="pp-fase" data-fase-index="' +
           fi +
           '">' +
-            '<div class="pp-fase-head">' +
-              '<div class="pp-fase-badge"><i class="fas ' +
-              esc(headIc) +
-              '"></i> Fase ' +
-              (fi + 1) +
+            '<div class="' +
+            headCls +
+            '">' +
+              '<div class="pp-fase-head-main">' +
+                '<div class="pp-fase-badge"><i class="fas ' +
+                esc(headIc) +
+                '"></i> Fase ' +
+                (fi + 1) +
+                '</div>' +
+                '<h3>' +
+                esc(tit) +
+                '</h3>' +
+                journey +
+                '<p>' +
+                esc(sub) +
+                '</p>' +
               '</div>' +
-              '<h3>' +
-              esc(tit) +
-              '</h3>' +
-              journey +
-              '<p>' +
-              esc(sub) +
-              '</p>' +
-              buildIntegracionesRow(fi) +
+              (intHtml ? '<div class="pp-fase-head-aside">' + intHtml + '</div>' : '') +
             '</div>' +
             '<div class="pp-fase-nodes">';
         var subCfg = null;
