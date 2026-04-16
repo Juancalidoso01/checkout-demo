@@ -3,299 +3,430 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0047bb">
-  <title>Prototipo Punto Pago — Flujo del proceso</title>
+  <meta name="theme-color" content="#5462e6">
+  <title>Punto Pago — Mapa del proceso (demo)</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
+    .pp-landing {
       min-height: 100vh;
-      background: #eef2ff;
-      font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
-      color: var(--pp-text, #171717);
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #f4f6ff 0%, #ffffff 32%, #f6f6f6 100%);
+      font-family: var(--pp-font);
+      color: var(--pp-text);
+      -webkit-font-smoothing: antialiased;
     }
-    .pp-home-hero {
-      background: linear-gradient(135deg, #1e3a8a 0%, var(--pp-primary, #0047bb) 45%, #0c4a6e 100%);
+    .pp-landing-nav {
+      background: linear-gradient(135deg, var(--pp-primary) 0%, var(--pp-primary-900) 100%);
       color: #fff;
-      padding: 32px 18px 36px;
-      position: relative;
-      overflow: hidden;
+      padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 14px;
+      box-shadow: 0 8px 32px rgba(84, 98, 230, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 40;
     }
-    .pp-home-hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 1;
-      pointer-events: none;
-    }
-    .pp-home-hero-inner {
-      max-width: 1100px;
+    .pp-landing-nav-inner {
+      max-width: 1120px;
       margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .pp-landing-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .pp-landing-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      animation: pp-float 4s ease-in-out infinite;
+    }
+    @keyframes pp-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .pp-landing-brand h1 {
+      margin: 0;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .pp-landing-brand span {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.82;
+      margin-top: 2px;
+    }
+    .pp-landing-nav a.pp-landing-link {
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .pp-landing-nav a.pp-landing-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+    .pp-landing-hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 8px;
+      text-align: center;
+    }
+    .pp-landing-hero h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      animation: pp-fade-up 0.7s ease forwards;
+    }
+    .pp-landing-hero p {
+      margin: 0 auto;
+      max-width: 36rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #64748b;
+      animation: pp-fade-up 0.75s ease 0.08s forwards;
+      opacity: 0;
+    }
+    @keyframes pp-fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pp-map-section {
+      flex: 1;
+      max-width: 1160px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 12px 16px 48px;
+    }
+    .pp-map-wrap {
+      position: relative;
+      padding: 8px 0 24px;
+    }
+    .pp-map-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+    .pp-map-svg path.pp-map-line {
+      fill: none;
+      stroke: url(#pp-line-grad);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 2px 6px rgba(84, 98, 230, 0.25));
+      animation: pp-draw-line 1.15s ease forwards;
+    }
+    @keyframes pp-draw-line {
+      to { stroke-dashoffset: 0; }
+    }
+    .pp-fase {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 36px;
+    }
+    .pp-fase:last-of-type {
+      margin-bottom: 12px;
+    }
+    .pp-fase-head {
+      margin-bottom: 16px;
+      padding-left: 4px;
+      animation: pp-fade-up 0.6s ease backwards;
+    }
+    .pp-fase:nth-child(2) .pp-fase-head { animation-delay: 0.1s; }
+    .pp-fase:nth-child(3) .pp-fase-head { animation-delay: 0.2s; }
+    .pp-fase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--pp-primary);
+      margin-bottom: 6px;
+    }
+    .pp-fase-badge i {
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      background: rgba(84, 98, 230, 0.12);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+    }
+    .pp-fase-head h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+    }
+    .pp-fase-head p {
+      margin: 0;
+      font-size: 0.84rem;
+      color: #64748b;
+      line-height: 1.45;
+      max-width: 52ch;
+    }
+    .pp-fase-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
+      gap: 14px;
       position: relative;
       z-index: 1;
     }
-    .pp-home-kicker {
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      opacity: 0.9;
-      margin-bottom: 8px;
-    }
-    .pp-home-hero h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.25rem, 4vw, 1.65rem);
-      font-weight: 800;
-      line-height: 1.25;
-    }
-    .pp-home-hero p {
-      margin: 0;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      opacity: 0.93;
-      max-width: 40rem;
-    }
-    .pp-home-actions {
-      margin-top: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .pp-home-actions a {
-      text-decoration: none;
-      font-size: 0.85rem;
-    }
-    .pp-flow-wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 16px 48px;
-    }
-    .pp-flow-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-      border: 1px solid rgba(0, 71, 187, 0.1);
-      padding: 22px 18px 28px;
-    }
-    .pp-flow-title {
-      margin: 0 0 6px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #0f172a;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .pp-flow-title i {
-      color: var(--pp-primary, #0047bb);
-    }
-    .pp-flow-sub {
-      margin: 0 0 20px;
-      font-size: 0.8rem;
-      color: #64748b;
-      line-height: 1.45;
-    }
-    .pp-flow-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: stretch;
-      justify-content: center;
-      gap: 6px 4px;
-    }
-    .pp-flow-node {
-      flex: 1 1 120px;
-      max-width: 200px;
-      min-width: 108px;
+    .pp-map-node {
+      flex: 1 1 140px;
+      max-width: 220px;
+      min-width: 132px;
       display: flex;
       flex-direction: column;
       text-decoration: none;
       color: inherit;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-      border: 2px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 14px 12px 12px;
-      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+      background: var(--pp-bg);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: var(--pp-radius-md);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+      padding: 16px 14px 14px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       position: relative;
+      overflow: hidden;
+      animation: pp-node-in 0.55s ease backwards;
+      cursor: pointer;
     }
-    .pp-flow-node:hover {
-      border-color: rgba(0, 71, 187, 0.45);
-      box-shadow: 0 8px 28px rgba(0, 71, 187, 0.15);
-      transform: translateY(-2px);
-    }
-    .pp-flow-node:focus-visible {
-      outline: 3px solid rgba(0, 71, 187, 0.45);
-      outline-offset: 2px;
-    }
-    .pp-flow-step {
+    .pp-map-node::before {
+      content: '';
       position: absolute;
-      top: -10px;
-      left: 10px;
-      background: linear-gradient(135deg, #0047bb, #2563eb);
-      color: #fff;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 999px;
-      box-shadow: 0 2px 8px rgba(0, 71, 187, 0.35);
+      inset: 0;
+      background: linear-gradient(135deg, rgba(84, 98, 230, 0.06), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
-    .pp-flow-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: rgba(0, 71, 187, 0.08);
-      color: #0047bb;
+    .pp-map-node:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 44px rgba(84, 98, 230, 0.18);
+      border-color: rgba(84, 98, 230, 0.35);
+    }
+    .pp-map-node:hover::before {
+      opacity: 1;
+    }
+    .pp-map-node:focus-visible {
+      outline: 3px solid rgba(84, 98, 230, 0.45);
+      outline-offset: 3px;
+    }
+    @keyframes pp-node-in {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .pp-map-step {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: var(--pp-primary);
+      opacity: 0.85;
+      letter-spacing: 0.04em;
+    }
+    .pp-map-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(84, 98, 230, 0.1);
+      color: var(--pp-primary);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.1rem;
-      margin: 6px auto 10px;
+      margin-bottom: 10px;
     }
-    .pp-flow-name {
+    .pp-map-title {
       font-weight: 800;
-      font-size: 0.82rem;
+      font-size: 0.88rem;
       line-height: 1.3;
-      text-align: center;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
       color: #0f172a;
     }
-    .pp-flow-hint {
-      margin-top: 8px;
-      font-size: 0.65rem;
-      color: #94a3b8;
-      line-height: 1.35;
-      text-align: center;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .pp-flow-arrow-h {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #94a3b8;
-      font-size: 0.85rem;
-      padding: 0 2px;
-      flex: 0 0 auto;
-    }
-    .pp-flow-arrow-h i {
-      opacity: 0.85;
-    }
-    .pp-flow-v {
-      display: flex;
-      justify-content: center;
-      padding: 10px 0 14px;
-      color: #94a3b8;
-      font-size: 1.1rem;
-    }
-    .pp-flow-v span {
-      background: #f1f5f9;
-      border-radius: 999px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px dashed #cbd5e1;
-    }
-    .pp-flow-extras {
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px dashed #e2e8f0;
-    }
-    .pp-flow-extras > p {
-      margin: 0 0 10px;
-      font-size: 0.78rem;
+    .pp-map-cta {
+      margin-top: auto;
+      padding-top: 10px;
+      font-size: 0.72rem;
       font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .pp-flow-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-    .pp-flow-pill {
+      color: var(--pp-primary);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 14px;
+    }
+    .pp-extras {
+      margin-top: 8px;
+      padding: 22px 20px;
+      border-radius: var(--pp-radius-md);
+      background: rgba(84, 98, 230, 0.05);
+      border: 1px dashed rgba(84, 98, 230, 0.22);
+      position: relative;
+      z-index: 1;
+    }
+    .pp-extras h4 {
+      margin: 0 0 12px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #64748b;
+      text-align: center;
+    }
+    .pp-extras-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .pp-extras a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
       border-radius: 999px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.06);
       font-size: 0.8rem;
       font-weight: 700;
-      color: #334155;
+      color: var(--pp-text);
       text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      transition: transform 0.15s, box-shadow 0.15s;
     }
-    .pp-flow-pill:hover {
-      background: #e0e7ff;
-      border-color: #a5b4fc;
-      color: #1e1b4b;
+    .pp-extras a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(84, 98, 230, 0.15);
+      color: var(--pp-primary);
     }
-    .pp-flow-pill i {
-      font-size: 0.85em;
-      color: #0047bb;
+    .pp-extras a i {
+      color: var(--pp-primary);
       opacity: 0.9;
     }
-    .pp-footer {
+    .pp-landing-foot {
       text-align: center;
-      padding: 8px 16px 32px;
+      padding: 8px 16px 28px;
       font-size: 0.75rem;
       color: #94a3b8;
     }
-    .pp-footer a {
-      color: #0047bb;
+    .pp-landing-foot a {
+      color: var(--pp-primary);
       font-weight: 600;
     }
     #pp-home-fallback {
-      margin: 20px 16px;
+      margin: 24px;
     }
     @media (max-width: 640px) {
-      .pp-flow-row {
-        flex-direction: column;
-        align-items: center;
-      }
-      .pp-flow-node {
+      .pp-map-node {
         max-width: 100%;
-        width: 100%;
       }
-      .pp-flow-arrow-h {
-        transform: rotate(90deg);
-        padding: 4px 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pp-map-line,
+      .pp-map-node,
+      .pp-landing-hero h2,
+      .pp-landing-hero p,
+      .pp-fase-head {
+        animation: none !important;
+        opacity: 1 !important;
+      }
+      .pp-map-line {
+        stroke-dashoffset: 0 !important;
+        stroke-dasharray: none !important;
+      }
+      .pp-landing-logo {
+        animation: none !important;
       }
     }
   </style>
 </head>
-<body>
-  <header class="pp-home-hero">
-    <div class="pp-home-hero-inner">
-      <div class="pp-home-kicker">Demostración</div>
-      <h1>Flujograma del prototipo</h1>
-      <p>
-        Recorrido sugerido del comercio: desde el acceso al onboarding hasta el demo de pago. Cada paso es un enlace real al módulo.
-        El orden se define en <code style="background: rgba(255,255,255,.18); padding: 2px 8px; border-radius: 6px; font-size: 0.85em">modules.config.js</code> (<strong>PP_FLUJO_PROCESO</strong>).
-      </p>
-      <div class="pp-home-actions">
-        <a href="modules-map.html" class="pp-btn pp-btn-secondary" style="background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.4);">
-          <i class="fas fa-table" style="margin-right: 6px;"></i> Catálogo por área
-        </a>
+<body class="pp-landing pp-type">
+  <header class="pp-landing-nav">
+    <div class="pp-landing-nav-inner">
+      <div class="pp-landing-brand">
+        <div class="pp-landing-logo" aria-hidden="true">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <div>
+          <h1>Punto Pago</h1>
+          <span>Demo · Mapa del proceso</span>
+        </div>
       </div>
+      <a class="pp-landing-link" href="modules-map.html">Equipo técnico</a>
     </div>
   </header>
 
-  <main class="pp-flow-wrap" id="pp-home-main">
-    <p class="pp-card -soft pp-card-body" id="pp-home-fallback" hidden>
-      No se pudo cargar la configuración. Comprueba que exista <code>modules.config.js</code>.
+  <section class="pp-landing-hero">
+    <h2>Así recorre un comercio el prototipo</h2>
+    <p>
+      Las <strong>líneas violeta</strong> muestran el orden sugerido: de izquierda a derecha en cada fase, y de arriba hacia abajo entre fases.
+      Cada recuadro abre la pantalla real del demo.
     </p>
-  </main>
+  </section>
 
-  <footer class="pp-footer">
-    Prototipo demo · <a href="login.html">Login</a>
+  <section class="pp-map-section">
+    <p class="pp-card -soft pp-card-body" id="pp-home-fallback" hidden>
+      No se cargó la configuración. Verifica <code>modules.config.js</code>.
+    </p>
+    <div class="pp-map-wrap" id="pp-map-wrap" hidden>
+      <svg class="pp-map-svg" id="pp-map-svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="pp-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#5462e6;stop-opacity:0.45" />
+            <stop offset="100%" style="stop-color:#3738ab;stop-opacity:0.95" />
+          </linearGradient>
+        </defs>
+        <g id="pp-map-lines"></g>
+      </svg>
+      <div id="pp-map-fases"></div>
+      <div id="pp-map-extras" class="pp-extras" hidden></div>
+    </div>
+  </section>
+
+  <footer class="pp-landing-foot">
+    Demo prototipo · <a href="login.html">Acceso login</a>
   </footer>
 
   <script src="modules.config.js"></script>
@@ -311,7 +442,7 @@
       }
 
       var iconByModulo = {
-        onb-access: 'fa-door-open',
+        'onb-access': 'fa-door-open',
         'onb-form': 'fa-file-lines',
         'onb-contract': 'fa-file-signature',
         'onb-review': 'fa-hourglass-half',
@@ -326,9 +457,15 @@
         'mapa-picker': 'fa-map-location-dot',
       };
 
+      var faseIcons = ['fa-seedling', 'fa-clipboard-check', 'fa-bolt'];
+
       var catalogo = window.PP_MODULOS_POR_AREA;
       var flujo = window.PP_FLUJO_PROCESO;
-      var main = document.getElementById('pp-home-main');
+      var fasesEl = document.getElementById('pp-map-fases');
+      var wrap = document.getElementById('pp-map-wrap');
+      var svg = document.getElementById('pp-map-svg');
+      var linesG = document.getElementById('pp-map-lines');
+      var extrasEl = document.getElementById('pp-map-extras');
       var fb = document.getElementById('pp-home-fallback');
 
       function findModulo(moduloId) {
@@ -347,52 +484,140 @@
         return;
       }
 
-      var stepNum = 0;
-      var rowsHtml = '';
+      var stepIndex = 0;
+      var nodeElements = [];
 
-      function nodeHtml(moduloId) {
-        var m = findModulo(moduloId);
-        if (!m) {
-          return (
-            '<div class="pp-flow-node" style="opacity:.6;cursor:not-allowed" title="Módulo no encontrado">' +
-              '<span class="pp-flow-step">' + esc(String(++stepNum)) + '</span>' +
-              '<div class="pp-flow-icon"><i class="fas fa-question"></i></div>' +
-              '<div class="pp-flow-name">' + esc(moduloId) + '</div>' +
-            '</div>'
-          );
-        }
+      function nodeEl(m, moduloId, idx) {
         var ic = iconByModulo[moduloId] || 'fa-circle';
-        stepNum++;
+        stepIndex++;
+        var si = stepIndex;
         return (
-          '<a class="pp-flow-node" href="' + esc(m.ruta) + '">' +
-            '<span class="pp-flow-step">' + esc(String(stepNum)) + '</span>' +
-            '<div class="pp-flow-icon"><i class="fas ' + esc(ic) + '"></i></div>' +
-            '<div class="pp-flow-name">' + esc(m.nombreTrabajo) + '</div>' +
-            '<div class="pp-flow-hint">' + esc(m.nota) + '</div>' +
+          '<a class="pp-map-node" href="' + esc(m.ruta) + '" data-pp-step="' + String(idx) + '" style="animation-delay:' +
+          Math.min(idx * 0.06, 0.5) +
+          's">' +
+            '<span class="pp-map-step">Paso ' +
+            si +
+            '</span>' +
+            '<div class="pp-map-icon"><i class="fas ' +
+            esc(ic) +
+            '"></i></div>' +
+            '<div class="pp-map-title">' +
+            esc(m.nombreTrabajo) +
+            '</div>' +
+            '<div class="pp-map-cta">Ver pantalla <i class="fas fa-arrow-right" style="font-size:0.7em"></i></div>' +
           '</a>'
         );
       }
 
-      function rowHtml(moduloIds) {
-        var parts = [];
-        moduloIds.forEach(function (id, idx) {
-          parts.push(nodeHtml(id));
-          if (idx < moduloIds.length - 1) {
-            parts.push('<span class="pp-flow-arrow-h" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>');
+      var htmlFases = '';
+      var flatIdx = 0;
+
+      flujo.filas.forEach(function (fase, fi) {
+        var ids = fase.ids || [];
+        var tit = fase.titulo || 'Fase';
+        var sub = fase.subtitulo || '';
+        var headIc = faseIcons[fi] || 'fa-diagram-project';
+        htmlFases +=
+          '<div class="pp-fase" data-fase-index="' +
+          fi +
+          '">' +
+            '<div class="pp-fase-head">' +
+              '<div class="pp-fase-badge"><i class="fas ' +
+              esc(headIc) +
+              '"></i> Fase ' +
+              (fi + 1) +
+              '</div>' +
+              '<h3>' +
+              esc(tit) +
+              '</h3>' +
+              '<p>' +
+              esc(sub) +
+              '</p>' +
+            '</div>' +
+            '<div class="pp-fase-nodes">';
+        ids.forEach(function (mid) {
+          var m = findModulo(mid);
+          if (m) {
+            htmlFases += nodeEl(m, mid, flatIdx);
+            flatIdx++;
           }
         });
-        return '<div class="pp-flow-row" role="group">' + parts.join('') + '</div>';
-      }
-
-      flujo.filas.forEach(function (fila, ri) {
-        rowsHtml += rowHtml(fila);
-        if (ri < flujo.filas.length - 1) {
-          rowsHtml +=
-            '<div class="pp-flow-v" aria-hidden="true"><span><i class="fas fa-chevron-down"></i></span></div>';
-        }
+        htmlFases += '</div></div>';
       });
 
-      var extrasHtml = '';
+      fasesEl.innerHTML = htmlFases;
+      wrap.hidden = false;
+
+      nodeElements = Array.prototype.slice.call(wrap.querySelectorAll('[data-pp-step]')).sort(function (a, b) {
+        return Number(a.getAttribute('data-pp-step')) - Number(b.getAttribute('data-pp-step'));
+      });
+
+      function drawLines() {
+        linesG.innerHTML = '';
+        var c = wrap.getBoundingClientRect();
+        if (c.width < 40 || c.height < 40) return;
+        svg.setAttribute('width', String(Math.ceil(c.width)));
+        svg.setAttribute('height', String(Math.ceil(c.height)));
+        svg.setAttribute('viewBox', '0 0 ' + c.width + ' ' + c.height);
+
+        function relRect(el) {
+          var r = el.getBoundingClientRect();
+          return {
+            left: r.left - c.left,
+            right: r.right - c.left,
+            top: r.top - c.top,
+            bottom: r.bottom - c.top,
+            width: r.width,
+            height: r.height,
+          };
+        }
+
+        function pathBetween(a, b) {
+          var ra = relRect(a);
+          var rb = relRect(b);
+          var sameRow = Math.abs(ra.top - rb.top) < 48 && rb.left > ra.right - 20;
+          if (sameRow) {
+            var y = ra.top + ra.height / 2;
+            var x1 = ra.right;
+            var x2 = rb.left;
+            return 'M ' + x1 + ' ' + y + ' L ' + x2 + ' ' + y;
+          }
+          var x1 = ra.left + ra.width / 2;
+          var y1 = ra.bottom;
+          var x2 = rb.left + rb.width / 2;
+          var y2 = rb.top;
+          var midY = y1 + (y2 - y1) * 0.5;
+          if (Math.abs(x1 - x2) < 12) {
+            return 'M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2;
+          }
+          return 'M ' + x1 + ' ' + y1 + ' L ' + x1 + ' ' + midY + ' L ' + x2 + ' ' + midY + ' L ' + x2 + ' ' + y2;
+        }
+
+        var mqReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        for (var i = 0; i < nodeElements.length - 1; i++) {
+          var d = pathBetween(nodeElements[i], nodeElements[i + 1]);
+          var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          p.setAttribute('d', d);
+          p.setAttribute('class', 'pp-map-line');
+          p.style.animationDelay = mqReduce ? '0s' : 0.1 * i + 's';
+          linesG.appendChild(p);
+          var plen = p.getTotalLength();
+          p.style.strokeDasharray = String(plen);
+          p.style.strokeDashoffset = mqReduce ? '0' : String(plen);
+        }
+      }
+
+      var ro = new ResizeObserver(function () {
+        requestAnimationFrame(drawLines);
+      });
+      ro.observe(wrap);
+      window.addEventListener('load', function () {
+        requestAnimationFrame(drawLines);
+      });
+      requestAnimationFrame(function () {
+        requestAnimationFrame(drawLines);
+      });
+
       if (flujo.extras && flujo.extras.length) {
         var pills = [];
         flujo.extras.forEach(function (mid) {
@@ -400,27 +625,20 @@
           if (!m) return;
           var ic = iconByModulo[mid] || 'fa-link';
           pills.push(
-            '<a class="pp-flow-pill" href="' + esc(m.ruta) + '">' +
-              '<i class="fas ' + esc(ic) + '"></i>' + esc(m.nombreTrabajo) +
-            '</a>'
+            '<a href="' +
+              esc(m.ruta) +
+              '"><i class="fas ' +
+              esc(ic) +
+              '"></i> ' +
+              esc(m.nombreTrabajo) +
+              '</a>'
           );
         });
-        extrasHtml =
-          '<div class="pp-flow-extras">' +
-            '<p>Accesos rápidos</p>' +
-            '<div class="pp-flow-pills">' + pills.join('') + '</div>' +
-          '</div>';
+        if (pills.length) {
+          extrasEl.innerHTML = '<h4>Otras pantallas del demo</h4><div class="pp-extras-grid">' + pills.join('') + '</div>';
+          extrasEl.hidden = false;
+        }
       }
-
-      var html =
-        '<div class="pp-flow-card">' +
-          '<h2 class="pp-flow-title"><i class="fas fa-route"></i> Proceso end-to-end</h2>' +
-          '<p class="pp-flow-sub">Haz clic en cada caja para abrir la pantalla correspondiente. En pantallas pequeñas el flujo se apila en vertical.</p>' +
-          rowsHtml +
-          extrasHtml +
-        '</div>';
-
-      main.insertAdjacentHTML('afterbegin', html);
     })();
   </script>
 </body>
