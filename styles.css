@@ -1052,6 +1052,28 @@ html, body { overscroll-behavior-y: contain; scroll-behavior: smooth; }
   background: rgba(251, 191, 36, 0.22);
   color: #fef3c7;
 }
+.pp-demo-flow-context__badge--operativo {
+  background: rgba(148, 163, 184, 0.22);
+  color: #f1f5f9;
+  letter-spacing: 0.1em;
+}
+.pp-demo-flow-context__track--operativo {
+  justify-content: flex-end;
+}
+.pp-demo-flow-context__operativo-hint {
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.82);
+  text-align: right;
+  max-width: 420px;
+}
+@media (max-width: 719px) {
+  .pp-demo-flow-context__operativo-hint {
+    text-align: left;
+  }
+}
 .pp-demo-flow-context__phase-title {
   font-size: 0.92rem;
   font-weight: 800;

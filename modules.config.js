@@ -177,16 +177,18 @@
         titulo: 'Administración del programa',
         journeyLabel: 'Journey interno (equipo Punto Pago)',
         subtitulo:
-          'Quien administra la plataforma: revisión de solicitudes, panel operativo y gestión de credenciales. No es el recorrido del comercio.',
-        ids: ['admin-entry', 'admin-panel', 'admin-login-alt', 'admin-credentials'],
+          'Dos accesos administrados: (1) captación con correo del aliado y canal de entrada unificado; (2) tras completar el onboarding, revisión y aprobación del expediente — propósito del portal interno. Las variantes de login y credenciales son herramientas, no pasos del recorrido.',
+        ids: ['admin-entry', 'admin-panel'],
+        /** Login alterno y credenciales legacy: enlaces útiles, no pasos secuenciales. */
+        subflujoModulosOperativosAdmin: ['admin-login-alt', 'admin-credentials'],
       },
       {
         titulo: 'El comercio ya operando',
         journeyLabel: 'Journey del aliado (portal agente)',
         subtitulo:
-          'Un paso de acceso al portal; lo demás son funciones u operaciones disponibles para el mismo aliado en ese entorno.',
-        ids: ['login', 'agent-hub', 'setup', 'agent-team', 'agent-cashout', 'checkout', 'factura'],
-        /** Tras iniciar sesión: hub, ajustes, equipo, retiros, cobro y factura como “habilidades” del portal. */
+          'Un solo paso de acceso al portal (login); el resto son funciones y operaciones en el mismo entorno — no se numeran como pasos del journey.',
+        ids: ['login'],
+        /** Tras iniciar sesión: hub, ajustes, equipo, retiros, cobro y factura. */
         subflujoFuncionesAgente: [
           'agent-hub',
           'setup',
@@ -219,6 +221,22 @@
           pasoGlobal: globalStep++,
           tipo: 'principal',
         };
+      });
+      var opLists = [fase.subflujoModulosOperativosAdmin, fase.subflujoFuncionesAgente];
+      opLists.forEach(function (list) {
+        if (!list || !list.length) return;
+        list.forEach(function (mid) {
+          if (meta[mid]) return;
+          meta[mid] = {
+            faseIndex: fi + 1,
+            faseTitulo: fase.titulo,
+            faseSubtitulo: fase.subtitulo || '',
+            pasoEnFase: 0,
+            pasosEnFase: n,
+            pasoGlobal: null,
+            tipo: 'operativo',
+          };
+        });
       });
     });
     var extras = flujo.extras || [];

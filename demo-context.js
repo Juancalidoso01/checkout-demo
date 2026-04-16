@@ -90,9 +90,20 @@
 
     var badge = document.createElement('span');
     badge.className =
-      'pp-demo-flow-context__badge' + (meta.tipo === 'extra' ? ' pp-demo-flow-context__badge--extra' : '');
+      'pp-demo-flow-context__badge' +
+      (meta.tipo === 'extra'
+        ? ' pp-demo-flow-context__badge--extra'
+        : meta.tipo === 'operativo'
+          ? ' pp-demo-flow-context__badge--operativo'
+          : '');
     badge.textContent =
-      meta.tipo === 'principal' ? 'Fase ' + meta.faseIndex : 'Sandbox';
+      meta.tipo === 'principal'
+        ? 'Fase ' + meta.faseIndex
+        : meta.tipo === 'extra'
+          ? 'Sandbox'
+          : meta.tipo === 'operativo'
+            ? 'Fase ' + meta.faseIndex + ' · Módulo'
+            : 'Fase ' + meta.faseIndex;
 
     var title = document.createElement('span');
     title.className = 'pp-demo-flow-context__phase-title';
@@ -110,32 +121,48 @@
     track.className = 'pp-demo-flow-context__track';
     track.setAttribute('aria-hidden', 'true');
 
-    var n = Math.max(1, meta.pasosEnFase | 0);
-    var cur = Math.min(Math.max(1, meta.pasoEnFase | 0), n);
-    var i;
-    for (i = 1; i <= n; i += 1) {
-      var dot = document.createElement('span');
-      dot.className = 'pp-demo-flow-context__dot';
-      if (i < cur) dot.classList.add('-done');
-      else if (i === cur) dot.classList.add('-current');
-      else dot.classList.add('-todo');
-      track.appendChild(dot);
-      if (i < n) {
-        var seg = document.createElement('span');
-        seg.className = 'pp-demo-flow-context__seg';
-        if (cur > i) seg.classList.add('-done');
-        track.appendChild(seg);
+    if (meta.tipo === 'operativo') {
+      track.removeAttribute('aria-hidden');
+      track.classList.add('pp-demo-flow-context__track--operativo');
+      var opHint = document.createElement('span');
+      opHint.className = 'pp-demo-flow-context__operativo-hint';
+      opHint.textContent = 'Función o herramienta del entorno (no es un paso numerado)';
+      track.appendChild(opHint);
+    } else {
+      var n = Math.max(1, meta.pasosEnFase | 0);
+      var cur = Math.min(Math.max(1, meta.pasoEnFase | 0), n);
+      var i;
+      for (i = 1; i <= n; i += 1) {
+        var dot = document.createElement('span');
+        dot.className = 'pp-demo-flow-context__dot';
+        if (i < cur) dot.classList.add('-done');
+        else if (i === cur) dot.classList.add('-current');
+        else dot.classList.add('-todo');
+        track.appendChild(dot);
+        if (i < n) {
+          var seg = document.createElement('span');
+          seg.className = 'pp-demo-flow-context__seg';
+          if (cur > i) seg.classList.add('-done');
+          track.appendChild(seg);
+        }
       }
     }
 
     var stepLabel = document.createElement('div');
     stepLabel.className = 'pp-demo-flow-context__step-label';
-    stepLabel.textContent =
-      'Paso ' +
-      cur +
-      ' / ' +
-      n +
-      (meta.tipo === 'principal' ? ' en esta fase' : meta.tipo === 'extra' ? ' (sandbox)' : '');
+    if (meta.tipo === 'operativo') {
+      stepLabel.textContent =
+        'Pantalla de referencia; el flujo principal de la fase son los pasos del mapa.';
+    } else {
+      var n2 = Math.max(1, meta.pasosEnFase | 0);
+      var cur2 = Math.min(Math.max(1, meta.pasoEnFase | 0), n2);
+      stepLabel.textContent =
+        'Paso ' +
+        cur2 +
+        ' / ' +
+        n2 +
+        (meta.tipo === 'principal' ? ' en esta fase' : meta.tipo === 'extra' ? ' (sandbox)' : '');
+    }
 
     inner.appendChild(home);
     inner.appendChild(phase);

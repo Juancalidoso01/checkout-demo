@@ -330,6 +330,10 @@
       border-color: rgba(13, 148, 136, 0.4);
       background: rgba(13, 148, 136, 0.05);
     }
+    .pp-map-subwrap--admin {
+      border-color: rgba(124, 58, 237, 0.42);
+      background: rgba(124, 58, 237, 0.05);
+    }
     .pp-map-subwrap-legend {
       margin: 0 0 8px;
       padding: 6px 8px;
@@ -505,6 +509,16 @@
       color: var(--pp-primary);
       opacity: 0.85;
       letter-spacing: 0.04em;
+    }
+    .pp-map-step--mod {
+      color: #64748b;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.55rem;
+    }
+    .pp-map-node--mod:hover {
+      border-color: rgba(100, 116, 139, 0.35);
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1);
     }
     .pp-map-icon {
       width: 44px;
@@ -795,17 +809,30 @@
       var stepIndex = 0;
       var nodeElements = [];
 
-      function nodeEl(m, moduloId, idx) {
+      function nodeEl(m, moduloId, idx, opts) {
+        opts = opts || {};
         var ic = iconByModulo[moduloId] || 'fa-circle';
-        stepIndex++;
-        var si = stepIndex;
+        var omitPaso = !!opts.omitPaso;
+        var stepHtml = '';
+        var nodeModClass = '';
+        if (omitPaso) {
+          stepHtml = '<span class="pp-map-step pp-map-step--mod">Módulo</span>';
+          nodeModClass = ' pp-map-node--mod';
+        } else {
+          stepIndex++;
+          stepHtml = '<span class="pp-map-step">Paso ' + stepIndex + '</span>';
+        }
         return (
-          '<a class="pp-map-node" href="' + esc(hrefDemo(m)) + '" data-pp-step="' + String(idx) + '" style="animation-delay:' +
-          Math.min(idx * 0.06, 0.5) +
-          's">' +
-            '<span class="pp-map-step">Paso ' +
-            si +
-            '</span>' +
+          '<a class="pp-map-node' +
+            nodeModClass +
+            '" href="' +
+            esc(hrefDemo(m)) +
+            '" data-pp-step="' +
+            String(idx) +
+            '" style="animation-delay:' +
+            Math.min(idx * 0.06, 0.5) +
+            's">' +
+            stepHtml +
             '<div class="pp-map-icon"><i class="fas ' +
             esc(ic) +
             '"></i></div>' +
@@ -861,20 +888,41 @@
             legend:
               'Pasos 3 a 5 · Mismo expediente comercial, continúa tras el formulario base (paso 2)',
             wrapClass: 'pp-map-subwrap pp-map-subwrap--onb',
+            omitPasoEnNodos: false,
+            mode: 'inline',
+          };
+        } else if (fi === 1 && fase.subflujoModulosOperativosAdmin && fase.subflujoModulosOperativosAdmin.length) {
+          subCfg = {
+            ids: fase.subflujoModulosOperativosAdmin,
+            legend:
+              'Herramientas de acceso · Variantes de login y credenciales; no son pasos del journey de revisión',
+            wrapClass: 'pp-map-subwrap pp-map-subwrap--admin',
+            omitPasoEnNodos: true,
+            mode: 'append',
           };
         } else if (fi === 2 && fase.subflujoFuncionesAgente && fase.subflujoFuncionesAgente.length) {
           subCfg = {
             ids: fase.subflujoFuncionesAgente,
             legend:
-              'Funciones del portal · Habilidades y operaciones del mismo aliado tras el acceso (paso anterior)',
+              'Funciones del portal · Operaciones del mismo aliado tras el acceso (login)',
             wrapClass: 'pp-map-subwrap pp-map-subwrap--agent',
+            omitPasoEnNodos: true,
+            mode: 'append',
           };
         }
         var subIds = subCfg ? subCfg.ids : [];
-        ids.forEach(function (mid) {
+        var walkIds = ids.slice();
+        if (subCfg && subCfg.mode === 'append' && subIds.length) {
+          walkIds = walkIds.concat(subIds);
+        }
+        walkIds.forEach(function (mid, wi) {
           var m = findModulo(mid);
           if (!m) return;
-          if (subCfg && mid === subIds[0]) {
+          var openBefore =
+            subCfg &&
+            ((subCfg.mode === 'inline' && mid === subIds[0]) ||
+              (subCfg.mode === 'append' && mid === subIds[0] && wi === ids.length));
+          if (openBefore) {
             htmlFases +=
               '<div class="' +
               subCfg.wrapClass +
@@ -884,7 +932,8 @@
               '</p>' +
               '<div class="pp-map-subwrap-nodes">';
           }
-          htmlFases += nodeEl(m, mid, flatIdx);
+          var omitPaso = !!(subCfg && subCfg.omitPasoEnNodos && subIds.indexOf(mid) >= 0);
+          htmlFases += nodeEl(m, mid, flatIdx, { omitPaso: omitPaso });
           flatIdx++;
           if (subCfg && mid === subIds[subIds.length - 1]) {
             htmlFases += '</div></div>';
