@@ -5,26 +5,42 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#5462e6">
   <title>Punto Pago — Mapa del proceso (demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Misma base que KYB onboarding-access / onboarding: texto oscuro en cuerpo, nunca oscuro sobre barra violeta */
     .pp-landing {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       background: linear-gradient(180deg, #f4f6ff 0%, #ffffff 32%, #f6f6f6 100%);
-      font-family: var(--pp-font);
+      font-family: var(--pp-font, system-ui, sans-serif);
       color: var(--pp-text);
       -webkit-font-smoothing: antialiased;
     }
+    /* Header = gate-nav / ob-nav (KYB) */
     .pp-landing-nav {
-      background: linear-gradient(135deg, var(--pp-primary) 0%, var(--pp-primary-900) 100%);
+      background: linear-gradient(135deg, #5462e6 0%, #4352d4 40%, #3738ab 100%);
       color: #fff;
       padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 14px;
-      box-shadow: 0 8px 32px rgba(84, 98, 230, 0.25);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 20px rgba(84, 98, 230, 0.25);
       position: sticky;
       top: 0;
       z-index: 40;
+    }
+    .pp-landing-nav,
+    .pp-landing-nav h1,
+    .pp-landing-nav .pp-landing-brand span,
+    .pp-landing-nav a {
+      color: #fff;
+    }
+    .pp-landing-nav .pp-landing-brand span {
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 700;
     }
     .pp-landing-nav-inner {
       max-width: 1120px;
@@ -50,6 +66,7 @@
       align-items: center;
       justify-content: center;
       font-size: 1.35rem;
+      color: #fff;
       flex-shrink: 0;
       animation: pp-float 4s ease-in-out infinite;
     }
@@ -59,48 +76,79 @@
     }
     .pp-landing-brand h1 {
       margin: 0;
-      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
       line-height: 1.2;
+      color: #fff;
     }
     .pp-landing-brand span {
       display: block;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      opacity: 0.82;
-      margin-top: 2px;
+      margin-top: 3px;
+      color: rgba(255, 255, 255, 0.88);
     }
     .pp-landing-nav a.pp-landing-link {
-      color: #fff;
+      color: #fff !important;
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       text-decoration: none;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      background: rgba(255, 255, 255, 0.08);
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.12);
       transition: background 0.2s, transform 0.15s;
       white-space: nowrap;
     }
     .pp-landing-nav a.pp-landing-link:hover {
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.22);
       transform: translateY(-1px);
     }
     .pp-landing-hero {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 28px 20px 8px;
+      padding: 24px 18px 12px;
       text-align: center;
+    }
+    .pp-landing-intro-card {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 26px 22px 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(84, 98, 230, 0.12);
+      background:
+        radial-gradient(circle at top left, rgba(97, 113, 255, 0.14), transparent 32%),
+        linear-gradient(135deg, #ffffff 0%, #eef3ff 44%, #ffffff 100%);
+      box-shadow: 0 28px 70px rgba(15, 23, 42, 0.07);
+      position: relative;
+      overflow: hidden;
+    }
+    .pp-landing-intro-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -40px -50px auto;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      background: rgba(84, 98, 230, 0.08);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    .pp-landing-intro-card > * {
+      position: relative;
+      z-index: 1;
     }
     .pp-landing-hero h2 {
       margin: 0 0 10px;
+      font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
       font-size: clamp(1.35rem, 4vw, 1.85rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      color: #0f172a;
+      color: #111827;
       animation: pp-fade-up 0.7s ease forwards;
     }
     .pp-landing-hero p {
@@ -382,7 +430,7 @@
     }
   </style>
 </head>
-<body class="pp-landing pp-type">
+<body class="pp-landing">
   <header class="pp-landing-nav">
     <div class="pp-landing-nav-inner">
       <div class="pp-landing-brand">
@@ -398,15 +446,20 @@
     </div>
   </header>
 
-  <section class="pp-landing-hero">
-    <h2>Así recorre un comercio el prototipo</h2>
-    <p>
-      Las <strong>líneas violeta</strong> muestran el orden sugerido: de izquierda a derecha en cada fase, y de arriba hacia abajo entre fases.
-      Cada recuadro abre la pantalla real del demo.
-    </p>
+  <section class="pp-landing-hero pp-type">
+    <div class="pp-landing-intro-card">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(84,98,230,.08);border:1px solid rgba(84,98,230,.12);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pp-primary);margin-bottom:14px">
+        <i class="fas fa-route"></i> Recorrido sugerido
+      </div>
+      <h2>Así recorre un comercio el prototipo</h2>
+      <p style="margin:0 auto;max-width:36rem;font-size:0.95rem;line-height:1.55;color:#475569">
+        Las <strong style="color:#3738ab">líneas violeta</strong> muestran el orden: de izquierda a derecha en cada fase y de arriba hacia abajo entre fases.
+        Cada recuadro abre la pantalla real del demo.
+      </p>
+    </div>
   </section>
 
-  <section class="pp-map-section">
+  <section class="pp-map-section pp-type">
     <p class="pp-card -soft pp-card-body" id="pp-home-fallback" hidden>
       No se cargó la configuración. Verifica <code>modules.config.js</code>.
     </p>
