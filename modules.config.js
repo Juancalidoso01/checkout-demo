@@ -186,6 +186,54 @@
         ids: ['login', 'agent-hub', 'checkout'],
       },
     ],
-    extras: ['factura', 'setup', 'agent-team', 'agent-cashout', 'mapa-picker'],
+    extras: [
+      'factura',
+      'setup',
+      'agent-team',
+      'agent-cashout',
+      'mapa-picker',
+      'onb-test',
+      'admin-login-alt',
+      'admin-panel',
+      'admin-credentials',
+      'test-kyc',
+      'test-direccion',
+      'test-mapa',
+    ],
   };
+
+  (function buildFlujoMeta() {
+    var flujo = window.PP_FLUJO_PROCESO;
+    if (!flujo || !flujo.filas) return;
+    var meta = {};
+    var globalStep = 1;
+    flujo.filas.forEach(function (fase, fi) {
+      var ids = fase.ids || [];
+      var n = ids.length;
+      ids.forEach(function (mid, j) {
+        meta[mid] = {
+          faseIndex: fi + 1,
+          faseTitulo: fase.titulo,
+          faseSubtitulo: fase.subtitulo || '',
+          pasoEnFase: j + 1,
+          pasosEnFase: n,
+          pasoGlobal: globalStep++,
+          tipo: 'principal',
+        };
+      });
+    });
+    var extras = flujo.extras || [];
+    extras.forEach(function (mid, j) {
+      meta[mid] = {
+        faseIndex: null,
+        faseTitulo: 'Complementarias',
+        faseSubtitulo: 'Otras pantallas del demo',
+        pasoEnFase: j + 1,
+        pasosEnFase: extras.length,
+        pasoGlobal: globalStep++,
+        tipo: 'extra',
+      };
+    });
+    window.PP_MODULO_FLUJO_META = meta;
+  })();
 })();
