@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0047bb">
+  <title>Mapa de módulos — desarrollo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { background: #f3f4f6; font-family: var(--pp-font, system-ui, sans-serif); color: var(--pp-text, #171717); margin: 0; min-height: 100vh; }
+    .mm-hero { background: linear-gradient(135deg, var(--pp-primary, #0047bb), var(--pp-primary-900, #003080)); color: #fff; padding: 28px 20px 32px; }
+    .mm-hero h1 { margin: 0 0 8px; font-size: 1.35rem; font-weight: 800; }
+    .mm-hero p { margin: 0; opacity: 0.92; font-size: 0.9rem; max-width: 720px; line-height: 1.5; }
+    .mm-tag { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; background: rgba(255,255,255,.15); padding: 4px 10px; border-radius: 999px; margin-bottom: 10px; }
+    .mm-grid { display: grid; gap: 12px; }
+    @media (min-width: 640px) { .mm-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .mm-grid { grid-template-columns: repeat(3, 1fr); } }
+    .mm-mod { display: flex; flex-direction: column; gap: 8px; height: 100%; }
+    .mm-mod code { font-size: 11px; background: rgba(0,0,0,.06); padding: 2px 6px; border-radius: 6px; word-break: break-all; }
+    .mm-mod .nombre { font-weight: 800; font-size: 1rem; }
+    .mm-mod .nota { font-size: 12px; color: #6b7280; line-height: 1.4; flex: 1; }
+    .mm-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+    .mm-actions a { font-size: 13px; font-weight: 700; text-decoration: none; }
+    .mm-area-title { font-size: 1.05rem; font-weight: 800; margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 2px solid rgba(0,71,187,.2); color: #0047bb; }
+    .mm-area-title:first-of-type { margin-top: 8px; }
+    .mm-roles { font-size: 11px; color: #059669; font-weight: 600; }
+    .mm-ids { font-size: 10px; color: #9ca3af; font-weight: 600; letter-spacing: 0.02em; }
+    .mm-filehint { margin-top: 20px; padding: 14px 16px; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px; font-size: 13px; color: #92400e; }
+    .mm-filehint strong { display: block; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <header class="mm-hero">
+    <span class="mm-tag">Solo desarrollo</span>
+    <h1>Mapa de módulos</h1>
+    <p>
+      El catálogo vive en <code>modules.config.js</code> (agrupado por <strong>área</strong>). Aquí solo se renderiza: nombres de trabajo, rutas y enlaces para ir mejorando <strong>módulo por módulo</strong>.
+    </p>
+  </header>
+
+  <main class="pp-shell" id="root"></main>
+
+  <script src="modules.config.js"></script>
+  <script>
+    function esc(s) {
+      return (s || '').toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function card(item, areaId) {
+      const href = item.ruta;
+      const ids = (item.moduloId || '') + (areaId ? ' · ' + areaId : '');
+      return (
+        '<article class="pp-card -soft mm-mod" data-ruta="' + esc(item.ruta) + '">' +
+          '<div class="pp-card-body">' +
+            '<div class="nombre">' + esc(item.nombreTrabajo) + '</div>' +
+            (ids ? '<div class="mm-ids">' + esc(ids) + '</div>' : '') +
+            '<div><code>' + esc(item.ruta) + '</code></div>' +
+            (item.roles ? '<div class="mm-roles">Sesión: ' + esc(item.roles) + '</div>' : '') +
+            '<p class="nota">' + esc(item.nota) + '</p>' +
+            '<div class="mm-actions">' +
+              '<a class="pp-btn pp-btn-primary" href="' + esc(href) + '">Abrir</a>' +
+              '<button type="button" class="pp-btn pp-btn-secondary mm-copy" data-ruta="' + esc(item.ruta) + '">Copiar ruta</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
+    }
+
+    var catalogo = window.PP_MODULOS_POR_AREA;
+    if (!catalogo || !Array.isArray(catalogo)) {
+      document.getElementById('root').innerHTML =
+        '<p class="pp-card -soft pp-card-body">No se cargó <code>modules.config.js</code>. Abre esta página con un servidor estático (misma carpeta que el JS).</p>';
+    } else {
+    var html = '';
+    catalogo.forEach(function (grupo) {
+      html += '<h2 class="mm-area-title">' + esc(grupo.area) + '</h2>';
+      html += '<div class="mm-grid">';
+      var aid = grupo.areaId || '';
+      grupo.items.forEach(function (it) { html += card(it, aid); });
+      html += '</div>';
+    });
+
+    html +=
+      '<div class="mm-filehint">' +
+        '<strong>Cómo renombrar módulos de verdad</strong>' +
+        '1) Cambia el archivo o carpeta en el disco.<br>' +
+        '2) Actualiza referencias: al menos <code>auth.js</code> (rutas post-login), <code>checkout.html</code>, <code>agents/*.html</code> (navegación relativa), <code>pp-admin-entry.html</code> y URLs absolutas si aún apuntan a GitHub Pages.<br>' +
+        '3) Ajusta <code>ruta</code> (y si quieres <code>moduloId</code> / <code>areaId</code>) en <code>modules.config.js</code> para que el mapa siga coincidiendo.' +
+      '</div>';
+
+    document.getElementById('root').innerHTML = html;
+    }
+
+    document.querySelectorAll('.mm-copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var r = btn.getAttribute('data-ruta') || '';
+        if (!r) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(r).then(function () {
+            var prev = btn.textContent;
+            btn.textContent = 'Copiado';
+            setTimeout(function () { btn.textContent = prev; }, 1200);
+          });
+        } else {
+          window.prompt('Copiar ruta:', r);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+.supabase-cli/
+supabase/.temp/
+*.tar.gz
+.git/

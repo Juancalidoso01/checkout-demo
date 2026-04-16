@@ -72,7 +72,7 @@
   <script src="auth.js"></script>
   <script>
     (function(){
-  const target = new URL('pp-admin-entry.html', location.href).href;
+  const target = window.PPAuth.buildAppUrl('pp-admin-entry.html');
       const existing = window.PPAuth.getSession();
       if (existing) {
         window.PPAuth.signOut();

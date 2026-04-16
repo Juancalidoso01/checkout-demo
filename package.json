@@ -1,0 +1,8 @@
+{
+  "name": "checkout-boton-demo",
+  "private": true,
+  "description": "Demo estático HTML (checkout, agentes, admin, onboarding). Sin paso de build en Vercel.",
+  "scripts": {
+    "dev": "python3 -m http.server 8080 --bind 127.0.0.1"
+  }
+}
