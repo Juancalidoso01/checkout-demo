@@ -254,6 +254,57 @@
       letter-spacing: -0.02em;
       color: #0f172a;
     }
+    .pp-fase-journey {
+      display: inline-flex;
+      align-items: center;
+      margin: 6px 0 10px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #1d4ed8;
+      background: rgba(59, 130, 246, 0.11);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      max-width: 100%;
+      line-height: 1.35;
+    }
+    .pp-fase[data-fase-index='1'] .pp-fase-journey {
+      color: #6d28d9;
+      background: rgba(124, 58, 237, 0.1);
+      border-color: rgba(124, 58, 237, 0.28);
+    }
+    .pp-fase[data-fase-index='2'] .pp-fase-journey {
+      color: #0f766e;
+      background: rgba(13, 148, 136, 0.11);
+      border-color: rgba(13, 148, 136, 0.28);
+    }
+    .pp-map-subwrap {
+      flex: 1 1 100%;
+      width: 100%;
+      margin-top: 2px;
+      padding: 14px 12px 16px;
+      border-radius: 20px;
+      border: 1px dashed rgba(84, 98, 230, 0.38);
+      background: rgba(84, 98, 230, 0.045);
+      box-sizing: border-box;
+    }
+    .pp-map-subwrap-legend {
+      margin: 0 0 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #475569;
+      line-height: 1.45;
+      text-align: center;
+    }
+    .pp-map-subwrap-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
+      gap: 14px;
+    }
     .pp-fase-head p {
       margin: 0;
       font-size: 0.84rem;
@@ -580,11 +631,10 @@
       }
 
       var iconByModulo = {
-        'onb-access': 'fa-door-open',
+        'onb-access': 'fa-bullhorn',
         'onb-form': 'fa-file-lines',
         'onb-contract': 'fa-file-signature',
         'onb-review': 'fa-hourglass-half',
-        'onb-test': 'fa-flask',
         'admin-entry': 'fa-user-shield',
         'admin-panel': 'fa-table-columns',
         'admin-login-alt': 'fa-key',
@@ -701,6 +751,9 @@
         var tit = fase.titulo || 'Fase';
         var sub = fase.subtitulo || '';
         var headIc = faseIcons[fi] || 'fa-diagram-project';
+        var journey = fase.journeyLabel
+          ? '<div class="pp-fase-journey">' + esc(fase.journeyLabel) + '</div>'
+          : '';
         htmlFases +=
           '<div class="pp-fase" data-fase-index="' +
           fi +
@@ -714,17 +767,32 @@
               '<h3>' +
               esc(tit) +
               '</h3>' +
+              journey +
               '<p>' +
               esc(sub) +
               '</p>' +
               buildIntegracionesRow(fi) +
             '</div>' +
             '<div class="pp-fase-nodes">';
+        var subIds =
+          fi === 0 &&
+          fase.subflujoDependeDeFormulario &&
+          fase.subflujoDependeDeFormulario.length
+            ? fase.subflujoDependeDeFormulario
+            : [];
         ids.forEach(function (mid) {
           var m = findModulo(mid);
-          if (m) {
-            htmlFases += nodeEl(m, mid, flatIdx);
-            flatIdx++;
+          if (!m) return;
+          if (subIds.length && mid === subIds[0]) {
+            htmlFases +=
+              '<div class="pp-map-subwrap">' +
+              '<p class="pp-map-subwrap-legend" role="note">Pasos 3 a 5 · Mismo expediente comercial, continúa tras el formulario base (paso 2)</p>' +
+              '<div class="pp-map-subwrap-nodes">';
+          }
+          htmlFases += nodeEl(m, mid, flatIdx);
+          flatIdx++;
+          if (subIds.length && mid === subIds[subIds.length - 1]) {
+            htmlFases += '</div></div>';
           }
         });
         htmlFases += '</div></div>';

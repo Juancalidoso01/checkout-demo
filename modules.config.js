@@ -84,15 +84,15 @@
       items: [
         {
           moduloId: 'onb-access',
-          nombreTrabajo: 'Acceso previo onboarding',
+          nombreTrabajo: 'Brochure y captación comercial',
           ruta: 'onboarding-access.html',
-          nota: 'Validación; opcional Supabase magic link.',
+          nota: 'Vitrina y mensajes para atraer al comercio; validación de acceso opcional (p. ej. Supabase magic link).',
         },
         {
           moduloId: 'onb-form',
-          nombreTrabajo: 'Formulario onboarding',
+          nombreTrabajo: 'Formulario de alta del comercio',
           ruta: 'onboarding.html',
-          nota: 'Formulario largo del comercio.',
+          nota: 'Núcleo del expediente: datos del negocio y representantes.',
         },
         {
           moduloId: 'onb-contract',
@@ -105,12 +105,6 @@
           nombreTrabajo: 'Revisión pendiente',
           ruta: 'onboarding-review-pending.html',
           nota: 'Estado post envío.',
-        },
-        {
-          moduloId: 'onb-test',
-          nombreTrabajo: 'Prueba onboarding (diseño)',
-          ruta: 'onboarding-test.html',
-          nota: 'Modo prueba sin Supabase.',
         },
       ],
     },
@@ -132,9 +126,9 @@
         },
         {
           moduloId: 'mapa-picker',
-          nombreTrabajo: 'Selector mapa',
+          nombreTrabajo: 'Ubicación en mapa (KYB)',
           ruta: 'mapa-picker.html',
-          nota: 'Usado desde flujo onboarding.',
+          nota: 'Selector de ubicación; continúa el expediente tras el formulario base.',
         },
       ],
     },
@@ -171,20 +165,26 @@
   window.PP_FLUJO_PROCESO = {
     filas: [
       {
-        titulo: 'Alta del comercio',
+        titulo: 'Captación y alta del comercio',
+        journeyLabel: 'Journey del cliente (comercio)',
         subtitulo:
-          'Validación de acceso, formulario, ubicación en mapa (KYB), contrato y estado de la solicitud.',
-        ids: ['onb-access', 'onb-form', 'mapa-picker', 'onb-contract', 'onb-review', 'onb-test'],
+          'Paso 1: brochure para captar. Paso 2: formulario base del expediente. Los pasos 3 a 5 son el mismo caso comercial una vez avanzado el formulario: ubicación, contrato y seguimiento.',
+        ids: ['onb-access', 'onb-form', 'mapa-picker', 'onb-contract', 'onb-review'],
+        /** Pasos que en el mapa se agrupan como continuación del formulario (paso 2). */
+        subflujoDependeDeFormulario: ['mapa-picker', 'onb-contract', 'onb-review'],
       },
       {
-        titulo: 'Revisión interna',
-        subtitulo: 'Entrada admin, panel operativo y pantallas de credenciales.',
+        titulo: 'Administración del programa',
+        journeyLabel: 'Journey interno (equipo Punto Pago)',
+        subtitulo:
+          'Quien administra la plataforma: revisión de solicitudes, panel operativo y gestión de credenciales. No es el recorrido del comercio.',
         ids: ['admin-entry', 'admin-panel', 'admin-login-alt', 'admin-credentials'],
       },
       {
-        titulo: 'Operación del agente',
+        titulo: 'El comercio ya operando',
+        journeyLabel: 'Journey del aliado (portal agente)',
         subtitulo:
-          'Login, portal, menú del comercio, equipo, retiros, demo de cobro y comprobante (factura).',
+          'Tras la alta: ingreso, portal, ajustes, equipo, retiros, demo de cobro y comprobante.',
         ids: ['login', 'agent-hub', 'setup', 'agent-team', 'agent-cashout', 'checkout', 'factura'],
       },
     ],

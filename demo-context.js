@@ -15,7 +15,6 @@
     'onboarding.html': 'onb-form',
     'onboarding-contract.html': 'onb-contract',
     'onboarding-review-pending.html': 'onb-review',
-    'onboarding-test.html': 'onb-test',
     'onboarding-firma-preview.html': 'onb-contract',
     'pp-admin-entry.html': 'admin-entry',
     'admin-login.html': 'admin-login-alt',
