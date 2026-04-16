@@ -59,12 +59,17 @@
         <div class="pp-checkout-nav__logo" aria-hidden="true"><i class="fas fa-layer-group"></i></div>
         <div class="pp-checkout-nav__titles">
           <span class="pp-checkout-nav__title" data-i18n="checkout_nav_title">Punto Pago</span>
-          <span class="pp-checkout-nav__subtitle" id="checkoutNavSubtitle" data-i18n="checkout_nav_subtitle">Cobro y recarga (demo)</span>
+          <span class="pp-checkout-nav__subtitle" id="checkoutNavSubtitle" data-i18n="checkout_nav_subtitle">Pagos</span>
         </div>
       </div>
-      <div class="pp-checkout-nav__balance" title="Saldo demo en localStorage">
-        <span class="pp-checkout-nav__balance-label" data-i18n="checkout_available_balance">Saldo en wallet</span>
-        <span class="pp-checkout-nav__balance-value" id="balance-display">$0.00</span>
+      <div class="pp-checkout-nav__right">
+        <button type="button" class="pp-checkout-icon-btn" id="checkoutSoundToggle" aria-pressed="false" aria-label="Sonidos" title="Sonidos">
+          <i class="fas fa-volume-high" aria-hidden="true"></i>
+        </button>
+        <div class="pp-checkout-nav__balance">
+          <span class="pp-checkout-nav__balance-label" data-i18n="checkout_available_balance">Saldo</span>
+          <span class="pp-checkout-nav__balance-value" id="balance-display">$0.00</span>
+        </div>
       </div>
     </div>
   </nav>
@@ -72,7 +77,6 @@
   <main class="pp-checkout-main pp-type flex-grow">
     <section class="pp-checkout-card section-fade" aria-labelledby="headline">
       <header class="pp-checkout-card__intro">
-        <p class="pp-checkout-kicker" id="checkoutKicker" data-i18n="checkout_kicker">Prototipo · sin cobro real</p>
         <h1 id="headline" class="pp-checkout-h1" data-i18n="checkout_heading">Completar pago</h1>
         <p id="checkoutLead" class="pp-checkout-lead" data-i18n="checkout_price_total">Importe de esta operación:</p>
       </header>
@@ -82,23 +86,11 @@
         <div class="pp-checkout-amount__caption" id="amountCaption" data-i18n="checkout_total">Total a pagar</div>
       </div>
 
-      <ul class="pp-checkout-trust" aria-label="Resumen">
-        <li>
-          <span class="pp-checkout-trust__icon" aria-hidden="true"><i class="fas fa-shield-halved"></i></span>
-          <span data-i18n="checkout_trust_1">Misma línea visual que el resto del demo Punto Pago (violeta institucional).</span>
-        </li>
-        <li>
-          <span class="pp-checkout-trust__icon" aria-hidden="true"><i class="fas fa-credit-card"></i></span>
-          <span data-i18n="checkout_trust_2">Visa, Mastercard y Clave: flujo pensado para Panamá, como en puntopago.net.</span>
-        </li>
-        <li>
-          <span class="pp-checkout-trust__icon" aria-hidden="true"><i class="fas fa-flask"></i></span>
-          <span data-i18n="checkout_trust_3">Ambiente de prueba: ningún cargo se envía a una pasarela real.</span>
-        </li>
-      </ul>
-
-      <div class="demo-toggle pp-checkout-demo-toggle">
-        <label class="pp-checkout-demo-toggle__label"><input type="checkbox" id="demoMode" checked> <span data-i18n="checkout_demo_mode_label">Modo demo: aceptar cualquier dato</span></label>
+      <div class="pp-checkout-meta-bar">
+        <label class="pp-checkout-meta-bar__item">
+          <input type="checkbox" id="demoMode" checked>
+          <span data-i18n="checkout_demo_short">Prueba · sin validar datos</span>
+        </label>
       </div>
 
         <!-- PuntoPago APP registration removed: all methods available, no restrictions -->
@@ -112,88 +104,69 @@
         </div>
 
         <fieldset class="pp-checkout-fieldset">
-          <legend class="pp-checkout-legend" data-i18n="checkout_select_method_legend">Cómo quieres pagar</legend>
-          <div class="row col radio-list pp-checkout-radio-list">
-            <label>
-              <input type="radio" name="payMethod" value="card">
-              <span class="pm-icon" aria-hidden="true">
-                <!-- Combined card icon: Visa + Mastercard hints -->
-                <svg viewBox="0 0 72 30" xmlns="http://www.w3.org/2000/svg" fill="none" class="pp-checkout-pm-svg">
-                  <rect x="1" y="1" width="70" height="28" rx="3" stroke="currentColor" stroke-width="1.6" fill="#fff" />
-                  <g transform="translate(6,5)">
-                    <rect x="0" y="0" width="22" height="6" rx="1" fill="currentColor" />
-                    <g transform="translate(26,0)">
-                      <circle cx="6" cy="6" r="6" fill="#ffd166" />
-                      <circle cx="14" cy="6" r="6" fill="#ef476f" />
-                    </g>
-                  </g>
-                </svg>
-              </span>
-              <span data-i18n="checkout_card_option">Tarjeta — Visa / Mastercard</span>
-            </label>
-
-            <label>
-              <input type="radio" name="payMethod" value="clave">
-              <span class="pm-icon" aria-hidden="true">
-                <!-- clave card icon -->
-                <svg viewBox="0 0 48 30" xmlns="http://www.w3.org/2000/svg" fill="none" class="pp-checkout-pm-svg">
-                  <rect x="1" y="1" width="46" height="28" rx="3" stroke="currentColor" stroke-width="1.6" fill="#fff8ea" />
-                  <text x="8" y="18" font-size="9" font-family="Arial, Helvetica, sans-serif" fill="currentColor">CLAVE</text>
-                </svg>
-              </span>
-              <span data-i18n="checkout_clave_option">Clave (tarjeta Panamá)</span>
-            </label>
-
-            <label>
-              <input type="radio" name="payMethod" value="yappy">
-              <span class="pm-icon" aria-hidden="true">
-                <!-- phone / QR placeholder -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="pp-checkout-pm-svg">
-                  <rect x="6" y="3" width="12" height="18" rx="2" stroke="currentColor" stroke-width="1.4" fill="#f4f6ff" />
-                  <rect x="9" y="7" width="6" height="2" rx="1" fill="currentColor" />
-                </svg>
-              </span>
-              <span data-i18n="checkout_yappy_option">Yappy</span>
-            </label>
-
-            <label>
-              <input type="radio" name="payMethod" value="paypal">
-              <span class="pm-icon" aria-hidden="true">
-                <!-- wallet / P icon -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="pp-checkout-pm-svg">
-                  <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.4" fill="#f4f6ff" />
-                  <path d="M6 10h6a1 1 0 0 1 1 1v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-              <span data-i18n="checkout_method_paypal">PayPal</span>
-            </label>
-
-            <label>
-              <input type="radio" name="payMethod" value="gpay">
-              <span class="pm-icon" aria-hidden="true">
-                <!-- stylized G -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="pp-checkout-pm-svg">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.4" fill="#fff" />
-                  <path d="M9.5 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                  <path d="M12 9.5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-                </svg>
-              </span>
-              <span data-i18n="checkout_method_gpay">Google Pay</span>
-            </label>
-
-            <label>
-              <input type="radio" name="payMethod" value="apple">
-              <span class="pm-icon" aria-hidden="true">
-                <!-- simple apple silhouette -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" class="pp-checkout-pm-svg">
-                  <path d="M15.2 7.5c-.4-1-.9-1.8-1.7-2.3-.7-.4-1.6-.5-2.5-.2-.2.1-.4.1-.6.1-.5 0-1-.2-1.5-.4-.2-.1-.4-.2-.6-.2-.3 0-.6.1-.8.3-.4.3-.6.8-.6 1.3 0 .2 0 .4.1.6.2.9.8 1.7 1.6 2.2.6.4 1.3.7 2 .8.1 0 .3.1.4.1.6 0 1.2-.2 1.7-.5.3-.2.6-.4.8-.6.1-.1.2-.2.3-.3z" stroke="currentColor" stroke-width="0.8" fill="#f4f6ff" />
-                  <path d="M17 13.8c-.2 1.5-.8 2.6-1.8 3.5-1.1 1-2.4 1.3-3.3 1.3-.7 0-1.6-.2-2.5-.6-1-.5-2-1.3-2.8-2.4C5 14.7 4.7 13 5 11.6c.3-1.4 1.1-2.6 2.2-3.6.9-.8 1.9-1.2 2.7-1.2.6 0 1.4.2 2.3.6.6.3 1.2.4 1.7.4.3 0 .6 0 .9-.1.2 0 .4 0 .6.1 0 0 .1.1.1.3 0 .2-.1.5-.2.7-.2.4-.6 1-1.3 1.7-.5.5-1.1 1-1.3 1.4-.3.6-.4 1.2-.4 1.9 0 .2 0 .5.1.8.1.6.3 1.2.6 1.7.4.7.9 1.2 1.6 1.8.4.3.8.5 1.1.7z" stroke="currentColor" stroke-width="0.7" fill="#f4f6ff" />
-                </svg>
-              </span>
-              <span data-i18n="checkout_method_apple">Apple Pay</span>
-            </label>
+          <legend class="pp-checkout-legend" data-i18n="checkout_select_method_legend">Medio de pago</legend>
+          <div class="pp-checkout-carousel" aria-roledescription="carrusel">
+            <button type="button" class="pp-checkout-carousel__nav pp-checkout-carousel__nav--prev" aria-controls="pmTrack" aria-label="Método anterior">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <div class="pp-checkout-carousel__viewport">
+              <div class="pp-checkout-carousel__track" id="pmTrack">
+                <label class="pp-checkout-slide">
+                  <input type="radio" name="payMethod" value="card" class="sr-only" checked />
+                  <div class="pp-checkout-slide__inner">
+                    <div class="pp-checkout-slide__brand" aria-hidden="true"><i class="fas fa-credit-card"></i></div>
+                    <span class="pp-checkout-slide__name" data-i18n="checkout_slide_card_title">Tarjeta</span>
+                    <span class="pp-checkout-slide__hint" data-i18n="checkout_slide_card_hint">Visa o Mastercard</span>
+                  </div>
+                </label>
+                <label class="pp-checkout-slide">
+                  <input type="radio" name="payMethod" value="clave" class="sr-only" />
+                  <div class="pp-checkout-slide__inner">
+                    <div class="pp-checkout-slide__brand" aria-hidden="true"><i class="fas fa-key"></i></div>
+                    <span class="pp-checkout-slide__name" data-i18n="checkout_slide_clave_title">Clave</span>
+                    <span class="pp-checkout-slide__hint" data-i18n="checkout_slide_clave_hint">Tarjeta Panamá</span>
+                  </div>
+                </label>
+                <label class="pp-checkout-slide">
+                  <input type="radio" name="payMethod" value="yappy" class="sr-only" />
+                  <div class="pp-checkout-slide__inner">
+                    <div class="pp-checkout-slide__brand" aria-hidden="true"><i class="fas fa-mobile-screen-button"></i></div>
+                    <span class="pp-checkout-slide__name" data-i18n="checkout_slide_yappy_title">Yappy</span>
+                    <span class="pp-checkout-slide__hint" data-i18n="checkout_slide_yappy_hint">Desde el celular</span>
+                  </div>
+                </label>
+                <label class="pp-checkout-slide">
+                  <input type="radio" name="payMethod" value="paypal" class="sr-only" />
+                  <div class="pp-checkout-slide__inner">
+                    <div class="pp-checkout-slide__brand" aria-hidden="true"><i class="fab fa-paypal"></i></div>
+                    <span class="pp-checkout-slide__name" data-i18n="checkout_slide_paypal_title">PayPal</span>
+                    <span class="pp-checkout-slide__hint" data-i18n="checkout_slide_paypal_hint">Cuenta PayPal</span>
+                  </div>
+                </label>
+                <label class="pp-checkout-slide">
+                  <input type="radio" name="payMethod" value="gpay" class="sr-only" />
+                  <div class="pp-checkout-slide__inner">
+                    <div class="pp-checkout-slide__brand" aria-hidden="true"><i class="fab fa-google"></i></div>
+                    <span class="pp-checkout-slide__name" data-i18n="checkout_slide_gpay_title">Google Pay</span>
+                    <span class="pp-checkout-slide__hint" data-i18n="checkout_slide_gpay_hint">Wallet Google</span>
+                  </div>
+                </label>
+                <label class="pp-checkout-slide">
+                  <input type="radio" name="payMethod" value="apple" class="sr-only" />
+                  <div class="pp-checkout-slide__inner">
+                    <div class="pp-checkout-slide__brand" aria-hidden="true"><i class="fab fa-apple"></i></div>
+                    <span class="pp-checkout-slide__name" data-i18n="checkout_slide_apple_title">Apple Pay</span>
+                    <span class="pp-checkout-slide__hint" data-i18n="checkout_slide_apple_hint">Wallet Apple</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <button type="button" class="pp-checkout-carousel__nav pp-checkout-carousel__nav--next" aria-controls="pmTrack" aria-label="Método siguiente">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
           </div>
-          <div id="selectionHint" class="muted small-note" aria-live="polite"></div>
+          <div class="pp-checkout-carousel__dots" id="pmDots" aria-label="Ir a método"></div>
+          <div id="selectionHint" class="pp-checkout-selection-hint muted small-note" aria-live="polite"></div>
         </fieldset>
 
         <!-- Contenedores específicos por método -->
@@ -405,6 +378,62 @@
         } catch(e){console.error(e);} 
       });
   // Elementos
+      window.ppCheckoutSound = (function () {
+        var muted = false;
+        try {
+          muted = localStorage.getItem('pp_checkout_mute') === '1';
+        } catch (e) {}
+        var ctx = null;
+        function getCtx() {
+          if (!window.AudioContext && !window.webkitAudioContext) return null;
+          if (!ctx) {
+            try {
+              ctx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+              ctx = null;
+            }
+          }
+          return ctx;
+        }
+        function tone(freq, dur, vol) {
+          var c = getCtx();
+          if (!c || muted) return;
+          if (c.state === 'suspended') c.resume().catch(function () {});
+          vol = typeof vol === 'number' ? vol : 0.1;
+          var o = c.createOscillator();
+          var g = c.createGain();
+          o.type = 'sine';
+          o.frequency.setValueAtTime(freq, c.currentTime);
+          g.gain.setValueAtTime(0.0001, c.currentTime);
+          g.gain.exponentialRampToValueAtTime(vol, c.currentTime + 0.018);
+          g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+          o.connect(g);
+          g.connect(c.destination);
+          o.start();
+          o.stop(c.currentTime + dur);
+        }
+        return {
+          tap: function () {
+            tone(520, 0.075);
+          },
+          ok: function () {
+            tone(660, 0.085);
+            setTimeout(function () {
+              tone(880, 0.11, 0.09);
+            }, 75);
+          },
+          setMuted: function (m) {
+            muted = !!m;
+            try {
+              localStorage.setItem('pp_checkout_mute', muted ? '1' : '0');
+            } catch (e) {}
+          },
+          isMuted: function () {
+            return muted;
+          },
+        };
+      })();
+
       const checkoutBtn = document.getElementById('checkoutBtn');
       const btnLabel = document.getElementById('btnLabel');
       const message = document.getElementById('message');
@@ -454,6 +483,138 @@
       removeStrayOverlays();
 
 
+      function wireSoundToggle() {
+        var btn = document.getElementById('checkoutSoundToggle');
+        if (!btn || !window.ppCheckoutSound) return;
+        function sync() {
+          var m = window.ppCheckoutSound.isMuted();
+          btn.setAttribute('aria-pressed', m ? 'true' : 'false');
+          btn.innerHTML = m
+            ? '<i class="fas fa-volume-xmark" aria-hidden="true"></i>'
+            : '<i class="fas fa-volume-high" aria-hidden="true"></i>';
+        }
+        sync();
+        btn.addEventListener('click', function () {
+          var was = window.ppCheckoutSound.isMuted();
+          window.ppCheckoutSound.setMuted(!was);
+          sync();
+          if (was) window.ppCheckoutSound.tap();
+        });
+      }
+
+      function wirePaymentCarousel() {
+        var track = document.getElementById('pmTrack');
+        var viewport = track && track.parentElement;
+        var prev = document.querySelector('.pp-checkout-carousel__nav--prev');
+        var next = document.querySelector('.pp-checkout-carousel__nav--next');
+        var dotHost = document.getElementById('pmDots');
+        if (!track || !viewport || !prev || !next || !dotHost) return;
+        var slides = Array.prototype.slice.call(track.querySelectorAll('.pp-checkout-slide'));
+        if (!slides.length) return;
+
+        dotHost.innerHTML = slides
+          .map(function (_, i) {
+            return (
+              '<button type="button" class="pp-checkout-dot" data-idx="' +
+              i +
+              '" aria-label="Método ' +
+              (i + 1) +
+              '"></button>'
+            );
+          })
+          .join('');
+
+        function currentIndex() {
+          var vr = viewport.getBoundingClientRect();
+          var mid = vr.left + vr.width / 2;
+          var best = 0;
+          var bestD = 1e9;
+          slides.forEach(function (s, j) {
+            var r = s.getBoundingClientRect();
+            var c = (r.left + r.right) / 2;
+            var d = Math.abs(c - mid);
+            if (d < bestD) {
+              bestD = d;
+              best = j;
+            }
+          });
+          return best;
+        }
+
+        function scrollSlideIntoView(slide) {
+          if (!slide || !viewport) return;
+          var left = slide.offsetLeft - (viewport.clientWidth - slide.offsetWidth) / 2;
+          viewport.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+        }
+
+        function selectIndex(i) {
+          var slide = slides[i];
+          if (!slide) return;
+          scrollSlideIntoView(slide);
+          var inp = slide.querySelector('input[type="radio"]');
+          if (inp && !inp.checked) {
+            inp.checked = true;
+            inp.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+
+        function syncDots() {
+          var idx = currentIndex();
+          Array.prototype.forEach.call(dotHost.querySelectorAll('.pp-checkout-dot'), function (d, j) {
+            d.classList.toggle('-active', j === idx);
+            d.setAttribute('aria-current', j === idx ? 'true' : 'false');
+          });
+          var inp = slides[idx] && slides[idx].querySelector('input[type="radio"]');
+          if (inp && !inp.checked) {
+            inp.checked = true;
+            inp.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+
+        var scrollTimer;
+        viewport.addEventListener('scroll', function () {
+          clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(syncDots, 64);
+        });
+
+        prev.addEventListener('click', function () {
+          var i = currentIndex();
+          selectIndex(Math.max(0, i - 1));
+        });
+        next.addEventListener('click', function () {
+          var i = currentIndex();
+          selectIndex(Math.min(slides.length - 1, i + 1));
+        });
+
+        dotHost.addEventListener('click', function (ev) {
+          var t = ev.target;
+          if (!t || !t.getAttribute || t.getAttribute('data-idx') == null) return;
+          selectIndex(Number(t.getAttribute('data-idx')));
+        });
+
+        payMethodRadios.forEach(function (r) {
+          r.addEventListener('change', function () {
+            var j = slides.findIndex(function (s) {
+              return s.contains(r);
+            });
+            if (j >= 0) scrollSlideIntoView(slides[j]);
+            try {
+              window.ppCheckoutSound && window.ppCheckoutSound.tap();
+            } catch (e) {}
+            setTimeout(syncDots, 280);
+          });
+        });
+
+        var checked = document.querySelector('input[name="payMethod"]:checked');
+        if (checked) {
+          var j0 = slides.findIndex(function (s) {
+            return s.contains(checked);
+          });
+          if (j0 >= 0) setTimeout(function () { selectIndex(j0); }, 120);
+        }
+        setTimeout(syncDots, 200);
+      }
+
       // Mostrar/ocultar contenedores solo cuando el usuario seleccione un método
       const selectionHint = document.getElementById('selectionHint');
       function updateMethodUI() {
@@ -496,8 +657,8 @@
       } catch (e) { console.warn('No card radios found for explicit listeners'); }
       // also ensure clicking labels triggers update (some environments may not fire change reliably)
       try {
-        document.querySelectorAll('.radio-list label').forEach(lbl => {
-          lbl.addEventListener('click', (ev) => { setTimeout(updateMethodUI, 10); });
+        document.querySelectorAll('.pp-checkout-slide').forEach(lbl => {
+          lbl.addEventListener('click', () => { setTimeout(updateMethodUI, 10); });
         });
       } catch (e) { /* ignore */ }
 
@@ -510,6 +671,8 @@
       }
       // Inicialmente ocultar todo si no hay selección
       updateMethodUI();
+      wireSoundToggle();
+      wirePaymentCarousel();
 
       // PuntoPago APP registration gate removed: all methods are always enabled
 
@@ -603,6 +766,11 @@
       function showMessage({ type, text }) {
         message.className = 'msg show ' + (type === 'success' ? 'success' : 'error');
         message.textContent = text;
+        if (type === 'success') {
+          try {
+            window.ppCheckoutSound && window.ppCheckoutSound.ok();
+          } catch (e) {}
+        }
       }
 
       function clearMessage() { message.className = 'msg'; message.textContent = ''; }
@@ -1080,15 +1248,12 @@
 
           document.documentElement.classList.add('pp-checkout--recarga');
           var sub = document.getElementById('checkoutNavSubtitle');
-          if (sub) sub.textContent = 'Recarga de wallet (demo)';
-          var kicker = document.getElementById('checkoutKicker');
-          if (kicker) kicker.textContent = 'Recarga desde el portal agente';
+          if (sub) sub.textContent = 'Recarga de saldo';
           var h = document.getElementById('headline');
-          if (h) h.textContent = 'Recargar saldo con tarjeta u otro medio';
+          if (h) h.textContent = 'Recargar saldo';
           var lead = document.getElementById('checkoutLead');
           if (lead) {
-            lead.textContent =
-              'El monto indicado se acreditará a tu wallet del demo tras confirmar (se aplican comisiones simuladas).';
+            lead.textContent = 'Elige cómo pagar. Al confirmar, el saldo se actualiza en tu wallet.';
           }
           var cap = document.getElementById('amountCaption');
           if (cap) cap.textContent = 'Monto a cargar a tu wallet';
