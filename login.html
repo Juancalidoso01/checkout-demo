@@ -136,20 +136,6 @@
         showError('');
         const res = window.PPAuth.signIn($u.value, $p.value);
         if (!res.ok){
-          if (res.contractPending) {
-            showError('Tu solicitud aun requiere aceptar el contrato. Te redirigiremos al paso pendiente.');
-            setTimeout(() => {
-              window.PPAuth.redirectToContract(res.applicationId || '');
-            }, 400);
-            return;
-          }
-          if (res.pendingReview) {
-            showError('Tu solicitud todavia esta en revision. Te redirigiremos al estado actual.');
-            setTimeout(() => {
-              window.PPAuth.redirectToPendingReview(res.applicationId || '');
-            }, 400);
-            return;
-          }
           // Prefer localized message via errorKey, then res.error, then generic fallback
           let msg = '';
           try {

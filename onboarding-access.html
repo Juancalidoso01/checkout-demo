@@ -627,79 +627,10 @@
       };
       const sbCfg = window.PPSupabaseConfig || {};
       const hasSupabase = !!(window.supabase && sbCfg.enabled && sbCfg.url && sbCfg.anonKey);
-      const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey, {
-        auth: {
-          detectSessionInUrl: true,
-          persistSession: true,
-          storage: window.localStorage,
-          autoRefreshToken: true
-        }
-      }) : null;
-
-      /** URL exacta que Supabase debe tener en Authentication → URL Configuration → Redirect URLs */
-      function getMagicLinkRedirectUrl(){
-        let u = (sbCfg.redirectTo || '').trim();
-        if (!u) {
-          try {
-            u = `${window.location.origin}${window.location.pathname}`;
-          } catch (e) {
-            u = (typeof location !== 'undefined' && location.href) ? location.href : '';
-          }
-        }
-        u = u.split('#')[0];
-        const q = u.indexOf('?');
-        if (q >= 0) u = u.slice(0, q);
-        return u.replace(/\/+$/, '') || u;
-      }
-
-      function explainMagicLinkError(error){
-        const msg = ((error && error.message) ? error.message : String(error || '')).toLowerCase();
-        const status = (error && error.status) ? Number(error.status) : 0;
-        const lines = [];
-        if (msg.includes('redirect') || (msg.includes('url') && msg.includes('allow')) || msg.includes('not allowed')) {
-          lines.push('En Supabase Dashboard → Authentication → URL Configuration, agrega esta URL en “Redirect URLs”:');
-          lines.push(getMagicLinkRedirectUrl());
-        }
-        if (msg.includes('rate') || msg.includes('too many') || msg.includes('seconds') || status === 429) {
-          lines.push('Límite de envío de correos: espera 1–2 minutos y vuelve a intentar, o revisa el plan/cuota de Auth en Supabase.');
-        }
-        if (msg.includes('smtp') || msg.includes('mail') && msg.includes('send') || msg.includes('email provider')) {
-          lines.push('Revisa en Supabase → Project Settings → Auth el proveedor de correo (SMTP personalizado o el predeterminado).');
-        }
-        if (msg.includes('sign up') && msg.includes('disabled') || msg.includes('signup_disabled')) {
-          lines.push('Puede que “Sign ups” esté deshabilitado en Authentication → Providers → Email.');
-        }
-        if (msg.includes('already been registered') || msg.includes('already registered') || msg.includes('user already exists')) {
-          lines.push('Este correo ya existe en Auth: prueba “Iniciar sesión” o usa otro correo para una solicitud nueva.');
-        }
-        if (!lines.length) {
-          lines.push('Revisa Supabase → Authentication → Logs (o la consola de red) para el detalle del rechazo.');
-        }
-        return lines;
-      }
+      const supabaseClient = hasSupabase ? window.supabase.createClient(sbCfg.url, sbCfg.anonKey) : null;
     let waitUntil = 0;
     let countdownTimer = null;
     let pollingTimer = null;
-    let autoOnboardingScheduled = false;
-    let authListenerBound = false;
-
-      (function captureAuthReturnForAutoOnboarding(){
-        try {
-          const h = window.location.hash || '';
-          const q = window.location.search || '';
-          if (/access_token|refresh_token|type=/i.test(h) || q.includes('code=')) {
-            sessionStorage.setItem('pp_expect_onboarding_auto', '1');
-          }
-        } catch (e) {}
-      })();
-
-      function shouldAutoContinueAfterEmailVerify(){
-        try {
-          return sessionStorage.getItem('pp_expect_onboarding_auto') === '1';
-        } catch (e) {
-          return false;
-        }
-      }
 
       if (desktopCursor && cursorRing) {
         let rafId = null;
@@ -796,19 +727,8 @@
         }
       }
       function normalize(v){ return (v || '').toString().trim().toLowerCase(); }
-      function escHtml(v){
-        return (v || '').toString()
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
-      }
       function setGateMsg(msg, isError){
         els.gateMsg.textContent = msg || '';
-        els.gateMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
-      }
-      function setGateHtml(html, isError){
-        els.gateMsg.innerHTML = html || '';
         els.gateMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
       }
       function setModalStep(active){
@@ -894,39 +814,7 @@
         renderCountdown();
         stopTimers();
         countdownTimer = setInterval(renderCountdown, 1000);
-        pollingTimer = setInterval(() => { handleSupabaseReturn(true); }, 1500);
-      }
-
-      function scheduleAutoContinueToOnboarding(){
-        if (autoOnboardingScheduled) return;
-        if (!shouldAutoContinueAfterEmailVerify()) return;
-        autoOnboardingScheduled = true;
-        try { sessionStorage.removeItem('pp_expect_onboarding_auto'); } catch (e) {}
-        setGateMsg('Correo confirmado. Te llevamos al formulario de onboarding…', false);
-        setTimeout(() => {
-          try { continueToOnboarding(); } catch (e) { console.warn(e); }
-        }, 700);
-      }
-
-      function applyMagicLinkSession(session){
-        if (!session || !session.user || !session.user.email) return false;
-        const ctx = getAccessContext();
-        storeVerifiedSession({ email: session.user.email, provider: 'supabase_magic_link' });
-        storeAccessContext({
-          ...(ctx || {}),
-          email: session.user.email,
-          emailVerified: true,
-          verificationMethod: 'supabase_magic_link',
-          supabaseUserId: session.user.id
-        });
-        stopTimers();
-        setWaitingMode(false);
-        setWaitingEmail(session.user.email);
-        setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
-        setStatus('-ok', `Correo verificado: ${session.user.email}`);
-        setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
-        updateContinueButton(true);
-        return true;
+        pollingTimer = setInterval(() => { handleSupabaseReturn(true); }, 4000);
       }
 
       async function handleSupabaseReturn(silent){
@@ -936,9 +824,23 @@
           if (error) throw error;
           const session = data && data.session;
           if (!session || !session.user || !session.user.email) return false;
-          const applied = applyMagicLinkSession(session);
-          if (applied && shouldAutoContinueAfterEmailVerify()) scheduleAutoContinueToOnboarding();
-          return applied;
+          const ctx = getAccessContext();
+          storeVerifiedSession({ email: session.user.email, provider: 'supabase_magic_link' });
+          storeAccessContext({
+            ...(ctx || {}),
+            email: session.user.email,
+            emailVerified: true,
+            verificationMethod: 'supabase_magic_link',
+            supabaseUserId: session.user.id
+          });
+          stopTimers();
+          setWaitingMode(false);
+          setWaitingEmail(session.user.email);
+          setGateMsg('Correo confirmado correctamente. Ya puedes continuar al onboarding.', false);
+          setStatus('-ok', `Correo verificado: ${session.user.email}`);
+          setNextStep('Tu correo ya fue validado. Ahora pulsa “Continuar al onboarding” para abrir el formulario completo.', true);
+          updateContinueButton(true);
+          return true;
         } catch (e) {
           if (!silent) {
             setGateMsg('No pudimos confirmar la sesión de correo. Puedes intentar de nuevo.', true);
@@ -949,46 +851,16 @@
         }
       }
 
-      function bindSupabaseAuthListener(){
-        if (!supabaseClient || authListenerBound) return;
-        authListenerBound = true;
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-          if (event === 'SIGNED_IN' && session && session.user && session.user.email) {
-            const applied = applyMagicLinkSession(session);
-            if (applied && shouldAutoContinueAfterEmailVerify()) scheduleAutoContinueToOnboarding();
-          }
-        });
-      }
-
-      function runMagicLinkReturnBurst(){
-        if (!supabaseClient) return;
-        const h = location.hash || '';
-        const q = location.search || '';
-        const looksLikeAuthReturn = h.includes('access_token') || h.includes('refresh_token') || h.includes('type=') || q.includes('code=');
-        if (!looksLikeAuthReturn) return;
-        let tries = 0;
-        const max = 40;
-        const tick = () => {
-          tries += 1;
-          handleSupabaseReturn(true).then((ok) => {
-            if (ok || tries >= max) return;
-            setTimeout(tick, 250);
-          });
-        };
-        tick();
-      }
-
       async function sendMagicLink(email, phone, business){
         storeAccessContext({ email, phone, businessName: business, emailVerified: false, verificationMethod: 'pending_magic_link' });
         setStatus('-pending', 'Enviando enlace de confirmación al correo...');
         setGateMsg('Estamos enviando el enlace de confirmación.', false);
         let error = null;
-        const redirectTo = getMagicLinkRedirectUrl();
         try {
           const result = await supabaseClient.auth.signInWithOtp({
-            email: email.trim(),
+            email,
             options: {
-              emailRedirectTo: redirectTo,
+              emailRedirectTo: sbCfg.redirectTo || location.href,
               shouldCreateUser: true,
               data: {
                 phone,
@@ -1002,22 +874,15 @@
           error = e;
         }
         if (error) {
-          const detail = (error && error.message) ? error.message : String(error || 'No pudimos enviar el correo de confirmación.');
-          const hints = explainMagicLinkError(error);
-          const gateHtml = [
-            `<strong>No se pudo enviar el enlace.</strong> ${escHtml(detail)}`,
-            '<ul class="mt-2 ml-4 list-disc text-sm space-y-1">' + hints.map(function(h){ return '<li>' + escHtml(h) + '</li>'; }).join('') + '</ul>',
-            '<p class="mt-2 text-xs text-slate-500">Redirect usado: <code class="mono">' + escHtml(redirectTo) + '</code></p>'
-          ].join('');
-          setGateHtml(gateHtml, true);
-          setStatus('-error', `No se envió el correo: ${detail}`);
-          console.error('Supabase magic link error:', error, { emailRedirectTo: redirectTo });
+          const detail = error.message || String(error) || 'No pudimos enviar el correo de confirmación.';
+          setGateMsg(`Error Supabase: ${detail}`, true);
+          setStatus('-error', 'Falló el envío del magic link. Revisa la configuración de Supabase y la sección de Email.');
+          console.error('Supabase magic link error:', error);
           return;
         }
         setGateMsg('Te enviamos un enlace de confirmación. Revisa tu correo y vuelve a esta misma página.', false);
         setStatus('-pending', `Correo enviado a ${email}. Debes abrir el enlace para continuar.`);
         setNextStep('Abre tu correo desde este mismo celular o computador. Cuando vuelvas aquí con el enlace confirmado, podrás continuar.', false);
-        try { sessionStorage.setItem('pp_expect_onboarding_auto', '1'); } catch (e) {}
         startWaitingWindow(email);
         updateContinueButton(false);
       }
@@ -1061,22 +926,10 @@
             setTimeout(() => { location.href = 'login.html'; }, 700);
             return;
           }
-          if (status === 'contract_pending') {
-            setGateMsg('Tu solicitud quedó pendiente de aceptar el contrato.', false);
-            setStatus('-warn', 'Debes aceptar el contrato de servicio antes de que podamos procesar la revisión.');
-            setNextStep('Te llevaremos al contrato pendiente para que completes el paso final.', false);
-            setTimeout(() => {
-              window.PPAuth.redirectToContract(existingApp.id || '');
-            }, 700);
-            return;
-          }
           if (status === 'pending_review' || status === 'pending') {
             setGateMsg('Ya existe una solicitud en revisión para este correo.', false);
             setStatus('-warn', 'Tu solicitud ya está en evaluación. No necesitas completar otra.');
-            setNextStep('No necesitas hacer nada más por ahora. Te mostraremos el estado actual de tu solicitud.', false);
-            setTimeout(() => {
-              window.PPAuth.redirectToPendingReview(existingApp.id || '');
-            }, 700);
+            setNextStep('No necesitas hacer nada más por ahora. Tu solicitud ya está en revisión.', false);
             return;
           }
           if (status === 'rejected') {
@@ -1115,7 +968,10 @@
         validateAndContinue();
       });
       els.resendBtn.addEventListener('click', () => {
-        validateAndContinue();
+        const email = normalize(els.email.value);
+        const phone = (els.phone.value || '').trim();
+        const business = (els.business.value || '').trim();
+        validateAndContinue(email, phone, business);
       });
       els.continueBtn.addEventListener('click', () => {
         const ctx = getAccessContext();
@@ -1199,8 +1055,6 @@
         }
       })();
 
-      bindSupabaseAuthListener();
-      runMagicLinkReturnBurst();
       handleSupabaseReturn();
     })();
   </script>

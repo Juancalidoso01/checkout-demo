@@ -972,9 +972,3 @@ html, body { overscroll-behavior-y: contain; scroll-behavior: smooth; }
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
-/* Leaflet: el img global rompe los tiles del mapa */
-#addressMap img {
-  max-width: none !important;
-  max-height: none !important;
-}

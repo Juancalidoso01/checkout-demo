@@ -4,14 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <!-- Solo bloquea tracker.js; permite el SDK oficial de MetaMap -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://web-button.getmati.com https://sdk.metamap.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com https://nominatim.openstreetmap.org https://api.geoapify.com https://reallyfreegeoip.org https://ipapi.co; frame-src 'self' https://*.metamap.com https://*.getmati.com https://signup.metamap.com https://signup.getmati.com; img-src 'self' data: blob: https: https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com;">
+  <!-- Bloquea sdk.metamap.com/tracker.js (evita errores 403/nosniff). El botón usa web-button.metamap.com -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://web-button.metamap.com https://cdn.jsdelivr.net; connect-src 'self' https://*.metamap.com https://*.getmati.com https://*.supabase.co https://api.prod.metamap.com wss://api.prod.metamap.com wss://*.metamap.com; frame-src https://*.metamap.com https://*.getmati.com https://signup.metamap.com;">
   <title>Onboarding aliado — Punto Pago</title>
   <script>
     (function(){
-      function blockTracker(url){
-        return !!(url && /tracker(\.js)?(\?|$)/i.test(String(url)));
-      }
+      function blockTracker(url){return !!(url&&String(url).indexOf('tracker')>=0||(url&&String(url).indexOf('sdk.metamap.com')>=0));}
       var origCreateElement=document.createElement.bind(document);
       document.createElement=function(tag){
         var el=origCreateElement(tag);
@@ -39,14 +37,12 @@
       };
     })();
   </script>
-  <script src="https://cdn.tailwindcss.com" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
-  <!-- SDK oficial MetaMap: https://docs.metamap.com/docs/web-metamap-button -->
   <script src="https://web-button.metamap.com/button.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="supabase-config.js" defer></script>
-  <script src="compliance-lists.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <style>
     html,body{background:#fff !important}
     body{font-family:var(--pp-font,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif);color:var(--pp-text,#171717)}
@@ -58,12 +54,12 @@
     .ob-progress-bar{height:8px;border-radius:999px;background:rgba(0,0,0,.08);overflow:hidden}
     .ob-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg, #5462e6, #4352d4);transition:width .4s ease}
     .ob-shell{max-width:1180px;margin:0 auto;padding:24px 16px 72px}
-    .ob-layout{display:grid;grid-template-columns:minmax(280px,320px) 1fr;gap:18px;align-items:start}
-    .ob-sidebar{position:sticky;top:96px;height:fit-content;display:block !important;min-width:0}
+    .ob-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
+    .ob-sidebar{position:sticky;top:96px;height:fit-content}
     .ob-step{display:flex;align-items:flex-start;gap:12px;padding:14px 12px;border-radius:18px;border:1px solid rgba(0,0,0,.06);background:#fff;color:#374151;transition:border-color .2s,box-shadow .2s}
     .ob-step.-active{border-color:rgba(84,98,230,.35);box-shadow:0 12px 30px rgba(84,98,230,.12)}
     .ob-step[role=button]:hover:not(.-active){border-color:rgba(84,98,230,.2);background:rgba(84,98,230,.04)}
-    .ob-step-index{width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.1);color:var(--pp-primary,#5462e6);font-weight:800;font-size:13px;flex:0 0 auto}
+    .ob-step-index{width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(84,98,230,.1);color:var(--pp-primary);font-weight:800;font-size:13px;flex:0 0 auto}
     .ob-hero{border:1px solid rgba(0,0,0,.08);background:#fff}
     .ob-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
     .ob-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -82,85 +78,17 @@
     .kyc-status-rejected{background:linear-gradient(135deg,#fef2f2 0%,#fee2e2 100%);border-color:#ef4444}
     .kyc-error-detail{padding:10px 14px;margin-top:8px;border-radius:10px;background:rgba(239,68,68,.1);color:#b91c1c;font-size:13px;line-height:1.4}
     @keyframes kyc-spin{to{transform:rotate(360deg)}}
-    @keyframes kycBtnPulse{0%,100%{box-shadow:0 4px 14px rgba(99,102,241,.35)}50%{box-shadow:0 6px 24px rgba(99,102,241,.5)}}
-    .ob-checkbox-input{appearance:auto;-webkit-appearance:checkbox;accent-color:#5462e6;cursor:pointer}
-    .ob-marker.leaflet-marker-icon{border:none !important;background:transparent !important}
     @media (max-width: 980px){
       .ob-layout{grid-template-columns:1fr}
-      .ob-sidebar{position:relative;top:auto;order:-1}
+      .ob-sidebar{position:relative;top:auto}
     }
-    .ob-sidebar .pp-card-body{min-height:120px}
-    #stepIndicator{display:block !important;visibility:visible !important;min-height:240px}
-    #stepIndicator .ob-step{display:flex !important;visibility:visible !important}
     @media (max-width: 720px){
       .ob-grid,.ob-grid-3{grid-template-columns:1fr}
       .ob-summary dl{grid-template-columns:1fr}
     }
-    /* Listas desplegables: encima del contenido, sin recorte */
-    .form-step{overflow:visible !important}
-    #industry-suggestions,#repOcupacion-suggestions,#repActividad-suggestions,#addressSuggestions{z-index:9999 !important;position:absolute !important;box-shadow:0 12px 28px rgba(0,0,0,.15) !important}
-    .ob-address-loading{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#64748b;margin-top:8px}
-    .ob-address-loading.hidden{display:none}
-    .ob-address-spinner{width:16px;height:16px;border:2px solid rgba(84,98,230,.18);border-top-color:#5462e6;border-radius:50%;animation:kyc-spin .8s linear infinite;flex:0 0 auto}
-    /* Cursor ring + efectos visuales (como onboarding-access) */
-    .cursor-ring{position:fixed;top:0;left:0;width:58px;height:58px;border-radius:999px;border:2px solid rgba(84,98,230,.82);background:transparent;pointer-events:none;transform:translate(-50%,-50%);z-index:120;opacity:0;transition:width .18s ease,height .18s ease,opacity .18s ease,border-color .18s ease,box-shadow .18s ease}
-    .cursor-ring.-visible{opacity:1}
-    .cursor-ring.-active{width:68px;height:68px;border-color:rgba(84,98,230,.96);box-shadow:0 0 0 6px rgba(84,98,230,.08)}
-    /* Hero mejorado: gradiente, blur orbs, palabras con palpitación */
-    .ob-hero{position:relative;overflow:hidden;border:1px solid rgba(84,98,230,.10);background:radial-gradient(circle at top left,rgba(97,113,255,.12),transparent 32%),linear-gradient(135deg,#ffffff 0%,#eef3ff 38%,#ffffff 100%);box-shadow:0 20px 50px rgba(15,23,42,.06)}
-    .ob-hero::before{content:'';position:absolute;inset:auto auto -30px -30px;width:160px;height:160px;border-radius:999px;background:rgba(84,98,230,.08);filter:blur(20px)}
-    .ob-hero::after{content:'';position:absolute;inset:-40px -20px auto auto;width:200px;height:200px;border-radius:999px;background:rgba(59,130,246,.08);filter:blur(24px)}
-    .ob-chip{transition:transform .22s ease,box-shadow .22s ease}
-    .ob-chip:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(84,98,230,.14)}
-    .ob-status-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
-    .ob-status-pill.ob-status-unsaved{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
-    .ob-status-pill.ob-status-saved{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
-    .ob-status-pill.ob-status-saved::before{content:'';width:6px;height:6px;border-radius:999px;background:currentColor}
-    /* Palabras con palpitación/subrayado elegante */
-    .ob-accent{display:inline-block;position:relative;padding:0 .06em;border-radius:.2em;background:linear-gradient(135deg,rgba(84,98,230,.14),rgba(59,130,246,.1));box-shadow:0 8px 20px rgba(84,98,230,.1);animation:obBeat 2s cubic-bezier(.2,.8,.2,1) infinite}
-    .ob-accent::after{content:'';position:absolute;inset:-6px -8px;border-radius:.35em;background:radial-gradient(circle at 50% 50%,rgba(84,98,230,.2),transparent 65%);opacity:.7;filter:blur(8px);z-index:-1;animation:obGlow 2s ease-in-out infinite}
-    @keyframes obBeat{0%,100%{transform:scale(1)}12%{transform:scale(1.03)}24%{transform:scale(1)}36%{transform:scale(1.018)}48%{transform:scale(1)}}
-    @keyframes obGlow{0%,100%{opacity:.5;transform:scale(1)}20%{opacity:.9;transform:scale(1.04)}40%{opacity:.6;transform:scale(1.02)}}
-    /* Etapas: paso activo con pulso suave en el número */
-    .ob-step{transition:transform .24s ease,border-color .24s,box-shadow .24s,background .24s}
-    .ob-step:hover:not(.-active){transform:translateX(4px)}
-    .ob-step.-active .ob-step-index{animation:obStepPulse 2.2s ease-in-out infinite}
-    @keyframes obStepPulse{0%,100%{box-shadow:0 0 0 0 rgba(84,98,230,.25)}50%{box-shadow:0 0 0 8px rgba(84,98,230,0)}}
-    .pp-card,.ob-step{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease}
-    .pp-card:hover,.ob-step:hover{box-shadow:0 16px 36px rgba(15,23,42,.06)}
-    @media (hover:none),(prefers-reduced-motion:reduce){
-      .cursor-ring,.ob-accent,.ob-accent::after,.ob-step.-active .ob-step-index{animation:none !important}
-      .ob-chip:hover,.ob-step:hover{transform:none !important}
-    }
-    /* Chulo verde cuando el campo está correcto */
-    .ob-field-wrap{position:relative;display:block;width:100%}
-    .ob-field-wrap > .pp-field,.ob-field-wrap > input,.ob-field-wrap > select,.ob-field-wrap > textarea{padding-right:42px}
-    .ob-field-check{position:absolute;right:12px;top:50%;margin-top:-11px;width:22px;height:22px;border-radius:50%;background:#10b981;color:#fff;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:bold;z-index:2;pointer-events:none}
-    .ob-field-check.-ok{display:flex}
-    .ob-field-invalid,.ob-field-invalid .pp-field,.ob-field-invalid input,.ob-field-invalid select,.ob-field-invalid textarea{box-shadow:0 0 0 2px #fecaca}
-    .ob-field-invalid .pp-field,.ob-field-invalid input,.ob-field-invalid select,.ob-field-invalid textarea{border-color:#ef4444 !important;background-color:#fef2f2 !important}
-    #pdf-dropzone.ob-field-invalid{border-color:#ef4444 !important;background-color:#fef2f2 !important;box-shadow:0 0 0 2px #fecaca}
-    #pdf-dropzone .ob-field-check{top:12px;right:12px;margin-top:0}
-    /* Dirección: animaciones y profundidad */
-    .ob-address-block{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 50%,#eef2ff 100%);box-shadow:0 4px 16px rgba(15,23,42,.06),inset 0 1px 0 rgba(255,255,255,.8);transition:box-shadow .25s ease,transform .25s ease}
-    .ob-address-block:hover{box-shadow:0 8px 24px rgba(84,98,230,.12),inset 0 1px 0 rgba(255,255,255,.9)}
-    .ob-address-block .pp-field:focus{box-shadow:0 0 0 3px rgba(84,98,230,.2)}
-    .ob-map-section{position:relative}
-    .ob-map-section::before{content:'';position:absolute;inset:-2px;border-radius:14px;background:linear-gradient(135deg,rgba(84,98,230,.08),transparent);pointer-events:none;opacity:0;transition:opacity .3s}
-    .ob-map-section:hover::before{opacity:1}
-    .ob-map-btn{transform:translateY(0);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-    .ob-map-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(84,98,230,.25)}
-    .ob-map-btn:active{transform:translateY(0)}
-    .ob-coords-badge{background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);border:1px solid rgba(16,185,129,.3);box-shadow:0 4px 12px rgba(16,185,129,.15)}
-    .ob-coords-badge{animation:obCoordsFadeIn .4s ease}
-    @keyframes obCoordsFadeIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-    @media (hover:none),(prefers-reduced-motion:reduce){
-      .ob-address-block:hover,.ob-map-btn:hover{transform:none}
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-page-white">
-  <div id="cursorRing" class="cursor-ring" aria-hidden="true"></div>
   <nav class="ob-nav p-4 sticky top-0 z-40 pp-type">
     <div class="mx-auto flex justify-between items-center w-full max-w-6xl px-4 gap-4">
       <div class="min-w-0">
@@ -168,11 +96,7 @@
         <div class="text-xs ob-nav-sub">Registro de nuevo aliado</div>
       </div>
       <div class="flex items-center gap-3">
-        <a id="whatsappBtn" href="https://wa.me/50762761874" target="_blank" rel="noopener noreferrer" class="pp-btn ob-nav-btn h-[42px] rounded-[14px] px-4 inline-flex items-center gap-2" style="background:#25d366;color:#fff;border:none">
-          <i class="fa-brands fa-whatsapp text-xl"></i>
-          <span>¿Dudas? Escríbenos</span>
-        </a>
-        <button type="button" id="btnRegresar" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i>Regresar</button>
+        <a id="portalLink" href="pp-admin-entry.html" class="pp-btn pp-btn-secondary ob-nav-btn h-[42px] rounded-[14px] px-4">Portal credenciales</a>
       </div>
     </div>
   </nav>
@@ -184,82 +108,50 @@
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div class="ob-chip"><i class="fa-solid fa-store"></i> Registro de aliado</div>
-              <h1 class="text-2xl font-extrabold mt-3">Completa los <span class="ob-accent">datos</span> de tu negocio</h1>
-              <p class="text-sm text-slate-600 mt-2 max-w-2xl">Llena cada sección para que podamos <span class="ob-accent">evaluar</span> tu solicitud. Al finalizar podrás enviar todo a <span class="ob-accent">revisión</span>.</p>
+              <h1 class="text-2xl font-extrabold mt-3">Completa los datos de tu negocio</h1>
+              <p class="text-sm text-slate-600 mt-2 max-w-2xl">Llena cada sección para que podamos evaluar tu solicitud. Al finalizar podrás enviar todo a revisión.</p>
             </div>
-            <div class="flex flex-wrap items-center gap-3 shrink-0">
-              <div class="flex items-center gap-2" id="obSaveStatusWrap">
-                <span id="obProgressLabel" class="text-sm font-bold text-slate-700">0%</span>
-                <div class="ob-progress-bar w-24 md:w-28" aria-hidden="true">
-                  <div id="obProgressFill" class="ob-progress-fill" style="width:0%"></div>
-                </div>
-                <span id="draftStatus" class="ob-status-pill ob-status-unsaved" aria-live="polite">Sin guardar</span>
+            <div class="flex items-center gap-3 shrink-0">
+              <span id="obProgressLabel" class="text-sm font-bold text-slate-700">0%</span>
+              <div class="ob-progress-bar w-28 md:w-36" aria-hidden="true">
+                <div id="obProgressFill" class="ob-progress-fill" style="width:0%"></div>
               </div>
             </div>
           </div>
-          <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div class="ob-progress-bar flex-1" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Avance del formulario">
-              <div id="obProgressFillFull" class="ob-progress-fill" style="width:0%"></div>
-            </div>
-            <span class="text-xs text-slate-500 shrink-0" id="applicationCodeLabel">Código: <span id="applicationCode">—</span></span>
+          <div class="ob-progress-bar w-full" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Avance del formulario">
+            <div id="obProgressFillFull" class="ob-progress-fill" style="width:0%"></div>
           </div>
         </div>
       </div>
 
       <div class="ob-layout">
         <aside class="ob-sidebar space-y-3">
-          <div class="pp-card -soft" style="overflow:visible">
+          <div class="pp-card -soft overflow-hidden">
             <div class="pp-card-head">
               <h2 class="text-lg font-extrabold">Etapas</h2>
-              <p class="text-sm text-gray-500 mt-1">Completa los <span class="ob-accent">datos mínimos</span> para pasar a evaluación.</p>
+              <p class="text-sm text-gray-500 mt-1">Completa los datos mínimos para pasar a evaluación.</p>
             </div>
-            <div class="pp-card-body space-y-3" id="stepIndicator" style="overflow:visible">
-              <div class="ob-step -active cursor-pointer" data-step-idx="0" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(0);return false;">
-                <div class="ob-step-index">1</div>
-                <div>
-                  <div class="font-extrabold text-sm">Comercio</div>
-                  <div class="text-xs text-slate-500 mt-1">Estructura, empresa y aviso de operaciones (PDF)</div>
-                </div>
-              </div>
-              <div class="ob-step cursor-pointer" data-step-idx="1" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(1);return false;">
-                <div class="ob-step-index">2</div>
-                <div>
-                  <div class="font-extrabold text-sm">Contactos</div>
-                  <div class="text-xs text-slate-500 mt-1">Representante, teléfono empresa y celular</div>
-                </div>
-              </div>
-              <div class="ob-step cursor-pointer" data-step-idx="2" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(2);return false;">
-                <div class="ob-step-index">3</div>
-                <div>
-                  <div class="font-extrabold text-sm">Dirección</div>
-                  <div class="text-xs text-slate-500 mt-1">Provincia, distrito, mapa y ubicación exacta</div>
-                </div>
-              </div>
-              <div class="ob-step cursor-pointer" data-step-idx="3" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(3);return false;">
-                <div class="ob-step-index">4</div>
-                <div>
-                  <div class="font-extrabold text-sm">Cuenta para liquidación</div>
-                  <div class="text-xs text-slate-500 mt-1">Banco o fintech donde recibirá sus comisiones</div>
-                </div>
-              </div>
-              <div class="ob-step cursor-pointer" data-step-idx="4" role="button" tabindex="0" onclick="(window.__obGoToStep||window.__obStepClick)(4);return false;">
-                <div class="ob-step-index">5</div>
-                <div>
-                  <div class="font-extrabold text-sm">Conocimiento del cliente</div>
-                  <div class="text-xs text-slate-500 mt-1">Ingresos, montos, origen y procedencia de fondos</div>
-                </div>
-              </div>
-            </div>
+            <div class="pp-card-body space-y-3" id="stepIndicator"></div>
           </div>
 
+          <div class="pp-card -soft overflow-hidden">
+            <div class="pp-card-head">
+              <h2 class="text-lg font-extrabold">Estado del registro</h2>
+            </div>
+            <div class="pp-card-body text-sm text-slate-600 space-y-2">
+              <div><strong>Código de solicitud:</strong> <span id="applicationCode">—</span></div>
+              <div><strong>Guardado:</strong> <span id="draftStatus">Sin guardar</span></div>
+              <div class="text-xs text-slate-500 pt-1 border-t border-slate-200 mt-2"><strong>Nota:</strong> Al enviar, tu caso pasará a revisión antes de asignar credenciales.</div>
+            </div>
+          </div>
         </aside>
 
         <section class="space-y-5">
           <form id="onboardingForm" class="space-y-5" novalidate>
             <section class="pp-card -soft overflow-hidden form-step" data-step="0">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">1. Identificación del comercio y aviso de operaciones</h2>
-                <p class="text-sm text-gray-500 mt-1">Estructura o empresa del cliente y documento PDF con la descripción del negocio.</p>
+                <h2 class="text-xl font-extrabold">1. Identificación del comercio</h2>
+                <p class="text-sm text-gray-500 mt-1">Primer paso para conocer la estructura o empresa del cliente.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
@@ -293,7 +185,7 @@
                     <label class="pp-label">Industria / rubro *</label>
                     <input name="industry" id="industry-autocomplete" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción de la lista" autocomplete="off">
                     <span class="text-xs text-slate-500 block mt-1">Obligatorio elegir una opción. Si no encuentra su rubro, seleccione &quot;Ocupación o actividad no enlistada&quot;.</span>
-                    <ul id="industry-suggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de industria"></ul>
+                    <ul id="industry-suggestions" class="absolute left-0 right-0 z-10 bg-white border border-gray-200 rounded shadow max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de industria"></ul>
                     <script>
                       // --- Autocompletado Industria / rubro (lista completa + opción manual) ---
                       (function(){
@@ -599,7 +491,7 @@
                         function syncValidity() {
                           var v = (input.value || '').trim();
                           if (!v) { input.setCustomValidity(''); return; }
-                          var inList = industryList.some(function(c) { return c.toLowerCase() === v.toLowerCase(); });
+                          var inList = industryList.some(function(c) { return c === v; });
                           input.setCustomValidity(inList ? '' : 'Debe elegir una opción de la lista o \'Ocupación o actividad no enlistada\'.');
                         }
                         function setFromList(value) {
@@ -615,7 +507,7 @@
                             suggestions.classList.add('hidden');
                             return;
                           }
-                          var matches = industryList.filter(function(cat){ return cat.toLowerCase().indexOf(lower) >= 0; });
+                          const matches = industryList.filter(cat => cat.toLowerCase().includes(lower));
                           if (matches.length === 0) {
                             var li = document.createElement('li');
                             li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-100 border-t border-slate-200 bg-amber-50/80';
@@ -657,17 +549,19 @@
                     <input name="yearsOperating" class="pp-field" type="number" min="0" step="1" required>
                   </div>
                 </div>
-                <div class="pt-4 mt-4 border-t border-gray-200">
+
+                <div>
                   <label class="pp-label">Cargue su aviso de operaciones *</label>
                   <p class="text-xs text-slate-500 mb-2">
                     Arrastra un PDF en la zona de abajo o selecciona el documento desde tu ordenador. Solo se acepta formato PDF.
                   </p>
-                  <div id="pdf-dropzone" class="border-2 border-dashed border-blue-400 rounded-xl p-6 text-center transition min-h-[120px] flex flex-col justify-center items-center gap-3 bg-slate-50/50 hover:bg-blue-50/80 relative">
+                  <!-- Zona exclusiva de arrastre -->
+                  <div id="pdf-dropzone" class="border-2 border-dashed border-blue-400 rounded-xl p-6 text-center transition min-h-[120px] flex flex-col justify-center items-center gap-3 bg-slate-50/50 hover:bg-blue-50/80">
                     <span class="text-gray-500 text-sm">Suelta aquí el PDF o usa el botón de abajo para cargarlo desde tu ordenador</span>
                     <span id="pdf-file-info" class="text-green-600 text-sm hidden"></span>
                     <span id="pdf-file-error" class="text-red-600 text-sm hidden"></span>
-                    <span id="pdf-check" class="ob-field-check" aria-hidden="true">&#10003;</span>
                   </div>
+                  <!-- Input visible: clic abre el selector para cargar desde el ordenador -->
                   <div class="mt-3">
                     <input id="businessDescriptionPdf" name="businessDescriptionPdf" type="file" accept="application/pdf" required aria-describedby="pdf-file-info pdf-file-error" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-blue-600 file:text-white file:font-semibold file:cursor-pointer hover:file:bg-blue-700" aria-label="Cargar PDF desde el ordenador">
                   </div>
@@ -678,7 +572,7 @@
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="1">
               <div class="pp-card-head">
                 <h2 class="text-xl font-extrabold">2. Contactos</h2>
-                <p class="text-sm text-gray-500 mt-1">Representante legal y datos de contacto de la empresa.</p>
+                <p class="text-sm text-gray-500 mt-1">Representante legal, contacto operativo y técnico.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
@@ -691,71 +585,60 @@
                     <input name="repEmail" class="pp-field" type="email" required>
                   </div>
                   <div>
-                    <label class="pp-label">Teléfono de atención a clientes *</label>
-                    <input name="companyPhone" class="pp-field" type="tel" placeholder="+507 XXX XXXX" inputmode="tel" required>
-                    <span class="text-xs text-slate-500 mt-1 block">Número donde la empresa recibe reclamos. Celular o teléfono fijo (Panamá +507).</span>
-                    <span id="companyPhoneError" class="text-xs text-red-600 hidden mt-1"></span>
+                    <label class="pp-label">Nombre contacto operativo *</label>
+                    <input name="opsContactName" class="pp-field" type="text" required>
                   </div>
                   <div>
-                    <label class="pp-label">Celular del representante legal *</label>
-                    <input name="repCellPhone" id="repCellPhone" class="pp-field" type="tel" placeholder="+507 6XXX XXXX" inputmode="tel" required>
-                    <span class="text-xs text-slate-500 mt-1 block">Celular Panamá: +507 6XXX XXXX (8 dígitos, comienza por 6).</span>
-                    <span id="repCellPhoneError" class="text-xs text-red-600 hidden mt-1"></span>
-                    <label class="ob-checkbox-row flex items-center gap-3 mt-3 cursor-pointer">
-                      <input name="confirmPhoneOwnership" type="checkbox" class="ob-checkbox-input w-5 h-5 rounded border-2 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500 shrink-0" style="accent-color:#5462e6">
-                      <span class="text-sm text-slate-700">Confirmo que este número me pertenece y es correcto.</span>
-                    </label>
-                  </div>
-                </div>
-                <div class="ob-grid pt-2">
-                  <div class="relative">
-                    <label class="pp-label">Ocupación del representante legal *</label>
-                    <input name="repOcupacion" id="repOcupacion" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción" autocomplete="off">
-                    <span class="text-xs text-slate-500 block mt-1">Obligatorio. Seleccione de la lista o &quot;Ocupación no listada&quot;.</span>
-                    <ul id="repOcupacion-suggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Ocupaciones"></ul>
-                  </div>
-                  <div class="relative">
-                    <label class="pp-label">Actividad del representante legal *</label>
-                    <input name="repActividad" id="repActividad" class="pp-field" type="text" required placeholder="Escriba para buscar y elija una opción" autocomplete="off">
-                    <span class="text-xs text-slate-500 block mt-1">Obligatorio. Seleccione de la lista o &quot;Actividad no listada&quot;.</span>
-                    <ul id="repActividad-suggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-gray-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Actividades"></ul>
+                    <label class="pp-label">Correo contacto operativo *</label>
+                    <input name="opsContactEmail" class="pp-field" type="email" required>
                   </div>
                 </div>
                 <div class="pt-4 mt-4 border-t border-gray-200">
                   <h3 class="text-base font-bold text-gray-800 mb-2">Validación de identidad (KYC)</h3>
-                  <p class="text-sm text-gray-600 mb-2">El representante legal debe completar la verificación de identidad para continuar. Tenga a la mano su documento de identificación vigente.</p>
-                  <p class="text-xs text-gray-500 mb-3"><strong>Documentos aceptados:</strong> Cédula, Cédula E o Pasaporte. Todos deben estar vigentes.</p>
+                  <p class="text-sm text-gray-600 mb-3">El representante legal debe completar la verificación de identidad para continuar con el proceso.</p>
+                  <p class="text-xs text-slate-400 mb-2">Si aparecen avisos de &quot;tracker&quot; o 403 en la consola al abrir la verificación, son inofensivos y no afectan el proceso.</p>
                   <div id="metamap-kyc-container">
                     <div id="kyc-status-panel" class="hidden">
-                      <div class="kyc-status-loading kyc-status-approved flex items-center gap-3 p-4 rounded-xl">
-                        <i class="fa-solid fa-circle-check text-emerald-600 text-2xl"></i>
+                      <div id="kyc-status-loading" class="kyc-status-loading hidden">
+                        <div class="kyc-spinner" aria-hidden="true"></div>
+                        <div class="flex-1">
+                          <div class="font-semibold text-slate-800">Validando identidad…</div>
+                          <div class="text-sm text-slate-600 mt-0.5">MetaMap puede tomar hasta 5 minutos. No cierre esta ventana.</div>
+                          <button type="button" id="kyc-check-status-btn-loading" class="mt-3 text-sm font-semibold text-indigo-600 hover:text-indigo-700 underline">Verificar estado</button>
+                        </div>
+                      </div>
+                      <div id="kyc-status-review" class="kyc-status-loading kyc-status-review hidden">
+                        <i class="fa-solid fa-clock text-amber-500 text-xl"></i>
+                        <div class="flex-1">
+                          <div class="font-semibold text-amber-900">Espera de revisión</div>
+                          <div class="text-sm text-amber-800 mt-0.5">Un verificador revisará manualmente. Te notificaremos cuando esté listo.</div>
+                          <button type="button" id="kyc-check-status-btn-review" class="mt-3 text-sm font-semibold text-amber-700 hover:text-amber-800 underline">Verificar estado</button>
+                        </div>
+                      </div>
+                      <div id="kyc-status-approved" class="kyc-status-loading kyc-status-approved hidden">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
                         <div>
-                          <div class="font-semibold text-emerald-800">Verificación enviada</div>
-                          <div class="text-sm text-emerald-700 mt-0.5">Su verificación fue enviada correctamente. Puede continuar con el proceso.</div>
+                          <div class="font-semibold text-emerald-800">Identidad verificada</div>
+                          <div class="text-sm text-emerald-700 mt-0.5">Puede continuar con el proceso.</div>
+                        </div>
+                      </div>
+                      <div id="kyc-status-rejected" class="kyc-status-loading kyc-status-rejected hidden">
+                        <i class="fa-solid fa-circle-xmark text-red-600 text-xl"></i>
+                        <div class="flex-1">
+                          <div class="font-semibold text-red-900">Verificación rechazada</div>
+                          <div id="kyc-error-message" class="text-sm text-red-800 mt-0.5"></div>
+                          <div id="kyc-error-detail" class="kyc-error-detail hidden mt-2"></div>
+                          <button type="button" id="kyc-retry-btn" class="mt-3 text-sm font-semibold text-red-700 hover:text-red-800 underline">Intentar de nuevo</button>
                         </div>
                       </div>
                     </div>
-                    <div id="kyc-pending-wrap">
-                      <div class="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 mb-3">
-                        <i class="fa-solid fa-clock text-amber-600 text-xl"></i>
-                        <div>
-                          <div class="font-semibold text-amber-900">Pendiente</div>
-                          <div class="text-sm text-amber-800 mt-0.5">Debe completar la verificación para continuar al siguiente paso.</div>
-                        </div>
-                      </div>
-                      <div class="relative inline-block w-full">
-                        <metamap-button
-                          id="metamap-btn"
-                          clientid="612566a0a0be80001b035915"
-                          flowId="69b84638b43624798a4477fd"
-                          metadata="{}"
-                          style="position:absolute;inset:0;opacity:0;z-index:20;min-width:200px;min-height:56px;display:block;cursor:pointer"
-                        ></metamap-button>
-                        <button type="button" id="kyc-trigger-btn" class="relative z-10 w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border-0 cursor-pointer hover:from-indigo-600 hover:to-purple-700" style="animation:kycBtnPulse 2.5s ease-in-out infinite;pointer-events:none">
-                          <i class="fa-solid fa-camera text-3xl" aria-hidden="true"></i>
-                          <span>Verificarme con selfie y documento</span>
-                        </button>
-                      </div>
+                    <div id="kyc-button-wrap">
+                      <metamap-button
+                        id="metamap-btn"
+                        clientid="612566a0a0be80001b035915"
+                        flowId="69b84638b43624798a4477fd"
+                        metadata="{}"
+                      ></metamap-button>
                     </div>
                   </div>
                 </div>
@@ -764,235 +647,55 @@
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="2">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">3. Dirección del negocio</h2>
-                <p class="text-sm text-gray-500 mt-1">Ubicación exacta del negocio en Panamá. Es fundamental para la operación.</p>
+                <h2 class="text-xl font-extrabold">3. Dirección y operación comercial</h2>
+                <p class="text-sm text-gray-500 mt-1">Ubicación, cobertura y estimados de uso.</p>
               </div>
               <div class="pp-card-body space-y-4">
-                <div class="ob-address-block p-4 rounded-2xl border border-slate-200/80">
-                  <p class="text-sm text-slate-700 mb-3">Detalle la dirección lo más exacta posible. Escriba y seleccione una sugerencia, o complete manualmente.</p>
-                  <div class="relative">
-                    <label class="pp-label">Dirección *</label>
-                    <input id="addressSearch" type="text" class="pp-field" placeholder="Escriba calle, barrio, ciudad... Ej: Av. Central, Bella Vista, Panamá" autocomplete="off" required>
-                    <ul id="addressSuggestions" class="absolute left-0 right-0 z-[9999] bg-white border border-slate-200 rounded-lg shadow-xl max-h-56 overflow-y-auto mt-1 hidden" role="listbox" aria-label="Sugerencias de dirección"></ul>
+                <div class="ob-grid">
+                  <div>
+                    <label class="pp-label">País *</label>
+                    <input name="country" class="pp-field" type="text" required value="Chile">
                   </div>
-                  <div id="addressLookupLoading" class="ob-address-loading hidden" aria-live="polite">
-                    <span class="ob-address-spinner" aria-hidden="true"></span>
-                    <span>Buscando direcciones...</span>
+                  <div>
+                    <label class="pp-label">Región / estado *</label>
+                    <input name="region" class="pp-field" type="text" required>
                   </div>
-                  <input type="hidden" name="province" id="province">
-                  <input type="hidden" name="district" id="district">
-                  <input type="hidden" name="corregimiento" id="corregimiento">
-                  <input type="hidden" name="businessAddress" id="businessAddress" required>
-                  <div id="addressParsed" class="text-xs text-slate-600 mt-2 hidden"></div>
-                  <script>
-                    (function initAddressAutocomplete(){
-                      function run(){
-                      var addressList = ['Bella Vista, Panamá','Bella Vista Viejo, Panamá','El Cangrejo, Panamá','Obarrio, Panamá','Marbella, Panamá','Campo Alegre, Panamá','El Carmen, Panamá','San Francisco, Panamá','Costa del Este, Panamá','Albrook, Panamá','Ancón, Panamá','Calidonia, Panamá','Curundú, Panamá','Bethania, Panamá','Pueblo Nuevo, Panamá','Juan Díaz, Panamá','Parque Lefevre, Panamá','Río Abajo, Panamá','Paitilla, Panamá','Panamá Viejo, Panamá','Vía España, Panamá','Av. Central, Panamá','Calle 50, Panamá','Vía Porras, Panamá','Vía Brasil, Panamá','Av. Balboa, Panamá','Clayton, Panamá','Chorrillo, Panamá','Santa Ana, Panamá','El Chorrillo, Panamá','La Exposición, Panamá','Brisas del Golf, Panamá','Colón, Colón','David, Chiriquí','Santiago, Veraguas','Chitré, Herrera','Aguadulce, Coclé','Penonomé, Coclé','La Chorrera, Panamá Oeste','Arraiján, Panamá Oeste','Tocumen, Panamá','24 de Diciembre, Panamá','Las Cumbres, Panamá','Pacora, Panamá','Chepo, Panamá','Pedregal, Panamá','Don Bosco, Panamá','San Miguelito, Panamá','Alcalde Díaz, Panamá','Villa Lucre, Panamá','Otra dirección (especificar)'];
-                      var input = document.getElementById('addressSearch');
-                      var suggestions = document.getElementById('addressSuggestions');
-                      var provinceEl = document.getElementById('province');
-                      var districtEl = document.getElementById('district');
-                      var corregimientoEl = document.getElementById('corregimiento');
-                      var businessAddressEl = document.getElementById('businessAddress');
-                      var addressParsed = document.getElementById('addressParsed');
-                      var addressLookupLoading = document.getElementById('addressLookupLoading');
-                      var debounceTimer = null;
-                      var requestSeq = 0;
-                      var selectedAddressValue = '';
-                      function getApiKey(){ return ((window.PPSupabaseConfig || {}).geoapifyApiKey || '').trim(); }
-                      if (!input || !suggestions) return;
-                      function syncBusinessAddr(v){ if (businessAddressEl) businessAddressEl.value = (v || '').trim(); }
-                      function showParsed(t){ if (addressParsed){ addressParsed.textContent = t || ''; addressParsed.classList.toggle('hidden', !t); } }
-                      function finalizeAddressSelection(value){
-                        selectedAddressValue = (value || '').trim();
-                        input.dataset.addressSelected = selectedAddressValue ? 'true' : 'false';
-                        requestSeq++;
-                        clearTimeout(debounceTimer);
-                        setLookupLoading(false);
-                        suggestions.innerHTML = '';
-                        suggestions.classList.add('hidden');
-                        input.dispatchEvent(new Event('change', { bubbles: true }));
-                        input.blur();
-                      }
-                      function setLookupLoading(open){
-                        if (addressLookupLoading) addressLookupLoading.classList.toggle('hidden', !open);
-                      }
-                      function renderLoadingSuggestion(){
-                        suggestions.innerHTML = '<li class="px-4 py-3 text-sm text-slate-500 flex items-center gap-2"><span class="ob-address-spinner" aria-hidden="true"></span><span>Consultando servicio de direcciones...</span></li>';
-                        suggestions.classList.remove('hidden');
-                      }
-                      function setFromLocal(value){
-                        input.value = value;
-                        syncBusinessAddr(value);
-                        showParsed('');
-                        if (value !== 'Otra dirección (especificar)') {
-                          var m = value.match(/^(.+),\s*(.+)$/);
-                          if (m) { if (corregimientoEl) corregimientoEl.value = m[1].trim(); if (provinceEl) provinceEl.value = m[2].trim(); }
-                        }
-                        finalizeAddressSelection(value);
-                      }
-                      function setFromGeoapify(item){
-                        var fmt = item.formatted || item.address_line1 || '';
-                        if (item.address_line2) fmt += ', ' + item.address_line2;
-                        input.value = fmt;
-                        syncBusinessAddr(fmt);
-                        if (provinceEl) provinceEl.value = (item.state || item.county || '') + '';
-                        if (districtEl) districtEl.value = (item.county || item.district || '') + '';
-                        if (corregimientoEl) corregimientoEl.value = (item.suburb || item.district || item.city || '') + '';
-                        var parts = [];
-                        if (item.state) parts.push('Provincia: ' + item.state);
-                        if (item.county) parts.push('Distrito: ' + item.county);
-                        if (item.suburb || item.city) parts.push('Barrio: ' + (item.suburb || item.city));
-                        showParsed(parts.length ? parts.join(' • ') : '');
-                        if (item.lat != null && item.lon != null && typeof window.__obSetAddressFromGeocode === 'function') {
-                          window.__obSetAddressFromGeocode(parseFloat(item.lat), parseFloat(item.lon));
-                        }
-                        finalizeAddressSelection(fmt);
-                      }
-                      function renderLocalSuggestions(value){
-                        var raw = (value || '').trim();
-                        var lower = raw.toLowerCase();
-                        setLookupLoading(false);
-                        suggestions.innerHTML = '';
-                        if (!raw) { suggestions.classList.add('hidden'); return; }
-                        var matches = addressList.filter(function(a){ return a.toLowerCase().indexOf(lower) >= 0; });
-                        if (matches.length === 0) {
-                          var li = document.createElement('li');
-                          li.className = 'px-4 py-3 cursor-pointer hover:bg-amber-50 border-t border-slate-200 bg-amber-50/80';
-                          li.textContent = 'Otra dirección (especificar)';
-                          li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromLocal('Otra dirección (especificar)'); });
-                          suggestions.appendChild(li);
-                        } else {
-                          matches.forEach(function(addr){
-                            var li = document.createElement('li');
-                            li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50 border-t border-slate-100';
-                            li.textContent = addr;
-                            li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromLocal(addr); });
-                            suggestions.appendChild(li);
-                          });
-                        }
-                        suggestions.classList.remove('hidden');
-                      }
-                      function fetchGeoapify(text, done){
-                        var key = getApiKey();
-                        if (!key || !text || text.length < 2) { done([]); return; }
-                        var url = 'https://api.geoapify.com/v1/geocode/autocomplete?text=' + encodeURIComponent(text + ', Panama') + '&filter=countrycode:pa&limit=8&format=json&lang=es&apiKey=' + encodeURIComponent(key);
-                        fetch(url).then(function(r){ return r.json(); }).then(function(data){
-                          var items = (data && data.results) ? data.results : [];
-                          done(items);
-                        }).catch(function(){ done([]); });
-                      }
-                      function onInput(){
-                        var val = (input.value || '').trim();
-                        if (selectedAddressValue && val !== selectedAddressValue) {
-                          selectedAddressValue = '';
-                          input.dataset.addressSelected = 'false';
-                        }
-                        syncBusinessAddr(val);
-                        clearTimeout(debounceTimer);
-                        requestSeq++;
-                        if (!val) { setLookupLoading(false); suggestions.innerHTML = ''; suggestions.classList.add('hidden'); return; }
-                        if (getApiKey() && val.length >= 2) {
-                          var currentRequest = requestSeq;
-                          setLookupLoading(true);
-                          renderLoadingSuggestion();
-                          debounceTimer = setTimeout(function(){
-                            fetchGeoapify(val, function(items){
-                              if (currentRequest !== requestSeq) return;
-                              suggestions.innerHTML = '';
-                              if (items && items.length > 0) {
-                                setLookupLoading(false);
-                                items.forEach(function(it){
-                                  var li = document.createElement('li');
-                                  li.className = 'px-4 py-3 cursor-pointer hover:bg-blue-50 border-t border-slate-100';
-                                  var disp = it.formatted || (it.address_line1 || '') + (it.address_line2 ? ', ' + it.address_line2 : '') || it.name || 'Dirección';
-                                  li.textContent = disp;
-                                  li.addEventListener('mousedown', function(e){ e.preventDefault(); setFromGeoapify(it); });
-                                  suggestions.appendChild(li);
-                                });
-                                var li2 = document.createElement('li');
-                                li2.className = 'px-4 py-2 cursor-pointer hover:bg-amber-50 border-t border-slate-200 bg-slate-50 text-slate-600 text-sm';
-                                li2.textContent = 'Otra dirección (especificar)';
-                                li2.addEventListener('mousedown', function(e){ e.preventDefault(); setFromLocal('Otra dirección (especificar)'); });
-                                suggestions.appendChild(li2);
-                              } else {
-                                renderLocalSuggestions(val);
-                              }
-                              suggestions.classList.remove('hidden');
-                            });
-                          }, 250);
-                        } else {
-                          renderLocalSuggestions(val);
-                        }
-                      }
-                      input.addEventListener('input', onInput);
-                      input.addEventListener('blur', function(){ setTimeout(function(){ setLookupLoading(false); suggestions.classList.add('hidden'); }, 150); });
-                      input.addEventListener('focus', function(){
-                        if (selectedAddressValue && (input.value || '').trim() === selectedAddressValue) return;
-                        if ((input.value || '').trim()) onInput();
-                      });
-                      if ((input.value || '').trim() && businessAddressEl && (businessAddressEl.value || '').trim() === (input.value || '').trim()) {
-                        selectedAddressValue = (input.value || '').trim();
-                        input.dataset.addressSelected = 'true';
-                      } else {
-                        input.dataset.addressSelected = 'false';
-                      }
-                      }
-                      if (document.readyState === 'loading') {
-                        document.addEventListener('DOMContentLoaded', run);
-                      } else {
-                        run();
-                      }
-                    })();
-                  </script>
-                  <div class="mt-3">
-                    <label class="pp-label">Complemento o puntos de referencia (opcional)</label>
-                    <input name="addressLandmarks" class="pp-field" type="text" placeholder="Ej: PH 5, Local 3, edificio X piso 2, frente al super">
+                  <div>
+                    <label class="pp-label">Ciudad *</label>
+                    <input name="city" class="pp-field" type="text" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Comuna / municipio</label>
+                    <input name="district" class="pp-field" type="text">
                   </div>
                 </div>
-                <div class="ob-map-section">
-                  <label class="pp-label">Ubicación en mapa *</label>
-                  <p class="text-xs text-slate-500 mb-2">Al hacer clic en &quot;Leer mi ubicación&quot;, solicitaremos su ubicación (en móvil el navegador pedirá permiso; en PC usamos ubicación aproximada por IP).</p>
-                  <div class="flex flex-wrap gap-2 items-center ob-map-actions">
-                    <button type="button" id="btnUseMyLocationQuick" class="ob-map-btn pp-btn pp-btn-secondary h-10 px-4 rounded-xl text-sm transition-all duration-200" onclick="var b=this;if(window.__obReadMyLocation){window.__obReadMyLocation();}else{b.disabled=true;var st=document.getElementById('obLocationStatus');if(st)st.textContent='Obteniendo...';fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(function(d){var lat=d.latitude,lng=d.longitude;if(lat!=null&&lng!=null){var le=document.getElementById('addressLat'),lge=document.getElementById('addressLng'),cd=document.getElementById('mapCoordsDisplay'),bx=document.getElementById('mapCoordsBox');if(le)le.value=(parseFloat(lat)).toFixed(6);if(lge)lge.value=(parseFloat(lng)).toFixed(6);if(cd)cd.textContent=le.value+', '+lge.value;if(bx){bx.style.display='flex';bx.classList.remove('hidden');}if(st)st.textContent='Ubicación guardada';}b.disabled=false;}).catch(function(){b.disabled=false;if(st)st.textContent='Error. Use Abrir mapa.';});}return false;"><i class="fa-solid fa-location-crosshairs mr-2"></i><span id="btnUseMyLocationQuickText">Leer mi ubicación</span></button>
-                    <button type="button" id="btnOpenMap" class="ob-map-btn pp-btn pp-btn-primary h-10 px-4 rounded-xl text-sm transition-all duration-200" onclick="if(window.__obOpenMapModal){window.__obOpenMapModal();}else{var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m&&f){var b='mapa-picker.html';var lat=document.getElementById('addressLat');var lng=document.getElementById('addressLng');if(lat&&lat.value)b+='?lat='+lat.value;if(lng&&lng.value)b+=(b.indexOf('?')>=0?'&':'?')+'lng='+lng.value;f.src=b;m.style.display='flex';m.classList.remove('hidden');m.setAttribute('aria-hidden','false');}}return false;"><i class="fa-solid fa-map-location-dot mr-2"></i>Abrir mapa</button>
-                    <span id="obLocationStatus" class="text-sm font-medium min-w-[200px]" aria-live="polite"></span>
-                    <div id="mapCoordsBox" class="ob-coords-badge flex items-center gap-2 px-3 py-2 rounded-xl min-h-[40px] min-w-[200px] transition-all duration-300" style="display:none">
-                      <span class="text-xs font-semibold text-emerald-800">Coordenadas:</span>
-                      <span id="mapCoordsDisplay" class="text-sm font-mono text-emerald-900"></span>
-                    </div>
-                  </div>
-                  <input type="hidden" name="addressLat" id="addressLat">
-                  <input type="hidden" name="addressLng" id="addressLng">
-                  <input type="hidden" name="country" value="Panamá">
+                <div>
+                  <label class="pp-label">Dirección comercial *</label>
+                  <textarea name="businessAddress" class="pp-field -area" required></textarea>
                 </div>
-                <div class="pt-4 mt-4 border-t border-slate-200 hidden" aria-hidden="true">
-                  <h3 class="text-sm font-semibold text-slate-600 mb-2">Operación comercial (opcional)</h3>
-                  <p class="text-xs text-slate-500 mb-3">Datos estimados para evaluación. Puede completarlos más adelante.</p>
-                  <div class="ob-grid ob-grid-3">
-                    <div>
-                      <label class="pp-label">Ventas mensuales estimadas</label>
-                      <select name="estimatedMonthlySales" class="pp-field -select">
-                        <option value="">Selecciona (opcional)</option>
-                        <option>Menos de 100 transacciones</option>
-                        <option>100 - 500 transacciones</option>
-                        <option>500 - 2.000 transacciones</option>
-                        <option>Más de 2.000 transacciones</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label class="pp-label">Ticket promedio</label>
-                      <input name="averageTicket" class="pp-field" type="text" placeholder="Ej: USD 25 (opcional)">
-                    </div>
-                    <div>
-                      <label class="pp-label">Canal principal</label>
-                      <select name="channelType" class="pp-field -select">
-                        <option value="">Selecciona (opcional)</option>
-                        <option>Presencial</option>
-                        <option>Online</option>
-                        <option>Mixto</option>
-                      </select>
-                    </div>
+                <div class="ob-grid-3">
+                  <div>
+                    <label class="pp-label">Ventas mensuales estimadas *</label>
+                    <select name="estimatedMonthlySales" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option>Menos de 100 transacciones</option>
+                      <option>100 - 500 transacciones</option>
+                      <option>500 - 2.000 transacciones</option>
+                      <option>Más de 2.000 transacciones</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="pp-label">Ticket promedio *</label>
+                    <input name="averageTicket" class="pp-field" type="text" required placeholder="Ej: CLP 18.000">
+                  </div>
+                  <div>
+                    <label class="pp-label">Canal principal *</label>
+                    <select name="channelType" class="pp-field -select" required>
+                      <option value="">Selecciona</option>
+                      <option>Presencial</option>
+                      <option>Online</option>
+                      <option>Mixto</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -1000,71 +703,27 @@
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="3">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">4. Cuenta para liquidación</h2>
-                <p class="text-sm text-gray-500 mt-1">Los fondos de sus comisiones se transferirán de forma automática a esta cuenta una vez estén disponibles.</p>
+                <h2 class="text-xl font-extrabold">4. Datos bancarios y compliance</h2>
+                <p class="text-sm text-gray-500 mt-1">Para evaluación y futura liquidación.</p>
               </div>
               <div class="pp-card-body space-y-4">
                 <div class="ob-grid">
                   <div>
-                    <label class="pp-label">Banco o fintech *</label>
-                    <select name="bankName" id="bankName" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <optgroup label="Bancos (ACH / Telered)">
-                        <option value="BAC Credomatic">BAC Credomatic</option>
-                        <option value="Banco Aliado">Banco Aliado</option>
-                        <option value="Banco Azteca">Banco Azteca</option>
-                        <option value="Banco Delta">Banco Delta</option>
-                        <option value="Banco Ficohsa">Banco Ficohsa</option>
-                        <option value="Banco General">Banco General</option>
-                        <option value="Banco La Hipotecaria">Banco La Hipotecaria</option>
-                        <option value="Banco LAFISE">Banco LAFISE</option>
-                        <option value="Banco Nacional de Panamá">Banco Nacional de Panamá</option>
-                        <option value="Banco Pichincha">Banco Pichincha</option>
-                        <option value="Bancolombia">Bancolombia</option>
-                        <option value="Banesco">Banesco</option>
-                        <option value="Banisi">Banisi</option>
-                        <option value="Banistmo">Banistmo</option>
-                        <option value="BBP Bank">BBP Bank</option>
-                        <option value="BCT Bank">BCT Bank</option>
-                        <option value="Bibank Panamá">Bibank Panamá</option>
-                        <option value="Bicsa">Bicsa</option>
-                        <option value="Caja de Ahorros">Caja de Ahorros</option>
-                        <option value="Canal Bank">Canal Bank</option>
-                        <option value="Citibank N.A.">Citibank N.A.</option>
-                        <option value="Credicorp Bank">Credicorp Bank</option>
-                        <option value="DAVIbank">DAVIbank</option>
-                        <option value="Davivienda">Davivienda</option>
-                        <option value="Global Bank">Global Bank</option>
-                        <option value="Mercantil Bank">Mercantil Bank</option>
-                        <option value="Metrobank">Metrobank</option>
-                        <option value="MMG Bank">MMG Bank</option>
-                        <option value="Multibank">Multibank</option>
-                        <option value="Pacific Bank">Pacific Bank</option>
-                        <option value="Prival Bank">Prival Bank</option>
-                        <option value="Scotiabank">Scotiabank</option>
-                        <option value="St. Georges Bank">St. Georges Bank</option>
-                        <option value="Tower Bank">Tower Bank</option>
-                        <option value="Unibank">Unibank</option>
-                      </optgroup>
-                      <optgroup label="Fintechs">
-                        <option value="Kali">Kali</option>
-                        <option value="Punto Pago APP">Punto Pago APP</option>
-                        <option value="Wally">Wally</option>
-                        <option value="Zinli">Zinli</option>
-                      </optgroup>
-                    </select>
+                    <label class="pp-label">Banco *</label>
+                    <input name="bankName" class="pp-field" type="text" required>
                   </div>
-                  <div id="bankAccountTypeWrap">
+                  <div>
                     <label class="pp-label">Tipo de cuenta *</label>
                     <select name="bankAccountType" class="pp-field -select" required>
                       <option value="">Selecciona</option>
-                      <option value="Corriente">Corriente</option>
-                      <option value="Ahorros">Ahorros</option>
+                      <option>Cuenta corriente</option>
+                      <option>Cuenta vista</option>
+                      <option>Cuenta de ahorro</option>
                     </select>
                   </div>
                   <div>
-                    <label id="bankAccountNumberLabel" class="pp-label">Número de cuenta *</label>
-                    <input name="bankAccountNumber" id="bankAccountNumber" class="pp-field" type="text" required placeholder="">
+                    <label class="pp-label">Número de cuenta *</label>
+                    <input name="bankAccountNumber" class="pp-field" type="text" required>
                   </div>
                   <div>
                     <label class="pp-label">Titular de la cuenta *</label>
@@ -1072,184 +731,56 @@
                   </div>
                   <div>
                     <label class="pp-label">Correo para liquidaciones *</label>
-                    <input name="settlementEmail" id="settlementEmail" class="pp-field" type="email" required placeholder="ejemplo@correo.com" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
-                    <p class="text-xs text-slate-500 mt-1">Para notificarle cuando se gestione el pago de sus comisiones y para reportes contables.</p>
-                    <span id="settlementEmailError" class="text-xs text-red-600 hidden mt-1 block"></span>
+                    <input name="settlementEmail" class="pp-field" type="email" required>
+                  </div>
+                  <div>
+                    <label class="pp-label">Beneficiario final *</label>
+                    <input name="beneficialOwner" class="pp-field" type="text" required>
                   </div>
                 </div>
                 <div class="ob-grid">
                   <label class="flex items-start gap-3 text-sm text-slate-700">
+                    <input name="acceptTerms" type="checkbox" class="mt-1" required>
+                    <span>Confirmo que la información entregada es verídica y autorizo su revisión para evaluación comercial y cumplimiento.</span>
+                  </label>
+                  <label class="flex items-start gap-3 text-sm text-slate-700">
                     <input name="needsApiIntegration" type="checkbox" class="mt-1">
-                    <span>Autorizo ser revisado por APC, con el fin de poder evaluar créditos o préstamos relativos al servicio.</span>
+                    <span>Requerimos integración técnica / API y acompañamiento de implementación.</span>
                   </label>
                 </div>
+                <div>
+                  <label class="pp-label">Comentarios adicionales</label>
+                  <textarea name="additionalNotes" class="pp-field -area" placeholder="Adjuntos pendientes, particularidades del comercio, requerimientos especiales..."></textarea>
+                </div>
               </div>
-              <script>
-              (function(){
-                var F = ['Kali','Punto Pago APP','Wally','Zinli'];
-                function run(){
-                  var sel=document.getElementById('bankName');
-                  var wrap=document.getElementById('bankAccountTypeWrap');
-                  var lbl=document.getElementById('bankAccountNumberLabel');
-                  var inp=document.getElementById('bankAccountNumber');
-                  var typ=document.querySelector('[name="bankAccountType"]');
-                  if(!sel||!wrap||!lbl||!inp)return;
-                  var v=(sel.value||'').trim();
-                  var isF=F.indexOf(v)>=0;
-                  wrap.style.display=isF?'none':'block';
-                  wrap.classList.toggle('hidden',!!isF);
-                  lbl.textContent=isF?'Número de teléfono *':'Número de cuenta *';
-                  inp.type=isF?'tel':'text';
-                  inp.placeholder=isF?'+507 6XXX XXXX':'';
-                  if(typ){typ.required=!isF;if(isF)typ.value='';}
-                }
-                function init(){
-                  var s=document.getElementById('bankName');
-                  if(s){s.onchange=run;s.oninput=run;run();}
-                }
-                if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
-                else setTimeout(init,0);
-              })();
-              </script>
             </section>
 
             <section class="pp-card -soft overflow-hidden form-step is-hidden" data-step="4">
               <div class="pp-card-head">
-                <h2 class="text-xl font-extrabold">5. Conocimiento del cliente</h2>
-                <p class="text-sm text-gray-500 mt-1">Información sobre ingresos, montos de operaciones y origen de los fondos.</p>
+                <h2 class="text-xl font-extrabold">5. Resumen y envío</h2>
+                <p class="text-sm text-gray-500 mt-1">Revisa antes de dejar el comercio en evaluación.</p>
               </div>
               <div class="pp-card-body space-y-5">
-                <div class="ob-grid">
-                  <div>
-                    <label class="pp-label">Ingresos mensuales *</label>
-                    <select name="monthlyIncome" id="monthlyIncome" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <option value="menos_500">Menos de $500</option>
-                      <option value="500_1000">$500 – $1,000</option>
-                      <option value="1000_2500">$1,000 – $2,500</option>
-                      <option value="2500_5000">$2,500 – $5,000</option>
-                      <option value="5000_10000">$5,000 – $10,000</option>
-                      <option value="mas_10000">Más de $10,000</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="pp-label">Montos de envíos o movimientos mensuales *</label>
-                    <select name="monthlyTransfersAmount" id="monthlyTransfersAmount" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <option value="menos_500">Menos de $500</option>
-                      <option value="500_1000">$500 – $1,000</option>
-                      <option value="1000_2500">$1,000 – $2,500</option>
-                      <option value="2500_5000">$2,500 – $5,000</option>
-                      <option value="5000_10000">$5,000 – $10,000</option>
-                      <option value="mas_10000">Más de $10,000</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="pp-label">De dónde proviene el dinero que transfiere *</label>
-                    <select name="fundsSource" id="fundsSource" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <option value="salario">Salario</option>
-                      <option value="familiares">Familiares</option>
-                      <option value="negocio_propio">Negocio propio</option>
-                      <option value="inversiones">Inversiones</option>
-                      <option value="herencia">Herencia</option>
-                      <option value="otro">Otro</option>
-                    </select>
-                    <div id="fundsSourceOtherWrap" class="mt-3" style="display:none">
-                      <label class="pp-label">Especifique a qué se refiere *</label>
-                      <input name="fundsSourceOther" id="fundsSourceOther" class="pp-field" type="text" placeholder="Ej: Remesas, venta de activos, etc.">
-                    </div>
-                  </div>
-                  <div>
-                    <label class="pp-label">Origen de los fondos *</label>
-                    <select name="fundsOrigin" id="fundsOrigin" class="pp-field -select" required>
-                      <option value="">Selecciona</option>
-                      <option value="panama">Panamá</option>
-                      <option value="extranjero">Extranjero</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="pp-label">Procedencia de los fondos (país) *</label>
-                    <select name="fundsCountry" id="fundsCountry" class="pp-field -select" required>
-                      <option value="">Selecciona país</option>
-                      <option value="Panamá">Panamá</option>
-                      <option value="Estados Unidos">Estados Unidos</option>
-                      <option value="Colombia">Colombia</option>
-                      <option value="Costa Rica">Costa Rica</option>
-                      <option value="México">México</option>
-                      <option value="Venezuela">Venezuela</option>
-                      <option value="Nicaragua">Nicaragua</option>
-                      <option value="Honduras">Honduras</option>
-                      <option value="El Salvador">El Salvador</option>
-                      <option value="Guatemala">Guatemala</option>
-                      <option value="República Dominicana">República Dominicana</option>
-                      <option value="Perú">Perú</option>
-                      <option value="Ecuador">Ecuador</option>
-                      <option value="Argentina">Argentina</option>
-                      <option value="Chile">Chile</option>
-                      <option value="Brasil">Brasil</option>
-                      <option value="Canadá">Canadá</option>
-                      <option value="España">España</option>
-                      <option value="China">China</option>
-                      <option value="India">India</option>
-                      <option value="Otro">Otro</option>
-                    </select>
-                    <div id="fundsCountryOtherWrap" class="mt-3" style="display:none">
-                      <label class="pp-label">Especifique el país *</label>
-                      <input name="fundsCountryOther" id="fundsCountryOther" class="pp-field" type="text" placeholder="Ej: Jamaica, Bahamas, etc.">
-                    </div>
-                  </div>
+                <div class="pp-card rounded-[20px] p-4 ob-summary bg-slate-50/70">
+                  <dl id="summaryList"></dl>
                 </div>
-                <script>
-                (function(){
-                  function run(){
-                    var fs=document.getElementById('fundsSource'),fc=document.getElementById('fundsCountry');
-                    var ws=document.getElementById('fundsSourceOtherWrap'),wc=document.getElementById('fundsCountryOtherWrap');
-                    var is=document.getElementById('fundsSourceOther'),ic=document.getElementById('fundsCountryOther');
-                    function update(){
-                      if(!ws||!wc)return;
-                      var showS=fs&&String(fs.value)==='otro',showC=fc&&String(fc.value)==='Otro';
-                      ws.style.display=showS?'block':'none';wc.style.display=showC?'block':'none';
-                      if(is){is.required=showS;if(!showS)is.value='';}
-                      if(ic){ic.required=showC;if(!showC)ic.value='';}
-                    }
-                    if(fs)fs.addEventListener('change',update);
-                    if(fc)fc.addEventListener('change',update);
-                  }
-                  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);
-                  else setTimeout(run,0);
-                })();
-                </script>
-                <div class="pt-4 border-t border-slate-200 space-y-4">
-                  <label class="flex items-start gap-3 text-sm text-slate-700">
-                    <input name="acceptTerms" type="checkbox" class="mt-1" required>
-                    <span>Confirmo que no soy persona políticamente expuesta (PEP).</span>
-                  </label>
-                </div>
-                <div class="pt-4 border-t border-slate-200">
-                  <h3 class="text-sm font-semibold text-slate-700 mb-3">Verificación y firma</h3>
-                  <p class="text-sm text-slate-600 mb-3">Revise el resumen y confirme los datos con su firma digital.</p>
-                  <div class="pp-card rounded-[20px] p-4 ob-summary bg-slate-50/70 max-h-[200px] overflow-y-auto">
-                    <dl id="summaryList"></dl>
-                  </div>
-                  <button type="button" id="btnOpenSignatureModal" class="mt-4 pp-btn pp-btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-pen-fancy"></i> Firmar y enviar a revisión
-                  </button>
+                <div class="pp-card rounded-[20px] p-4 bg-amber-50 border border-amber-200 text-sm text-amber-900">
+                  Al enviar, el registro se guardará como <strong>pending_review</strong>. Todavía no se crearán las credenciales finales del cliente; eso ocurre solo cuando el superadmin apruebe el caso desde el portal administrativo.
                 </div>
               </div>
             </section>
 
-            <div id="ob-step-error-banner" class="mb-4 p-4 rounded-xl bg-red-50 border-2 border-red-300 text-red-700 font-semibold text-sm hidden" role="alert" aria-live="assertive"></div>
             <div class="ob-actions">
               <div class="flex gap-3 flex-wrap">
-                <button id="prevBtn" type="button" class="pp-btn pp-btn-secondary is-hidden" aria-hidden="true" onclick="if(window.__obGoPrev)window.__obGoPrev();return false;">Anterior</button>
-                <button id="nextBtn" type="button" class="pp-btn pp-btn-secondary" onclick="if(window.__obGoNext){window.__obGoNext();}return false;">Siguiente</button>
+                <button id="prevBtn" type="button" class="pp-btn pp-btn-secondary">Anterior</button>
+                <button id="nextBtn" type="button" class="pp-btn pp-btn-secondary">Siguiente</button>
               </div>
               <div class="flex gap-3 flex-wrap">
                 <button id="saveDraftBtn" type="button" class="pp-btn pp-btn-secondary">Guardar borrador</button>
-                <button id="submitBtn" type="submit" class="pp-btn pp-btn-primary is-hidden" aria-hidden="true">Enviar a revisión</button>
+                <button id="submitBtn" type="submit" class="pp-btn pp-btn-primary">Enviar a revisión</button>
               </div>
             </div>
+
             <p id="formMsg" class="text-sm text-slate-600 min-h-[20px]"></p>
           </form>
         </section>
@@ -1257,165 +788,607 @@
     </div>
   </main>
 
-  <script>
-  (function(){
-    var LABELS={businessLegalName:'Razón social',businessTradeName:'Nombre comercial',taxId:'RUT / NIT',businessType:'Tipo de empresa',industry:'Industria / rubro',yearsOperating:'Años operando',businessDescriptionPdf:'Aviso de operaciones (PDF)'};
-    function obMinimalAdvance(){
-      var steps=document.querySelectorAll('.form-step');
-      var current=document.querySelector('.form-step:not(.is-hidden)');
-      if(!current||!steps.length)return;
-      var idx=Array.prototype.indexOf.call(steps,current);
-      if(idx<0||idx>=steps.length-1)return;
-      var msgEl=document.getElementById('formMsg'),banner=document.getElementById('ob-step-error-banner');
-      var fields=current.querySelectorAll('input:not([type="button"]):not([type="submit"]), select, textarea');
-      for(var i=0;i<fields.length;i++){
-        var f=fields[i];
-        if(f.required&&!f.checkValidity()){
-          var lbl=LABELS[f.name]||f.name||'Campo';
-          if(banner){banner.textContent='Falta completar: '+lbl;banner.classList.remove('hidden');}
-          if(msgEl){msgEl.textContent='';msgEl.classList.add('hidden');}
-          f.focus();
-          return;
-        }
-      }
-      if(idx===0){
-        var pdf=document.getElementById('businessDescriptionPdf');
-        if(!pdf||!pdf.files||!pdf.files[0]){
-          if(banner){banner.textContent='Falta completar: Aviso de operaciones (PDF). Debe cargar el documento.';banner.classList.remove('hidden');}
-          if(msgEl){msgEl.textContent='';msgEl.classList.add('hidden');}
-          if(pdf)pdf.focus();
-          return;
-        }
-      }
-      current.classList.add('is-hidden');
-      steps[idx+1].classList.remove('is-hidden');
-      var ind=document.querySelectorAll('.ob-step[data-step-idx]');
-      for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===idx+1);
-      var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn');
-      if(p){p.style.display='';p.classList.remove('is-hidden');p.disabled=false;}
-      if(n)n.classList.toggle('is-hidden',idx+1===steps.length-1);
-      var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');
-      if(lab)lab.textContent=Math.round(((idx+2)/steps.length)*100)+'%';
-      if(fil)fil.style.width=Math.round(((idx+2)/steps.length)*100)+'%';
-      if(msgEl){msgEl.textContent='';msgEl.className='text-sm text-slate-600 min-h-[20px]';}
-      if(banner)banner.classList.add('hidden');
-      if(window.__obSetStep)window.__obSetStep(idx+1);
-    }
-    function obMinimalPrev(){
-      var steps=document.querySelectorAll('.form-step');
-      var current=document.querySelector('.form-step:not(.is-hidden)');
-      if(!current||!steps.length)return;
-      var idx=Array.prototype.indexOf.call(steps,current);
-      if(idx<=0)return;
-      current.classList.add('is-hidden');
-      steps[idx-1].classList.remove('is-hidden');
-      var ind=document.querySelectorAll('.ob-step[data-step-idx]');
-      for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===idx-1);
-      var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn');
-      if(p){p.style.display=idx-1===0?'none':'';p.disabled=idx-1===0;}
-      if(n)n.classList.remove('is-hidden');
-      var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');
-      if(lab)lab.textContent=Math.round((idx/steps.length)*100)+'%';
-      if(fil)fil.style.width=Math.round((idx/steps.length)*100)+'%';
-      if(window.__obSetStep)window.__obSetStep(idx-1);
-    }
-    window.__obMinimalAdvance=obMinimalAdvance;
-    window.__obMinimalPrev=obMinimalPrev;
-    window.__obAdvanceToNext=obMinimalAdvance;
-    window.__obAdvanceToPrev=obMinimalPrev;
-    window.__obGoNext=obMinimalAdvance;
-    window.__obGoPrev=obMinimalPrev;
-    document.addEventListener('click',function(e){
-      var t=e.target;
-      while(t&&t!==document){
-        if(t.id==='nextBtn'){
-          e.preventDefault();e.stopPropagation();
-          var fn=window.__obAdvanceToNext;
-          if(typeof fn==='function')fn();
-          return;
-        }
-        if(t.id==='prevBtn'){
-          e.preventDefault();e.stopPropagation();
-          var fn2=window.__obAdvanceToPrev;
-          if(typeof fn2==='function')fn2();
-          return;
-        }
-        t=t.parentElement;
-      }
-    },true);
-    window.__obStepClick=function(i){var s=document.querySelectorAll('.form-step');var c=document.querySelector('.form-step:not(.is-hidden)');if(!c||!s[i])return;c.classList.add('is-hidden');s[i].classList.remove('is-hidden');var ind=document.querySelectorAll('.ob-step[data-step-idx]');for(var k=0;k<ind.length;k++)ind[k].classList.toggle('-active',parseInt(ind[k].getAttribute('data-step-idx'),10)===i);var p=document.getElementById('prevBtn'),n=document.getElementById('nextBtn'),b=document.getElementById('submitBtn');if(p){p.disabled=(i===0);p.style.display=(i===0)?'none':'';}if(n)n.classList.toggle('is-hidden',i===s.length-1);if(b)b.classList.toggle('is-hidden',i!==s.length-1);var pct=Math.round(((i+1)/s.length)*100);var lab=document.getElementById('obProgressLabel'),fil=document.getElementById('obProgressFill');if(lab)lab.textContent=pct+'%';if(fil)fil.style.width=pct+'%';if(window.__obSetStep)window.__obSetStep(i);};
-  })();
-  </script>
-  <!-- Modal: firma digital y consentimiento -->
-  <div id="signatureModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 hidden" aria-hidden="true" style="display:none;background:rgba(0,0,0,.5)">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col" role="dialog" aria-modal="true" aria-labelledby="signatureModalTitle">
-      <div class="p-5 border-b border-slate-200 flex-shrink-0">
-        <h2 id="signatureModalTitle" class="text-xl font-extrabold text-slate-900">Confirmación y firma</h2>
-        <p class="text-sm text-slate-600 mt-1">Revise el resumen, acepte la declaración y firme para enviar su solicitud.</p>
-      </div>
-      <div class="p-5 overflow-y-auto flex-1 min-h-0 space-y-4">
-        <div class="ob-summary text-sm max-h-[120px] overflow-y-auto rounded-xl p-3 bg-slate-50">
-          <dl id="signatureModalSummary"></dl>
-        </div>
-        <div class="rounded-xl p-4 border-2 border-slate-200 bg-slate-50">
-          <label class="flex items-start gap-3 cursor-pointer">
-            <input type="checkbox" id="signatureConsentCheck" class="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600">
-            <span class="text-sm text-slate-700">Confirmo que he revisado la información anterior y que los datos proporcionados son <strong>verdadero y completos</strong>. Autorizo el tratamiento de mi información según la política de privacidad de Punto Pago.</span>
-          </label>
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-2">Firma digital *</label>
-          <div class="border-2 border-slate-200 rounded-xl overflow-hidden bg-white" style="touch-action:none">
-            <canvas id="signatureCanvas" width="450" height="180" class="block w-full" style="max-width:100%;height:180px;cursor:crosshair"></canvas>
-          </div>
-          <button type="button" id="signatureClearBtn" class="mt-2 text-sm text-slate-600 hover:text-slate-900 underline">Limpiar firma</button>
-        </div>
-      </div>
-      <div class="p-5 border-t border-slate-200 flex gap-3 flex-shrink-0">
-        <button type="button" id="signatureModalCancel" class="pp-btn pp-btn-secondary flex-1">Cancelar</button>
-        <button type="button" id="signatureModalSubmit" class="pp-btn pp-btn-primary flex-1" disabled>Firmar y enviar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: mapa en iframe (mapa-picker.html aísla Leaflet del CSS del onboarding) -->
-  <div id="mapModal" class="fixed inset-0 z-[9998] hidden flex flex-col bg-white" aria-hidden="true" style="display:none">
-    <div class="flex items-center justify-end p-2 border-b border-slate-100 flex-shrink-0 relative z-10 bg-white">
-      <button type="button" id="mapModalClose" class="pp-btn pp-btn-secondary py-2 px-3 text-sm cursor-pointer" aria-label="Cerrar sin guardar" onclick="var m=document.getElementById('mapModal');var f=document.getElementById('mapPickerFrame');if(m){m.style.display='none';m.classList.add('hidden');m.setAttribute('aria-hidden','true');}if(f)f.src='about:blank';"><i class="fa-solid fa-xmark"></i> Cerrar</button>
-    </div>
-    <iframe id="mapPickerFrame" src="about:blank" class="flex-1 w-full min-h-[65vh] border-0 relative z-0" title="Mapa para ubicar el negocio"></iframe>
-  </div>
-
-  <script>
-  (function(){
-    function applyMapCoordsFromHash(){
-      var h = (window.location.hash || '').replace(/^#/, '');
-      if (h.indexOf('mapa-done-') !== 0) return;
-      var rest = h.replace('mapa-done-', '');
-      var parts = rest.split(',');
-      var lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
-      if (isNaN(lat) || isNaN(lng)) return;
-      var latEl = document.getElementById('addressLat');
-      var lngEl = document.getElementById('addressLng');
-      var cd = document.getElementById('mapCoordsDisplay');
-      var box = document.getElementById('mapCoordsBox');
-      var modal = document.getElementById('mapModal');
-      var frame = document.getElementById('mapPickerFrame');
-      if (latEl) latEl.value = lat.toFixed(6);
-      if (lngEl) lngEl.value = lng.toFixed(6);
-      if (cd) cd.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
-      if (box) { box.style.display = 'flex'; box.classList.remove('hidden'); }
-      if (modal) { modal.style.display = 'none'; modal.classList.add('hidden'); modal.setAttribute('aria-hidden','true'); }
-      if (frame) frame.src = 'about:blank';
-      try { history.replaceState(null,'',location.pathname+location.search); } catch(e){ location.hash = ''; }
-    }
-    window.addEventListener('hashchange', applyMapCoordsFromHash);
-    if (window.location.hash.indexOf('mapa-done-') === 1) applyMapCoordsFromHash();
-  })();
-  </script>
-  <script src="supabase-applications.js"></script>
   <script src="auth.js"></script>
-  <script src="onboarding-main.js"></script>
+  <script>
+    (function(){
+      const APPLICATIONS_KEY = 'pp_onboarding_applications_v1';
+      const ACCESS_KEY = 'pp_onboarding_access_v1';
+      const RECOVERY_KEY = 'pp_onboarding_recovery_v1';
+      const steps = [
+        { title: 'Comercio', desc: 'Estructura o empresa del cliente' },
+        { title: 'Contactos', desc: 'Representante, operativo y técnico' },
+        { title: 'Operación', desc: 'Dirección, alcance y volumen' },
+        { title: 'Compliance', desc: 'Cuenta bancaria y validaciones' },
+        { title: 'Resumen', desc: 'Confirmación para revisión' }
+      ];
+
+      const stepEls = Array.from(document.querySelectorAll('.form-step'));
+      const indicator = document.getElementById('stepIndicator');
+      const form = document.getElementById('onboardingForm');
+      const formMsg = document.getElementById('formMsg');
+      const summaryList = document.getElementById('summaryList');
+      const applicationCodeEl = document.getElementById('applicationCode');
+      const draftStatusEl = document.getElementById('draftStatus');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const saveDraftBtn = document.getElementById('saveDraftBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      const pdfInput = document.getElementById('businessDescriptionPdf');
+      const pdfDropzone = document.getElementById('pdf-dropzone');
+      const pdfInfo = document.getElementById('pdf-file-info');
+      const pdfError = document.getElementById('pdf-file-error');
+      const obProgressLabel = document.getElementById('obProgressLabel');
+      const obProgressFill = document.getElementById('obProgressFill');
+      const obProgressFillFull = document.getElementById('obProgressFillFull');
+      const obProgressBarFull = document.querySelector('.ob-progress-bar[role="progressbar"]');
+      let currentStep = 0;
+      let applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
+
+      function now(){ return Date.now(); }
+      function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+      function readApplications(){
+        try {
+          const raw = localStorage.getItem(APPLICATIONS_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          return [];
+        }
+      }
+      function writeApplications(items){
+        localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items || []));
+      }
+      function readAccessContext(){
+        try {
+          const raw = localStorage.getItem(ACCESS_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+      function readFormData(){
+        const fd = new FormData(form);
+        const data = {};
+        for (const [key, value] of fd.entries()) {
+          if (data[key] !== undefined) continue;
+          data[key] = value;
+        }
+        data.acceptTerms = form.elements.acceptTerms.checked;
+        data.needsApiIntegration = form.elements.needsApiIntegration.checked;
+        if (pdfInput && pdfInput.files && pdfInput.files[0]) {
+          data.businessDescriptionPdfName = pdfInput.files[0].name;
+        }
+        return data;
+      }
+      let saveRecoveryTimer = null;
+      function saveRecovery(){
+        clearTimeout(saveRecoveryTimer);
+        saveRecoveryTimer = setTimeout(function(){
+          try {
+            const data = readFormData();
+            sessionStorage.setItem(RECOVERY_KEY, JSON.stringify({
+              applicationId,
+              currentStep,
+              formData: data,
+              savedAt: Date.now()
+            }));
+          } catch (e) {}
+        }, 800);
+      }
+      function restoreRecovery(){
+        try {
+          const raw = sessionStorage.getItem(RECOVERY_KEY);
+          if (!raw) return false;
+          const r = JSON.parse(raw);
+          if (!r.applicationId || !r.formData) return false;
+          if (Date.now() - (r.savedAt || 0) > 24 * 60 * 60 * 1000) { sessionStorage.removeItem(RECOVERY_KEY); return false; }
+          applicationId = r.applicationId;
+          currentStep = Math.min(Math.max(0, r.currentStep || 0), stepEls.length - 1);
+          const d = r.formData;
+          for (const k in d) {
+            const el = form.elements[k];
+            if (!el) continue;
+            if (el.type === 'checkbox') el.checked = !!d[k];
+            else if (el.type === 'radio') el.checked = (el.value === d[k]);
+            else if (el.value !== d[k]) el.value = d[k] || '';
+          }
+          applicationCodeEl.textContent = applicationId;
+          renderSteps();
+          setMsg('Progreso restaurado. Puede continuar donde lo dejó.', false);
+          return true;
+        } catch (e) { return false; }
+      }
+      function setMsg(msg, isError){
+        formMsg.textContent = msg || '';
+        formMsg.className = `text-sm min-h-[20px] ${isError ? 'text-red-600' : 'text-slate-600'}`;
+      }
+      function goToStep(idx){
+        if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
+        if (metamapModalOpen) return;
+        if (idx > currentStep) {
+          for (let i = currentStep; i < idx; i++) {
+            if (!validateStep(i)) {
+              currentStep = i;
+              renderSteps();
+              setMsg('Completa los campos antes de avanzar.', true);
+              return;
+            }
+          }
+        }
+        currentStep = idx;
+        renderSteps();
+        setMsg('');
+        saveRecovery();
+      }
+      function renderIndicator(){
+        indicator.innerHTML = steps.map((step, idx) => `
+          <div class="ob-step ${idx === currentStep ? '-active' : ''} cursor-pointer" data-step-idx="${idx}" role="button" tabindex="0">
+            <div class="ob-step-index">${idx + 1}</div>
+            <div>
+              <div class="font-extrabold text-sm">${esc(step.title)}</div>
+              <div class="text-xs text-slate-500 mt-1">${esc(step.desc)}</div>
+            </div>
+          </div>`).join('');
+        indicator.querySelectorAll('.ob-step[data-step-idx]').forEach(el => {
+          const idx = parseInt(el.getAttribute('data-step-idx'), 10);
+          el.addEventListener('click', () => goToStep(idx));
+          el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToStep(idx); } });
+        });
+      }
+      function updateProgress(){
+        const total = stepEls.length;
+        const percent = total ? Math.round(((currentStep + 1) / total) * 100) : 0;
+        const percentStr = percent + '%';
+        if (obProgressLabel) obProgressLabel.textContent = percentStr;
+        if (obProgressFill) obProgressFill.style.width = percentStr;
+        if (obProgressFillFull) obProgressFillFull.style.width = percentStr;
+        if (obProgressBarFull) {
+          obProgressBarFull.setAttribute('aria-valuenow', percent);
+        }
+      }
+      const KYC_STATUS_KEY = 'pp_kyc_status';
+      let metamapModalOpen = false;
+      function getKycStatus(){
+        try {
+          const raw = localStorage.getItem(KYC_STATUS_KEY);
+          const all = raw ? JSON.parse(raw) : {};
+          return all[applicationId] || null;
+        } catch (e) { return null; }
+      }
+      function setKycStatus(data){
+        try {
+          const raw = localStorage.getItem(KYC_STATUS_KEY);
+          const all = raw ? JSON.parse(raw) : {};
+          if (data == null) { delete all[applicationId]; }
+          else { all[applicationId] = { ...data, updatedAt: Date.now() }; }
+          localStorage.setItem(KYC_STATUS_KEY, JSON.stringify(all));
+        } catch (e) {}
+      }
+      window.setKycResult = function(appId, payload){
+        try {
+          const raw = localStorage.getItem(KYC_STATUS_KEY);
+          const all = raw ? JSON.parse(raw) : {};
+          all[appId] = { ...(all[appId] || {}), ...payload, updatedAt: Date.now() };
+          localStorage.setItem(KYC_STATUS_KEY, JSON.stringify(all));
+          if (appId === applicationId) renderKycStatus();
+        } catch (e) {}
+      };
+      async function checkKycStatusFromMetamap(){
+        const kyc = getKycStatus();
+        if (!kyc?.verificationId) {
+          setMsg('Complete la verificación con Metamap primero.', true);
+          return;
+        }
+        const sbCfg = window.PPSupabaseConfig || {};
+        if (!sbCfg.url || !(sbCfg.anonKey || sbCfg.anon_key)) {
+          setMsg('Configura supabase-config.js con url y anonKey.', true);
+          return;
+        }
+        setMsg('Comprobando estado en Metamap…', false);
+        const supabase = window.supabase?.createClient(sbCfg.url, sbCfg.anonKey || sbCfg.anon_key);
+        if (!supabase?.functions?.invoke) {
+          setMsg('Carga el SDK de Supabase (supabase-js).', true);
+          return;
+        }
+        try {
+          const { data, error } = await supabase.functions.invoke('check-metamap-verification', {
+            body: { verificationId: kyc.verificationId, applicationId },
+          });
+          if (error) {
+            setMsg(error.message || 'Error al verificar.', true);
+            console.error('Supabase invoke error:', error);
+            return;
+          }
+          const status = (data?.status || '').toLowerCase();
+          const mapped = status === 'verified' ? 'approved' : status === 'rejected' ? 'rejected' : status === 'reviewneeded' ? 'reviewNeeded' : status;
+          setKycStatus({
+            status: mapped || 'pending_review',
+            identityId: kyc.identityId,
+            verificationId: kyc.verificationId,
+            error: data?.error || null,
+          });
+          renderKycStatus();
+          const savedOk = data?.savedToSupabase === true;
+          if (!savedOk) console.warn('Edge Function respondió pero savedToSupabase=false. Revisa logs en Supabase.', data);
+          if (status === 'verified') setMsg('¡Identidad verificada! Puede continuar.' + (savedOk ? '' : ' (No se guardó en Supabase)'), false);
+          else if (status === 'rejected') setMsg('Verificación rechazada. Revise el motivo.' + (savedOk ? '' : ' (No se guardó en Supabase)'), true);
+          else setMsg('Sigue en revisión. Intente de nuevo en unos minutos.' + (savedOk ? '' : ' (No se guardó en Supabase)'), savedOk ? false : true);
+        } catch (err) {
+          setMsg('Error. Abra la consola (F12) para más detalles.', true);
+          console.error('checkKycStatusFromMetamap:', err);
+        }
+      }
+      async function fetchKycStatusFromSupabase(){
+        const sbCfg = window.PPSupabaseConfig || {};
+        if (!sbCfg.url || !(sbCfg.anonKey || sbCfg.anon_key)) return;
+        const supabase = window.supabase?.createClient(sbCfg.url, sbCfg.anonKey || sbCfg.anon_key);
+        if (!supabase?.from) return;
+        try {
+          const { data, error } = await supabase.from('kyc_verifications').select('*').eq('application_id', applicationId).maybeSingle();
+          if (error || !data) return;
+          const kyc = {
+            status: data.status || 'pending_review',
+            identityId: data.identity_id || null,
+            verificationId: data.verification_id || null,
+            error: (data.error_message || data.error_code || data.error_type) ? { message: data.error_message, code: data.error_code, type: data.error_type } : null,
+            completedAt: data.completed_at ? new Date(data.completed_at).getTime() : null,
+            updatedAt: data.updated_at ? new Date(data.updated_at).getTime() : null
+          };
+          setKycStatus(kyc);
+          renderKycStatus();
+        } catch (e) {}
+      }
+      window.getKycVerificationsForSupabase = function(){
+        try {
+          const raw = localStorage.getItem(KYC_STATUS_KEY);
+          const all = raw ? JSON.parse(raw) : {};
+          return Object.entries(all).map(([appId, kyc]) => ({
+            application_id: appId,
+            identity_id: kyc.identityId || null,
+            verification_id: kyc.verificationId || null,
+            status: kyc.status || 'pending_review',
+            error_message: kyc.error?.message || null,
+            error_code: kyc.error?.code || null,
+            error_type: kyc.error?.type || null,
+            completed_at: kyc.completedAt || null,
+            updated_at: kyc.updatedAt || null
+          }));
+        } catch (e) { return []; }
+      };
+      function renderKycStatus(){
+        const kyc = getKycStatus();
+        const loadingEl = document.getElementById('kyc-status-loading');
+        const reviewEl = document.getElementById('kyc-status-review');
+        const approvedEl = document.getElementById('kyc-status-approved');
+        const rejectedEl = document.getElementById('kyc-status-rejected');
+        const panelEl = document.getElementById('kyc-status-panel');
+        const buttonWrap = document.getElementById('kyc-button-wrap');
+        const errMsg = document.getElementById('kyc-error-message');
+        const errDetail = document.getElementById('kyc-error-detail');
+        [loadingEl, reviewEl, approvedEl, rejectedEl].forEach(el => { if (el) el.classList.add('hidden'); });
+        if (!kyc) {
+          if (panelEl) panelEl.classList.add('hidden');
+          if (buttonWrap) buttonWrap.classList.remove('hidden');
+          return;
+        }
+        if (panelEl) panelEl.classList.remove('hidden');
+        if (buttonWrap) buttonWrap.classList.add('hidden');
+        if (kyc.status === 'approved') {
+          if (approvedEl) approvedEl.classList.remove('hidden');
+        } else if (kyc.status === 'rejected') {
+          if (rejectedEl) rejectedEl.classList.remove('hidden');
+          if (errMsg) errMsg.textContent = kyc.error?.message || 'La verificación no pudo completarse.';
+          if (errDetail) {
+            const detail = kyc.error?.code || kyc.error?.type ? [kyc.error.code, kyc.error.type].filter(Boolean).join(' — ') : '';
+            if (detail) { errDetail.textContent = detail; errDetail.classList.remove('hidden'); }
+            else errDetail.classList.add('hidden');
+          }
+        } else if (kyc.status === 'reviewNeeded') {
+          if (reviewEl) reviewEl.classList.remove('hidden');
+        } else {
+          if (loadingEl) loadingEl.classList.remove('hidden');
+        }
+      }
+      function updateMetamapMetadata(){
+        const btn = document.getElementById('metamap-btn');
+        if (!btn) return;
+        const repEmail = form.elements.repEmail?.value || '';
+        const meta = {
+          onboardingId: applicationId,
+          email: repEmail
+        };
+        btn.setAttribute('metadata', JSON.stringify(meta));
+      }
+      function setMetamapModalOpen(open){
+        metamapModalOpen = open;
+        window.__metamapModalOpen = open;
+        const sidebar = document.querySelector('.ob-sidebar');
+        if (sidebar) sidebar.style.pointerEvents = open ? 'none' : '';
+        if (prevBtn) prevBtn.disabled = open ? true : (currentStep === 0);
+        if (nextBtn) nextBtn.disabled = open;
+      }
+      function renderSteps(){
+        stepEls.forEach((el, idx) => el.classList.toggle('is-hidden', idx !== currentStep));
+        prevBtn.disabled = currentStep === 0;
+        nextBtn.classList.toggle('is-hidden', currentStep === stepEls.length - 1);
+        submitBtn.classList.toggle('is-hidden', currentStep !== stepEls.length - 1);
+        if (currentStep === stepEls.length - 1) renderSummary();
+        if (currentStep === 1) { updateMetamapMetadata(); renderKycStatus(); }
+        renderIndicator();
+        updateProgress();
+      }
+      function setupPdfUpload(){
+        if (!pdfInput || !pdfDropzone) return;
+        function clearError(){
+          if (pdfError) {
+            pdfError.textContent = '';
+            pdfError.classList.add('hidden');
+          }
+        }
+        function showError(msg){
+          if (!pdfError) return;
+          pdfError.textContent = msg;
+          pdfError.classList.remove('hidden');
+        }
+        function showInfo(msg){
+          if (!pdfInfo) return;
+          pdfInfo.textContent = msg;
+          pdfInfo.classList.remove('hidden');
+        }
+        function handleFiles(files){
+          clearError();
+          if (!files || !files[0]) return;
+          const file = files[0];
+          if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+            pdfInput.value = '';
+            showError('Solo se permiten archivos en formato PDF.');
+            return;
+          }
+          const mb = (file.size / (1024 * 1024)).toFixed(2);
+          showInfo(`Seleccionado: ${file.name} (${mb} MB)`);
+        }
+        pdfDropzone.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          pdfDropzone.classList.add('bg-blue-50');
+        });
+        pdfDropzone.addEventListener('dragleave', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          pdfDropzone.classList.remove('bg-blue-50');
+        });
+        pdfDropzone.addEventListener('drop', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          pdfDropzone.classList.remove('bg-blue-50');
+          var files = e.dataTransfer && e.dataTransfer.files;
+          if (!files || !files[0]) return;
+          var file = files[0];
+          try {
+            var dt = new DataTransfer();
+            dt.items.add(file);
+            pdfInput.files = dt.files;
+          } catch (err) {}
+          handleFiles(files);
+        });
+        pdfInput.addEventListener('change', (e) => {
+          handleFiles(e.target.files);
+        });
+      }
+      function getStepFields(stepIndex){
+        return Array.from(stepEls[stepIndex].querySelectorAll('input, select, textarea')).filter(el => el.type !== 'button' && el.type !== 'submit' && !el.disabled);
+      }
+      function validateStep(stepIndex){
+        const fields = getStepFields(stepIndex);
+        for (const field of fields) {
+          if (!field.checkValidity()) {
+            field.reportValidity();
+            return false;
+          }
+        }
+        return true;
+      }
+      function goNext(){
+        if (!validateStep(currentStep)) return;
+        currentStep = Math.min(currentStep + 1, stepEls.length - 1);
+        renderSteps();
+        setMsg('');
+      }
+      function goPrev(){
+        currentStep = Math.max(currentStep - 1, 0);
+        renderSteps();
+        setMsg('');
+      }
+      function renderSummary(){
+        const data = readFormData();
+        const items = [
+          ['Razón social', data.businessLegalName],
+          ['Nombre comercial', data.businessTradeName],
+          ['RUT / NIT', data.taxId],
+          ['Industria', data.industry],
+          ['Descripción del negocio', data.businessDescriptionPdfName ? `Archivo: ${data.businessDescriptionPdfName}` : 'No adjuntado'],
+          ['Representante', `${data.repName || ''} · ${data.repEmail || ''}`],
+          ['Contacto operativo', `${data.opsContactName || ''} · ${data.opsContactEmail || ''}`],
+          ['Ubicación', [data.country, data.region, data.city, data.district].filter(Boolean).join(' / ')],
+          ['Canal principal', data.channelType],
+          ['Ventas estimadas', data.estimatedMonthlySales],
+          ['Banco / cuenta', [data.bankName, data.bankAccountType, data.bankAccountNumber].filter(Boolean).join(' · ')],
+          ['Integración API', data.needsApiIntegration ? 'Sí' : 'No'],
+          ['Notas', data.additionalNotes || '—']
+        ];
+        summaryList.innerHTML = items.map(([label, value]) => `<dt>${esc(label)}</dt><dd>${esc(value || '—')}</dd>`).join('');
+      }
+      function buildApplication(status){
+        const data = readFormData();
+        const kyc = getKycStatus();
+        return {
+          id: applicationId,
+          type: 'agent_onboarding',
+          status: status || 'draft',
+          submittedAt: status === 'pending_review' ? now() : null,
+          updatedAt: now(),
+          createdAt: now(),
+          review: {
+            state: status === 'pending_review' ? 'pending' : 'draft',
+            approvedBy: null,
+            approvedAt: null,
+            rejectionReason: ''
+          },
+          credentials: {
+            username: '',
+            temporaryPassword: '',
+            linkedAgentId: null,
+            linkedUserId: null
+          },
+          onboarding: data,
+          kycVerification: kyc ? {
+            identityId: kyc.identityId,
+            verificationId: kyc.verificationId,
+            status: kyc.status,
+            error: kyc.error || null,
+            completedAt: kyc.completedAt,
+            updatedAt: kyc.updatedAt
+          } : null
+        };
+      }
+      function persist(status){
+        const items = readApplications();
+        const payload = buildApplication(status);
+        const idx = items.findIndex(item => item.id === applicationId);
+        if (idx >= 0) {
+          payload.createdAt = items[idx].createdAt || payload.createdAt;
+          payload.credentials = items[idx].credentials || payload.credentials;
+          items[idx] = payload;
+        } else {
+          items.unshift(payload);
+        }
+        writeApplications(items);
+        applicationCodeEl.textContent = applicationId;
+        draftStatusEl.textContent = status === 'pending_review' ? 'Enviado a revisión' : 'Borrador guardado';
+        return payload;
+      }
+      function resetFormAfterSubmit(){
+        try { sessionStorage.removeItem(RECOVERY_KEY); } catch(_){}
+        form.reset();
+        currentStep = 0;
+        applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
+        applicationCodeEl.textContent = applicationId;
+        draftStatusEl.textContent = 'Sin guardar';
+        prefillFromAccess();
+        renderSteps();
+      }
+
+      function prefillFromAccess(){
+        const ctx = readAccessContext();
+        if (!ctx) return false;
+        if (form.elements.repEmail && !form.elements.repEmail.value) form.elements.repEmail.value = ctx.email || '';
+        if (form.elements.repPhone && !form.elements.repPhone.value) form.elements.repPhone.value = ctx.phone || '';
+        if (form.elements.opsContactEmail && !form.elements.opsContactEmail.value) form.elements.opsContactEmail.value = ctx.email || '';
+        if (form.elements.businessTradeName && !form.elements.businessTradeName.value) form.elements.businessTradeName.value = ctx.businessName || '';
+        if (form.elements.businessLegalName && !form.elements.businessLegalName.value) form.elements.businessLegalName.value = ctx.businessName || '';
+        return true;
+      }
+
+      prevBtn.addEventListener('click', goPrev);
+      nextBtn.addEventListener('click', goNext);
+      saveDraftBtn.addEventListener('click', () => {
+        try {
+          persist('draft');
+          window.__metamapModalOpen = false;
+          window.__formSavedAfterDraft = true;
+          setMsg('Borrador guardado. Puede recargar sin perder datos.', false);
+        } catch (err) {
+          setMsg('Error al guardar. Revise la consola (F12).', true);
+          console.error('persist error:', err);
+        }
+      });
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        for (let i = 0; i < stepEls.length - 1; i += 1) {
+          if (!validateStep(i)) {
+            currentStep = i;
+            renderSteps();
+            setMsg('Completa los campos obligatorios antes de enviar.', true);
+            return;
+          }
+        }
+        persist('pending_review');
+        setMsg('Solicitud enviada a revisión. Las credenciales se asignarán solo después de aprobación.');
+        resetFormAfterSubmit();
+      });
+
+      const accessContext = readAccessContext();
+      if (!accessContext) {
+        location.href = 'onboarding-access.html';
+        return;
+      }
+
+      if (!accessContext.emailVerified) {
+        location.href = 'onboarding-access.html';
+        return;
+      }
+
+      applicationCodeEl.textContent = applicationId;
+      if (!restoreRecovery()) {
+        prefillFromAccess();
+        renderSteps();
+      }
+      fetchKycStatusFromSupabase();
+      form.addEventListener('input', saveRecovery);
+      form.addEventListener('change', saveRecovery);
+      setupPdfUpload();
+      form.elements.repEmail?.addEventListener('input', () => { if (currentStep === 1) updateMetamapMetadata(); });
+      form.elements.repEmail?.addEventListener('change', () => { if (currentStep === 1) updateMetamapMetadata(); });
+      window.addEventListener('beforeunload', (e) => {
+        if (window.__metamapModalOpen) e.preventDefault();
+      });
+      document.getElementById('portalLink')?.addEventListener('click', (e) => {
+        if (window.__metamapModalOpen) {
+          e.preventDefault();
+          e.stopPropagation();
+          setMsg('Complete o cancele la verificación de identidad antes de salir.', true);
+        }
+      }, true);
+      document.getElementById('kyc-check-status-btn-loading')?.addEventListener('click', checkKycStatusFromMetamap);
+      document.getElementById('kyc-check-status-btn-review')?.addEventListener('click', checkKycStatusFromMetamap);
+      document.getElementById('kyc-retry-btn')?.addEventListener('click', () => {
+        setKycStatus(null);
+        renderKycStatus();
+        setMsg('', false);
+      });
+      const metamapBtn = document.getElementById('metamap-btn');
+      if (metamapBtn) {
+        metamapBtn.addEventListener('metamap:userStartedSdk', () => {
+          setMetamapModalOpen(true);
+          setMsg('Complete la verificación. No cierre ni actualice la página.', false);
+        });
+        metamapBtn.addEventListener('metamap:userFinishedSdk', (e) => {
+          setMetamapModalOpen(false);
+          const d = e.detail || {};
+          const identityId = d.identityId || d.identity_id;
+          const verificationId = d.verificationId || d.verification_id;
+          if (!verificationId) {
+            console.warn('Metamap userFinishedSdk: sin verificationId. detail=', d);
+            setMsg('No se recibió el ID de verificación. Intente de nuevo o haga clic en "Verificar estado".', true);
+            return;
+          }
+          setKycStatus({
+            status: 'pending_review',
+            identityId: identityId,
+            verificationId: verificationId,
+            completedAt: Date.now()
+          });
+          renderKycStatus();
+          setMsg('Verificando estado automáticamente…', false);
+          setTimeout(function(){ checkKycStatusFromMetamap(); }, 2000);
+        });
+        metamapBtn.addEventListener('metamap:exitedSdk', () => {
+          setMetamapModalOpen(false);
+          setMsg('', false);
+        });
+      }
+    })();
+  </script>
 
   <!-- Modal: confirmar salida con cambios sin guardar -->
   <div id="leaveConfirmBackdrop" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden" aria-hidden="true">
@@ -1430,18 +1403,66 @@
     </div>
   </div>
 
-  <script src="onboarding-leave-modal.js"></script>
   <script>
     (function(){
-      var cursorRing = document.getElementById('cursorRing');
-      var desktopCursor = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-      if (desktopCursor && cursorRing) {
-        var rafId = null, targetX = 0, targetY = 0, currentX = 0, currentY = 0;
-        function render(){ currentX += (targetX - currentX) * 0.18; currentY += (targetY - currentY) * 0.18; cursorRing.style.transform = 'translate(' + currentX + 'px,' + currentY + 'px) translate(-50%,-50%)'; rafId = requestAnimationFrame(render); }
-        window.addEventListener('mousemove', function(e){ targetX = e.clientX; targetY = e.clientY; if (!cursorRing.classList.contains('-visible')){ currentX = targetX; currentY = targetY; cursorRing.classList.add('-visible'); } if (!rafId) rafId = requestAnimationFrame(render); });
-        window.addEventListener('mouseout', function(){ cursorRing.classList.remove('-visible'); });
-        document.querySelectorAll('a, button, input, select, textarea, .pp-card, .ob-step, label[for]').forEach(function(node){ node.addEventListener('mouseenter', function(){ cursorRing.classList.add('-active'); }); node.addEventListener('mouseleave', function(){ cursorRing.classList.remove('-active'); }); });
+      var form = document.getElementById('onboardingForm');
+      var formDirty = false;
+      var formSaved = false;
+      var pendingHref = null;
+      var backdrop = document.getElementById('leaveConfirmBackdrop');
+      var portalLink = document.getElementById('portalLink');
+
+      function markDirty(){ formDirty = true; window.__formSavedAfterDraft = false; }
+      function markSaved(){ formSaved = true; formDirty = false; window.__formSavedAfterDraft = true; }
+
+      if (form) {
+        form.addEventListener('input', markDirty);
+        form.addEventListener('change', markDirty);
       }
+
+      window.addEventListener('beforeunload', function(e){
+        if (window.__formSavedAfterDraft) return;
+        if (window.__metamapModalOpen) e.preventDefault();
+        // No bloquear recarga: sessionStorage recupera progreso al refrescar
+      });
+
+      function showLeaveModal(href){
+        if (!backdrop) return;
+        pendingHref = href;
+        backdrop.classList.remove('hidden');
+      }
+      function hideLeaveModal(){
+        if (backdrop) backdrop.classList.add('hidden');
+        pendingHref = null;
+      }
+
+      if (portalLink) {
+        portalLink.addEventListener('click', function(e){
+          if (!formDirty || formSaved) return;
+          e.preventDefault();
+          showLeaveModal(this.getAttribute('href'));
+        });
+      }
+
+      if (backdrop) {
+        document.getElementById('leaveConfirmSave')?.addEventListener('click', function(){
+          var btn = document.getElementById('saveDraftBtn');
+          if (btn) { btn.click(); markSaved(); }
+          hideLeaveModal();
+          if (pendingHref) location.href = pendingHref;
+        });
+        document.getElementById('leaveConfirmDiscard')?.addEventListener('click', function(){
+          var h = pendingHref;
+          hideLeaveModal();
+          if (h) location.href = h;
+        });
+        document.getElementById('leaveConfirmCancel')?.addEventListener('click', function(){
+          hideLeaveModal();
+        });
+      }
+
+      document.getElementById('saveDraftBtn')?.addEventListener('click', markSaved);
+      document.getElementById('onboardingForm')?.addEventListener('submit', markSaved);
     })();
   </script>
 </body>

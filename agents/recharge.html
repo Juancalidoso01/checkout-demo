@@ -62,7 +62,7 @@
         if (window.PPAuth && window.PPAuth.renderSessionBadge) window.PPAuth.renderSessionBadge({ selector: '[data-pp-session]' });
         if (window.PPAuth && window.PPAuth.ensureLogoutButton) window.PPAuth.ensureLogoutButton({ selector: '[data-pp-logout]' });
         // if superadmin accidentally lands here, take them to admin
-        if (s && s.role === 'superadmin') { location.href = '../pp-admin-entry.html'; }
+        if (s && s.role === 'superadmin') { location.href = '../admin/index.html'; }
       } catch(e){ console.warn('auth guard failed', e); }
     })();
   </script>
