@@ -189,6 +189,10 @@
       position: relative;
       padding: 8px 0 24px;
     }
+    #pp-map-fases {
+      position: relative;
+      z-index: 2;
+    }
     .pp-map-svg {
       position: absolute;
       left: 0;
@@ -220,8 +224,16 @@
       margin-bottom: 12px;
     }
     .pp-fase-head {
+      position: relative;
+      z-index: 4;
       margin-bottom: 16px;
-      padding-left: 4px;
+      padding: 12px 14px 14px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 10px 32px rgba(15, 23, 42, 0.06);
       animation: pp-fade-up 0.6s ease backwards;
     }
     .pp-fase:nth-child(2) .pp-fase-head { animation-delay: 0.1s; }
@@ -289,6 +301,12 @@
       border: 1px dashed rgba(84, 98, 230, 0.38);
       background: rgba(84, 98, 230, 0.045);
       box-sizing: border-box;
+      position: relative;
+      z-index: 2;
+    }
+    .pp-map-subwrap--agent {
+      border-color: rgba(13, 148, 136, 0.4);
+      background: rgba(13, 148, 136, 0.05);
     }
     .pp-map-subwrap-legend {
       margin: 0 0 12px;
@@ -371,7 +389,7 @@
       align-items: stretch;
       gap: 14px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
     .pp-map-node {
       flex: 1 1 140px;
@@ -388,6 +406,7 @@
       padding: 16px 14px 14px;
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       position: relative;
+      z-index: 2;
       overflow: hidden;
       animation: pp-node-in 0.55s ease backwards;
       cursor: pointer;
@@ -466,10 +485,10 @@
       margin-top: 8px;
       padding: 22px 20px;
       border-radius: var(--pp-radius-md);
-      background: rgba(84, 98, 230, 0.05);
+      background: rgba(248, 250, 252, 0.98);
       border: 1px dashed rgba(84, 98, 230, 0.22);
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
     .pp-extras h4 {
       margin: 0 0 8px;
@@ -774,24 +793,39 @@
               buildIntegracionesRow(fi) +
             '</div>' +
             '<div class="pp-fase-nodes">';
-        var subIds =
-          fi === 0 &&
-          fase.subflujoDependeDeFormulario &&
-          fase.subflujoDependeDeFormulario.length
-            ? fase.subflujoDependeDeFormulario
-            : [];
+        var subCfg = null;
+        if (fi === 0 && fase.subflujoDependeDeFormulario && fase.subflujoDependeDeFormulario.length) {
+          subCfg = {
+            ids: fase.subflujoDependeDeFormulario,
+            legend:
+              'Pasos 3 a 5 · Mismo expediente comercial, continúa tras el formulario base (paso 2)',
+            wrapClass: 'pp-map-subwrap pp-map-subwrap--onb',
+          };
+        } else if (fi === 2 && fase.subflujoFuncionesAgente && fase.subflujoFuncionesAgente.length) {
+          subCfg = {
+            ids: fase.subflujoFuncionesAgente,
+            legend:
+              'Funciones del portal · Habilidades y operaciones del mismo aliado tras el acceso (paso anterior)',
+            wrapClass: 'pp-map-subwrap pp-map-subwrap--agent',
+          };
+        }
+        var subIds = subCfg ? subCfg.ids : [];
         ids.forEach(function (mid) {
           var m = findModulo(mid);
           if (!m) return;
-          if (subIds.length && mid === subIds[0]) {
+          if (subCfg && mid === subIds[0]) {
             htmlFases +=
-              '<div class="pp-map-subwrap">' +
-              '<p class="pp-map-subwrap-legend" role="note">Pasos 3 a 5 · Mismo expediente comercial, continúa tras el formulario base (paso 2)</p>' +
+              '<div class="' +
+              subCfg.wrapClass +
+              '">' +
+              '<p class="pp-map-subwrap-legend" role="note">' +
+              esc(subCfg.legend) +
+              '</p>' +
               '<div class="pp-map-subwrap-nodes">';
           }
           htmlFases += nodeEl(m, mid, flatIdx);
           flatIdx++;
-          if (subIds.length && mid === subIds[subIds.length - 1]) {
+          if (subCfg && mid === subIds[subIds.length - 1]) {
             htmlFases += '</div></div>';
           }
         });

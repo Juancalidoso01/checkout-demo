@@ -184,8 +184,17 @@
         titulo: 'El comercio ya operando',
         journeyLabel: 'Journey del aliado (portal agente)',
         subtitulo:
-          'Tras la alta: ingreso, portal, ajustes, equipo, retiros, demo de cobro y comprobante.',
+          'Un paso de acceso al portal; lo demás son funciones u operaciones disponibles para el mismo aliado en ese entorno.',
         ids: ['login', 'agent-hub', 'setup', 'agent-team', 'agent-cashout', 'checkout', 'factura'],
+        /** Tras iniciar sesión: hub, ajustes, equipo, retiros, cobro y factura como “habilidades” del portal. */
+        subflujoFuncionesAgente: [
+          'agent-hub',
+          'setup',
+          'agent-team',
+          'agent-cashout',
+          'checkout',
+          'factura',
+        ],
       },
     ],
     /** Solo herramientas locales / QA; no son pasos del flujo comercial anterior. */
