@@ -164,6 +164,7 @@
     if (next) {
       try {
         const url = new URL(next, location.origin);
+        url.searchParams.delete('pp_demo');
         location.href = url.href;
         return;
       } catch(e) {}
@@ -192,6 +193,116 @@
     el.textContent = `${s.displayName} (${s.role})`;
   }
 
+  /**
+   * Demo stakeholders: enlaces con ?pp_demo=1 inician sesión automática con usuario demo adecuado.
+   */
+  function needsStakeholderDemoLogin(relativePath){
+    const clean = (relativePath || '').replace(/^\/+/, '').split('?')[0].toLowerCase();
+    if (clean.indexOf('agents/') === 0) return true;
+    if (clean.indexOf('admin/') === 0) return true;
+    if (clean === 'pp-admin-entry.html' || clean === 'admin-login.html') return true;
+    if (clean === 'setup.html' || clean === 'factura.html') return true;
+    if (clean === 'login.html') return true;
+    return false;
+  }
+
+  function withStakeholderDemoQuery(relativePath){
+    if (!relativePath || !needsStakeholderDemoLogin(relativePath)) return relativePath;
+    const base = relativePath.split('?')[0];
+    const q = relativePath.indexOf('?') >= 0 ? relativePath.slice(relativePath.indexOf('?') + 1) : '';
+    const params = new URLSearchParams(q);
+    params.set('pp_demo', '1');
+    return `${base}?${params.toString()}`;
+  }
+
+  function stakeholderDemoPickCredentials(pathname, search){
+    const p = (pathname || '').toLowerCase();
+    const s = search || '';
+
+    if (p.indexOf('login.html') >= 0){
+      try {
+        const q = new URLSearchParams(s);
+        const next = q.get('next');
+        if (next){
+          const nu = new URL(decodeURIComponent(next), location.origin);
+          return stakeholderDemoPickCredentials(nu.pathname, nu.search);
+        }
+      } catch (e){}
+      return { username: 'agente01', password: '1234' };
+    }
+
+    if (p.indexOf('/admin/index') >= 0 || p.endsWith('admin/index.html')){
+      return { username: 'superadmin', password: 'admin123' };
+    }
+    if (p.indexOf('pp-admin-entry') >= 0) return { username: 'superadmin', password: 'admin123' };
+    if (p.indexOf('admin-login') >= 0) return { username: 'superadmin', password: 'admin123' };
+    if (p.indexOf('admin/credentials') >= 0) return { username: 'superadmin', password: 'admin123' };
+
+    if (p.indexOf('/agents/') >= 0) return { username: 'agente01', password: '1234' };
+    if (p.indexOf('setup.html') >= 0) return { username: 'agente01', password: '1234' };
+    if (p.indexOf('factura.html') >= 0) return { username: 'agente01', password: '1234' };
+
+    if (p.indexOf('checkout.html') >= 0) return null;
+    if (p.indexOf('onboarding') >= 0) return null;
+    if (p.indexOf('mapa-picker') >= 0) return null;
+    if (p.indexOf('modules-map') >= 0) return null;
+    if (p === '/' || p.endsWith('/index.html')) return null;
+    if (p.indexOf('test-') >= 0) return null;
+
+    return null;
+  }
+
+  function stripPpDemoParamFromUrl(){
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('pp_demo') !== '1') return;
+      params.delete('pp_demo');
+      const q = params.toString();
+      const url = location.pathname + (q ? `?${q}` : '') + location.hash;
+      history.replaceState({}, '', url);
+    } catch (e){}
+  }
+
+  function showStakeholderDemoToast(){
+    const run = () => {
+      if (!document.body) return;
+      const el = document.createElement('div');
+      el.setAttribute('role', 'status');
+      el.style.cssText = [
+        'position:fixed','bottom:22px','left:50%','transform:translateX(-50%)','z-index:9999',
+        'max-width:min(92vw,420px)','padding:12px 18px','border-radius:14px',
+        'background:linear-gradient(135deg,#3738ab,#5462e6)','color:#fff','font-size:13px','font-weight:600',
+        'font-family:system-ui,sans-serif','box-shadow:0 12px 40px rgba(84,98,230,.35)',
+        'text-align:center','line-height:1.35'
+      ].join(';');
+      el.textContent = 'Acceso demo activado: estás viendo la pantalla como usuario de prueba.';
+      document.body.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity .4s ease';
+        setTimeout(() => el.remove(), 400);
+      }, 4200);
+    };
+    if (document.body) run();
+    else document.addEventListener('DOMContentLoaded', run, { once: true });
+  }
+
+  function applyStakeholderDemoIfRequested(){
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('pp_demo') !== '1') return;
+      const creds = stakeholderDemoPickCredentials(location.pathname, location.search);
+      if (creds){
+        signOut();
+        const res = signIn(creds.username, creds.password);
+        if (res.ok) showStakeholderDemoToast();
+      }
+      stripPpDemoParamFromUrl();
+    } catch (e){}
+  }
+
+  applyStakeholderDemoIfRequested();
+
   // Expose minimal API
   window.PPAuth = {
     USERS_KEY,
@@ -207,5 +318,7 @@
     renderSessionBadge,
     buildAppUrl,
     buildSiteUrl,
+    needsStakeholderDemoLogin,
+    withStakeholderDemoQuery,
   };
 })();

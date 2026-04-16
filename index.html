@@ -479,10 +479,11 @@
   </section>
 
   <footer class="pp-landing-foot">
-    Demo prototipo · <a href="login.html">Acceso login</a>
+    Demo prototipo · <a href="login.html">Acceso login manual</a>
   </footer>
 
   <script src="modules.config.js"></script>
+  <script src="auth.js"></script>
   <script>
     (function () {
       function esc(s) {
@@ -532,6 +533,13 @@
         return null;
       }
 
+      function hrefDemo(m) {
+        if (window.PPAuth && typeof window.PPAuth.withStakeholderDemoQuery === 'function') {
+          return window.PPAuth.withStakeholderDemoQuery(m.ruta);
+        }
+        return m.ruta;
+      }
+
       if (!catalogo || !flujo || !Array.isArray(flujo.filas)) {
         fb.hidden = false;
         return;
@@ -545,7 +553,7 @@
         stepIndex++;
         var si = stepIndex;
         return (
-          '<a class="pp-map-node" href="' + esc(m.ruta) + '" data-pp-step="' + String(idx) + '" style="animation-delay:' +
+          '<a class="pp-map-node" href="' + esc(hrefDemo(m)) + '" data-pp-step="' + String(idx) + '" style="animation-delay:' +
           Math.min(idx * 0.06, 0.5) +
           's">' +
             '<span class="pp-map-step">Paso ' +
@@ -679,7 +687,7 @@
           var ic = iconByModulo[mid] || 'fa-link';
           pills.push(
             '<a href="' +
-              esc(m.ruta) +
+              esc(hrefDemo(m)) +
               '"><i class="fas ' +
               esc(ic) +
               '"></i> ' +

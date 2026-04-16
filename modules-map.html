@@ -41,6 +41,7 @@
   <main class="pp-shell" id="root"></main>
 
   <script src="modules.config.js"></script>
+  <script src="auth.js"></script>
   <script>
     function esc(s) {
       return (s || '').toString()
@@ -51,7 +52,9 @@
     }
 
     function card(item, areaId) {
-      const href = item.ruta;
+      const href = (window.PPAuth && typeof window.PPAuth.withStakeholderDemoQuery === 'function')
+        ? window.PPAuth.withStakeholderDemoQuery(item.ruta)
+        : item.ruta;
       const ids = (item.moduloId || '') + (areaId ? ' · ' + areaId : '');
       return (
         '<article class="pp-card -soft mm-mod" data-ruta="' + esc(item.ruta) + '">' +
