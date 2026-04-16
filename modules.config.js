@@ -6,17 +6,17 @@
   window.PP_MODULOS_POR_AREA = [
     {
       areaId: 'pagos-demo',
-      area: 'Pagos y demo',
+      area: 'Cobros y comprobantes (demo)',
       items: [
         {
           moduloId: 'checkout',
-          nombreTrabajo: 'Checkout principal',
+          nombreTrabajo: 'Cobro con tarjeta (demo)',
           ruta: 'checkout.html',
           nota: 'Demo de flujos de pago; enlaza al portal agente.',
         },
         {
           moduloId: 'factura',
-          nombreTrabajo: 'Factura / comprobante',
+          nombreTrabajo: 'Comprobante o factura al cliente',
           ruta: 'factura.html',
           nota: 'Embebido en portal agente con ?embed=1',
         },
@@ -24,25 +24,25 @@
     },
     {
       areaId: 'portal-agentes',
-      area: 'Portal agentes',
+      area: 'Operaciones del comercio',
       items: [
         {
           moduloId: 'agent-hub',
-          nombreTrabajo: 'Portal agente (hub)',
+          nombreTrabajo: 'Inicio del portal: saldo y recargas',
           ruta: 'agents/recharge.html',
           nota: 'Tabs: recarga, histórico, factura, ACH, servicios. Sesión agent/employee.',
           roles: 'agent · employee',
         },
         {
           moduloId: 'agent-team',
-          nombreTrabajo: 'Equipo / empleados',
+          nombreTrabajo: 'Empleados del comercio',
           ruta: 'agents/team.html',
           nota: 'CRUD empleados en localStorage; requiere agentId.',
           roles: 'agent',
         },
         {
           moduloId: 'agent-cashout',
-          nombreTrabajo: 'Retiro de fondos (UI)',
+          nombreTrabajo: 'Retiro a cuenta bancaria',
           ruta: 'agents/cashout.html',
           nota: 'Flujo demo retiros / banco.',
         },
@@ -50,17 +50,17 @@
     },
     {
       areaId: 'admin',
-      area: 'Admin y credenciales',
+      area: 'Equipo Punto Pago (interno)',
       items: [
         {
           moduloId: 'admin-entry',
-          nombreTrabajo: 'Entrada admin unificada',
+          nombreTrabajo: 'Portal interno: login y altas',
           ruta: 'pp-admin-entry.html',
           nota: 'Login superadmin + credenciales; actualiza URLs absolutas si cambia el dominio del deploy.',
         },
         {
           moduloId: 'admin-panel',
-          nombreTrabajo: 'Panel admin',
+          nombreTrabajo: 'Revisar solicitudes y aprobar',
           ruta: 'admin/index.html',
           nota: 'Gestión interna.',
         },
@@ -68,29 +68,29 @@
     },
     {
       areaId: 'onboarding',
-      area: 'Onboarding',
+      area: 'Alta del comercio',
       items: [
         {
           moduloId: 'onb-access',
-          nombreTrabajo: 'Brochure y captación comercial',
+          nombreTrabajo: 'Página pública: interés y contacto',
           ruta: 'onboarding-access.html',
           nota: 'Vitrina y mensajes para atraer al comercio; validación de acceso opcional (p. ej. Supabase magic link).',
         },
         {
           moduloId: 'onb-form',
-          nombreTrabajo: 'Formulario de alta del comercio',
+          nombreTrabajo: 'Formulario de datos del negocio',
           ruta: 'onboarding.html',
           nota: 'Núcleo del expediente: datos del negocio y representantes.',
         },
         {
           moduloId: 'onb-contract',
-          nombreTrabajo: 'Contrato onboarding',
+          nombreTrabajo: 'Contrato y condiciones',
           ruta: 'onboarding-contract.html',
           nota: 'Firma / contrato.',
         },
         {
           moduloId: 'onb-review',
-          nombreTrabajo: 'Revisión pendiente',
+          nombreTrabajo: 'Solicitud enviada · en revisión',
           ruta: 'onboarding-review-pending.html',
           nota: 'Estado post envío.',
         },
@@ -98,23 +98,23 @@
     },
     {
       areaId: 'comercio-util',
-      area: 'Comercio y utilidades',
+      area: 'Acceso y ubicación',
       items: [
         {
           moduloId: 'setup',
-          nombreTrabajo: 'Menú / setup comercio',
+          nombreTrabajo: 'Ajustes del comercio',
           ruta: 'setup.html',
           nota: 'Enlazado desde portal agente.',
         },
         {
           moduloId: 'login',
-          nombreTrabajo: 'Login general',
+          nombreTrabajo: 'Entrada al portal del comercio',
           ruta: 'login.html',
           nota: 'auth.js · redirección por rol.',
         },
         {
           moduloId: 'mapa-picker',
-          nombreTrabajo: 'Ubicación en mapa (KYB)',
+          nombreTrabajo: 'Dirección y ubicación en mapa',
           ruta: 'mapa-picker.html',
           nota: 'Selector de ubicación; continúa el expediente tras el formulario base.',
         },
@@ -122,23 +122,23 @@
     },
     {
       areaId: 'sandbox',
-      area: 'Pruebas y herramientas locales',
+      area: 'Pruebas técnicas (solo demo)',
       items: [
         {
           moduloId: 'test-kyc',
-          nombreTrabajo: 'Tests / KYC / dirección',
+          nombreTrabajo: 'Prueba integración KYC',
           ruta: 'test-kyc-edge-function.html',
           nota: 'Sandbox.',
         },
         {
           moduloId: 'test-direccion',
-          nombreTrabajo: 'Test dirección',
+          nombreTrabajo: 'Prueba autocompletar dirección',
           ruta: 'test-direccion.html',
           nota: 'Sandbox.',
         },
         {
           moduloId: 'test-mapa',
-          nombreTrabajo: 'Test mapa',
+          nombreTrabajo: 'Prueba mapa y pin',
           ruta: 'test-mapa.html',
           nota: 'Sandbox.',
         },
@@ -153,26 +153,26 @@
   window.PP_FLUJO_PROCESO = {
     filas: [
       {
-        titulo: 'Captación y alta del comercio',
-        journeyLabel: 'Journey del cliente (comercio)',
+        titulo: 'Del interés al alta del comercio',
+        journeyLabel: 'Vista del comercio (solicitante)',
         subtitulo:
-          'Paso 1: brochure para captar. Paso 2: formulario base del expediente. Los pasos 3 a 5 son el mismo caso comercial una vez avanzado el formulario: ubicación, contrato y seguimiento.',
+          '1) Página pública para captar interés.\n2) Formulario con datos del negocio.\n3–5) Misma solicitud, después del formulario: ubicación en mapa, contrato y mensaje de “en revisión”.',
         ids: ['onb-access', 'onb-form', 'mapa-picker', 'onb-contract', 'onb-review'],
         /** Pasos que en el mapa se agrupan como continuación del formulario (paso 2). */
         subflujoDependeDeFormulario: ['mapa-picker', 'onb-contract', 'onb-review'],
       },
       {
-        titulo: 'Administración del programa',
-        journeyLabel: 'Journey interno (equipo Punto Pago)',
+        titulo: 'Equipo interno: revisar y aprobar',
+        journeyLabel: 'Vista Punto Pago (operaciones)',
         subtitulo:
-          'Dos accesos administrados: (1) captación con correo del aliado y canal de entrada unificado; (2) tras completar el onboarding, revisión y aprobación del expediente — propósito del portal interno.',
+          '1) Portal interno: entrar y gestionar altas (correo del aliado, credenciales).\n2) Panel para revisar expedientes cuando el comercio ya envió el onboarding.',
         ids: ['admin-entry', 'admin-panel'],
       },
       {
-        titulo: 'El comercio ya operando',
-        journeyLabel: 'Journey del aliado (portal agente)',
+        titulo: 'Comercio en día a día (portal)',
+        journeyLabel: 'Vista del comercio (ya dado de alta)',
         subtitulo:
-          'Un solo paso de acceso al portal (login); el resto son funciones y operaciones en el mismo entorno — no se numeran como pasos del journey.',
+          '1) Solo el acceso con usuario cuenta como “paso” del mapa.\n2) El resto son pantallas del mismo portal (cobros, equipo, ajustes…): útiles, pero no son pasos nuevos del alta.',
         ids: ['login'],
         /** Tras iniciar sesión: hub, ajustes, equipo, retiros, cobro y factura. */
         subflujoFuncionesAgente: [

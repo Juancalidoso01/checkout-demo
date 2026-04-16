@@ -124,7 +124,7 @@
       track.classList.add('pp-demo-flow-context__track--operativo');
       var opHint = document.createElement('span');
       opHint.className = 'pp-demo-flow-context__operativo-hint';
-      opHint.textContent = 'Función o herramienta del entorno (no es un paso numerado)';
+      opHint.textContent = 'Función del portal (no es un paso numerado del mapa)';
       track.appendChild(opHint);
     } else {
       var n = Math.max(1, meta.pasosEnFase | 0);
