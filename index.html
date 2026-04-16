@@ -2,13 +2,291 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Checkout demo</title>
-  <meta http-equiv="refresh" content="0; url=checkout.html">
-  <link rel="canonical" href="checkout.html">
-  <script>location.replace('checkout.html');</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0047bb">
+  <title>Prototipo Punto Pago — Módulos</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #f0f4ff 0%, #f3f4f6 38%, #f3f4f6 100%);
+      font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
+      color: var(--pp-text, #171717);
+    }
+    .pp-home-hero {
+      background: linear-gradient(135deg, var(--pp-primary, #0047bb), var(--pp-primary-900, #003080));
+      color: #fff;
+      padding: 36px 20px 40px;
+      box-shadow: 0 12px 40px rgba(0, 71, 187, 0.18);
+    }
+    .pp-home-hero-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .pp-home-kicker {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.88;
+      margin-bottom: 10px;
+    }
+    .pp-home-hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .pp-home-hero p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      opacity: 0.94;
+      max-width: 42rem;
+    }
+    .pp-home-actions {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .pp-home-actions a {
+      text-decoration: none;
+    }
+    .pp-home-note {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      opacity: 0.82;
+    }
+    .pp-area-block {
+      margin-top: 28px;
+    }
+    .pp-area-block:first-of-type {
+      margin-top: 8px;
+    }
+    .pp-area-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0047bb;
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(0, 71, 187, 0.18);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pp-area-title i {
+      opacity: 0.85;
+    }
+    .pp-mod-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .pp-mod-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 960px) {
+      .pp-mod-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .pp-mod-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+      border-radius: var(--pp-radius-md, 16px);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .pp-mod-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
+    }
+    .pp-mod-card .pp-card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pp-mod-name {
+      font-weight: 800;
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+    .pp-mod-desc {
+      font-size: 0.8125rem;
+      color: #6b7280;
+      line-height: 1.45;
+      flex: 1;
+    }
+    .pp-mod-meta {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #059669;
+      margin-top: auto;
+    }
+    .pp-mod-cta {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--pp-primary, #0047bb);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    details.pp-sandbox {
+      margin-top: 32px;
+      border: 1px dashed rgba(0, 0, 0, 0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.65);
+    }
+    details.pp-sandbox summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+    .pp-footer {
+      text-align: center;
+      padding: 28px 16px 40px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    .pp-footer a {
+      color: #0047bb;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-  <p>Si no redirige automáticamente, <a href="checkout.html">abre el checkout</a>.</p>
+  <header class="pp-home-hero">
+    <div class="pp-home-hero-inner">
+      <div class="pp-home-kicker">Demostración</div>
+      <h1>Explora los módulos del prototipo</h1>
+      <p>
+        Vista pensada para stakeholders: cada tarjeta abre una pantalla del demo. Los textos y el orden salen de
+        <code style="background: rgba(255,255,255,.2); padding: 2px 8px; border-radius: 6px; font-size: 0.85em">modules.config.js</code>
+        para poder actualizar el catálogo en un solo lugar.
+      </p>
+      <div class="pp-home-actions">
+        <a href="checkout.html" class="pp-btn pp-btn-primary" style="background: #fff; color: #0047bb; border: none;">
+          <i class="fas fa-cart-shopping" style="margin-right: 6px;"></i> Ir al checkout
+        </a>
+        <a href="modules-map.html" class="pp-btn pp-btn-secondary" style="background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.35);">
+          <i class="fas fa-diagram-project" style="margin-right: 6px;"></i> Vista técnica (mapa)
+        </a>
+      </div>
+      <p class="pp-home-note">Algunos flujos requieren sesión (login, rol agente o superadmin según el módulo).</p>
+    </div>
+  </header>
+
+  <main class="pp-shell" id="pp-home-main">
+    <p class="pp-card -soft pp-card-body" id="pp-home-fallback" hidden>
+      No se pudo cargar el catálogo. Abre esta página con un servidor estático y comprueba que exista <code>modules.config.js</code>.
+    </p>
+  </main>
+
+  <footer class="pp-footer">
+    Prototipo local / demo · <a href="login.html">Login</a>
+  </footer>
+
+  <script src="modules.config.js"></script>
+  <script>
+    (function () {
+      function esc(s) {
+        return (s || '')
+          .toString()
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      var areaIcons = {
+        'pagos-demo': 'fa-credit-card',
+        'portal-agentes': 'fa-store',
+        admin: 'fa-shield-halved',
+        onboarding: 'fa-file-signature',
+        'comercio-util': 'fa-bars',
+        sandbox: 'fa-flask',
+      };
+
+      var catalogo = window.PP_MODULOS_POR_AREA;
+      var main = document.getElementById('pp-home-main');
+      var fb = document.getElementById('pp-home-fallback');
+
+      if (!catalogo || !Array.isArray(catalogo)) {
+        fb.hidden = false;
+        return;
+      }
+
+      function cardHtml(item) {
+        var href = esc(item.ruta);
+        var meta = item.roles
+          ? '<div class="pp-mod-meta"><i class="fas fa-user-lock" style="margin-right:4px;opacity:.85"></i>' + esc(item.roles) + '</div>'
+          : '';
+        return (
+          '<a class="pp-card -soft pp-mod-card" href="' + href + '">' +
+            '<div class="pp-card-body">' +
+              '<div class="pp-mod-name">' + esc(item.nombreTrabajo) + '</div>' +
+              '<div class="pp-mod-desc">' + esc(item.nota) + '</div>' +
+              meta +
+              '<span class="pp-mod-cta">Abrir <i class="fas fa-arrow-right" style="font-size:0.75em"></i></span>' +
+            '</div>' +
+          '</a>'
+        );
+      }
+
+      function renderGrid(items) {
+        var h = '<div class="pp-mod-grid">';
+        items.forEach(function (it) {
+          h += cardHtml(it);
+        });
+        return h + '</div>';
+      }
+
+      function renderArea(grupo) {
+        var icon = areaIcons[grupo.areaId] || 'fa-layer-group';
+        return (
+          '<section class="pp-area-block">' +
+            '<h2 class="pp-area-title"><i class="fas ' + esc(icon) + '"></i> ' + esc(grupo.area) + '</h2>' +
+            renderGrid(grupo.items) +
+          '</section>'
+        );
+      }
+
+      var html = '';
+      var sandbox = null;
+
+      catalogo.forEach(function (grupo) {
+        if (grupo.areaId === 'sandbox') {
+          sandbox = grupo;
+          return;
+        }
+        html += renderArea(grupo);
+      });
+
+      if (sandbox && sandbox.items && sandbox.items.length) {
+        html +=
+          '<details class="pp-sandbox">' +
+            '<summary>' +
+              esc(sandbox.area) +
+            '</summary>' +
+            '<div style="margin-top:14px">' +
+              renderGrid(sandbox.items) +
+            '</div>' +
+          '</details>';
+      }
+
+      main.insertAdjacentHTML('afterbegin', html);
+    })();
+  </script>
 </body>
 </html>
