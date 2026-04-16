@@ -202,7 +202,7 @@
     const clean = (relativePath || '').replace(/^\/+/, '').split('?')[0].toLowerCase();
     if (clean.indexOf('agents/') === 0) return true;
     if (clean.indexOf('admin/') === 0) return true;
-    if (clean === 'pp-admin-entry.html' || clean === 'admin-login.html') return true;
+    if (clean === 'pp-admin-entry.html') return true;
     if (clean === 'setup.html' || clean === 'factura.html') return true;
     if (clean === 'login.html') return true;
     return false;
@@ -249,8 +249,6 @@
       return { username: 'superadmin', password: 'admin123' };
     }
     if (p.indexOf('pp-admin-entry') >= 0) return { username: 'superadmin', password: 'admin123' };
-    if (p.indexOf('admin-login') >= 0) return { username: 'superadmin', password: 'admin123' };
-    if (p.indexOf('admin/credentials') >= 0) return { username: 'superadmin', password: 'admin123' };
 
     if (p.indexOf('/agents/') >= 0) return { username: 'agente01', password: '1234' };
     if (p.indexOf('setup.html') >= 0) return { username: 'agente01', password: '1234' };

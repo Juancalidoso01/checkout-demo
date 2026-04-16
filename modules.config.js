@@ -59,22 +59,10 @@
           nota: 'Login superadmin + credenciales; actualiza URLs absolutas si cambia el dominio del deploy.',
         },
         {
-          moduloId: 'admin-login-alt',
-          nombreTrabajo: 'Login admin alterno',
-          ruta: 'admin-login.html',
-          nota: 'Variante de acceso admin.',
-        },
-        {
           moduloId: 'admin-panel',
           nombreTrabajo: 'Panel admin',
           ruta: 'admin/index.html',
           nota: 'Gestión interna.',
-        },
-        {
-          moduloId: 'admin-credentials',
-          nombreTrabajo: 'Credenciales (legacy)',
-          ruta: 'admin/credentials.html',
-          nota: 'Compatibilidad / redirecciones.',
         },
       ],
     },
@@ -177,10 +165,8 @@
         titulo: 'Administración del programa',
         journeyLabel: 'Journey interno (equipo Punto Pago)',
         subtitulo:
-          'Dos accesos administrados: (1) captación con correo del aliado y canal de entrada unificado; (2) tras completar el onboarding, revisión y aprobación del expediente — propósito del portal interno. Las variantes de login y credenciales son herramientas, no pasos del recorrido.',
+          'Dos accesos administrados: (1) captación con correo del aliado y canal de entrada unificado; (2) tras completar el onboarding, revisión y aprobación del expediente — propósito del portal interno.',
         ids: ['admin-entry', 'admin-panel'],
-        /** Login alterno y credenciales legacy: enlaces útiles, no pasos secuenciales. */
-        subflujoModulosOperativosAdmin: ['admin-login-alt', 'admin-credentials'],
       },
       {
         titulo: 'El comercio ya operando',
@@ -222,7 +208,7 @@
           tipo: 'principal',
         };
       });
-      var opLists = [fase.subflujoModulosOperativosAdmin, fase.subflujoFuncionesAgente];
+      var opLists = [fase.subflujoFuncionesAgente];
       opLists.forEach(function (list) {
         if (!list || !list.length) return;
         list.forEach(function (mid) {

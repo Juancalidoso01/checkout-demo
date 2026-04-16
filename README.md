@@ -19,10 +19,7 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 Acceso interno del prototipo:
 
-- Entrada oficial para admin por GitHub Pages: `pp-admin-entry.html`
-- Entrada alternativa para admin: `admin-login.html`
-- `pp-admin-entry.html` ahora contiene el login admin y la gestión de credenciales en una sola URL estable
-- `admin/credentials.html` se mantiene solo como compatibilidad y redirige a la entrada oficial
+- Entrada oficial para admin por GitHub Pages: `pp-admin-entry.html` (login y gestión de credenciales en una sola URL)
 - Nueva validación previa al onboarding: `onboarding-access.html`
 - Nuevo formulario de onboarding exhaustivo: `onboarding.html`
 - Requiere iniciar sesión como `superadmin`
@@ -30,8 +27,6 @@ Acceso interno del prototipo:
 Si publicas este repo con GitHub Pages, las rutas quedarían así:
 
 - `https://juancalidoso01.github.io/checkout-demo/pp-admin-entry.html`
-- `https://juancalidoso01.github.io/checkout-demo/admin-login.html`
-- `https://juancalidoso01.github.io/checkout-demo/admin/credentials.html` (redirige a la entrada oficial)
 - `https://juancalidoso01.github.io/checkout-demo/onboarding-access.html`
 - `https://juancalidoso01.github.io/checkout-demo/onboarding.html`
 

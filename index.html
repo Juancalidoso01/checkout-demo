@@ -330,10 +330,6 @@
       border-color: rgba(13, 148, 136, 0.4);
       background: rgba(13, 148, 136, 0.05);
     }
-    .pp-map-subwrap--admin {
-      border-color: rgba(124, 58, 237, 0.42);
-      background: rgba(124, 58, 237, 0.05);
-    }
     .pp-map-subwrap-legend {
       margin: 0 0 8px;
       padding: 6px 8px;
@@ -725,8 +721,6 @@
         'onb-review': 'fa-hourglass-half',
         'admin-entry': 'fa-user-shield',
         'admin-panel': 'fa-table-columns',
-        'admin-login-alt': 'fa-key',
-        'admin-credentials': 'fa-id-card',
         login: 'fa-right-to-bracket',
         'agent-hub': 'fa-store',
         checkout: 'fa-cart-shopping',
@@ -890,15 +884,6 @@
             wrapClass: 'pp-map-subwrap pp-map-subwrap--onb',
             omitPasoEnNodos: false,
             mode: 'inline',
-          };
-        } else if (fi === 1 && fase.subflujoModulosOperativosAdmin && fase.subflujoModulosOperativosAdmin.length) {
-          subCfg = {
-            ids: fase.subflujoModulosOperativosAdmin,
-            legend:
-              'Herramientas de acceso · Variantes de login y credenciales; no son pasos del journey de revisión',
-            wrapClass: 'pp-map-subwrap pp-map-subwrap--admin',
-            omitPasoEnNodos: true,
-            mode: 'append',
           };
         } else if (fi === 2 && fase.subflujoFuncionesAgente && fase.subflujoFuncionesAgente.length) {
           subCfg = {

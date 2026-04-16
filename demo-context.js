@@ -17,7 +17,6 @@
     'onboarding-review-pending.html': 'onb-review',
     'onboarding-firma-preview.html': 'onb-contract',
     'pp-admin-entry.html': 'admin-entry',
-    'admin-login.html': 'admin-login-alt',
     'test-kyc-edge-function.html': 'test-kyc',
     'test-direccion.html': 'test-direccion',
     'test-mapa.html': 'test-mapa',
@@ -25,7 +24,6 @@
     'agents/team.html': 'agent-team',
     'agents/cashout.html': 'agent-cashout',
     'admin/index.html': 'admin-panel',
-    'admin/credentials.html': 'admin-credentials',
   };
 
   function normalizePathname() {
