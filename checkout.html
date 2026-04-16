@@ -359,23 +359,19 @@
         } catch (e) { console.warn('Agent return failed', e); return false; }
       }
 
-      // Global error handlers to surface JS errors to the UI for debugging
       window.addEventListener('error', function (ev) {
         try {
           console.error('Global error', ev.error || ev.message || ev);
-          const dbg = document.getElementById('debugOverlay');
-          if (dbg) {
-            const el = document.createElement('div'); el.style.marginTop='8px'; el.style.color='#ffdddd'; el.textContent = 'ERROR: ' + (ev.error && ev.error.message ? ev.error.message : (ev.message || String(ev))); dbg.appendChild(el);
-          }
-          // avoid alert in non-debug mode
-        } catch(e){ console.error('Error handler failed', e); }
+        } catch (e) {
+          console.error('Error handler failed', e);
+        }
       });
-      window.addEventListener('unhandledrejection', function(ev){
+      window.addEventListener('unhandledrejection', function (ev) {
         try {
           console.error('UnhandledRejection', ev.reason);
-          const dbg=document.getElementById('debugOverlay');
-          if(dbg){ const el=document.createElement('div'); el.style.marginTop='8px'; el.style.color='#ffd9d9'; el.textContent='UNHANDLED_REJECTION: '+(ev.reason && ev.reason.message?ev.reason.message:JSON.stringify(ev.reason)); dbg.appendChild(el);} 
-        } catch(e){console.error(e);} 
+        } catch (e) {
+          console.error(e);
+        }
       });
   // Elementos
       window.ppCheckoutSound = (function () {
@@ -572,10 +568,14 @@
         }
 
         var scrollTimer;
-        viewport.addEventListener('scroll', function () {
+        function onScrollTick() {
           clearTimeout(scrollTimer);
           scrollTimer = setTimeout(syncDots, 64);
-        });
+        }
+        viewport.addEventListener('scroll', onScrollTick, { passive: true });
+        try {
+          viewport.addEventListener('scrollend', syncDots, { passive: true });
+        } catch (e) {}
 
         prev.addEventListener('click', function () {
           var i = currentIndex();
@@ -962,41 +962,6 @@
 
         const ids = ['cardNumber','cardCvc','yappyPhone','docNumber'];
         ids.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('focus', ()=>ensureVisible(el), { passive:true }); el.addEventListener('touchstart', ()=> setTimeout(()=>{ try{ el.focus(); }catch(e){} },50), { passive:true }); });
-      })();
-
-      // Debug overlay (help track why UI doesn't progress) — visible locally
-      (function createDebugOverlay(){
-        try {
-          const dbg = document.createElement('div');
-          dbg.id = 'debugOverlay';
-          dbg.style.position = 'fixed';
-          dbg.style.left = '12px';
-          dbg.style.bottom = '12px';
-          dbg.style.zIndex = 2000;
-          dbg.style.background = 'rgba(3,10,27,0.85)';
-          dbg.style.color = '#fff';
-          dbg.style.padding = '8px 10px';
-          dbg.style.borderRadius = '8px';
-          dbg.style.fontSize = '12px';
-          dbg.style.boxShadow = '0 8px 24px rgba(2,6,23,0.35)';
-          dbg.innerHTML = `<div class="dbg-title">DEBUG</div><div id="dbgSel">sel: -</div><div id="dbgCard">card.hidden: -</div><div class="dbg-actions"><button id="dbgRefresh" class="btn secondary dbg-btn">Refrescar</button><button id="dbgRun" class="btn dbg-btn">Simular pagar</button><button id="dbgClearOverlays" class="btn secondary dbg-btn">Cerrar overlays</button></div>`;
-          document.body.appendChild(dbg);
-          const dbgSel = dbg.querySelector('#dbgSel');
-          const dbgCard = dbg.querySelector('#dbgCard');
-          const refresh = dbg.querySelector('#dbgRefresh');
-          const run = dbg.querySelector('#dbgRun');
-          const clr = dbg.querySelector('#dbgClearOverlays');
-          function refreshState(){
-            const sel = document.querySelector('input[name="payMethod"]:checked');
-            dbgSel.textContent = 'sel: ' + (sel ? sel.value : '(none)');
-            const cardEl = containers.card;
-            dbgCard.textContent = 'card.hidden: ' + (cardEl ? !!cardEl.hidden : 'nocard');
-          }
-          refresh.addEventListener('click', refreshState);
-          run.addEventListener('click', ()=>{ try { handleCheckoutClick(); } catch(e){ console.error('run debug failed', e); alert((window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_error_run : 'Error en run: ') + e.message); } });
-          clr.addEventListener('click', ()=>{ removeStrayOverlays(); alert(window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_overlays_removed : 'Overlays eliminados'); });
-          setInterval(refreshState, 700);
-        } catch(e){ console.warn('No se pudo crear debug overlay', e); }
       })();
 
       // Inline modal for recurrence choice (replaces popup)
