@@ -56,6 +56,16 @@
     return `${location.origin}/${clean}`;
   }
 
+  /** Rutas tipo /admin o …/admin (Vercel cleanUrls) o …/admin/index.html */
+  function pathnameIsAdminReturn(pathname){
+    const raw = (pathname || '').toLowerCase();
+    const p = raw.replace(/\/+$/, '') || '/';
+    if (p.indexOf('/admin/index') >= 0 || p.endsWith('admin/index.html')) return true;
+    if (p === '/admin') return true;
+    if (p.length >= 7 && p.slice(-6) === '/admin') return true;
+    return false;
+  }
+
   function loadUsers(){
     const users = safeJsonParse(localStorage.getItem(USERS_KEY), null);
     if (users && Array.isArray(users)) return users;
@@ -145,7 +155,8 @@
 
     if (!session){
       const next = encodeURIComponent(location.pathname + location.search);
-      location.href = `${buildAppUrl('login.html')}?next=${next}`;
+      /* Siempre login en la raíz del sitio; buildAppUrl desde /admin/ producía /admin/login.html (404). */
+      location.href = `${buildSiteUrl('login.html')}?next=${next}`;
       return null;
     }
 
@@ -153,8 +164,8 @@
       const allowed = Array.isArray(role) ? role : [role];
       if (allowed.indexOf(session.role) < 0){
         // If user lacks permissions, bounce to their appropriate home
-        if (session.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
-        else location.href = buildAppUrl('agents/recharge.html');
+        if (session.role === 'superadmin') location.href = buildSiteUrl('admin/index.html');
+        else location.href = buildSiteUrl('agents/recharge.html');
         return null;
       }
     }
@@ -165,15 +176,27 @@
   function redirectAfterLogin(next){
     if (next) {
       try {
-        const url = new URL(next, location.origin);
+        const raw = String(next).trim();
+        const url = new URL(raw, location.origin);
+        if (url.origin !== location.origin) {
+          throw new Error('cross-origin next');
+        }
+        if (pathnameIsAdminReturn(url.pathname)) {
+          const target = new URL(buildSiteUrl('admin/index.html'));
+          url.searchParams.forEach((v, k) => {
+            if (k !== 'pp_demo') target.searchParams.set(k, v);
+          });
+          location.href = target.href;
+          return;
+        }
         url.searchParams.delete('pp_demo');
         location.href = url.href;
         return;
       } catch(e) {}
     }
     const s = getSession();
-    if (s?.role === 'superadmin') location.href = buildAppUrl('admin/index.html');
-    else location.href = buildAppUrl('agents/recharge.html');
+    if (s?.role === 'superadmin') location.href = buildSiteUrl('admin/index.html');
+    else location.href = buildSiteUrl('agents/recharge.html');
   }
 
   function ensureLogoutButton({ selector }){
@@ -183,7 +206,7 @@
     el.addEventListener('click', (e)=>{
       e.preventDefault();
       signOut();
-      location.href = buildAppUrl('login.html');
+      location.href = buildSiteUrl('login.html');
     });
   }
 
@@ -204,7 +227,7 @@
     if (clean.indexOf('admin/') === 0) return true;
     if (clean === 'pp-admin-entry.html') return true;
     if (clean === 'setup.html' || clean === 'factura.html') return true;
-    if (clean === 'login.html') return true;
+    if (clean === 'login.html' || clean === 'login') return true;
     return false;
   }
 
@@ -233,7 +256,9 @@
     const p = (pathname || '').toLowerCase();
     const s = search || '';
 
-    if (p.indexOf('login.html') >= 0){
+    const onLoginPage =
+      p.indexOf('login.html') >= 0 || p === '/login' || /\/login\/?$/.test(p);
+    if (onLoginPage){
       try {
         const q = new URLSearchParams(s);
         const next = q.get('next');
@@ -245,10 +270,9 @@
       return { username: 'agente01', password: '1234' };
     }
 
-    if (p.indexOf('/admin/index') >= 0 || p.endsWith('admin/index.html')){
+    if (pathnameIsAdminReturn(p) || p.indexOf('pp-admin-entry') >= 0){
       return { username: 'superadmin', password: 'admin123' };
     }
-    if (p.indexOf('pp-admin-entry') >= 0) return { username: 'superadmin', password: 'admin123' };
 
     if (p.indexOf('/agents/') >= 0) return { username: 'agente01', password: '1234' };
     if (p.indexOf('setup.html') >= 0) return { username: 'agente01', password: '1234' };
