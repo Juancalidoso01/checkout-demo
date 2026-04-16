@@ -183,11 +183,11 @@
       max-width: 1160px;
       margin: 0 auto;
       width: 100%;
-      padding: 12px 16px 48px;
+      padding: 8px 12px 28px;
     }
     .pp-map-wrap {
       position: relative;
-      padding: 8px 0 24px;
+      padding: 4px 0 12px;
     }
     #pp-map-fases {
       position: relative;
@@ -206,11 +206,12 @@
     .pp-map-svg path.pp-map-line {
       fill: none;
       stroke: url(#pp-line-grad);
-      stroke-width: 3;
+      stroke-width: 4.5;
       stroke-linecap: round;
       stroke-linejoin: round;
-      filter: drop-shadow(0 2px 6px rgba(84, 98, 230, 0.25));
+      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.55)) drop-shadow(0 3px 10px rgba(84, 98, 230, 0.45));
       animation: pp-draw-line 1.15s ease forwards;
+      shape-rendering: geometricPrecision;
     }
     @keyframes pp-draw-line {
       to { stroke-dashoffset: 0; }
@@ -218,16 +219,16 @@
     .pp-fase {
       position: relative;
       z-index: 1;
-      margin-bottom: 36px;
+      margin-bottom: 20px;
     }
     .pp-fase:last-of-type {
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .pp-fase-head {
       position: relative;
       z-index: 4;
-      margin-bottom: 16px;
-      padding: 12px 14px 14px;
+      margin-bottom: 10px;
+      padding: 10px 12px 12px;
       border-radius: 18px;
       background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
       border: 1px solid rgba(226, 232, 240, 0.95);
@@ -295,9 +296,9 @@
     .pp-map-subwrap {
       flex: 1 1 100%;
       width: 100%;
-      margin-top: 2px;
-      padding: 14px 12px 16px;
-      border-radius: 20px;
+      margin-top: 0;
+      padding: 10px 10px 12px;
+      border-radius: 16px;
       border: 1px dashed rgba(84, 98, 230, 0.38);
       background: rgba(84, 98, 230, 0.045);
       box-sizing: border-box;
@@ -309,19 +310,24 @@
       background: rgba(13, 148, 136, 0.05);
     }
     .pp-map-subwrap-legend {
-      margin: 0 0 12px;
-      font-size: 0.8rem;
+      margin: 0 0 8px;
+      padding: 6px 8px;
+      font-size: 0.74rem;
       font-weight: 700;
       color: #475569;
-      line-height: 1.45;
+      line-height: 1.35;
       text-align: center;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 10px;
+      position: relative;
+      z-index: 3;
     }
     .pp-map-subwrap-nodes {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       align-items: stretch;
-      gap: 14px;
+      gap: 10px;
     }
     .pp-fase-head p {
       margin: 0;
@@ -387,14 +393,15 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: stretch;
-      gap: 14px;
+      gap: 10px;
+      row-gap: 10px;
       position: relative;
       z-index: 2;
     }
     .pp-map-node {
-      flex: 1 1 140px;
-      max-width: 220px;
-      min-width: 132px;
+      flex: 0 1 168px;
+      max-width: 200px;
+      min-width: 128px;
       display: flex;
       flex-direction: column;
       text-decoration: none;
@@ -403,7 +410,7 @@
       border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: var(--pp-radius-md);
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-      padding: 16px 14px 14px;
+      padding: 14px 12px 12px;
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       position: relative;
       z-index: 2;
@@ -614,8 +621,8 @@
       <svg class="pp-map-svg" id="pp-map-svg" aria-hidden="true">
         <defs>
           <linearGradient id="pp-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#5462e6;stop-opacity:0.45" />
-            <stop offset="100%" style="stop-color:#3738ab;stop-opacity:0.95" />
+            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.92" />
+            <stop offset="100%" style="stop-color:#4338ca;stop-opacity:1" />
           </linearGradient>
         </defs>
         <g id="pp-map-lines"></g>
@@ -862,22 +869,35 @@
         function pathBetween(a, b) {
           var ra = relRect(a);
           var rb = relRect(b);
-          var sameRow = Math.abs(ra.top - rb.top) < 48 && rb.left > ra.right - 20;
+          var sameRow = Math.abs(ra.top - rb.top) < 52 && rb.left > ra.right - 28;
           if (sameRow) {
             var y = ra.top + ra.height / 2;
-            var x1 = ra.right;
-            var x2 = rb.left;
-            return 'M ' + x1 + ' ' + y + ' L ' + x2 + ' ' + y;
+            return 'M ' + ra.right + ' ' + y + ' L ' + rb.left + ' ' + y;
           }
-          var x1 = ra.left + ra.width / 2;
-          var y1 = ra.bottom;
-          var x2 = rb.left + rb.width / 2;
-          var y2 = rb.top;
-          var midY = y1 + (y2 - y1) * 0.5;
-          if (Math.abs(x1 - x2) < 12) {
-            return 'M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2;
+          var cxA = ra.left + ra.width / 2;
+          var cxB = rb.left + rb.width / 2;
+          var yBottomA = ra.bottom;
+          var yTopB = rb.top;
+          if (Math.abs(cxA - cxB) < 14) {
+            return 'M ' + cxA + ' ' + yBottomA + ' L ' + cxB + ' ' + yTopB;
           }
-          return 'M ' + x1 + ' ' + y1 + ' L ' + x1 + ' ' + midY + ' L ' + x2 + ' ' + midY + ' L ' + x2 + ' ' + y2;
+          if (yTopB >= yBottomA - 1) {
+            return (
+              'M ' +
+              cxA +
+              ' ' +
+              yBottomA +
+              ' L ' +
+              cxA +
+              ' ' +
+              yTopB +
+              ' L ' +
+              cxB +
+              ' ' +
+              yTopB
+            );
+          }
+          return 'M ' + cxA + ' ' + yBottomA + ' L ' + cxB + ' ' + yTopB;
         }
 
         var mqReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
