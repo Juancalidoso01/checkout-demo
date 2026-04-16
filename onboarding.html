@@ -1317,6 +1317,28 @@
         resetFormAfterSubmit();
       });
 
+      (function seedAccessForStakeholderOrModoPrueba(){
+        try {
+          const q = new URLSearchParams(location.search);
+          const bypass = q.get('stakeholder') === '1' || q.get('modo_prueba') === '1';
+          if (!bypass) return;
+          const mock = {
+            email: 'stakeholder@demo.puntopago.local',
+            emailVerified: true,
+            businessName: 'Comercio Demo (vista stakeholder)',
+            phone: '+50760000000'
+          };
+          localStorage.setItem(ACCESS_KEY, JSON.stringify(mock));
+          if (q.get('stakeholder') === '1') {
+            try { sessionStorage.setItem('pp_stakeholder_onboarding', '1'); } catch (e) {}
+          }
+          q.delete('stakeholder');
+          q.delete('modo_prueba');
+          const qs = q.toString();
+          history.replaceState({}, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+        } catch (e) {}
+      })();
+
       const accessContext = readAccessContext();
       if (!accessContext) {
         location.href = 'onboarding-access.html';
@@ -1327,6 +1349,18 @@
         location.href = 'onboarding-access.html';
         return;
       }
+
+      try {
+        if (sessionStorage.getItem('pp_stakeholder_onboarding') === '1') {
+          var _ppStakeholderBar = document.createElement('div');
+          _ppStakeholderBar.setAttribute('role', 'status');
+          _ppStakeholderBar.style.cssText =
+            'background:#fef3c7;border-bottom:1px solid #f59e0b;color:#92400e;padding:10px 16px;text-align:center;font-size:14px;font-weight:600;';
+          _ppStakeholderBar.textContent =
+            'Vista previa (stakeholders): puede revisar el formulario sin el flujo de acceso restringido.';
+          document.body.insertBefore(_ppStakeholderBar, document.body.firstChild);
+        }
+      } catch (e) {}
 
       applicationCodeEl.textContent = applicationId;
       if (!restoreRecovery()) {

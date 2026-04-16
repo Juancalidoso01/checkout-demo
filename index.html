@@ -534,10 +534,14 @@
       }
 
       function hrefDemo(m) {
-        if (window.PPAuth && typeof window.PPAuth.withStakeholderDemoQuery === 'function') {
-          return window.PPAuth.withStakeholderDemoQuery(m.ruta);
+        var h = m.ruta;
+        if (window.PPAuth && typeof window.PPAuth.withStakeholderOnboardingQuery === 'function') {
+          h = window.PPAuth.withStakeholderOnboardingQuery(h);
         }
-        return m.ruta;
+        if (window.PPAuth && typeof window.PPAuth.withStakeholderDemoQuery === 'function') {
+          h = window.PPAuth.withStakeholderDemoQuery(h);
+        }
+        return h;
       }
 
       if (!catalogo || !flujo || !Array.isArray(flujo.filas)) {

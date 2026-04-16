@@ -52,9 +52,13 @@
     }
 
     function card(item, areaId) {
-      const href = (window.PPAuth && typeof window.PPAuth.withStakeholderDemoQuery === 'function')
-        ? window.PPAuth.withStakeholderDemoQuery(item.ruta)
-        : item.ruta;
+      let href = item.ruta;
+      if (window.PPAuth && typeof window.PPAuth.withStakeholderOnboardingQuery === 'function') {
+        href = window.PPAuth.withStakeholderOnboardingQuery(href);
+      }
+      if (window.PPAuth && typeof window.PPAuth.withStakeholderDemoQuery === 'function') {
+        href = window.PPAuth.withStakeholderDemoQuery(href);
+      }
       const ids = (item.moduloId || '') + (areaId ? ' · ' + areaId : '');
       return (
         '<article class="pp-card -soft mm-mod" data-ruta="' + esc(item.ruta) + '">' +

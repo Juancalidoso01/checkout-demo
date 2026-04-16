@@ -215,6 +215,18 @@
     return `${base}?${params.toString()}`;
   }
 
+  /** Abre el formulario onboarding sin pasar por onboarding-access (solo demo / stakeholders). */
+  function withStakeholderOnboardingQuery(relativePath){
+    if (!relativePath) return relativePath;
+    const baseOnly = relativePath.split('?')[0].toLowerCase();
+    if (baseOnly !== 'onboarding.html' && !baseOnly.endsWith('/onboarding.html')) return relativePath;
+    const base = relativePath.split('?')[0];
+    const q = relativePath.indexOf('?') >= 0 ? relativePath.slice(relativePath.indexOf('?') + 1) : '';
+    const params = new URLSearchParams(q);
+    params.set('stakeholder', '1');
+    return `${base}?${params.toString()}`;
+  }
+
   function stakeholderDemoPickCredentials(pathname, search){
     const p = (pathname || '').toLowerCase();
     const s = search || '';
@@ -320,5 +332,6 @@
     buildSiteUrl,
     needsStakeholderDemoLogin,
     withStakeholderDemoQuery,
+    withStakeholderOnboardingQuery,
   };
 })();
