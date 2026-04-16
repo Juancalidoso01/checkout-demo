@@ -485,6 +485,13 @@
   <script src="modules.config.js"></script>
   <script src="auth.js"></script>
   <script>
+    try {
+      if (window.PPAuth && typeof window.PPAuth.markProcessTourFromHubPage === 'function') {
+        window.PPAuth.markProcessTourFromHubPage();
+      }
+    } catch (e) {}
+  </script>
+  <script>
     (function () {
       function esc(s) {
         return (s || '')

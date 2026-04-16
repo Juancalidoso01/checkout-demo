@@ -824,6 +824,10 @@
       let currentStep = 0;
       let applicationId = `oba_${Math.random().toString(16).slice(2,8)}_${Date.now().toString(16)}`;
 
+      function isPreviewNav(){
+        try { return sessionStorage.getItem('pp_onboarding_preview_nav') === '1'; } catch (e) { return false; }
+      }
+
       function now(){ return Date.now(); }
       function esc(v){ return (v || '').toString().replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
       function readApplications(){
@@ -905,7 +909,7 @@
       function goToStep(idx){
         if (idx < 0 || idx >= stepEls.length || idx === currentStep) return;
         if (metamapModalOpen) return;
-        if (idx > currentStep) {
+        if (idx > currentStep && !isPreviewNav()) {
           for (let i = currentStep; i < idx; i++) {
             if (!validateStep(i)) {
               currentStep = i;
@@ -1189,7 +1193,7 @@
         return true;
       }
       function goNext(){
-        if (!validateStep(currentStep)) return;
+        if (!isPreviewNav() && !validateStep(currentStep)) return;
         currentStep = Math.min(currentStep + 1, stepEls.length - 1);
         renderSteps();
         setMsg('');
@@ -1308,7 +1312,12 @@
           if (!validateStep(i)) {
             currentStep = i;
             renderSteps();
-            setMsg('Completa los campos obligatorios antes de enviar.', true);
+            setMsg(
+              isPreviewNav()
+                ? 'Vista previa: la validación de campos obligatorios se aplica al enviar. Complete este paso y los anteriores pendientes.'
+                : 'Completa los campos obligatorios antes de enviar.',
+              true
+            );
             return;
           }
         }
@@ -1321,7 +1330,15 @@
         try {
           const q = new URLSearchParams(location.search);
           const bypass = q.get('stakeholder') === '1' || q.get('modo_prueba') === '1';
-          if (!bypass) return;
+          if (!bypass) {
+            try {
+              sessionStorage.removeItem('pp_onboarding_preview_nav');
+              sessionStorage.removeItem('pp_stakeholder_onboarding');
+            } catch (e) {}
+            return;
+          }
+          try { sessionStorage.setItem('pp_onboarding_preview_nav', '1'); } catch (e) {}
+          try { sessionStorage.setItem('pp_stakeholder_process_tour', '1'); } catch (e) {}
           const mock = {
             email: 'stakeholder@demo.puntopago.local',
             emailVerified: true,
@@ -1351,13 +1368,19 @@
       }
 
       try {
-        if (sessionStorage.getItem('pp_stakeholder_onboarding') === '1') {
+        if (window.PPAuth && typeof window.PPAuth.refreshProcessMapNav === 'function') {
+          window.PPAuth.refreshProcessMapNav();
+        }
+      } catch (e) {}
+
+      try {
+        if (sessionStorage.getItem('pp_onboarding_preview_nav') === '1') {
           var _ppStakeholderBar = document.createElement('div');
           _ppStakeholderBar.setAttribute('role', 'status');
           _ppStakeholderBar.style.cssText =
             'background:#fef3c7;border-bottom:1px solid #f59e0b;color:#92400e;padding:10px 16px;text-align:center;font-size:14px;font-weight:600;';
           _ppStakeholderBar.textContent =
-            'Vista previa (stakeholders): puede revisar el formulario sin el flujo de acceso restringido.';
+            'Vista previa: puede recorrer todos los pasos sin llenar campos; la validación de obligatorios se aplica al enviar (último paso).';
           document.body.insertBefore(_ppStakeholderBar, document.body.firstChild);
         }
       } catch (e) {}

@@ -15,6 +15,8 @@
 (function(){
   const USERS_KEY = 'pp_users_v1';
   const SESSION_KEY = 'pp_auth_session_v1';
+  /** Recorrido stakeholders: volver al mapa principal (index.html) desde cualquier módulo. */
+  const STAKEHOLDER_PROCESS_TOUR_KEY = 'pp_stakeholder_process_tour';
 
   function now(){ return Date.now(); }
 
@@ -307,13 +309,95 @@
       if (creds){
         signOut();
         const res = signIn(creds.username, creds.password);
-        if (res.ok) showStakeholderDemoToast();
+        if (res.ok) {
+          try { sessionStorage.setItem(STAKEHOLDER_PROCESS_TOUR_KEY, '1'); } catch (e) {}
+          showStakeholderDemoToast();
+        }
       }
       stripPpDemoParamFromUrl();
     } catch (e){}
   }
 
+  function markStakeholderProcessTourFromUrl(){
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('stakeholder_tour') !== '1') return;
+      sessionStorage.setItem(STAKEHOLDER_PROCESS_TOUR_KEY, '1');
+      params.delete('stakeholder_tour');
+      const q = params.toString();
+      history.replaceState({}, '', location.pathname + (q ? `?${q}` : '') + location.hash);
+    } catch (e){}
+  }
+
+  function markProcessTourFromHubPage(){
+    try { sessionStorage.setItem(STAKEHOLDER_PROCESS_TOUR_KEY, '1'); } catch (e) {}
+  }
+
+  function isStakeholderProcessTourActive(){
+    try {
+      if (sessionStorage.getItem(STAKEHOLDER_PROCESS_TOUR_KEY) === '1') return true;
+      if (sessionStorage.getItem('pp_onboarding_preview_nav') === '1') return true;
+      if (sessionStorage.getItem('pp_stakeholder_onboarding') === '1') return true;
+      const q = new URLSearchParams(location.search);
+      if (q.get('stakeholder_tour') === '1') return true;
+      return false;
+    } catch (e) { return false; }
+  }
+
+  function buildProcessMapHomeUrl(){
+    return buildSiteUrl('index.html');
+  }
+
+  function shouldSkipProcessMapNavInject(){
+    const path = ((location && location.pathname) || '').replace(/\\/g, '/').toLowerCase();
+    if (path === '/' || path.endsWith('/index.html')) return true;
+    if (path.endsWith('/modules-map.html')) return true;
+    return false;
+  }
+
+  function injectStakeholderProcessMapNav(){
+    if (!isStakeholderProcessTourActive()) return;
+    if (shouldSkipProcessMapNavInject()) return;
+    if (document.getElementById('pp-process-map-nav')) return;
+    const wrap = document.createElement('div');
+    wrap.id = 'pp-process-map-nav';
+    wrap.setAttribute('role', 'navigation');
+    wrap.setAttribute('aria-label', 'Volver al mapa de procesos');
+    wrap.style.cssText = [
+      'position:fixed','bottom:22px','left:50%','transform:translateX(-50%)','z-index:10050',
+      'max-width:calc(100vw - 24px)','pointer-events:auto'
+    ].join(';');
+    const a = document.createElement('a');
+    a.href = buildProcessMapHomeUrl();
+    a.setAttribute('title', 'Volver al menú principal del recorrido');
+    a.style.cssText = [
+      'display:inline-flex','align-items:center','gap:10px','padding:12px 20px','border-radius:999px',
+      'text-decoration:none','font-weight:800','font-size:14px','letter-spacing:.02em',
+      'font-family:system-ui,-apple-system,sans-serif','color:#fff',
+      'background:linear-gradient(135deg,#5462e6,#3738ab)',
+      'box-shadow:0 10px 32px rgba(84,98,230,.38)','border:1px solid rgba(255,255,255,.22)'
+    ].join(';');
+    a.innerHTML = '<i class="fas fa-layer-group" aria-hidden="true" style="font-size:15px;opacity:.95"></i><span>Mapa de procesos</span>';
+    wrap.appendChild(a);
+    document.body.appendChild(wrap);
+  }
+
+  /** Vuelve a intentar inyectar el botón (p. ej. tras `seed` en onboarding que activa la sesión después de DOMContentLoaded). */
+  function refreshProcessMapNav(){
+    injectStakeholderProcessMapNav();
+  }
+
+  function initStakeholderProcessTourUi(){
+    markStakeholderProcessTourFromUrl();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectStakeholderProcessMapNav, { once: true });
+    } else {
+      injectStakeholderProcessMapNav();
+    }
+  }
+
   applyStakeholderDemoIfRequested();
+  initStakeholderProcessTourUi();
 
   // Expose minimal API
   window.PPAuth = {
@@ -333,5 +417,9 @@
     needsStakeholderDemoLogin,
     withStakeholderDemoQuery,
     withStakeholderOnboardingQuery,
+    markProcessTourFromHubPage,
+    buildProcessMapHomeUrl,
+    isStakeholderProcessTourActive,
+    refreshProcessMapNav,
   };
 })();

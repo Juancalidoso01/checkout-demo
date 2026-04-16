@@ -36,12 +36,24 @@
     <p>
       El catálogo vive en <code>modules.config.js</code> (agrupado por <strong>área</strong>). Aquí solo se renderiza: nombres de trabajo, rutas y enlaces para ir mejorando <strong>módulo por módulo</strong>.
     </p>
+    <p style="margin-top:14px">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:0.9rem;color:#fff;text-decoration:none;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28)">
+        ← Mapa del proceso (demo principal)
+      </a>
+    </p>
   </header>
 
   <main class="pp-shell" id="root"></main>
 
   <script src="modules.config.js"></script>
   <script src="auth.js"></script>
+  <script>
+    try {
+      if (window.PPAuth && typeof window.PPAuth.markProcessTourFromHubPage === 'function') {
+        window.PPAuth.markProcessTourFromHubPage();
+      }
+    } catch (e) {}
+  </script>
   <script>
     function esc(s) {
       return (s || '').toString()
