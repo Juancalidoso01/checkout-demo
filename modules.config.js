@@ -163,4 +163,18 @@
       ],
     },
   ];
+
+  /**
+   * Flujograma de proceso (home stakeholders): cada fila es una etapa del journey.
+   * Valores = moduloId que deben existir en PP_MODULOS_POR_AREA.
+   */
+  window.PP_FLUJO_PROCESO = {
+    filas: [
+      ['onb-access', 'onb-form', 'onb-contract', 'onb-review'],
+      ['admin-entry'],
+      ['login', 'agent-hub', 'checkout'],
+    ],
+    /** Módulos relacionados mostrados como accesos rápidos bajo el flujo principal */
+    extras: ['factura', 'setup', 'agent-team', 'agent-cashout', 'mapa-picker'],
+  };
 })();

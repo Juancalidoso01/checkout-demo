@@ -4,164 +4,270 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0047bb">
-  <title>Prototipo Punto Pago — Módulos</title>
+  <title>Prototipo Punto Pago — Flujo del proceso</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(180deg, #f0f4ff 0%, #f3f4f6 38%, #f3f4f6 100%);
+      background: #eef2ff;
       font-family: var(--pp-font, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
       color: var(--pp-text, #171717);
     }
     .pp-home-hero {
-      background: linear-gradient(135deg, var(--pp-primary, #0047bb), var(--pp-primary-900, #003080));
+      background: linear-gradient(135deg, #1e3a8a 0%, var(--pp-primary, #0047bb) 45%, #0c4a6e 100%);
       color: #fff;
-      padding: 36px 20px 40px;
-      box-shadow: 0 12px 40px rgba(0, 71, 187, 0.18);
+      padding: 32px 18px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pp-home-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 1;
+      pointer-events: none;
     }
     .pp-home-hero-inner {
-      max-width: 960px;
+      max-width: 1100px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
     .pp-home-kicker {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 800;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      opacity: 0.88;
-      margin-bottom: 10px;
+      opacity: 0.9;
+      margin-bottom: 8px;
     }
     .pp-home-hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      margin: 0 0 8px;
+      font-size: clamp(1.25rem, 4vw, 1.65rem);
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.25;
     }
     .pp-home-hero p {
       margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.55;
-      opacity: 0.94;
-      max-width: 42rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      opacity: 0.93;
+      max-width: 40rem;
     }
     .pp-home-actions {
-      margin-top: 18px;
+      margin-top: 16px;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+      gap: 8px;
     }
     .pp-home-actions a {
       text-decoration: none;
+      font-size: 0.85rem;
     }
-    .pp-home-note {
-      margin-top: 14px;
-      font-size: 0.78rem;
-      opacity: 0.82;
+    .pp-flow-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 48px;
     }
-    .pp-area-block {
-      margin-top: 28px;
+    .pp-flow-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+      border: 1px solid rgba(0, 71, 187, 0.1);
+      padding: 22px 18px 28px;
     }
-    .pp-area-block:first-of-type {
-      margin-top: 8px;
-    }
-    .pp-area-title {
-      font-size: 1.05rem;
+    .pp-flow-title {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
       font-weight: 800;
-      color: #0047bb;
-      margin: 0 0 12px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid rgba(0, 71, 187, 0.18);
+      color: #0f172a;
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-    .pp-area-title i {
-      opacity: 0.85;
-    }
-    .pp-mod-grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-    }
-    @media (min-width: 640px) {
-      .pp-mod-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (min-width: 960px) {
-      .pp-mod-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    .pp-mod-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      text-decoration: none;
-      color: inherit;
-      border-radius: var(--pp-radius-md, 16px);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .pp-mod-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
-    }
-    .pp-mod-card .pp-card-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
       gap: 8px;
     }
-    .pp-mod-name {
-      font-weight: 800;
-      font-size: 1rem;
-      line-height: 1.3;
-    }
-    .pp-mod-desc {
-      font-size: 0.8125rem;
-      color: #6b7280;
-      line-height: 1.45;
-      flex: 1;
-    }
-    .pp-mod-meta {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #059669;
-      margin-top: auto;
-    }
-    .pp-mod-cta {
-      font-size: 0.8rem;
-      font-weight: 800;
+    .pp-flow-title i {
       color: var(--pp-primary, #0047bb);
+    }
+    .pp-flow-sub {
+      margin: 0 0 20px;
+      font-size: 0.8rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+    .pp-flow-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
+      gap: 6px 4px;
+    }
+    .pp-flow-node {
+      flex: 1 1 120px;
+      max-width: 200px;
+      min-width: 108px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px 12px 12px;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+      position: relative;
+    }
+    .pp-flow-node:hover {
+      border-color: rgba(0, 71, 187, 0.45);
+      box-shadow: 0 8px 28px rgba(0, 71, 187, 0.15);
+      transform: translateY(-2px);
+    }
+    .pp-flow-node:focus-visible {
+      outline: 3px solid rgba(0, 71, 187, 0.45);
+      outline-offset: 2px;
+    }
+    .pp-flow-step {
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: linear-gradient(135deg, #0047bb, #2563eb);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(0, 71, 187, 0.35);
+    }
+    .pp-flow-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(0, 71, 187, 0.08);
+      color: #0047bb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin: 6px auto 10px;
+    }
+    .pp-flow-name {
+      font-weight: 800;
+      font-size: 0.82rem;
+      line-height: 1.3;
+      text-align: center;
+      color: #0f172a;
+    }
+    .pp-flow-hint {
+      margin-top: 8px;
+      font-size: 0.65rem;
+      color: #94a3b8;
+      line-height: 1.35;
+      text-align: center;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .pp-flow-arrow-h {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      padding: 0 2px;
+      flex: 0 0 auto;
+    }
+    .pp-flow-arrow-h i {
+      opacity: 0.85;
+    }
+    .pp-flow-v {
+      display: flex;
+      justify-content: center;
+      padding: 10px 0 14px;
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+    .pp-flow-v span {
+      background: #f1f5f9;
+      border-radius: 999px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #cbd5e1;
+    }
+    .pp-flow-extras {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .pp-flow-extras > p {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .pp-flow-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .pp-flow-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
     }
-    details.pp-sandbox {
-      margin-top: 32px;
-      border: 1px dashed rgba(0, 0, 0, 0.12);
-      border-radius: 16px;
-      padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.65);
+    .pp-flow-pill:hover {
+      background: #e0e7ff;
+      border-color: #a5b4fc;
+      color: #1e1b4b;
     }
-    details.pp-sandbox summary {
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 0.9rem;
-      color: #64748b;
+    .pp-flow-pill i {
+      font-size: 0.85em;
+      color: #0047bb;
+      opacity: 0.9;
     }
     .pp-footer {
       text-align: center;
-      padding: 28px 16px 40px;
+      padding: 8px 16px 32px;
       font-size: 0.75rem;
-      color: #9ca3af;
+      color: #94a3b8;
     }
     .pp-footer a {
       color: #0047bb;
       font-weight: 600;
+    }
+    #pp-home-fallback {
+      margin: 20px 16px;
+    }
+    @media (max-width: 640px) {
+      .pp-flow-row {
+        flex-direction: column;
+        align-items: center;
+      }
+      .pp-flow-node {
+        max-width: 100%;
+        width: 100%;
+      }
+      .pp-flow-arrow-h {
+        transform: rotate(90deg);
+        padding: 4px 0;
+      }
     }
   </style>
 </head>
@@ -169,32 +275,27 @@
   <header class="pp-home-hero">
     <div class="pp-home-hero-inner">
       <div class="pp-home-kicker">Demostración</div>
-      <h1>Explora los módulos del prototipo</h1>
+      <h1>Flujograma del prototipo</h1>
       <p>
-        Vista pensada para stakeholders: cada tarjeta abre una pantalla del demo. Los textos y el orden salen de
-        <code style="background: rgba(255,255,255,.2); padding: 2px 8px; border-radius: 6px; font-size: 0.85em">modules.config.js</code>
-        para poder actualizar el catálogo en un solo lugar.
+        Recorrido sugerido del comercio: desde el acceso al onboarding hasta el demo de pago. Cada paso es un enlace real al módulo.
+        El orden se define en <code style="background: rgba(255,255,255,.18); padding: 2px 8px; border-radius: 6px; font-size: 0.85em">modules.config.js</code> (<strong>PP_FLUJO_PROCESO</strong>).
       </p>
       <div class="pp-home-actions">
-        <a href="checkout.html" class="pp-btn pp-btn-primary" style="background: #fff; color: #0047bb; border: none;">
-          <i class="fas fa-cart-shopping" style="margin-right: 6px;"></i> Ir al checkout
-        </a>
-        <a href="modules-map.html" class="pp-btn pp-btn-secondary" style="background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.35);">
-          <i class="fas fa-diagram-project" style="margin-right: 6px;"></i> Vista técnica (mapa)
+        <a href="modules-map.html" class="pp-btn pp-btn-secondary" style="background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.4);">
+          <i class="fas fa-table" style="margin-right: 6px;"></i> Catálogo por área
         </a>
       </div>
-      <p class="pp-home-note">Algunos flujos requieren sesión (login, rol agente o superadmin según el módulo).</p>
     </div>
   </header>
 
-  <main class="pp-shell" id="pp-home-main">
+  <main class="pp-flow-wrap" id="pp-home-main">
     <p class="pp-card -soft pp-card-body" id="pp-home-fallback" hidden>
-      No se pudo cargar el catálogo. Abre esta página con un servidor estático y comprueba que exista <code>modules.config.js</code>.
+      No se pudo cargar la configuración. Comprueba que exista <code>modules.config.js</code>.
     </p>
   </main>
 
   <footer class="pp-footer">
-    Prototipo local / demo · <a href="login.html">Login</a>
+    Prototipo demo · <a href="login.html">Login</a>
   </footer>
 
   <script src="modules.config.js"></script>
@@ -209,81 +310,115 @@
           .replace(/"/g, '&quot;');
       }
 
-      var areaIcons = {
-        'pagos-demo': 'fa-credit-card',
-        'portal-agentes': 'fa-store',
-        admin: 'fa-shield-halved',
-        onboarding: 'fa-file-signature',
-        'comercio-util': 'fa-bars',
-        sandbox: 'fa-flask',
+      var iconByModulo = {
+        onb-access: 'fa-door-open',
+        'onb-form': 'fa-file-lines',
+        'onb-contract': 'fa-file-signature',
+        'onb-review': 'fa-hourglass-half',
+        'admin-entry': 'fa-user-shield',
+        login: 'fa-right-to-bracket',
+        'agent-hub': 'fa-store',
+        checkout: 'fa-cart-shopping',
+        factura: 'fa-receipt',
+        setup: 'fa-bars',
+        'agent-team': 'fa-users',
+        'agent-cashout': 'fa-money-bill-transfer',
+        'mapa-picker': 'fa-map-location-dot',
       };
 
       var catalogo = window.PP_MODULOS_POR_AREA;
+      var flujo = window.PP_FLUJO_PROCESO;
       var main = document.getElementById('pp-home-main');
       var fb = document.getElementById('pp-home-fallback');
 
-      if (!catalogo || !Array.isArray(catalogo)) {
+      function findModulo(moduloId) {
+        if (!catalogo) return null;
+        for (var i = 0; i < catalogo.length; i++) {
+          var items = catalogo[i].items || [];
+          for (var j = 0; j < items.length; j++) {
+            if (items[j].moduloId === moduloId) return items[j];
+          }
+        }
+        return null;
+      }
+
+      if (!catalogo || !flujo || !Array.isArray(flujo.filas)) {
         fb.hidden = false;
         return;
       }
 
-      function cardHtml(item) {
-        var href = esc(item.ruta);
-        var meta = item.roles
-          ? '<div class="pp-mod-meta"><i class="fas fa-user-lock" style="margin-right:4px;opacity:.85"></i>' + esc(item.roles) + '</div>'
-          : '';
+      var stepNum = 0;
+      var rowsHtml = '';
+
+      function nodeHtml(moduloId) {
+        var m = findModulo(moduloId);
+        if (!m) {
+          return (
+            '<div class="pp-flow-node" style="opacity:.6;cursor:not-allowed" title="Módulo no encontrado">' +
+              '<span class="pp-flow-step">' + esc(String(++stepNum)) + '</span>' +
+              '<div class="pp-flow-icon"><i class="fas fa-question"></i></div>' +
+              '<div class="pp-flow-name">' + esc(moduloId) + '</div>' +
+            '</div>'
+          );
+        }
+        var ic = iconByModulo[moduloId] || 'fa-circle';
+        stepNum++;
         return (
-          '<a class="pp-card -soft pp-mod-card" href="' + href + '">' +
-            '<div class="pp-card-body">' +
-              '<div class="pp-mod-name">' + esc(item.nombreTrabajo) + '</div>' +
-              '<div class="pp-mod-desc">' + esc(item.nota) + '</div>' +
-              meta +
-              '<span class="pp-mod-cta">Abrir <i class="fas fa-arrow-right" style="font-size:0.75em"></i></span>' +
-            '</div>' +
+          '<a class="pp-flow-node" href="' + esc(m.ruta) + '">' +
+            '<span class="pp-flow-step">' + esc(String(stepNum)) + '</span>' +
+            '<div class="pp-flow-icon"><i class="fas ' + esc(ic) + '"></i></div>' +
+            '<div class="pp-flow-name">' + esc(m.nombreTrabajo) + '</div>' +
+            '<div class="pp-flow-hint">' + esc(m.nota) + '</div>' +
           '</a>'
         );
       }
 
-      function renderGrid(items) {
-        var h = '<div class="pp-mod-grid">';
-        items.forEach(function (it) {
-          h += cardHtml(it);
+      function rowHtml(moduloIds) {
+        var parts = [];
+        moduloIds.forEach(function (id, idx) {
+          parts.push(nodeHtml(id));
+          if (idx < moduloIds.length - 1) {
+            parts.push('<span class="pp-flow-arrow-h" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>');
+          }
         });
-        return h + '</div>';
+        return '<div class="pp-flow-row" role="group">' + parts.join('') + '</div>';
       }
 
-      function renderArea(grupo) {
-        var icon = areaIcons[grupo.areaId] || 'fa-layer-group';
-        return (
-          '<section class="pp-area-block">' +
-            '<h2 class="pp-area-title"><i class="fas ' + esc(icon) + '"></i> ' + esc(grupo.area) + '</h2>' +
-            renderGrid(grupo.items) +
-          '</section>'
-        );
-      }
-
-      var html = '';
-      var sandbox = null;
-
-      catalogo.forEach(function (grupo) {
-        if (grupo.areaId === 'sandbox') {
-          sandbox = grupo;
-          return;
+      flujo.filas.forEach(function (fila, ri) {
+        rowsHtml += rowHtml(fila);
+        if (ri < flujo.filas.length - 1) {
+          rowsHtml +=
+            '<div class="pp-flow-v" aria-hidden="true"><span><i class="fas fa-chevron-down"></i></span></div>';
         }
-        html += renderArea(grupo);
       });
 
-      if (sandbox && sandbox.items && sandbox.items.length) {
-        html +=
-          '<details class="pp-sandbox">' +
-            '<summary>' +
-              esc(sandbox.area) +
-            '</summary>' +
-            '<div style="margin-top:14px">' +
-              renderGrid(sandbox.items) +
-            '</div>' +
-          '</details>';
+      var extrasHtml = '';
+      if (flujo.extras && flujo.extras.length) {
+        var pills = [];
+        flujo.extras.forEach(function (mid) {
+          var m = findModulo(mid);
+          if (!m) return;
+          var ic = iconByModulo[mid] || 'fa-link';
+          pills.push(
+            '<a class="pp-flow-pill" href="' + esc(m.ruta) + '">' +
+              '<i class="fas ' + esc(ic) + '"></i>' + esc(m.nombreTrabajo) +
+            '</a>'
+          );
+        });
+        extrasHtml =
+          '<div class="pp-flow-extras">' +
+            '<p>Accesos rápidos</p>' +
+            '<div class="pp-flow-pills">' + pills.join('') + '</div>' +
+          '</div>';
       }
+
+      var html =
+        '<div class="pp-flow-card">' +
+          '<h2 class="pp-flow-title"><i class="fas fa-route"></i> Proceso end-to-end</h2>' +
+          '<p class="pp-flow-sub">Haz clic en cada caja para abrir la pantalla correspondiente. En pantallas pequeñas el flujo se apila en vertical.</p>' +
+          rowsHtml +
+          extrasHtml +
+        '</div>';
 
       main.insertAdjacentHTML('afterbegin', html);
     })();
