@@ -160,6 +160,20 @@
       animation: pp-fade-up 0.75s ease 0.08s forwards;
       opacity: 0;
     }
+    .pp-hero-int-hint {
+      display: block;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(84, 98, 230, 0.1);
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .pp-hero-int-hint strong {
+      color: #475569;
+      font-weight: 700;
+    }
     @keyframes pp-fade-up {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
@@ -246,6 +260,58 @@
       color: #64748b;
       line-height: 1.45;
       max-width: 52ch;
+    }
+    .pp-fase-int {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(84, 98, 230, 0.2);
+      max-width: min(56ch, 100%);
+    }
+    .pp-fase-int-kicker {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.58rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .pp-fase-int-kicker i {
+      font-size: 0.55rem;
+      opacity: 0.88;
+    }
+    .pp-fase-int-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pp-fase-int-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #475569;
+      background: rgba(248, 250, 252, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.38);
+      border-radius: 999px;
+      padding: 5px 11px 5px 8px;
+      cursor: help;
+      transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+    .pp-fase-int-chip i {
+      font-size: 0.68rem;
+      color: var(--pp-primary);
+      opacity: 0.92;
+    }
+    .pp-fase-int-chip:hover,
+    .pp-fase-int-chip:focus-visible {
+      border-color: rgba(84, 98, 230, 0.35);
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(84, 98, 230, 0.1);
+      outline: none;
     }
     .pp-fase-nodes {
       display: flex;
@@ -355,13 +421,23 @@
       z-index: 1;
     }
     .pp-extras h4 {
-      margin: 0 0 12px;
+      margin: 0 0 8px;
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #64748b;
       text-align: center;
+    }
+    .pp-extras-lead {
+      margin: 0 0 14px;
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: #64748b;
+      text-align: center;
+      max-width: 40rem;
+      margin-left: auto;
+      margin-right: auto;
     }
     .pp-extras-grid {
       display: flex;
@@ -455,6 +531,7 @@
       <p style="margin:0 auto;max-width:36rem;font-size:0.95rem;line-height:1.55;color:#475569">
         Las <strong style="color:#3738ab">líneas violeta</strong> muestran el orden: de izquierda a derecha en cada fase y de arriba hacia abajo entre fases.
         Cada recuadro abre la pantalla real del demo.
+        <span class="pp-hero-int-hint">Bajo cada fase verás <strong>integraciones</strong> de referencia (servicios típicos); el detalle aparece al pasar el cursor o al enfocar cada chip.</span>
       </p>
     </div>
   </section>
@@ -507,7 +584,11 @@
         'onb-form': 'fa-file-lines',
         'onb-contract': 'fa-file-signature',
         'onb-review': 'fa-hourglass-half',
+        'onb-test': 'fa-flask',
         'admin-entry': 'fa-user-shield',
+        'admin-panel': 'fa-table-columns',
+        'admin-login-alt': 'fa-key',
+        'admin-credentials': 'fa-id-card',
         login: 'fa-right-to-bracket',
         'agent-hub': 'fa-store',
         checkout: 'fa-cart-shopping',
@@ -516,9 +597,40 @@
         'agent-team': 'fa-users',
         'agent-cashout': 'fa-money-bill-transfer',
         'mapa-picker': 'fa-map-location-dot',
+        'test-kyc': 'fa-vial',
+        'test-direccion': 'fa-road',
+        'test-mapa': 'fa-map',
       };
 
       var faseIcons = ['fa-seedling', 'fa-clipboard-check', 'fa-bolt'];
+
+      function buildIntegracionesRow(fi) {
+        var intl = window.PP_FLUJO_INTEGRACIONES;
+        if (!intl || !intl.porFase || !intl.porFase[fi]) return '';
+        var items = intl.porFase[fi].items || [];
+        if (!items.length) return '';
+        var chips = items.map(function (it) {
+          var ic = it.icon
+            ? '<i class="fas ' + esc(it.icon) + '" aria-hidden="true"></i>'
+            : '';
+          return (
+            '<span class="pp-fase-int-chip" tabindex="0" role="note" title="' +
+            esc(it.hint || '') +
+            '">' +
+            ic +
+            '<span>' +
+            esc(it.label) +
+            '</span></span>'
+          );
+        });
+        return (
+          '<div class="pp-fase-int" role="region" aria-label="Integraciones de referencia por fase">' +
+          '<span class="pp-fase-int-kicker"><i class="fas fa-link" aria-hidden="true"></i> Integraciones</span>' +
+          '<div class="pp-fase-int-chips">' +
+          chips.join('') +
+          '</div></div>'
+        );
+      }
 
       var catalogo = window.PP_MODULOS_POR_AREA;
       var flujo = window.PP_FLUJO_PROCESO;
@@ -605,6 +717,7 @@
               '<p>' +
               esc(sub) +
               '</p>' +
+              buildIntegracionesRow(fi) +
             '</div>' +
             '<div class="pp-fase-nodes">';
         ids.forEach(function (mid) {
@@ -707,7 +820,12 @@
           );
         });
         if (pills.length) {
-          extrasEl.innerHTML = '<h4>Otras pantallas del demo</h4><div class="pp-extras-grid">' + pills.join('') + '</div>';
+          extrasEl.innerHTML =
+            '<h4>Pruebas y sandbox</h4>' +
+            '<p class="pp-extras-lead">Herramientas locales de QA; no forman parte del recorrido comercial de las tres fases anteriores. Suelen reutilizar las mismas integraciones (p. ej. Supabase, Geoapify, Metamap) con claves de entorno de prueba.</p>' +
+            '<div class="pp-extras-grid">' +
+            pills.join('') +
+            '</div>';
           extrasEl.hidden = false;
         }
       }

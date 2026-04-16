@@ -92,7 +92,8 @@
     var badge = document.createElement('span');
     badge.className =
       'pp-demo-flow-context__badge' + (meta.tipo === 'extra' ? ' pp-demo-flow-context__badge--extra' : '');
-    badge.textContent = meta.tipo === 'principal' ? 'Fase ' + meta.faseIndex : 'Complementaria';
+    badge.textContent =
+      meta.tipo === 'principal' ? 'Fase ' + meta.faseIndex : 'Sandbox';
 
     var title = document.createElement('span');
     title.className = 'pp-demo-flow-context__phase-title';
@@ -130,7 +131,12 @@
 
     var stepLabel = document.createElement('div');
     stepLabel.className = 'pp-demo-flow-context__step-label';
-    stepLabel.textContent = 'Paso ' + cur + ' / ' + n + (meta.tipo === 'principal' ? ' en esta fase' : '');
+    stepLabel.textContent =
+      'Paso ' +
+      cur +
+      ' / ' +
+      n +
+      (meta.tipo === 'principal' ? ' en esta fase' : meta.tipo === 'extra' ? ' (sandbox)' : '');
 
     inner.appendChild(home);
     inner.appendChild(phase);

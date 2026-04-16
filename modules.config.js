@@ -172,34 +172,24 @@
     filas: [
       {
         titulo: 'Alta del comercio',
-        subtitulo: 'El negocio entra, completa datos y envía la solicitud.',
-        ids: ['onb-access', 'onb-form', 'onb-contract', 'onb-review'],
+        subtitulo:
+          'Validación de acceso, formulario, ubicación en mapa (KYB), contrato y estado de la solicitud.',
+        ids: ['onb-access', 'onb-form', 'mapa-picker', 'onb-contract', 'onb-review', 'onb-test'],
       },
       {
         titulo: 'Revisión interna',
-        subtitulo: 'Punto Pago revisa y deja listas las credenciales.',
-        ids: ['admin-entry'],
+        subtitulo: 'Entrada admin, panel operativo y pantallas de credenciales.',
+        ids: ['admin-entry', 'admin-panel', 'admin-login-alt', 'admin-credentials'],
       },
       {
         titulo: 'Operación del agente',
-        subtitulo: 'Ingreso al sistema, portal y demo de cobro.',
-        ids: ['login', 'agent-hub', 'checkout'],
+        subtitulo:
+          'Login, portal, menú del comercio, equipo, retiros, demo de cobro y comprobante (factura).',
+        ids: ['login', 'agent-hub', 'setup', 'agent-team', 'agent-cashout', 'checkout', 'factura'],
       },
     ],
-    extras: [
-      'factura',
-      'setup',
-      'agent-team',
-      'agent-cashout',
-      'mapa-picker',
-      'onb-test',
-      'admin-login-alt',
-      'admin-panel',
-      'admin-credentials',
-      'test-kyc',
-      'test-direccion',
-      'test-mapa',
-    ],
+    /** Solo herramientas locales / QA; no son pasos del flujo comercial anterior. */
+    extras: ['test-kyc', 'test-direccion', 'test-mapa'],
   };
 
   (function buildFlujoMeta() {
@@ -226,8 +216,8 @@
     extras.forEach(function (mid, j) {
       meta[mid] = {
         faseIndex: null,
-        faseTitulo: 'Complementarias',
-        faseSubtitulo: 'Otras pantallas del demo',
+        faseTitulo: 'Pruebas y sandbox',
+        faseSubtitulo: 'Herramientas locales; fuera del flujo comercial principal.',
         pasoEnFase: j + 1,
         pasosEnFase: extras.length,
         pasoGlobal: globalStep++,
@@ -236,4 +226,62 @@
     });
     window.PP_MODULO_FLUJO_META = meta;
   })();
+
+  /**
+   * Referencia informativa por fase (mapa en index): servicios externos típicos a integrar.
+   * Solo lectura en UI; no altera rutas ni metadatos de pasos.
+   */
+  window.PP_FLUJO_INTEGRACIONES = {
+    porFase: [
+      {
+        items: [
+          {
+            label: 'Direcciones y mapa',
+            hint:
+              'Autocomplete, geocodificación y selector en mapa (p. ej. Geoapify u otro proveedor de direcciones).',
+            icon: 'fa-location-dot',
+          },
+          {
+            label: 'KYC / identidad',
+            hint: 'Verificación de identidad con Metamap (SDK web, seguimiento y revisión manual).',
+            icon: 'fa-fingerprint',
+          },
+          {
+            label: 'Backend y correo',
+            hint:
+              'Supabase (datos, auth, Edge Functions); envío de enlaces y avisos por email (magic link, plantillas).',
+            icon: 'fa-plug',
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            label: 'Supabase',
+            hint: 'Aplicaciones en revisión, verificaciones KYC y lógica en Edge Functions para operación interna.',
+            icon: 'fa-database',
+          },
+          {
+            label: 'Correo transaccional',
+            hint: 'Notificaciones de estado, credenciales y comunicación con el comercio.',
+            icon: 'fa-envelope',
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            label: 'Cobro (demo)',
+            hint: 'Flujo de pago del prototipo; en producción se conecta a la pasarela definida por el producto.',
+            icon: 'fa-credit-card',
+          },
+          {
+            label: 'Comprobantes y email',
+            hint: 'Envío de factura o comprobante al cliente (mailto, SMTP o API de correo).',
+            icon: 'fa-file-invoice',
+          },
+        ],
+      },
+    ],
+  };
 })();
