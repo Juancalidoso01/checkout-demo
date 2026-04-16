@@ -103,8 +103,9 @@
           <span class="muted" id="orderLabel" data-i18n="checkout_order_label">Pedido: ENSA prepago</span>
         </div>
 
-        <fieldset class="pp-checkout-fieldset">
-          <legend class="pp-checkout-legend" data-i18n="checkout_select_method_legend">Medio de pago</legend>
+        <!-- div+role=group: en Safari/WebKit un <fieldset> con <legend> puede dejar el resto del bloque con ancho 0 y el carrusel “en blanco” -->
+        <div class="pp-checkout-fieldset" role="group" aria-labelledby="checkoutPayMethodLabel">
+          <div id="checkoutPayMethodLabel" class="pp-checkout-legend" data-i18n="checkout_select_method_legend">Medio de pago</div>
           <div class="pp-checkout-carousel" aria-roledescription="carrusel">
             <button type="button" class="pp-checkout-carousel__nav pp-checkout-carousel__nav--prev" aria-controls="pmTrack" aria-label="Método anterior">
               <i class="fas fa-chevron-left" aria-hidden="true"></i>
@@ -167,7 +168,7 @@
           </div>
           <div class="pp-checkout-carousel__dots" id="pmDots" aria-label="Ir a método"></div>
           <div id="selectionHint" class="pp-checkout-selection-hint muted small-note" aria-live="polite"></div>
-        </fieldset>
+        </div>
 
         <!-- Contenedores específicos por método -->
           <div id="methodContainers" class="method-containers">

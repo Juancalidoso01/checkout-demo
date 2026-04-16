@@ -1368,6 +1368,14 @@ body.pp-has-demo-flow-context {
   color: #334155;
 }
 
+.pp-checkout-fieldset {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
 /* Carrusel de métodos de pago */
 .pp-checkout-carousel {
   position: relative;
