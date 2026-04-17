@@ -17,8 +17,8 @@
         {
           moduloId: 'factura',
           nombreTrabajo: 'Comprobante o factura al cliente',
-          ruta: 'factura.html',
-          nota: 'Embebido en portal agente con ?embed=1',
+          ruta: 'agents/recharge.html?tab=factura',
+          nota: 'Pestaña Factura del portal agente (único módulo; antes factura.html).',
         },
       ],
     },

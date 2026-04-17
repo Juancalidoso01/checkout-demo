@@ -3,6 +3,18 @@
   "framework": null,
   "outputDirectory": ".",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/factura",
+      "destination": "/agents/recharge.html?tab=factura",
+      "permanent": false
+    },
+    {
+      "source": "/factura.html",
+      "destination": "/agents/recharge.html?tab=factura",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

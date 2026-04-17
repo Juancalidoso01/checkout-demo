@@ -7,7 +7,6 @@
 
   var ROUTE_TO_MODULO = {
     'checkout.html': 'checkout',
-    'factura.html': 'factura',
     'login.html': 'login',
     'setup.html': 'setup',
     'mapa-picker.html': 'mapa-picker',
@@ -42,6 +41,15 @@
     var m = document.querySelector('meta[name="pp-demo-modulo"]');
     if (m && m.getAttribute('content')) return String(m.getAttribute('content')).trim();
     var p = normalizePathname();
+    try {
+      var q = new URLSearchParams(location.search || '');
+      if (
+        q.get('tab') === 'factura' &&
+        (p.indexOf('agents/recharge') === 0 || (p.indexOf('agents/') === 0 && p.indexOf('recharge') >= 0))
+      ) {
+        return 'factura';
+      }
+    } catch (e) {}
     if (ROUTE_TO_MODULO[p]) return ROUTE_TO_MODULO[p];
     var file = p.split('/').pop() || '';
     return ROUTE_TO_MODULO[file] || null;

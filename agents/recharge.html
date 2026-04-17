@@ -138,19 +138,106 @@
         Desliza para ver más opciones · « »
       </div>
 
-    <!-- SECCIÓN: FACTURA (embed para mantener carrusel+contenido en la misma pantalla) -->
+    <!-- SECCIÓN: FACTURA (mismo módulo que antes en factura.html; unificado aquí) -->
     <div id="section-factura" class="hidden section-fade">
       <div class="pp-card -soft overflow-hidden">
         <div class="pp-card-head">
           <h2 class="text-2xl font-bold pp-type" data-i18n="tab_invoice">Factura</h2>
           <p class="text-gray-500 pp-type" data-i18n="invoice_subtitle_embed">Enviar comprobante y compartir recibo.</p>
         </div>
-        <div class="pp-card-body p-0">
-          <iframe
-            src="../factura.html?embed=1"
-            title="Factura"
-            class="pp-embed-frame">
-          </iframe>
+        <div class="pp-card-body">
+          <div id="invoice-tab-root" class="invoice-tab-root">
+            <section class="pp-top-tabs mb-6" aria-label="Acciones factura">
+              <button type="button" id="loadLastTx" class="pp-top-tab -active">
+                <span class="icon"><i class="fas fa-rotate"></i></span>
+                <span class="title" data-i18n="invoice_load_last">Cargar última operación</span>
+              </button>
+              <button type="button" id="clearDraft" class="pp-top-tab">
+                <span class="icon"><i class="fas fa-eraser"></i></span>
+                <span class="title" data-i18n="invoice_clear">Limpiar</span>
+              </button>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <section class="pp-card -soft overflow-hidden">
+                <div class="pp-card-head">
+                  <h3 class="text-xl font-extrabold pp-type" data-i18n="invoice_send_btn">Enviar comprobante</h3>
+                  <p class="text-sm text-gray-500" data-i18n="invoice_subtitle">Confirma los datos del cliente para compartir el recibo.</p>
+                </div>
+                <div class="pp-card-body space-y-5">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="pp-label" data-i18n="invoice_label_name">Nombre (opcional)</label>
+                      <input id="clientName" class="pp-field" type="text" placeholder="Ej: Juan Pérez" data-i18n-ph="invoice_ph_name" autocomplete="name">
+                    </div>
+                    <div>
+                      <label class="pp-label" data-i18n="invoice_label_id">Documento / ID (opcional)</label>
+                      <input id="clientId" class="pp-field" type="text" placeholder="Ej: 8-888-888" data-i18n-ph="invoice_ph_id" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="pp-label" data-i18n="invoice_label_wa">WhatsApp (tel con país)</label>
+                      <div class="pp-input-group">
+                        <span class="pp-input-prefix">+</span>
+                        <input id="waPhone" class="pp-input-control" type="tel" inputmode="tel" placeholder="50760000000" data-i18n-ph="invoice_ph_wa" autocomplete="tel">
+                      </div>
+                      <p class="text-xs text-gray-500 mt-2" data-i18n="invoice_help_wa">Formato sin espacios. Ej: 50760000000</p>
+                    </div>
+                    <div>
+                      <label class="pp-label" data-i18n="invoice_label_email">Correo electrónico</label>
+                      <input id="email" class="pp-field" type="email" placeholder="cliente@correo.com" data-i18n-ph="invoice_ph_email" autocomplete="email">
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="pp-label" data-i18n="invoice_label_tg">Telegram (usuario o número)</label>
+                      <input id="telegram" class="pp-field" type="text" placeholder="@usuario o 50760000000" data-i18n-ph="invoice_ph_tg" autocomplete="off">
+                    </div>
+                    <div>
+                      <label class="pp-label" data-i18n="invoice_label_msg">Mensaje (editable)</label>
+                      <textarea id="message" class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-4" rows="4" placeholder="Mensaje para el cliente..." data-i18n-ph="invoice_ph_msg"></textarea>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                    <button type="button" id="sendWhatsapp" class="pp-btn pp-btn-primary -full">
+                      <i class="fab fa-whatsapp"></i> <span data-i18n="invoice_btn_wa">WhatsApp</span>
+                    </button>
+                    <button type="button" id="sendTelegram" class="pp-btn pp-btn-primary -full">
+                      <i class="fab fa-telegram"></i> <span data-i18n="invoice_btn_tg">Telegram</span>
+                    </button>
+                    <button type="button" id="sendEmail" class="pp-btn pp-btn-primary -full">
+                      <i class="fas fa-envelope"></i> <span data-i18n="invoice_btn_email">Correo</span>
+                    </button>
+                  </div>
+                  <p id="status" class="text-sm text-gray-500"></p>
+                </div>
+              </section>
+
+              <section class="pp-card -soft overflow-hidden">
+                <div class="pp-card-head">
+                  <h3 class="text-xl font-extrabold pp-type" data-i18n="invoice_preview_title">Vista previa</h3>
+                  <p class="text-sm text-gray-500" data-i18n="invoice_preview_desc">Así verá el recibo el cliente (texto).</p>
+                </div>
+                <div class="pp-card-body">
+                  <div class="rounded-2xl border border-gray-200 bg-white p-5">
+                    <div class="text-xs tracking-widest text-gray-500 font-bold uppercase" data-i18n="invoice_print">Punto Pago — Comprobante</div>
+                    <div id="receiptTitle" class="mt-2 text-lg font-extrabold" data-i18n="invoice_op">Operación</div>
+                    <div id="receiptMeta" class="mt-2 text-sm text-gray-600"></div>
+                    <div class="mt-4 border-t pt-4">
+                      <div class="flex justify-between text-sm"><span class="text-gray-500" data-i18n="invoice_amount">Monto</span><span id="receiptAmount" class="font-extrabold">$0.00</span></div>
+                      <div class="flex justify-between text-sm mt-2"><span class="text-gray-500" data-i18n="invoice_ref">Referencia</span><span id="receiptRef" class="font-mono text-gray-700">—</span></div>
+                    </div>
+                    <div class="mt-4 text-xs text-gray-500" data-i18n="invoice_preview_disclaimer">Este demo abre apps/enlaces para compartir. En producción, esto saldría de un backend con envío real.</div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <footer class="mt-6 text-xs text-gray-500">
+              <span data-i18n="invoice_demo_footer">Demo — Los datos se guardan en <code>localStorage</code>. Fuente de operaciones: sandbox <code>pp_agent_sandbox_v1</code>.</span>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -1436,6 +1523,7 @@
       });
     })();
   </script>
+  <script src="invoice-tab.js"></script>
   <script src="../i18n.js?v=5"></script>
   <script src="../chat-widget.js"></script>
 </body>

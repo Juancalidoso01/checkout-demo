@@ -274,6 +274,10 @@
       return { username: 'superadmin', password: 'admin123' };
     }
 
+    try {
+      var qInv = new URLSearchParams(s || '');
+      if (p.indexOf('agents/recharge') >= 0 && qInv.get('tab') === 'factura') return { username: 'agente01', password: '1234' };
+    } catch (eInv) {}
     if (p.indexOf('/agents/') >= 0) return { username: 'agente01', password: '1234' };
     if (p.indexOf('setup.html') >= 0) return { username: 'agente01', password: '1234' };
     if (p.indexOf('factura.html') >= 0) return { username: 'agente01', password: '1234' };
