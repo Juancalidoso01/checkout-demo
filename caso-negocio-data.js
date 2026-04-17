@@ -13,45 +13,26 @@
     fuenteHoja:
       'https://docs.google.com/spreadsheets/d/1aA_WmZYIoDscBgRb_adag942RRaJTlDIS5bQycmtrTM/edit?gid=1960561278',
 
-    /** true = muestra aviso de que conviene enlazar export CSV oficial */
-    usarDatosEjemplo: true,
-
     cover: {
-      eyebrow: 'Revista digital · Punto Pago',
-      lineas: [
-        '16 páginas · 4 bloques',
-        'Referente Colombia → tamaño Panamá',
-        'Esfuerzo comercial · retorno (junta)',
-      ],
+      eyebrow: 'Punto Pago',
+      etiquetaHero: '',
+      titulo: 'Agentes en Panamá',
+      subtitulo: 'Mercado, inversión digital y retorno a accionistas.',
+      lineas: ['Tamaño del mercado (referente Colombia)', 'Cierre con economía y ganancia'],
     },
 
-    /** Índice en la apertura (p. 2): `capitulo` = encabezado; `pagina` = salto */
-    indicePaginas: [
-      { capitulo: 'I · Panamá y escenarios (3–5)' },
-      { pagina: 3, texto: 'Demografía y urbano / rural' },
-      { pagina: 4, texto: 'Muestra de población por distrito' },
-      { pagina: 5, texto: 'Escenarios con 2 500 puntos' },
-      { capitulo: 'II · Tamaño del mercado (6–7)' },
-      { pagina: 6, texto: 'Colombia vs Panamá + supuestos del ajuste' },
-      { pagina: 7, texto: 'TAM / SAM / SOM y visual' },
-      { capitulo: 'III · Esfuerzo comercial (8–9)' },
-      { pagina: 8, texto: 'Presupuesto digital (M1–M6)' },
-      { pagina: 9, texto: 'Presupuesto digital (M7–M12) + red' },
-      { capitulo: 'IV · Decisión y retorno (10–16)' },
-      { pagina: 10, texto: 'Lo esencial para la junta' },
-      { pagina: 11, texto: 'Referente Colombia → Panamá (lectura corta)' },
-      { pagina: 12, texto: 'Adquisición y esfuerzo digital' },
-      { pagina: 13, texto: 'Próxima versión (datos operativos)' },
-      { pagina: 14, texto: 'Segmento (resumen)' },
-      { pagina: 15, texto: 'Mercado y problema' },
-      { pagina: 16, texto: 'Solución, economía, ganancia y demo' },
-    ],
-
     apertura: {
-      titulo: 'Cómo leer este caso',
+      eyebrow: 'Sesión',
+      titulo: 'Lo que vemos hoy',
       cuerpo:
-        'Mensaje primero: usamos un referente maduro en Colombia (ej. Puntored) solo como brújula; los números de Panamá son un caso ajustado con supuestos explícitos (p. 06). Luego tamaño de mercado (07), presupuesto del plan digital (08–09), un resumen corto para junta (10–13) y el cierre con economía y ganancia para accionistas (16). Lo operativo detallado lo iremos sustituyendo cuando tengas tus datos.',
-      chips: ['I País y escenarios', 'II Mercado', 'III Presupuesto', 'IV Junta y retorno'],
+        'Un recorrido breve por el mercado en Panamá, el plan comercial digital y las cifras de retorno. El detalle está en las páginas siguientes.',
+      indiceTitulo: 'Saltar a',
+      atajos: [
+        { pagina: 3, texto: 'País y escenarios' },
+        { pagina: 6, texto: 'Mercado y supuestos' },
+        { pagina: 8, texto: 'Presupuesto digital' },
+        { pagina: 16, texto: 'Economía y ganancia' },
+      ],
     },
 
     /**
@@ -143,7 +124,7 @@
             pregunta: '¿Dónde está cada tipo de cifra?',
             etiqueta: 'referencia',
             respuesta:
-              'Escenarios e ingreso bruto ilustrativo: p. 05. Comparación país y supuestos del ajuste: p. 06. Pastel TAM/SAM/SOM: p. 07. Presupuesto digital y red: p. 08–09.',
+              'País: p. 03. Territorio (peso poblacional y reparto ilustrativo de la red de ejemplo): p. 04. Escenarios: p. 05. Comparación y supuestos: p. 06. TAM/SAM/SOM: p. 07. Presupuesto digital: p. 08–09.',
           },
           {
             pregunta: '¿Qué no está todavía en el libro?',
@@ -243,10 +224,16 @@
       { nombre: 'Chitré', poblacion: 60957 },
     ],
 
-    distritosTitulo: 'Cabeceras por población (2023, muestra)',
+    /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
+    distritosRedReferencia: 2500,
+
+    distritosTitulo: 'Territorio: dónde está la “masa” y un reparto ilustrativo',
 
     distritosIntro:
-      'Ocho distritos con más población (referencia interna 2023). No suman el país; solo peso relativo para pensar red física.',
+      'Ocho cabeceras con más población (referencia 2023). La última columna pregunta: si la red de ejemplo fuera de 2 500 puntos y se repartieran en proporción a esta muestra, ¿cuántos puntos caerían en cada distrito? Es un ejercicio visual para junta, no el plan comercial.',
+
+    distritosNota:
+      'Las cuotas reales las fijan comercial, regulación y viabilidad por zona. Aquí solo se relaciona población relativa con el mismo orden de magnitud de red que usamos en escenarios (p. 05).',
 
     /** Escenarios de negocio — 2 500 puntos, ingreso bruto 1,2 % */
     escenarios: {
@@ -399,9 +386,8 @@
     },
 
     texto: {
-      tituloPagina: 'Caso de negocio — Agentes en Panamá',
-      heroDek:
-        'Cuatro bloques: país y escenarios (3–5) → mercado y supuestos (6–7) → presupuesto digital (8–9) → junta y retorno (10–16).',
+      tituloPagina: 'Agentes en Panamá',
+      heroDek: 'Mercado Panamá · plan digital · retorno a accionistas.',
 
       segmento: {
         titulo: 'Segmento y razón comercial',

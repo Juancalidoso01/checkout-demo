@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#5462e6">
-  <title>Punto Pago — Caso de negocio (revista digital)</title>
+  <title>Agentes en Panamá — Punto Pago</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -18,16 +18,10 @@
     <div class="magazine-chrome__row">
       <div class="magazine-chrome__brand">
         <span class="magazine-chrome__logo">Punto Pago</span>
-        <span class="magazine-chrome__tag">Caso de negocio · formato revista digital</span>
+        <span class="magazine-chrome__tag">Caso de negocio</span>
       </div>
       <div class="magazine-chrome__meta">
         <a class="magazine-chrome__map-link" href="index.html">← Mapa del proceso</a>
-        <a
-          class="magazine-chrome__modelo-link"
-          href="https://github.com/Juancalidoso01/revisita-modelo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Modelo revista (GitHub)</a>
         <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 16</span>
       </div>
     </div>
@@ -44,30 +38,23 @@
                 <span class="cover__page-no">01</span>
               </div>
               <div class="cover__hero">
-                <p class="cover__eyebrow">Proyecto</p>
+                <p class="cover__eyebrow" id="cn-cover-label"></p>
                 <h1 class="cover__title" id="cn-cover-title"></h1>
                 <p class="cover__subtitle" id="cn-cover-sub"></p>
               </div>
-              <div class="cover__feature-list" id="cn-cover-lines" aria-label="Líneas de portada"></div>
-              <div class="cover__footer">
-                <div class="cover__hint">
-                  <span class="cover__hint-icon" aria-hidden="true">→</span>
-                  Flechas, botones o deslizar; en pantallas muy anchas hay zonas táctiles en los bordes
-                </div>
-                <div class="cover__contact">Demo · uso interno</div>
-              </div>
+              <div class="cover__feature-list" id="cn-cover-lines" aria-label="Temas de la sesión"></div>
             </div>
           </article>
 
           <article class="magazine-page magazine-page--cover magazine-page--opening-right" data-page="2" id="p2" aria-label="Apertura">
             <div class="magazine-page__inner magazine-page__inner--opening-side">
               <div class="opening-summary">
-                <p class="opening-summary__eyebrow">Apertura</p>
+                <p class="opening-summary__eyebrow" id="cn-open-eyebrow"></p>
                 <h2 class="opening-summary__title" id="cn-open-title"></h2>
                 <p class="opening-summary__text" id="cn-open-body"></p>
-                <div class="opening-summary__chips" id="cn-open-chips" aria-label="Temas"></div>
-                <nav class="opening-index-wrap" aria-label="Índice del flipbook">
-                  <p class="opening-index__title">Cuatro bloques — índice</p>
+                <div class="opening-summary__chips" id="cn-open-chips" aria-label="Temas" hidden></div>
+                <nav class="opening-index-wrap" aria-label="Ir al contenido">
+                  <p class="opening-index__title" id="cn-open-index-title"></p>
                   <ul class="opening-index" id="cn-open-index"></ul>
                 </nav>
               </div>
@@ -76,7 +63,6 @@
 
           <article class="magazine-page" data-page="3" id="p3" aria-label="Panamá en contexto">
             <div class="magazine-page__inner pp-mag-page">
-              <div id="cn-banner" class="pp-mag-banner" hidden></div>
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">03</span>
                 <h2 class="pp-mag-h2" id="cn-pa-h"></h2>
@@ -91,24 +77,27 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="4" id="p4" aria-label="Población por distrito">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="4" id="p4" aria-label="Territorio y reparto ilustrativo de red">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--dist">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">04</span>
                 <h2 class="pp-mag-h2" id="cn-dist-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-dist-intro"></p>
-              <div class="pp-mag-table-wrap">
-                <table class="pp-mag-table" id="cn-dist-table">
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--dist">
+                <table class="pp-mag-table pp-mag-table--dist" id="cn-dist-table">
                   <thead>
                     <tr>
                       <th scope="col">Distrito</th>
-                      <th scope="col" class="pp-mag-table__num">Población total (2023)</th>
+                      <th scope="col" class="pp-mag-table__num">Población (2023)</th>
+                      <th scope="col" class="pp-mag-table__num">% muestra</th>
+                      <th scope="col" class="pp-mag-table__num">Puntos ilustrativos</th>
                     </tr>
                   </thead>
                   <tbody id="cn-dist-tbody"></tbody>
                 </table>
               </div>
+              <p class="pp-mag-note" id="cn-dist-nota"></p>
             </div>
           </article>
 
@@ -454,7 +443,6 @@
       if (!D || !D.texto) return;
 
       var t = D.texto;
-      document.title = (t.tituloPagina || 'Caso de negocio') + ' — Punto Pago';
 
       function set(id, txt) {
         var el = document.getElementById(id);
@@ -462,9 +450,16 @@
       }
 
       var cov = D.cover || {};
+      document.title = (cov.titulo || t.tituloPagina || 'Caso de negocio') + ' — Punto Pago';
       set('cn-cover-eyebrow', cov.eyebrow || '');
-      set('cn-cover-title', t.tituloPagina);
-      set('cn-cover-sub', t.segmento && t.segmento.subtitulo ? t.segmento.subtitulo : '');
+      var heroLab = document.getElementById('cn-cover-label');
+      if (heroLab) {
+        var lab = cov.etiquetaHero != null ? String(cov.etiquetaHero).trim() : '';
+        heroLab.textContent = lab;
+        heroLab.hidden = !lab;
+      }
+      set('cn-cover-title', cov.titulo || t.tituloPagina);
+      set('cn-cover-sub', cov.subtitulo || (t.segmento && t.segmento.subtitulo) || '');
 
       var linesEl = document.getElementById('cn-cover-lines');
       if (linesEl && cov.lineas) {
@@ -477,31 +472,32 @@
       }
 
       var ap = D.apertura || {};
+      set('cn-open-eyebrow', ap.eyebrow || 'Sesión');
       set('cn-open-title', ap.titulo || '');
       set('cn-open-body', ap.cuerpo || '');
+      set('cn-open-index-title', ap.indiceTitulo || 'Ir a');
+
       var chips = document.getElementById('cn-open-chips');
       if (chips) {
         chips.innerHTML = '';
-        var chipSrc =
-          ap.chips && ap.chips.length
-            ? ap.chips
-            : t.segmento && t.segmento.bullets
-              ? t.segmento.bullets.map(function (b) {
-                  return b.titulo || '';
-                })
-              : [];
-        chipSrc.forEach(function (label) {
-          if (!label) return;
-          var sp = document.createElement('span');
-          sp.textContent = label;
-          chips.appendChild(sp);
-        });
+        chips.hidden = true;
+        var chipSrc = ap.chips && ap.chips.length ? ap.chips : [];
+        if (chipSrc.length) {
+          chips.hidden = false;
+          chipSrc.forEach(function (label) {
+            if (!label) return;
+            var sp = document.createElement('span');
+            sp.textContent = label;
+            chips.appendChild(sp);
+          });
+        }
       }
 
+      var indexRows = ap.atajos && ap.atajos.length ? ap.atajos : D.indicePaginas || [];
       var idxEl = document.getElementById('cn-open-index');
-      if (idxEl && D.indicePaginas && D.indicePaginas.length) {
+      if (idxEl && indexRows.length) {
         idxEl.innerHTML = '';
-        D.indicePaginas.forEach(function (row) {
+        indexRows.forEach(function (row) {
           if (row.capitulo) {
             var capLi = document.createElement('li');
             capLi.className = 'opening-index__capitulo';
@@ -533,19 +529,6 @@
           var p = parseInt(t.getAttribute('data-caso-page'), 10);
           window.PPMagazineGoToPage(p);
         });
-      }
-
-      var banner = document.getElementById('cn-banner');
-      if (banner && D.fuenteHoja) {
-        banner.hidden = false;
-        banner.className = 'pp-mag-banner' + (D.usarDatosEjemplo ? '' : ' pp-mag-banner--ok');
-        banner.innerHTML =
-          (D.usarDatosEjemplo
-            ? '<span><strong>Ejemplo:</strong> sustituye series en <code>caso-negocio-data.js</code> desde tu export CSV.</span> '
-            : '<span>Datos según tu configuración.</span> ') +
-          '<a href="' +
-          String(D.fuenteHoja).replace(/"/g, '') +
-          '" target="_blank" rel="noopener">Abrir hoja</a>';
       }
 
       var sl = document.getElementById('cn-sheet-link');
@@ -591,21 +574,61 @@
         }
       }
 
-      set('cn-dist-h', D.distritosTitulo || 'Población por distrito');
+      set('cn-dist-h', D.distritosTitulo || 'Territorio');
       set('cn-dist-intro', D.distritosIntro || '');
+      set('cn-dist-nota', D.distritosNota || '');
 
       var tbodyDist = document.getElementById('cn-dist-tbody');
-      if (tbodyDist && D.distritos) {
+      if (tbodyDist && D.distritos && D.distritos.length) {
         tbodyDist.innerHTML = '';
+        var redN = D.distritosRedReferencia != null ? Number(D.distritosRedReferencia) : 2500;
+        if (!redN || redN < 1) redN = 2500;
+        var totalPop = 0;
         D.distritos.forEach(function (d) {
+          totalPop += Number(d.poblacion) || 0;
+        });
+        var exact = [];
+        var floors = [];
+        var i;
+        if (totalPop > 0) {
+          for (i = 0; i < D.distritos.length; i++) {
+            var p = Number(D.distritos[i].poblacion) || 0;
+            var e = (redN * p) / totalPop;
+            exact.push(e);
+            floors.push(Math.floor(e));
+          }
+          var sumF = 0;
+          for (i = 0; i < floors.length; i++) sumF += floors[i];
+          var rem = redN - sumF;
+          var frac = exact.map(function (e, idx) {
+            return { i: idx, r: e - floors[idx] };
+          });
+          frac.sort(function (a, b) {
+            return b.r - a.r;
+          });
+          for (i = 0; i < rem; i++) floors[frac[i].i]++;
+        } else {
+          for (i = 0; i < D.distritos.length; i++) floors.push(0);
+        }
+        D.distritos.forEach(function (d, idx) {
           var tr = document.createElement('tr');
+          var p = Number(d.poblacion) || 0;
           var td1 = document.createElement('td');
           td1.textContent = d.nombre || '';
           var td2 = document.createElement('td');
           td2.className = 'pp-mag-table__num';
-          td2.textContent = fmtIntEs(d.poblacion || 0);
+          td2.textContent = fmtIntEs(p);
+          var td3 = document.createElement('td');
+          td3.className = 'pp-mag-table__num';
+          td3.textContent =
+            totalPop > 0 ? ((100 * p) / totalPop).toFixed(1).replace('.', ',') + '%' : '—';
+          var td4 = document.createElement('td');
+          td4.className = 'pp-mag-table__num';
+          td4.textContent = totalPop > 0 ? String(floors[idx]) : '—';
           tr.appendChild(td1);
           tr.appendChild(td2);
+          tr.appendChild(td3);
+          tr.appendChild(td4);
           tbodyDist.appendChild(tr);
         });
       }

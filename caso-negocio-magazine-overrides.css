@@ -57,17 +57,6 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.magazine-chrome__modelo-link {
-  font-size: 0.62rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.75) !important;
-  text-decoration: none;
-}
-
-.magazine-chrome__modelo-link:hover {
-  text-decoration: underline;
-}
-
 /* Páginas de datos Punto Pago */
 .pp-mag-page {
   display: flex;
@@ -179,6 +168,24 @@ body {
 .pp-mag-page--escenarios .pp-mag-chart--scenario {
   min-height: 70px;
   max-height: min(19vh, 148px);
+}
+
+.pp-mag-page--dist .pp-mag-lead {
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.pp-mag-table-wrap--dist {
+  max-height: min(50vh, 400px);
+}
+
+.pp-mag-table--dist {
+  font-size: 0.64rem;
+}
+
+.pp-mag-table--dist th,
+.pp-mag-table--dist td {
+  padding: 0.32rem 0.35rem;
 }
 
 .pp-mag-table-wrap--escenarios {
@@ -476,27 +483,6 @@ body {
 
 .pp-mag-actions a:hover {
   filter: brightness(1.06);
-}
-
-.pp-mag-banner {
-  font-size: 0.72rem;
-  line-height: 1.4;
-  padding: 0.5rem 0.65rem;
-  border-radius: 10px;
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
-  color: #92400e;
-}
-
-.pp-mag-banner--ok {
-  background: rgba(84, 98, 230, 0.1);
-  border-color: rgba(84, 98, 230, 0.25);
-  color: #3730a3;
-}
-
-.pp-mag-banner a {
-  font-weight: 800;
-  color: inherit;
 }
 
 .cover__title {
