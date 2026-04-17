@@ -21,7 +21,8 @@
   var total = pages.length;
   var index = 0;
   var turnTimer = null;
-  var soundEnabled = false;
+  /** Sonido de pasar página activado por defecto; el botón SFX lo desactiva si molesta. */
+  var soundEnabled = true;
   /** Punto Pago: vacío = sin logos en esquina (evita marca de otro proyecto). */
   var logoUrl = "";
   var zoomLevel = 1;
@@ -104,9 +105,20 @@
     return clamped;
   }
 
+  /**
+   * Ancho de UNA página visible en píxeles CSS, sin mezclar el scale() del track.
+   * getBoundingClientRect() sobre la página incluye el zoom del padre y rompe el translate al ir atrás.
+   */
   function currentPageWidth() {
+    if (book && book.clientWidth > 0) {
+      var vc = visibleCount();
+      if (vc > 0) return book.clientWidth / vc;
+    }
     if (!pages.length) return 0;
-    return pages[0].getBoundingClientRect().width;
+    var el = pages[0];
+    var ow = el.offsetWidth;
+    if (ow > 0) return ow;
+    return el.getBoundingClientRect().width || 0;
   }
 
   function updateZoomUi() {
@@ -334,18 +346,17 @@
       return;
     }
 
-    if (event.target.closest("a, button")) return;
+    if (event.target.closest("a, button, input, textarea, select, label")) return;
+    if (event.target.closest("canvas")) return;
 
     var rect = book.getBoundingClientRect();
-    if (rect.width && rect.height) {
-      originX = ((event.clientX - rect.left) / rect.width) * 100;
-      originY = ((event.clientY - rect.top) / rect.height) * 100;
-    }
+    if (!rect.width) return;
 
     if (zoomLevel > 1.001) {
+      originX = 50;
+      originY = 50;
       resetZoom();
-    } else {
-      setZoom(1.6);
+      layout();
     }
   }
 

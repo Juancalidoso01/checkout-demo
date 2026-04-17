@@ -171,6 +171,11 @@ body {
   color: var(--ink) !important;
 }
 
+.pp-mag-lead--long {
+  font-size: 0.8rem;
+  line-height: 1.58;
+}
+
 .pp-mag-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -214,6 +219,71 @@ body {
   line-height: 1.45;
   color: var(--muted);
   font-style: italic;
+}
+
+.pp-mag-qa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-bottom: 0.25rem;
+}
+
+.pp-mag-qa {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.45rem 0.55rem;
+  background: var(--paper);
+}
+
+.pp-mag-qa--pendiente {
+  background: #fffbeb;
+  border-color: rgba(252, 211, 77, 0.85);
+}
+
+.pp-mag-qa__tag {
+  display: inline-block;
+  margin-bottom: 0.3rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pp-mag-qa__tag--pendiente {
+  background: rgba(251, 191, 36, 0.35);
+  color: #92400e;
+}
+
+.pp-mag-qa__tag--referencia {
+  background: rgba(84, 98, 230, 0.15);
+  color: var(--brand-blue-dark);
+}
+
+.pp-mag-qa__tag--sintesis {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369a1;
+}
+
+.pp-mag-qa__q {
+  margin: 0 0 0.3rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.76rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.pp-mag-qa__a {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.48;
+  color: var(--muted);
 }
 
 .pp-mag-table-wrap {
@@ -389,6 +459,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.35);
   transform: translateY(-120%);
   transition: transform 0.2s ease;
+}
+
+/* Clic en el libro ya no hace zoom; el cursor zoom-in confundía con la navegación */
+.magazine-book {
+  cursor: default !important;
+}
+
+.magazine-book.is-zoomed {
+  cursor: pointer !important;
 }
 
 .pp-skip-flipbook:focus {
