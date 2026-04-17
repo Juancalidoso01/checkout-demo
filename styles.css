@@ -693,6 +693,101 @@ html, body { -webkit-text-size-adjust: 100%; }
 .overlay-note .muted{color:var(--muted);font-size:0.92rem}
 .recurrence-card{border-left:4px solid var(--blue-500)}
 
+/* Modal de confirmación post-pago — portal agente (checkout) */
+.pp-checkout-agent-success {
+  max-width: 440px;
+  width: calc(100% - 28px);
+  margin: 0 auto;
+  border-radius: 22px;
+  background: linear-gradient(165deg, #ffffff 0%, #f4f6ff 45%, #eef2ff 100%);
+  border: 1px solid rgba(84, 98, 230, 0.2);
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.18);
+  overflow: hidden;
+  text-align: center;
+}
+.pp-checkout-agent-success__pad {
+  padding: 28px 22px 22px;
+}
+.pp-checkout-agent-success__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  color: #fff;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 14px 32px rgba(34, 197, 94, 0.35);
+}
+.pp-checkout-agent-success__title {
+  margin: 0 0 8px;
+  font-family: 'Montserrat', var(--pp-font, system-ui, sans-serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.pp-checkout-agent-success__lead {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.45;
+  font-weight: 500;
+}
+.pp-checkout-agent-success__facts {
+  margin: 18px 0 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  text-align: left;
+}
+.pp-checkout-agent-success__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  font-size: 0.875rem;
+}
+.pp-checkout-agent-success__row:last-child {
+  border-bottom: 0;
+}
+.pp-checkout-agent-success__row dt {
+  margin: 0;
+  color: #64748b;
+  font-weight: 600;
+}
+.pp-checkout-agent-success__row dd {
+  margin: 0;
+  font-weight: 800;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.pp-checkout-agent-success__note {
+  margin: 14px 0 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+.pp-checkout-agent-success__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+@media (min-width: 480px) {
+  .pp-checkout-agent-success__actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-height:600px){
   .overlay-note{max-height:86vh;overflow:auto;padding:12px}
 }

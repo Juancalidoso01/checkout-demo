@@ -270,78 +270,77 @@
         }
       } catch (e) { /* ignore */ }
 
-      // Helper: when checkout is used from agent flow, register recharge and redirect
-      function handleAgentReturn(amount, method, txId){
+      /**
+       * Portal agente / kiosko: aplica el pago al sandbox y devuelve un resumen para el modal de confirmación
+       * (sin redirigir al instante).
+       */
+      function applyAgentSandboxAfterPayment(amount, method, txId){
         try {
           const params = new URLSearchParams(location.search);
           const flow = params.get('flow');
-          if (flow !== 'agent' && flow !== 'kiosk') return false;
+          if (flow !== 'agent' && flow !== 'kiosk') return null;
+
           const purpose = (params.get('purpose') || '').toLowerCase();
           const STORAGE_KEY = 'pp_agent_sandbox_v1';
           const raw = localStorage.getItem(STORAGE_KEY);
-          // Ensure required fields exist in stored state
-          const state = raw ? JSON.parse(raw) : { balance:0, gain:0, txs:[], cash: 0 };
+          const state = raw ? JSON.parse(raw) : { balance: 0, gain: 0, txs: [], cash: 0 };
           state.txs = state.txs || [];
           state.cash = typeof state.cash === 'number' ? state.cash : (state.cash ? Number(state.cash) : 0);
           state.gain = typeof state.gain === 'number' ? state.gain : (state.gain ? Number(state.gain) : 0);
           const amt = Number(amount) || 0;
 
-          // Determine if this checkout was initiated as a "Pago de servicios"
           const clientId = params.get('clientId');
           const svc = params.get('svc');
           const isServicePayment = !!(clientId && svc);
+          const digitalMethods = ['card', 'yappy', 'paypal', 'gpay', 'apple', 'clave'];
 
-          // Distinguish digital methods
-          const digitalMethods = ['card','yappy','paypal','gpay','apple','clave'];
+          const summary = {
+            mode: 'credit_wallet',
+            txId: String(txId || ''),
+            grossAmount: amt,
+            netCredited: null,
+            fees: null,
+            commission: null,
+            newBalance: '0.00',
+            newCash: null,
+          };
 
           if (isServicePayment && method && digitalMethods.indexOf(method) >= 0) {
-            // CASE: Pago de servicios pagado por el cliente con método digital -> no aumentar balance, registrar comisión y el cobro en el histórico
-            // Random commission between $0.05 and $0.50 (two decimals)
+            summary.mode = 'service_digital';
             const commission = Number((Math.random() * (0.50 - 0.05) + 0.05).toFixed(2));
+            summary.commission = commission.toFixed(2);
             state.gain = Number((Number(state.gain) + commission).toFixed(2));
-            state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión por pago digital (servicio) via ${method} ID:${txId||''}`, amount: commission });
-            // Also record the actual cobro (payment) in the history so agents can see the operation amount
-            state.txs.push({ when: Date.now(), type: 'Cobro', desc: `Cobro servicio (digital) cliente:${clientId||''} svc:${svc||''} via ${method} ID:${txId||''}`, amount: amt });
+            state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión por pago digital (servicio) via ${method} ID:${txId || ''}`, amount: commission });
+            state.txs.push({ when: Date.now(), type: 'Cobro', desc: `Cobro servicio (digital) cliente:${clientId || ''} svc:${svc || ''} via ${method} ID:${txId || ''}`, amount: amt });
           } else {
-            // CASE: Either a cash payment for a service, or a recarga iniciada por el agente (flow agent/kiosk)
             const isDigitalTopup = purpose === 'topup' || purpose === 'digital_topup' || purpose === 'recarga_digital';
 
-            // For DIGITAL TOP-UP we credit ONLY the NET amount (after fees) to the balance.
-            // For other cases, we credit the full amount.
             if (isDigitalTopup) {
+              summary.mode = 'topup_digital';
               const commission = Number((amt * 0.02 + 0.25).toFixed(2));
               const ibms = Number((commission * 0.07).toFixed(2));
               const net = Number((amt - commission - ibms).toFixed(2));
+              summary.netCredited = net.toFixed(2);
+              summary.fees = (commission + ibms).toFixed(2);
 
               state.balance = Number((Number(state.balance) + net).toFixed(2));
-              // Track fees as gain (optional, useful for reporting)
               state.gain = Number((Number(state.gain) + commission + ibms).toFixed(2));
-
-              state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión recarga digital (checkout) ID:${txId||''}`, amount: commission });
-              state.txs.push({ when: Date.now(), type: 'Impuesto', desc: `ITBMS sobre comisión recarga digital (checkout) ID:${txId||''}`, amount: ibms });
-
-              // Include gross and net in the description for audit
-              state.txs.push({ when: Date.now(), type: 'Recarga digital', desc: `Recarga digital via ${method || 'digital'} (checkout) ID:${txId||''} bruto:${amt.toFixed(2)} neto:${net.toFixed(2)}`, amount: net });
+              state.txs.push({ when: Date.now(), type: 'Comisión', desc: `Comisión recarga digital (checkout) ID:${txId || ''}`, amount: commission });
+              state.txs.push({ when: Date.now(), type: 'Impuesto', desc: `ITBMS sobre comisión recarga digital (checkout) ID:${txId || ''}`, amount: ibms });
+              state.txs.push({ when: Date.now(), type: 'Recarga digital', desc: `Recarga digital via ${method || 'digital'} (checkout) ID:${txId || ''} bruto:${amt.toFixed(2)} neto:${net.toFixed(2)}`, amount: net });
             } else {
-              // Non-topup: credit full amount
               state.balance = Number((Number(state.balance) + amt).toFixed(2));
-
-              // For agent/kiosk we also credit the cash pocket, except when this is a DIGITAL TOP-UP (purpose=topup).
-              if ((flow === 'agent' || flow === 'kiosk')) {
+              if (flow === 'agent' || flow === 'kiosk') {
                 state.cash = Number((Number(state.cash) + amt).toFixed(2));
               }
-
-              // Choose a transaction type that helps auditing: 'Recarga' for agent-originated flows, 'Cobro' for service payments
               const txType = isServicePayment ? 'Cobro' : 'Recarga';
-              state.txs.push({ when: Date.now(), type: txType, desc: `${txType} via ${method || 'efectivo'} (checkout) ID:${txId||''}`, amount: amt });
+              state.txs.push({ when: Date.now(), type: txType, desc: `${txType} via ${method || 'efectivo'} (checkout) ID:${txId || ''}`, amount: amt });
+              summary.netCredited = amt.toFixed(2);
             }
           }
 
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-          // If checkout was called for a specific client service, mark that service as paid
           try {
-            const clientId = params.get('clientId');
-            const svc = params.get('svc');
             if (clientId && svc) {
               const PAID_MAP_KEY = 'pp_paid_services_v1';
               const rawMap = localStorage.getItem(PAID_MAP_KEY);
@@ -350,14 +349,137 @@
               if (map[clientId].indexOf(svc) < 0) map[clientId].push(svc);
               localStorage.setItem(PAID_MAP_KEY, JSON.stringify(map));
             }
-          } catch(e){ console.warn('Mark paid from checkout failed', e); }
-          // redirect back to agents recharge page
-          const agentsUrl = new URL('agents/recharge.html', location.href).href;
-          const target = new URL(agentsUrl);
-          target.searchParams.set('fromCheckout','1');
-          location.href = target.href;
-          return true;
-        } catch (e) { console.warn('Agent return failed', e); return false; }
+          } catch (e) {
+            console.warn('Mark paid from checkout failed', e);
+          }
+
+          summary.newBalance = Number(state.balance).toFixed(2);
+          summary.newCash = Number(state.cash).toFixed(2);
+          return summary;
+        } catch (e) {
+          console.warn('applyAgentSandboxAfterPayment failed', e);
+          return null;
+        }
+      }
+
+      function agentDict(k, fallback) {
+        try {
+          const d = window.I18N && window.I18N.getDict ? window.I18N.getDict() : null;
+          if (d && d[k]) return d[k];
+        } catch (e) {}
+        return fallback;
+      }
+
+      function fmtUsd(n) {
+        var x = Number(n);
+        if (!Number.isFinite(x)) x = 0;
+        return 'USD ' + x.toFixed(2);
+      }
+
+      function removeCheckoutOverlays() {
+        ['recurrenceModal', 'deliveryModal', 'agentSuccessModal'].forEach(function (id) {
+          var n = document.getElementById(id);
+          if (n && n.parentNode) n.parentNode.removeChild(n);
+        });
+      }
+
+      function openAgentPostPaymentModal(summary) {
+        removeCheckoutOverlays();
+
+        var titleKey =
+          summary.mode === 'topup_digital'
+            ? 'checkout_agent_success_title_topup'
+            : summary.mode === 'service_digital'
+              ? 'checkout_agent_success_title_service'
+              : 'checkout_agent_success_title_credit';
+        var title = agentDict(titleKey, 'Operación completada');
+
+        var modal = document.createElement('div');
+        modal.id = 'agentSuccessModal';
+        modal.className = 'overlay-backdrop active';
+        modal.setAttribute('role', 'presentation');
+
+        var factsHtml = '';
+        function row(dt, dd) {
+          factsHtml +=
+            '<div class="pp-checkout-agent-success__row"><dt>' +
+            dt +
+            '</dt><dd>' +
+            dd +
+            '</dd></div>';
+        }
+        row(agentDict('checkout_agent_fact_gross', 'Monto de la operación'), fmtUsd(summary.grossAmount));
+        if (summary.mode === 'topup_digital' && summary.netCredited) {
+          row(agentDict('checkout_agent_fact_net', 'Acreditado en saldo (neto)'), fmtUsd(summary.netCredited));
+        }
+        if (summary.mode === 'topup_digital' && summary.fees) {
+          row(agentDict('checkout_agent_fact_fees', 'Comisión + ITBMS (estimado)'), fmtUsd(summary.fees));
+        }
+        if (summary.mode === 'service_digital' && summary.commission) {
+          row(agentDict('checkout_agent_fact_commission', 'Comisión registrada'), fmtUsd(summary.commission));
+        }
+        row(agentDict('checkout_agent_fact_balance', 'Saldo operativo ahora'), fmtUsd(summary.newBalance));
+        if (summary.mode !== 'service_digital' && summary.mode !== 'topup_digital' && summary.newCash != null) {
+          row(agentDict('checkout_agent_fact_cash', 'Efectivo (caja) ahora'), fmtUsd(summary.newCash));
+        }
+        row(agentDict('checkout_agent_fact_tx', 'ID de transacción'), summary.txId || '—');
+
+        modal.innerHTML =
+          '<div class="pp-checkout-agent-success" role="dialog" aria-modal="true" aria-labelledby="agentSuccTitle">' +
+          '  <div class="pp-checkout-agent-success__pad">' +
+          '    <div class="pp-checkout-agent-success__icon" aria-hidden="true"><i class="fas fa-circle-check"></i></div>' +
+          '    <h2 id="agentSuccTitle" class="pp-checkout-agent-success__title">' +
+          title +
+          '</h2>' +
+          '    <p class="pp-checkout-agent-success__lead">' +
+          agentDict('checkout_agent_success_lead', 'Los cambios ya están en el sandbox de este navegador.') +
+          '</p>' +
+          '    <dl class="pp-checkout-agent-success__facts">' +
+          factsHtml +
+          '</dl>' +
+          '    <p class="pp-checkout-agent-success__note">' +
+          agentDict('checkout_agent_success_demo', 'Demo: sin pasarela real. Puedes volver al portal para seguir operando.') +
+          '</p>' +
+          '    <div class="pp-checkout-agent-success__actions">' +
+          '      <button type="button" class="pp-btn pp-btn-primary" id="agentSuccPortal">' +
+          agentDict('checkout_back_agent', 'Volver al portal del agente') +
+          '</button>' +
+          '      <button type="button" class="pp-btn pp-btn-secondary" id="agentSuccClose">' +
+          agentDict('checkout_agent_success_dismiss', 'Cerrar') +
+          '</button>' +
+          '    </div>' +
+          '  </div>' +
+          '</div>';
+
+        document.body.appendChild(modal);
+        try {
+          initAgentBalanceInHeader();
+        } catch (e) {}
+
+        function closeAgentSuccessModal() {
+          var m = document.getElementById('agentSuccessModal');
+          if (!m) return;
+          m.classList.remove('active');
+          setTimeout(function () {
+            if (m.parentNode) m.parentNode.removeChild(m);
+          }, 200);
+        }
+
+        function goAgentPortal() {
+          var agentsUrl = new URL('agents/recharge.html', location.href);
+          agentsUrl.searchParams.set('fromCheckout', '1');
+          location.href = agentsUrl.href;
+        }
+
+        modal.querySelector('#agentSuccPortal').addEventListener('click', goAgentPortal);
+        modal.querySelector('#agentSuccClose').addEventListener('click', closeAgentSuccessModal);
+        modal.addEventListener('click', function (ev) {
+          if (ev.target === modal) closeAgentSuccessModal();
+        });
+
+        try {
+          if (window.I18N && window.I18N.updateDOM) window.I18N.updateDOM();
+        } catch (e) {}
       }
 
       window.addEventListener('error', function (ev) {
@@ -813,8 +935,12 @@
             updateSimSteps('final', true);
             showMessage({ type: 'success', text: (window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_paypal_success : 'Pago completado con PayPal. ID: ') + res.id });
             // If originating from agent flow, record recharge and return
-            if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), 'paypal', res.id)) return;
-            // show back button for convenience
+            var agentSum0 = applyAgentSandboxAfterPayment(Number((new URLSearchParams(location.search)).get('amount')||0), 'paypal', res.id);
+            if (agentSum0) {
+              showReturnButton();
+              openAgentPostPaymentModal(agentSum0);
+              return;
+            }
             showReturnButton();
             openRecurrenceWindow(res);
             return;
@@ -829,7 +955,12 @@
               ? (method === 'gpay' ? window.I18N.getDict().checkout_wallet_success_gpay : window.I18N.getDict().checkout_wallet_success_apple)
               : (method === 'gpay' ? 'Pago completado con Google Pay. ID: ' : 'Pago completado con Apple Pay. ID: ');
             showMessage({ type: 'success', text: `${walletMsg}${res.id}` });
-            if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, res.id)) return;
+            var agentSum1 = applyAgentSandboxAfterPayment(Number((new URLSearchParams(location.search)).get('amount')||0), method, res.id);
+            if (agentSum1) {
+              showReturnButton();
+              openAgentPostPaymentModal(agentSum1);
+              return;
+            }
             showReturnButton();
             openRecurrenceWindow(res);
             return;
@@ -851,7 +982,12 @@
           const paymentSuccess = window.I18N && window.I18N.getDict() ? window.I18N.getDict().checkout_payment_success : 'Pago realizado correctamente';
           showMessage({ type: 'success', text: `${paymentSuccess} (${result.method}). ID: ${result.id}` });
           // If coming from agent flow, register the recharge and redirect
-          if (handleAgentReturn(Number((new URLSearchParams(location.search)).get('amount')||0), method, result.id)) return;
+          var agentSum2 = applyAgentSandboxAfterPayment(Number((new URLSearchParams(location.search)).get('amount')||0), method, result.id);
+          if (agentSum2) {
+            showReturnButton();
+            openAgentPostPaymentModal(agentSum2);
+            return;
+          }
           showReturnButton();
           openRecurrenceWindow(result);
         } catch (err) {
