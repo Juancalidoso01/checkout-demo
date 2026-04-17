@@ -111,13 +111,13 @@
     .pp-landing-hero {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 24px 18px 12px;
+      padding: 18px 14px 8px;
       text-align: center;
     }
     .pp-landing-intro-card {
-      max-width: 720px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 26px 22px 28px;
+      padding: 22px 18px 20px;
       border-radius: 24px;
       border: 1px solid rgba(84, 98, 230, 0.12);
       background:
@@ -160,51 +160,62 @@
       animation: pp-fade-up 0.75s ease 0.08s forwards;
       opacity: 0;
     }
-    .pp-hero-int-hint {
-      display: block;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(84, 98, 230, 0.1);
-      font-size: 0.82rem;
-      line-height: 1.5;
+    .pp-map-read-lead {
+      margin: 0 auto;
+      max-width: 28rem;
+      font-size: 0.8rem;
+      line-height: 1.4;
       color: #64748b;
-      font-weight: 500;
+      font-weight: 600;
     }
-    .pp-hero-int-hint strong {
-      color: #475569;
-      font-weight: 700;
-    }
-    .pp-landing-hero-bullets {
-      margin: 18px auto 0;
-      padding: 16px 18px 16px 22px;
-      max-width: 40rem;
+    .pp-map-read-tiles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px auto 0;
+      max-width: 52rem;
       text-align: left;
-      list-style: none;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.72);
+    }
+    @media (min-width: 720px) {
+      .pp-map-read-tiles {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+    }
+    .pp-map-read-tile {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 0;
+      padding: 10px 11px 11px;
+      border-radius: 14px;
       border: 1px solid rgba(84, 98, 230, 0.14);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
-      font-size: 0.84rem;
-      line-height: 1.5;
-      color: #475569;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
     }
-    .pp-landing-hero-bullets li {
-      position: relative;
-      padding-left: 14px;
-      margin-bottom: 10px;
+    .pp-map-read-tile__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      font-size: 0.72rem;
+      color: var(--pp-primary);
+      background: rgba(84, 98, 230, 0.1);
+      margin-bottom: 1px;
     }
-    .pp-landing-hero-bullets li:last-child {
-      margin-bottom: 0;
+    .pp-map-read-tile strong {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #334155;
     }
-    .pp-landing-hero-bullets li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.55em;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #5462e6, #3738ab);
+    .pp-map-read-tile span:last-child {
+      font-size: 0.72rem;
+      line-height: 1.35;
+      color: #64748b;
     }
     .pp-map-layout {
       display: flex;
@@ -969,17 +980,29 @@
         <i class="fas fa-route"></i> Recorrido sugerido
       </div>
       <h2>Cómo leer este mapa</h2>
-      <p style="margin:0 auto;max-width:38rem;font-size:0.95rem;line-height:1.55;color:#475569">
-        Las <strong style="color:#3738ab">líneas</strong> unen el <strong>orden sugerido</strong> (izquierda → derecha; luego baja a la siguiente fase).
-        Las tarjetas con <strong>“Paso”</strong> son hitos del recorrido; las que dicen <strong>“Función del portal”</strong> son pantallas del mismo entorno <em>después</em> de entrar: útiles, pero no cuentan como paso nuevo del alta.
-        Cada tarjeta abre la pantalla real del demo.
-        <span class="pp-hero-int-hint">A la derecha de cada fase, <strong>integraciones</strong> típicas (pasa el cursor o enfoca un chip para ver el detalle).</span>
-      </p>
-      <ul class="pp-landing-hero-bullets" aria-label="Resumen para directivos">
-        <li><strong>Interactúa:</strong> en escritorio verás la <strong>leyenda de colores</strong> a un lado; en móvil va arriba del mapa. Toca cada color y el mapa <em>ilumina</em> lo que significa.</li>
-        <li><strong>Orden:</strong> sigue las líneas violeta como un “camino” del demo; no es un BPM legal, es una guía visual.</li>
-        <li><strong>Profundidad:</strong> si necesitas más detalle, abre “Más contexto” dentro de la leyenda.</li>
-      </ul>
+      <p class="pp-map-read-lead">Resumen en cuatro bloques; el detalle largo sigue en la leyenda lateral.</p>
+      <div class="pp-map-read-tiles" role="list" aria-label="Resumen para directivos">
+        <div class="pp-map-read-tile" role="listitem">
+          <span class="pp-map-read-tile__icon" aria-hidden="true"><i class="fas fa-route"></i></span>
+          <strong>Orden</strong>
+          <span>Líneas violeta: izq. → der., luego baja. Guía visual del demo, no BPM legal.</span>
+        </div>
+        <div class="pp-map-read-tile" role="listitem">
+          <span class="pp-map-read-tile__icon" aria-hidden="true"><i class="fas fa-clone"></i></span>
+          <strong>Tarjetas</strong>
+          <span><strong style="font-weight:800;color:#3738ab">Paso</strong> = hito. <strong style="font-weight:800;color:#64748b">Portal</strong> = pantalla útil tras login, no suma paso. Clic = pantalla real.</span>
+        </div>
+        <div class="pp-map-read-tile" role="listitem">
+          <span class="pp-map-read-tile__icon" aria-hidden="true"><i class="fas fa-puzzle-piece"></i></span>
+          <strong>Chips</strong>
+          <span>A la derecha de cada fase: integraciones típicas. Hover o foco para el detalle.</span>
+        </div>
+        <div class="pp-map-read-tile" role="listitem">
+          <span class="pp-map-read-tile__icon" aria-hidden="true"><i class="fas fa-gamepad"></i></span>
+          <strong>Leyenda</strong>
+          <span>Escritorio: al costado. Móvil: arriba. Toca un color y el mapa ilumina. Más texto en “Más contexto”.</span>
+        </div>
+      </div>
     </div>
   </section>
 
