@@ -286,6 +286,7 @@
     if (p.indexOf('onboarding') >= 0) return null;
     if (p.indexOf('mapa-picker') >= 0) return null;
     if (p.indexOf('modules-map') >= 0) return null;
+    if (p.indexOf('caso-negocio') >= 0) return null;
     if (p === '/' || p.endsWith('/index.html')) return null;
     if (p.indexOf('test-') >= 0) return null;
 
@@ -378,6 +379,7 @@
     const path = ((location && location.pathname) || '').replace(/\\/g, '/').toLowerCase();
     if (path === '/' || path.endsWith('/index.html')) return true;
     if (path.endsWith('/modules-map.html')) return true;
+    if (path.endsWith('/caso-negocio.html')) return true;
     return false;
   }
 

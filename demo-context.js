@@ -3,7 +3,7 @@
  * Requiere modules.config.js (PP_MODULO_FLUJO_META). Opcional: auth.js para URL del mapa.
  */
 (function () {
-  var SKIP_FILES = { 'index.html': 1, 'modules-map.html': 1 };
+  var SKIP_FILES = { 'index.html': 1, 'modules-map.html': 1, 'caso-negocio.html': 1 };
 
   var ROUTE_TO_MODULO = {
     'checkout.html': 'checkout',

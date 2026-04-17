@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#5462e6">
+  <title>Punto Pago — Caso de negocio (demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .cn-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #f4f6ff 0%, #ffffff 36%, #f6f6f6 100%);
+      font-family: var(--pp-font, system-ui, sans-serif);
+      color: var(--pp-text);
+      -webkit-font-smoothing: antialiased;
+    }
+    .cn-nav {
+      background: linear-gradient(135deg, #5462e6 0%, #4352d4 40%, #3738ab 100%);
+      color: #fff;
+      padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 20px rgba(84, 98, 230, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .cn-nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .cn-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.12);
+      white-space: nowrap;
+    }
+    .cn-nav a:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+    .cn-nav h1 {
+      margin: 0;
+      font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .cn-nav .cn-sub {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+    .cn-main {
+      flex: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 22px 18px 40px;
+      box-sizing: border-box;
+    }
+    .cn-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pp-primary);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(84, 98, 230, 0.1);
+      border: 1px solid rgba(84, 98, 230, 0.15);
+      margin-bottom: 14px;
+    }
+    .cn-lead {
+      margin: 0 0 22px;
+      font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      line-height: 1.25;
+      max-width: 36em;
+    }
+    .cn-grid {
+      display: grid;
+      gap: 14px;
+    }
+    @media (min-width: 720px) {
+      .cn-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .cn-card h2 {
+      margin: 0 0 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--pp-primary);
+    }
+    .cn-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: #475569;
+    }
+    .cn-quote {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      border-left: 4px solid #5462e6;
+      background: linear-gradient(135deg, #fff 0%, #f1f4ff 100%);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+    }
+    .cn-quote p {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-style: italic;
+      color: #334155;
+      line-height: 1.5;
+    }
+    .cn-foot {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(84, 98, 230, 0.12);
+      font-size: 0.82rem;
+      color: #64748b;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      align-items: center;
+    }
+    .cn-foot a {
+      font-weight: 700;
+      color: var(--pp-primary);
+      text-decoration: none;
+    }
+    .cn-foot a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="cn-page">
+  <header class="cn-nav">
+    <div class="cn-nav-inner">
+      <div>
+        <h1>Punto Pago</h1>
+        <span class="cn-sub">Caso de negocio · soporte del proyecto</span>
+      </div>
+      <a href="index.html"><i class="fas fa-map" aria-hidden="true"></i> Volver al mapa</a>
+    </div>
+  </header>
+
+  <main class="cn-main">
+    <span class="cn-kicker"><i class="fas fa-compass" aria-hidden="true"></i> Por qué existe este demo</span>
+    <p class="cn-lead">
+      Alinear a dirección, producto y operación alrededor de <strong>un mismo recorrido</strong> — antes de discutir contratos o roadmap en detalle.
+    </p>
+
+    <div class="cn-grid">
+      <article class="pp-card -soft cn-card">
+        <div class="pp-card-body">
+          <h2>Contexto</h2>
+          <p>
+            Alta de comercio, riesgo, cobros y canales (incl. agentes) suelen vivir en <strong>pantallas y proveedores distintos</strong>. Sin una historia visual compartida, cada área defiende su pedazo y cuesta ver el flujo completo del cliente.
+          </p>
+        </div>
+      </article>
+      <article class="pp-card -soft cn-card">
+        <div class="pp-card-body">
+          <h2>Propuesta (este prototipo)</h2>
+          <p>
+            Un <strong>mapa navegable</strong>: fases claras, líneas de orden y tarjetas que abren HTML real del laboratorio. Sirve para enseñar el “camino feliz” y dónde encajan integraciones típicas, con datos de prueba.
+          </p>
+        </div>
+      </article>
+      <article class="pp-card -soft cn-card">
+        <div class="pp-card-body">
+          <h2>Qué no es</h2>
+          <p>
+            No sustituye políticas internas, ni un BPM firmado. Es <strong>material de conversación</strong> y prueba de concepto: lo que importa es que cualquiera pueda recorrerlo y entender el orden propuesto.
+          </p>
+        </div>
+      </article>
+      <article class="pp-card -soft cn-card">
+        <div class="pp-card-body">
+          <h2>Paralelo con otros briefs</h2>
+          <p>
+            Misma lógica que en piezas tipo <strong>“revista para dirección”</strong> (p. ej. proyectos editoriales como <em>Revista Telered</em>): pocas palabras, bloques escaneables y un hilo conductor que el lector recorre en minutos, no en capítulos.
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <aside class="cn-quote" aria-label="Frase guía">
+      <p>“Si el mapa se entiende sin manual, el caso de negocio ya está haciendo su trabajo.”</p>
+    </aside>
+
+    <footer class="cn-foot">
+      <span>Catálogo técnico por módulo (solo desarrollo): <a href="modules-map.html">modules-map.html</a></span>
+    </footer>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    try {
+      if (window.PPAuth && typeof window.PPAuth.markProcessTourFromHubPage === 'function') {
+        window.PPAuth.markProcessTourFromHubPage();
+      }
+    } catch (e) {}
+  </script>
+</body>
+</html>
