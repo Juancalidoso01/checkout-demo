@@ -750,6 +750,67 @@ body {
   font-size: 0.88rem;
 }
 
+.pp-mag-lead--tight {
+  font-size: 0.72rem;
+  line-height: 1.42;
+  margin-bottom: 0.15rem;
+}
+
+.pp-mag-page--recursos {
+  gap: 0.5rem;
+}
+
+.pp-mag-table-wrap--recursos {
+  flex: 1;
+  min-height: 0;
+  max-height: min(52vh, 420px);
+  -webkit-overflow-scrolling: touch;
+}
+
+.pp-mag-table--recursos {
+  font-size: 0.58rem;
+  min-width: 100%;
+}
+
+.pp-mag-table--recursos th,
+.pp-mag-table--recursos td {
+  padding: 0.28rem 0.32rem;
+}
+
+.pp-mag-table--recursos th {
+  font-size: 0.52rem;
+  letter-spacing: 0.02em;
+}
+
+.pp-mag-table--recursos td:first-child {
+  font-weight: 700;
+  max-width: 7.2rem;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.pp-mag-tr--destacado {
+  background: rgba(84, 98, 230, 0.06);
+}
+
+.pp-mag-tr--destacado td {
+  font-weight: 800;
+}
+
+.pp-mag-page--cierre {
+  gap: 0.55rem;
+}
+
+.pp-mag-chart--cierre {
+  min-height: 90px;
+  max-height: min(22vh, 180px);
+}
+
+.pp-mag-list--tight {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .magazine-track {
     transition-duration: 0.2s !important;

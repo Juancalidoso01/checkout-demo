@@ -15,7 +15,7 @@
 
     cover: {
       eyebrow: 'Revista digital · Punto Pago',
-      lineas: ['16 páginas', 'Datos 03–07 · Guía 08–11', 'Cierre 12–16'],
+      lineas: ['16 páginas', 'Datos 03–07 · Recursos 08–09 · Guía 10–13', 'Cierre 14–16'],
     },
 
     /** Índice en la apertura (p. 2): enlaces saltan a la página indicada */
@@ -25,33 +25,102 @@
       { pagina: 5, texto: 'Escenarios: gráficas y tabla' },
       { pagina: 6, texto: 'Mercado: Colombia vs Panamá (tabla)' },
       { pagina: 7, texto: 'Mercado: TAM / SAM / SOM, gráfica y tabla' },
-      { pagina: 8, texto: 'Guía: negocio hoy y volumen por agente' },
-      { pagina: 9, texto: 'Guía: costes, herramientas y procesos' },
-      { pagina: 10, texto: 'Guía: oportunidad, tamaño y problema' },
-      { pagina: 11, texto: 'Guía: red, pagos y propuesta' },
-      { pagina: 12, texto: 'Segmento y razón comercial' },
-      { pagina: 13, texto: 'Mercado y problema' },
-      { pagina: 14, texto: 'Solución y economía' },
-      { pagina: 15, texto: 'Riesgos y dependencias' },
-      { pagina: 16, texto: 'Demo y enlaces' },
+      { pagina: 8, texto: 'Recursos: gastos digitales (meses 1–6)' },
+      { pagina: 9, texto: 'Recursos: gastos digitales (meses 7–12 y métricas)' },
+      { pagina: 10, texto: 'Guía: negocio hoy y volumen por agente' },
+      { pagina: 11, texto: 'Guía: costes, herramientas y procesos' },
+      { pagina: 12, texto: 'Guía: oportunidad, tamaño y problema' },
+      { pagina: 13, texto: 'Guía: red, pagos y propuesta' },
+      { pagina: 14, texto: 'Segmento y razón comercial' },
+      { pagina: 15, texto: 'Mercado y problema' },
+      { pagina: 16, texto: 'Solución, economía, riesgos y demo' },
     ],
 
     apertura: {
       titulo: 'Resumen ejecutivo',
       cuerpo:
-        'País y cabeceras (03–04), escenarios (05), mercado en dos páginas (06–07). Guía de preguntas (08–11) y cierre 12–16 (riesgos y demo en páginas separadas).',
+        'País y cabeceras (03–04), escenarios (05), mercado en dos páginas (06–07), presupuesto de marketing y esfuerzo digital (08–09), guía de preguntas (10–13), segmento (14), mercado y problema (15) y cierre operativo en una sola página (16).',
       chips: [
         'Contexto Panamá',
         'Escenarios de TX',
         'TAM / SAM / SOM',
-        'Guía preguntas 08–11',
-        'Segmento y mercado',
-        'Demo',
+        'Recursos 08–09',
+        'Guía preguntas 10–13',
+        'Cierre 16',
       ],
     },
 
     /**
-     * Preguntas guía (pp. 08–11): respuestas con la información ya incorporada al caso.
+     * Gastos y esfuerzos digitales (plan anual): dos tablas en el flipbook (08–09).
+     * Valores mensuales en US$ salvo filas de puntos (enteros) y CAC (US$ por punto nuevo).
+     */
+    recursosMarketing: {
+      tituloPrimera: 'Gastos y esfuerzos digitales (1/2)',
+      introPrimera:
+        'Canales de pauta, operación de mensajería, referidos, contenido y apoyo administrativo. Meses 1 a 6 en US$; la última columna es la suma de ese semestre.',
+      tituloSegunda: 'Gastos y esfuerzos digitales (2/2)',
+      introSegunda:
+        'Meses 7 a 12 y total del año en dinero. Al pie: puntos nuevos de la red, CAC mensual (referencia interna del plan) y puntos acumulados; el asterisco marca cifra de cierre proyectada.',
+      filas: [
+        {
+          tipo: 'usd',
+          canal: 'Google Ads',
+          meses: [800, 900, 1000, 1200, 1300, 1400, 1500, 1600, 1600, 1500, 1300, 1000],
+        },
+        {
+          tipo: 'usd',
+          canal: 'Meta Ads',
+          meses: [500, 600, 700, 800, 900, 1000, 1000, 1100, 1100, 1000, 900, 700],
+        },
+        {
+          tipo: 'usd',
+          canal: 'WhatsApp / Email',
+          meses: [150, 150, 200, 200, 250, 250, 300, 300, 300, 250, 200, 150],
+        },
+        {
+          tipo: 'usd',
+          canal: 'Programa Referidos',
+          meses: [200, 300, 400, 500, 600, 700, 800, 900, 1000, 900, 700, 500],
+        },
+        {
+          tipo: 'usd',
+          canal: 'Contenido / Material',
+          meses: [350, 250, 200, 200, 150, 150, 100, 100, 100, 100, 100, 100],
+        },
+        {
+          tipo: 'usd',
+          canal: 'Mano de obra, apoyo administrativo',
+          meses: [1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200],
+        },
+        {
+          tipo: 'usd',
+          canal: 'Total marketing',
+          meses: [3200, 2200, 2500, 2900, 3200, 3500, 3700, 4000, 4100, 3750, 3200, 2450],
+          destacado: true,
+        },
+        {
+          tipo: 'entero',
+          canal: 'Puntos nuevos',
+          meses: [80, 120, 180, 220, 250, 280, 300, 320, 320, 250, 110, 70],
+          destacado: true,
+        },
+        {
+          tipo: 'cac',
+          canal: 'CAC (US$ por punto nuevo)',
+          meses: [40, 18, 14, 13, 13, 13, 12, 13, 13, 15, 29, 35],
+          totalCacAnual: 227,
+        },
+        {
+          tipo: 'acum',
+          canal: 'Puntos acumulados',
+          meses: [140, 260, 440, 660, 910, 1190, 1490, 1810, 2130, 2380, 2490, 2560],
+          asteriscoUltimoMes: true,
+        },
+      ],
+    },
+
+    /**
+     * Preguntas guía (pp. 10–13 en el flipbook): respuestas con la información ya incorporada al caso.
      * etiqueta: pendiente = espera datos del modelo operativo actual; referencia = tablas/escenarios; sintesis = redacción del caso.
      */
     guiasPreguntas: [
@@ -132,7 +201,7 @@
             pregunta: '¿Cuál es el problema que queremos resolver?',
             etiqueta: 'sintesis',
             respuesta:
-              'Hoy el dolor es que todo está repartido en muchas herramientas, cuesta caro y lento meter comercios nuevos, hay riesgo operativo y casi nadie ve de un solo vistazo qué le pasó al cliente y qué le pasó al agente. El bloque “Problema” (página 13) lo dice en la misma línea, y el mapa del demo muestra el camino único que queremos.',
+              'Hoy el dolor es que todo está repartido en muchas herramientas, cuesta caro y lento meter comercios nuevos, hay riesgo operativo y casi nadie ve de un solo vistazo qué le pasó al cliente y qué le pasó al agente. El bloque “Problema” (página 15) lo dice en la misma línea, y el mapa del demo muestra el camino único que queremos.',
           },
           {
             pregunta: '¿Queremos incrementar transacciones en zonas donde no podemos llevar kioscos?',
@@ -386,7 +455,7 @@
     texto: {
       tituloPagina: 'Caso de negocio — Agentes en Panamá',
       heroDek:
-        'Panamá → escenarios → mercado (06–07) → guía (08–11) → segmento → mercado/problema → solución → riesgos → demo (16 páginas).',
+        'Panamá → escenarios → mercado (06–07) → recursos (08–09) → guía (10–13) → segmento → mercado/problema → cierre solución/economía/riesgos/demo (16 páginas).',
 
       segmento: {
         titulo: 'Segmento y razón comercial',
