@@ -28,7 +28,7 @@
           target="_blank"
           rel="noopener noreferrer"
         >Modelo revista (GitHub)</a>
-        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 6</span>
+        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 10</span>
       </div>
     </div>
   </header>
@@ -66,15 +66,129 @@
                 <h2 class="opening-summary__title" id="cn-open-title"></h2>
                 <p class="opening-summary__text" id="cn-open-body"></p>
                 <div class="opening-summary__chips" id="cn-open-chips" aria-label="Temas"></div>
+                <nav class="opening-index-wrap" aria-label="Índice del flipbook">
+                  <p class="opening-index__title">Dónde está cada cosa</p>
+                  <ol class="opening-index" id="cn-open-index"></ol>
+                </nav>
               </div>
             </div>
           </article>
 
-          <article class="magazine-page" data-page="3" id="p3" aria-label="Segmento">
+          <article class="magazine-page" data-page="3" id="p3" aria-label="Panamá en contexto">
             <div class="magazine-page__inner pp-mag-page">
               <div id="cn-banner" class="pp-mag-banner" hidden></div>
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">03</span>
+                <h2 class="pp-mag-h2" id="cn-pa-h"></h2>
+              </div>
+              <p class="pp-mag-lead pp-mag-lead--accent" id="cn-pa-sub"></p>
+              <p class="pp-mag-lead" id="cn-pa-intro"></p>
+              <div class="pp-mag-stats" id="cn-pa-stats" aria-label="Cifras clave"></div>
+              <div class="pp-mag-chart pp-mag-chart--short">
+                <canvas id="cnChartPanamaUrbano" aria-label="Distribución urbano rural"></canvas>
+              </div>
+              <p class="pp-mag-note" id="cn-pa-nota"></p>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="4" id="p4" aria-label="Población por distrito">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">04</span>
+                <h2 class="pp-mag-h2" id="cn-dist-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-dist-intro"></p>
+              <div class="pp-mag-table-wrap">
+                <table class="pp-mag-table" id="cn-dist-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Distrito</th>
+                      <th scope="col" class="pp-mag-table__num">Población total (2023)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cn-dist-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="5" id="p5" aria-label="Escenarios comparativos">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">05</span>
+                <h2 class="pp-mag-h2" id="cn-esc-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-esc-intro"></p>
+              <div class="pp-mag-two-charts">
+                <div class="pp-mag-chart pp-mag-chart--short">
+                  <canvas id="cnChartEscenariosVol" aria-label="Volumen anual por escenario"></canvas>
+                </div>
+                <div class="pp-mag-chart pp-mag-chart--short">
+                  <canvas id="cnChartEscenariosIng" aria-label="Ingreso bruto por escenario"></canvas>
+                </div>
+              </div>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--tight">
+                <table class="pp-mag-table pp-mag-table--compact" id="cn-esc-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Escenario</th>
+                      <th scope="col" class="pp-mag-table__num">TX / año</th>
+                      <th scope="col" class="pp-mag-table__num">Ticket</th>
+                      <th scope="col" class="pp-mag-table__num">Volumen / año</th>
+                      <th scope="col" class="pp-mag-table__num">TX / pt / mes</th>
+                      <th scope="col" class="pp-mag-table__num">Ingreso bruto (1,2 %)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cn-esc-tbody"></tbody>
+                </table>
+              </div>
+              <p class="pp-mag-note" id="cn-esc-nota"></p>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="6" id="p6" aria-label="TAM y SAM">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">06</span>
+                <h2 class="pp-mag-h2" id="cn-tam-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-tam-intro"></p>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--tight">
+                <table class="pp-mag-table pp-mag-table--compact" id="cn-tam-metric-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Métrica</th>
+                      <th scope="col">Colombia (ref.)</th>
+                      <th scope="col">Panamá (proy.)</th>
+                      <th scope="col">Nota</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cn-tam-metric-tbody"></tbody>
+                </table>
+              </div>
+              <div class="pp-mag-chart pp-mag-chart--short">
+                <canvas id="cnChartTamSom" aria-label="Volumen por nivel TAM SAM SOM"></canvas>
+              </div>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--tight">
+                <table class="pp-mag-table pp-mag-table--compact" id="cn-tam-nivel-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nivel</th>
+                      <th scope="col">Volumen anual</th>
+                      <th scope="col">Usuarios estimados</th>
+                      <th scope="col">Supuesto</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cn-tam-nivel-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="7" id="p7" aria-label="Segmento">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">07</span>
                 <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-seg-sub"></p>
@@ -86,10 +200,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="4" id="p4" aria-label="Mercado y problema">
+          <article class="magazine-page" data-page="8" id="p8" aria-label="Mercado y problema">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">04</span>
+                <span class="pp-mag-kicker">08</span>
                 <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-mer-intro"></p>
@@ -108,10 +222,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="5" id="p5" aria-label="Solución y economía">
+          <article class="magazine-page" data-page="9" id="p9" aria-label="Solución y economía">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">05</span>
+                <span class="pp-mag-kicker">09</span>
                 <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-sol-intro"></p>
@@ -129,10 +243,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="6" id="p6" aria-label="Riesgos y demo">
+          <article class="magazine-page" data-page="10" id="p10" aria-label="Riesgos y demo">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">06</span>
+                <span class="pp-mag-kicker">10</span>
                 <h2 class="pp-mag-h2" id="cn-ries-h"></h2>
               </div>
               <ul class="pp-mag-list" id="cn-ries-list"></ul>
@@ -251,12 +365,50 @@
       set('cn-open-title', ap.titulo || '');
       set('cn-open-body', ap.cuerpo || '');
       var chips = document.getElementById('cn-open-chips');
-      if (chips && t.segmento && t.segmento.bullets) {
+      if (chips) {
         chips.innerHTML = '';
-        t.segmento.bullets.forEach(function (b) {
+        var chipSrc =
+          ap.chips && ap.chips.length
+            ? ap.chips
+            : t.segmento && t.segmento.bullets
+              ? t.segmento.bullets.map(function (b) {
+                  return b.titulo || '';
+                })
+              : [];
+        chipSrc.forEach(function (label) {
+          if (!label) return;
           var sp = document.createElement('span');
-          sp.textContent = b.titulo || '';
+          sp.textContent = label;
           chips.appendChild(sp);
+        });
+      }
+
+      var idxEl = document.getElementById('cn-open-index');
+      if (idxEl && D.indicePaginas && D.indicePaginas.length) {
+        idxEl.innerHTML = '';
+        D.indicePaginas.forEach(function (row) {
+          var li = document.createElement('li');
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'opening-index__btn';
+          btn.setAttribute('data-caso-page', String(row.pagina));
+          var sn = row.pagina < 10 ? '0' + row.pagina : String(row.pagina);
+          var no = document.createElement('span');
+          no.className = 'opening-index__no';
+          no.textContent = sn;
+          var tx = document.createElement('span');
+          tx.className = 'opening-index__txt';
+          tx.textContent = row.texto || '';
+          btn.appendChild(no);
+          btn.appendChild(tx);
+          li.appendChild(btn);
+          idxEl.appendChild(li);
+        });
+        idxEl.addEventListener('click', function (ev) {
+          var t = ev.target.closest('[data-caso-page]');
+          if (!t || typeof window.PPMagazineGoToPage !== 'function') return;
+          var p = parseInt(t.getAttribute('data-caso-page'), 10);
+          window.PPMagazineGoToPage(p);
         });
       }
 
@@ -275,6 +427,129 @@
 
       var sl = document.getElementById('cn-sheet-link');
       if (sl && D.fuenteHoja) sl.href = D.fuenteHoja;
+
+      function fmtIntEs(n) {
+        return Math.round(n).toLocaleString('es-PA');
+      }
+
+      var pa = D.panama;
+      if (pa) {
+        set('cn-pa-h', pa.titulo);
+        set('cn-pa-sub', pa.subtitulo);
+        set('cn-pa-intro', pa.intro);
+        set('cn-pa-nota', pa.nota);
+        var statsEl = document.getElementById('cn-pa-stats');
+        if (statsEl && pa.poblacionMillones != null) {
+          var pm = pa.poblacionMillones;
+          var pctU = pa.pctUrbano != null ? pa.pctUrbano : 0;
+          var pctR = pa.pctRural != null ? pa.pctRural : 0;
+          var mUrb = ((pm * pctU) / 100).toFixed(1).replace('.', ',');
+          var mRur = ((pm * pctR) / 100).toFixed(1).replace('.', ',');
+          var dec = String(pm).replace('.', ',');
+          statsEl.innerHTML = '';
+          [
+            { v: '~' + dec + ' M', l: 'habitantes (referencia nacional)' },
+            { v: '~' + mUrb + ' M', l: 'en zonas urbanas (~' + pctU + ' %)' },
+            { v: '~' + mRur + ' M', l: 'en zonas rurales (~' + pctR + ' %)' },
+          ].forEach(function (row) {
+            var box = document.createElement('div');
+            box.className = 'pp-mag-stat';
+            box.innerHTML =
+              '<span class="pp-mag-stat__val">' +
+              row.v +
+              '</span><span class="pp-mag-stat__lbl">' +
+              row.l +
+              '</span>';
+            statsEl.appendChild(box);
+          });
+        }
+        if (D.charts && D.charts.panamaUrbano && pa.pctUrbano != null && pa.pctRural != null) {
+          D.charts.panamaUrbano.values = [pa.pctUrbano, pa.pctRural];
+        }
+      }
+
+      set('cn-dist-h', D.distritosTitulo || 'Población por distrito');
+      set('cn-dist-intro', D.distritosIntro || '');
+
+      var tbodyDist = document.getElementById('cn-dist-tbody');
+      if (tbodyDist && D.distritos) {
+        tbodyDist.innerHTML = '';
+        D.distritos.forEach(function (d) {
+          var tr = document.createElement('tr');
+          var td1 = document.createElement('td');
+          td1.textContent = d.nombre || '';
+          var td2 = document.createElement('td');
+          td2.className = 'pp-mag-table__num';
+          td2.textContent = fmtIntEs(d.poblacion || 0);
+          tr.appendChild(td1);
+          tr.appendChild(td2);
+          tbodyDist.appendChild(tr);
+        });
+      }
+
+      var esc = D.escenarios;
+      if (esc) {
+        set('cn-esc-h', esc.titulo);
+        set('cn-esc-intro', esc.intro);
+        set('cn-esc-nota', esc.notaCac || '');
+        var tbodyEsc = document.getElementById('cn-esc-tbody');
+        if (tbodyEsc && esc.filas) {
+          tbodyEsc.innerHTML = '';
+          esc.filas.forEach(function (f) {
+            var tr = document.createElement('tr');
+            var volM = (f.volumenUsd || 0) / 1e6;
+            var ingM = (f.ingresoBrutoUsd || 0) / 1e6;
+            var ingTxt =
+              f.ingresoBrutoAprox === true ? '~US$' + ingM.toFixed(1).replace('.', ',') + ' M' : 'US$' + ingM.toFixed(2).replace('.', ',') + ' M';
+            [
+              f.escenario,
+              fmtIntEs(f.transaccionesAnuales || 0),
+              'US$' + (f.ticketUsd != null ? f.ticketUsd : ''),
+              'US$' + volM.toFixed(0) + ' M',
+              String(f.txPorPuntoMes != null ? f.txPorPuntoMes : ''),
+              ingTxt,
+            ].forEach(function (cell, idx) {
+              var td = document.createElement('td');
+              if (idx > 0) td.className = 'pp-mag-table__num';
+              td.textContent = cell;
+              tr.appendChild(td);
+            });
+            tbodyEsc.appendChild(tr);
+          });
+        }
+      }
+
+      var tam = D.tamSam;
+      if (tam) {
+        set('cn-tam-h', tam.titulo);
+        set('cn-tam-intro', tam.intro);
+        var mt = document.getElementById('cn-tam-metric-tbody');
+        if (mt && tam.metricas) {
+          mt.innerHTML = '';
+          tam.metricas.forEach(function (r) {
+            var tr = document.createElement('tr');
+            [r.metrica, r.colombia, r.panama, r.explicacion].forEach(function (cell) {
+              var td = document.createElement('td');
+              td.textContent = cell || '';
+              tr.appendChild(td);
+            });
+            mt.appendChild(tr);
+          });
+        }
+        var nt = document.getElementById('cn-tam-nivel-tbody');
+        if (nt && tam.niveles) {
+          nt.innerHTML = '';
+          tam.niveles.forEach(function (r) {
+            var tr = document.createElement('tr');
+            [r.nivel, r.volumen, r.usuarios, r.supuesto].forEach(function (cell) {
+              var td = document.createElement('td');
+              td.textContent = cell || '';
+              tr.appendChild(td);
+            });
+            nt.appendChild(tr);
+          });
+        }
+      }
 
       set('cn-seg-h', t.segmento.titulo);
       set('cn-seg-sub', t.segmento.subtitulo);
@@ -332,7 +607,15 @@
     window.addEventListener('pp-magazine-layout', function () {
       window.requestAnimationFrame(function () {
         if (typeof Chart === 'undefined') return;
-        ['cnChartSegCanal', 'cnChartMercado', 'cnChartEconomia'].forEach(function (id) {
+        [
+          'cnChartPanamaUrbano',
+          'cnChartEscenariosVol',
+          'cnChartEscenariosIng',
+          'cnChartTamSom',
+          'cnChartSegCanal',
+          'cnChartMercado',
+          'cnChartEconomia',
+        ].forEach(function (id) {
           var canvas = document.getElementById(id);
           if (!canvas) return;
           var ch = Chart.getChart(canvas);
@@ -433,6 +716,41 @@
             },
             scales: scales,
           },
+        });
+      }
+
+      var cpu = charts.panamaUrbano;
+      if (cpu) makeChart('cnChartPanamaUrbano', { tipo: cpu.tipo, titulo: cpu.titulo, labels: cpu.labels, values: cpu.values });
+
+      var cev = charts.escenariosVolumen;
+      if (cev) {
+        makeChart('cnChartEscenariosVol', {
+          tipo: cev.tipo,
+          titulo: cev.titulo,
+          labels: cev.labels,
+          values: cev.values,
+          unit: cev.unit,
+        });
+      }
+      var cei = charts.escenariosIngresoBruto;
+      if (cei) {
+        makeChart('cnChartEscenariosIng', {
+          tipo: cei.tipo,
+          titulo: cei.titulo,
+          labels: cei.labels,
+          values: cei.values,
+          unit: cei.unit,
+        });
+      }
+      var cts = charts.tamSamVolumen;
+      if (cts) {
+        makeChart('cnChartTamSom', {
+          tipo: cts.tipo,
+          titulo: cts.titulo,
+          labels: cts.labels,
+          values: cts.values,
+          unit: cts.unit,
+          horizontal: cts.horizontal,
         });
       }
 

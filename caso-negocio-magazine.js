@@ -518,4 +518,12 @@
   syncYear();
   updateSoundButton();
   layout();
+
+  /** Ir a página 1-based (p. ej. 3 = primera página de datos). Expuesto para índice en caso-negocio.html */
+  window.PPMagazineGoToPage = function (pageOneBased) {
+    var p = parseInt(pageOneBased, 10);
+    if (isNaN(p) || p < 1) p = 1;
+    if (p > total) p = total;
+    goTo(clampIndex(p - 1));
+  };
 })();
