@@ -174,16 +174,284 @@
       color: #475569;
       font-weight: 700;
     }
+    .pp-landing-hero-bullets {
+      margin: 18px auto 0;
+      padding: 16px 18px 16px 22px;
+      max-width: 40rem;
+      text-align: left;
+      list-style: none;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(84, 98, 230, 0.14);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: #475569;
+    }
+    .pp-landing-hero-bullets li {
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 10px;
+    }
+    .pp-landing-hero-bullets li:last-child {
+      margin-bottom: 0;
+    }
+    .pp-landing-hero-bullets li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #5462e6, #3738ab);
+    }
+    .pp-map-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: stretch;
+    }
+    @media (min-width: 1024px) {
+      .pp-map-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(268px, 320px);
+        gap: 20px 26px;
+        align-items: start;
+      }
+      .pp-map-layout__main {
+        order: 1;
+      }
+      .pp-map-legend {
+        order: 2;
+        position: sticky;
+        top: 84px;
+      }
+    }
+    @media (max-width: 1023px) {
+      .pp-map-legend {
+        order: -1;
+      }
+    }
+    .pp-map-legend {
+      border-radius: 20px;
+      padding: 18px 16px 16px;
+      background: linear-gradient(165deg, #ffffff 0%, #f4f6ff 50%, #eef2ff 100%);
+      border: 1px solid rgba(84, 98, 230, 0.2);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+    .pp-map-legend__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--pp-primary);
+      margin-bottom: 8px;
+    }
+    .pp-map-legend__title {
+      margin: 0 0 6px;
+      font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+    }
+    .pp-map-legend__deck {
+      margin: 0 0 14px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .pp-map-legend__deck strong {
+      color: #334155;
+    }
+    .pp-map-legend__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pp-map-legend-btn {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(255, 255, 255, 0.92);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+      font: inherit;
+      color: inherit;
+    }
+    .pp-map-legend-btn:hover {
+      border-color: rgba(84, 98, 230, 0.45);
+      box-shadow: 0 6px 18px rgba(84, 98, 230, 0.12);
+      transform: translateY(-1px);
+    }
+    .pp-map-legend-btn:focus-visible {
+      outline: 3px solid rgba(84, 98, 230, 0.4);
+      outline-offset: 2px;
+    }
+    .pp-map-legend-btn[aria-pressed='true'] {
+      border-color: rgba(84, 98, 230, 0.55);
+      box-shadow: 0 0 0 3px rgba(84, 98, 230, 0.15);
+      background: #fff;
+    }
+    .pp-map-legend-swatch {
+      flex-shrink: 0;
+      width: 14px;
+      height: 44px;
+      border-radius: 8px;
+      margin-top: 2px;
+    }
+    .pp-map-legend-swatch--paso {
+      background: linear-gradient(180deg, #5462e6, #3738ab);
+    }
+    .pp-map-legend-swatch--portal {
+      background: repeating-linear-gradient(
+        -45deg,
+        #94a3b8,
+        #94a3b8 3px,
+        #e2e8f0 3px,
+        #e2e8f0 6px
+      );
+      border: 1px solid rgba(100, 116, 139, 0.4);
+    }
+    .pp-map-legend-swatch--journey {
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.35), rgba(124, 58, 237, 0.45));
+    }
+    .pp-map-legend-swatch--chip {
+      background: linear-gradient(180deg, #f8fafc, #e2e8f0);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+    .pp-map-legend-swatch--line {
+      height: 8px;
+      width: 44px;
+      margin-top: 18px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #6366f1, #4338ca);
+    }
+    .pp-map-legend-swatch--box {
+      background: rgba(13, 148, 136, 0.15);
+      border: 2px dashed rgba(13, 148, 136, 0.55);
+    }
+    .pp-map-legend-swatch--sandbox {
+      background: rgba(248, 250, 252, 0.95);
+      border: 2px dashed rgba(84, 98, 230, 0.35);
+    }
+    .pp-map-legend-btn__text strong {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+    .pp-map-legend-btn__text small {
+      display: block;
+      font-size: 0.72rem;
+      color: #64748b;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+    .pp-map-legend__more {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px dashed rgba(84, 98, 230, 0.25);
+      font-size: 0.78rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+    .pp-map-legend__more summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--pp-primary);
+      list-style: none;
+    }
+    .pp-map-legend__more summary::-webkit-details-marker {
+      display: none;
+    }
+    .pp-map-legend__more[open] summary {
+      margin-bottom: 8px;
+    }
+    .pp-map-legend__hint {
+      margin-top: 12px;
+      font-size: 0.68rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .pp-legend-flash.pp-map-node {
+      animation: pp-legend-flash-node 1.1s ease 2;
+    }
+    .pp-legend-flash.pp-fase-journey {
+      animation: pp-legend-flash-pill 1.1s ease 2;
+    }
+    .pp-legend-flash.pp-fase-int-chip {
+      animation: pp-legend-flash-chip 1.1s ease 2;
+    }
+    .pp-legend-flash.pp-map-line {
+      animation: pp-legend-flash-line 1.1s ease 2;
+      stroke-width: 7 !important;
+    }
+    .pp-legend-flash.pp-map-subwrap {
+      animation: pp-legend-flash-box 1.1s ease 2;
+    }
+    .pp-legend-flash.pp-extras {
+      animation: pp-legend-flash-box 1.1s ease 2;
+    }
+    @keyframes pp-legend-flash-node {
+      0%,
+      100% {
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+      }
+      50% {
+        box-shadow: 0 0 0 4px rgba(84, 98, 230, 0.45), 0 18px 44px rgba(84, 98, 230, 0.22);
+      }
+    }
+    @keyframes pp-legend-flash-pill {
+      50% {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+      }
+    }
+    @keyframes pp-legend-flash-chip {
+      50% {
+        border-color: rgba(84, 98, 230, 0.65);
+        background: #fff;
+      }
+    }
+    @keyframes pp-legend-flash-line {
+      50% {
+        filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.85));
+      }
+    }
+    @keyframes pp-legend-flash-box {
+      50% {
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.35);
+      }
+    }
     @keyframes pp-fade-up {
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .pp-map-section {
       flex: 1;
-      max-width: 1160px;
+      max-width: 1240px;
       margin: 0 auto;
       width: 100%;
-      padding: 8px 12px 28px;
+      padding: 8px 14px 32px;
     }
     .pp-map-wrap {
       position: relative;
@@ -665,6 +933,17 @@
       .pp-landing-logo {
         animation: none !important;
       }
+      .pp-legend-flash.pp-map-node,
+      .pp-legend-flash.pp-fase-journey,
+      .pp-legend-flash.pp-fase-int-chip,
+      .pp-legend-flash.pp-map-line,
+      .pp-legend-flash.pp-map-subwrap,
+      .pp-legend-flash.pp-extras {
+        animation: none !important;
+      }
+      .pp-legend-flash.pp-map-line {
+        stroke-width: 5.5 !important;
+      }
     }
   </style>
 </head>
@@ -696,6 +975,11 @@
         Cada tarjeta abre la pantalla real del demo.
         <span class="pp-hero-int-hint">A la derecha de cada fase, <strong>integraciones</strong> típicas (pasa el cursor o enfoca un chip para ver el detalle).</span>
       </p>
+      <ul class="pp-landing-hero-bullets" aria-label="Resumen para directivos">
+        <li><strong>Interactúa:</strong> en escritorio verás la <strong>leyenda de colores</strong> a un lado; en móvil va arriba del mapa. Toca cada color y el mapa <em>ilumina</em> lo que significa.</li>
+        <li><strong>Orden:</strong> sigue las líneas violeta como un “camino” del demo; no es un BPM legal, es una guía visual.</li>
+        <li><strong>Profundidad:</strong> si necesitas más detalle, abre “Más contexto” dentro de la leyenda.</li>
+      </ul>
     </div>
   </section>
 
@@ -703,18 +987,103 @@
     <p class="pp-card -soft pp-card-body" id="pp-home-fallback" hidden>
       No se cargó la configuración. Verifica <code>modules.config.js</code>.
     </p>
-    <div class="pp-map-wrap" id="pp-map-wrap" hidden>
-      <svg class="pp-map-svg" id="pp-map-svg" aria-hidden="true">
-        <defs>
-          <linearGradient id="pp-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.92" />
-            <stop offset="100%" style="stop-color:#4338ca;stop-opacity:1" />
-          </linearGradient>
-        </defs>
-        <g id="pp-map-lines"></g>
-      </svg>
-      <div id="pp-map-fases"></div>
-      <div id="pp-map-extras" class="pp-extras" hidden></div>
+    <div class="pp-map-layout" id="pp-map-layout" hidden>
+      <aside class="pp-map-legend" id="pp-map-legend" aria-label="Leyenda de colores del mapa">
+        <div class="pp-map-legend__head">
+          <div class="pp-map-legend__kicker"><i class="fas fa-gamepad" aria-hidden="true"></i> Leyenda interactiva</div>
+          <h2 class="pp-map-legend__title">Colores = significado</h2>
+          <p class="pp-map-legend__deck">
+            Pensado para <strong>una mirada rápida</strong>: pulsa un renglón y el mapa <strong>ilumina</strong> ese tipo de elemento (como la leyenda de un mapa en videojuego).
+          </p>
+        </div>
+        <ul class="pp-map-legend__list">
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="paso" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--paso" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>Paso del recorrido</strong>
+                <small>Borde violeta sólido a la izquierda y etiqueta “Paso N”. Son hitos obligatorios del demo.</small>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="portal" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--portal" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>Función del portal</strong>
+                <small>Borde gris discontinuo: pantallas útiles <em>después</em> de iniciar sesión; no suman un paso nuevo del alta.</small>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="journey" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--journey" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>¿Quién “actúa” aquí?</strong>
+                <small>Píldora de color por fase (comercio, operaciones internas, día a día). Da contexto de rol sin abrir nada.</small>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="chips" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--chip" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>Integraciones típicas</strong>
+                <small>Chips a la derecha: ejemplos de APIs o proveedores (Supabase, KYC, mapas…). Pasa el cursor para el detalle.</small>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="lines" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--line" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>Camino sugerido</strong>
+                <small>Líneas violeta enlazan tarjetas en el orden del recorrido (izquierda → derecha, luego baja).</small>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="subwrap" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--box" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>Bloques “misma solicitud”</strong>
+                <small>Recuadro con borde discontinuo: agrupa varias pantallas que siguen al mismo paso (p. ej. alta o portal).</small>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="pp-map-legend-btn" data-legend="sandbox" aria-pressed="false">
+              <span class="pp-map-legend-swatch pp-map-legend-swatch--sandbox" aria-hidden="true"></span>
+              <span class="pp-map-legend-btn__text">
+                <strong>Sandbox / QA</strong>
+                <small>Zona inferior aparte: pruebas técnicas fuera del flujo comercial de las tres fases.</small>
+              </span>
+            </button>
+          </li>
+        </ul>
+        <details class="pp-map-legend__more">
+          <summary>Más contexto (opcional)</summary>
+          <p>
+            Este mapa es un <strong>demo navegable</strong>: cada tarjeta abre HTML real del prototipo. Las fases resumen el viaje del comercio (captación → revisión interna → operación diaria). Los colores no son normativa legal; ayudan a alinear conversaciones entre negocio, producto e ingeniería.
+          </p>
+        </details>
+        <p class="pp-map-legend__hint">Pulsa de nuevo el mismo color para repetir el resaltado.</p>
+      </aside>
+      <div class="pp-map-layout__main">
+        <div class="pp-map-wrap" id="pp-map-wrap" hidden>
+          <svg class="pp-map-svg" id="pp-map-svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="pp-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.92" />
+                <stop offset="100%" style="stop-color:#4338ca;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <g id="pp-map-lines"></g>
+          </svg>
+          <div id="pp-map-fases"></div>
+          <div id="pp-map-extras" class="pp-extras" hidden></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -794,6 +1163,7 @@
 
       var catalogo = window.PP_MODULOS_POR_AREA;
       var flujo = window.PP_FLUJO_PROCESO;
+      var layout = document.getElementById('pp-map-layout');
       var fasesEl = document.getElementById('pp-map-fases');
       var wrap = document.getElementById('pp-map-wrap');
       var svg = document.getElementById('pp-map-svg');
@@ -825,6 +1195,7 @@
 
       if (!catalogo || !flujo || !Array.isArray(flujo.filas)) {
         fb.hidden = false;
+        if (layout) layout.hidden = true;
         return;
       }
 
@@ -977,6 +1348,7 @@
       });
 
       fasesEl.innerHTML = htmlFases;
+      if (layout) layout.hidden = false;
       wrap.hidden = false;
 
       nodeElements = Array.prototype.slice.call(wrap.querySelectorAll('[data-pp-step]')).sort(function (a, b) {
@@ -1088,6 +1460,70 @@
           extrasEl.hidden = false;
         }
       }
+
+      function clearLegendFlash() {
+        wrap.querySelectorAll('.pp-legend-flash').forEach(function (el) {
+          el.classList.remove('pp-legend-flash');
+        });
+      }
+
+      function pulseClass(els) {
+        els.forEach(function (el) {
+          if (!el) return;
+          el.classList.remove('pp-legend-flash');
+          void el.offsetWidth;
+          el.classList.add('pp-legend-flash');
+        });
+      }
+
+      function wireMapLegend() {
+        var legendRoot = document.getElementById('pp-map-legend');
+        if (!legendRoot) return;
+        var buttons = legendRoot.querySelectorAll('.pp-map-legend-btn');
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var kind = btn.getAttribute('data-legend') || '';
+            buttons.forEach(function (b) {
+              b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+            });
+            clearLegendFlash();
+            if (kind === 'paso') {
+              pulseClass(Array.prototype.slice.call(wrap.querySelectorAll('.pp-map-node--paso')));
+              var first = wrap.querySelector('.pp-map-node--paso');
+              if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (kind === 'portal') {
+              pulseClass(Array.prototype.slice.call(wrap.querySelectorAll('.pp-map-node--mod')));
+              var fm = wrap.querySelector('.pp-map-node--mod');
+              if (fm) fm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (kind === 'journey') {
+              pulseClass(Array.prototype.slice.call(wrap.querySelectorAll('.pp-fase-journey')));
+              var fj = wrap.querySelector('.pp-fase-journey');
+              if (fj) fj.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (kind === 'chips') {
+              pulseClass(Array.prototype.slice.call(wrap.querySelectorAll('.pp-fase-int-chip')));
+              var fc = wrap.querySelector('.pp-fase-int-chip');
+              if (fc) fc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (kind === 'lines') {
+              pulseClass(Array.prototype.slice.call(wrap.querySelectorAll('.pp-map-line')));
+            } else if (kind === 'subwrap') {
+              pulseClass(Array.prototype.slice.call(wrap.querySelectorAll('.pp-map-subwrap')));
+              var sw = wrap.querySelector('.pp-map-subwrap');
+              if (sw) sw.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (kind === 'sandbox') {
+              var ex = document.getElementById('pp-map-extras');
+              if (ex && !ex.hidden) {
+                pulseClass([ex]);
+                ex.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }
+            requestAnimationFrame(function () {
+              requestAnimationFrame(drawLines);
+            });
+          });
+        });
+      }
+
+      wireMapLegend();
     })();
   </script>
 </body>
