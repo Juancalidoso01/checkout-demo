@@ -1501,7 +1501,7 @@
         }
       }, { passive: true });
 
-      // Listen for swipe messages from iframes (like Factura)
+      // Listen for swipe messages from iframes (p. ej. Mi equipo)
       window.addEventListener('message', function(e) {
         if(e.data && e.data.type === 'iframeSwipe') {
           const dx = e.data.dx;
