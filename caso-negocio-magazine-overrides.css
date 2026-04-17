@@ -194,7 +194,52 @@ body {
 .pp-mag-table-wrap--tam-metrics {
   flex: 1;
   min-height: 0;
-  max-height: min(56vh, 480px);
+  max-height: min(40vh, 340px);
+}
+
+.pp-mag-bridge {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--line);
+}
+
+.pp-mag-bridge__kicker {
+  margin: 0 0 0.2rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand-blue-dark);
+}
+
+.pp-mag-bridge__h {
+  margin: 0 0 0.25rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.pp-mag-lead--bridge {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  margin: 0 0 0.35rem;
+}
+
+.pp-mag-table-wrap--bridge {
+  max-height: min(28vh, 220px);
+}
+
+.pp-mag-table--bridge th,
+.pp-mag-table--bridge td {
+  font-size: 0.68rem;
+}
+
+.pp-mag-table--bridge td:last-child {
+  color: var(--muted);
+  font-weight: 600;
 }
 
 /* Pág. 07: pastel + barra + tabla niveles */
@@ -382,6 +427,7 @@ body {
 .pp-mag-table__num {
   text-align: right !important;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .pp-mag-h2 {
@@ -626,6 +672,22 @@ body {
   color: rgba(241, 245, 249, 0.9);
 }
 
+.opening-index__capitulo {
+  list-style: none;
+  margin: 0.55rem 0 0.2rem;
+  padding: 0 0.1rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(199, 210, 254, 0.85);
+}
+
+.opening-index__capitulo:first-child {
+  margin-top: 0;
+}
+
 .pp-flip-zone {
   display: none;
   position: absolute;
@@ -802,8 +864,151 @@ body {
 }
 
 .pp-mag-chart--cierre {
-  min-height: 90px;
-  max-height: min(22vh, 180px);
+  min-height: 82px;
+  max-height: min(18vh, 158px);
+}
+
+.pp-mag-profit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+  padding: 0.35rem 0.15rem 0.15rem;
+  border-radius: 12px;
+  background: linear-gradient(165deg, rgba(238, 242, 255, 0.95), rgba(255, 255, 255, 0.6));
+  border: 1px solid var(--line);
+}
+
+.pp-mag-profit--visible .pp-mag-profit-node {
+  animation: pp-mag-profit-pop 0.55s ease backwards;
+}
+
+.pp-mag-profit--visible .pp-mag-profit-grid__item:nth-child(1) .pp-mag-profit-node {
+  animation-delay: 0.02s;
+}
+.pp-mag-profit--visible .pp-mag-profit-grid__item:nth-child(2) .pp-mag-profit-node {
+  animation-delay: 0.08s;
+}
+.pp-mag-profit--visible .pp-mag-profit-grid__item:nth-child(3) .pp-mag-profit-node {
+  animation-delay: 0.14s;
+}
+.pp-mag-profit--visible .pp-mag-profit-grid__item:nth-child(4) .pp-mag-profit-node {
+  animation-delay: 0.2s;
+}
+.pp-mag-profit--visible .pp-mag-profit-grid__item:nth-child(5) .pp-mag-profit-node {
+  animation-delay: 0.26s;
+}
+
+@keyframes pp-mag-profit-pop {
+  from {
+    opacity: 0.35;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pp-mag-profit--visible .pp-mag-profit-node {
+    animation: none;
+  }
+}
+
+.pp-mag-head--profit {
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.pp-mag-lead--profit {
+  font-size: 0.68rem;
+  line-height: 1.42;
+  margin: 0;
+}
+
+.pp-mag-profit-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0.15rem 0 0.05rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.4rem 0.45rem;
+}
+
+.pp-mag-profit-grid__item {
+  flex: 0 0 auto;
+}
+
+.pp-mag-profit-node {
+  position: relative;
+  width: 4.85rem;
+  height: 4.85rem;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+
+.pp-mag-profit-node:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 3px;
+}
+
+.pp-mag-profit-node:hover {
+  transform: scale(1.05);
+}
+
+.pp-mag-profit-node.is-selected {
+  transform: scale(1.07);
+  filter: drop-shadow(0 5px 14px rgba(84, 98, 230, 0.42));
+}
+
+.pp-mag-profit-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pp-mag-profit-node__core {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.2rem 0.15rem;
+  pointer-events: none;
+}
+
+.pp-mag-profit-node__year {
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pp-mag-profit-node__val {
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.48rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.12;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .pp-mag-list--tight {

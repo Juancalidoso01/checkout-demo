@@ -67,8 +67,8 @@
                 <p class="opening-summary__text" id="cn-open-body"></p>
                 <div class="opening-summary__chips" id="cn-open-chips" aria-label="Temas"></div>
                 <nav class="opening-index-wrap" aria-label="Índice del flipbook">
-                  <p class="opening-index__title">Dónde está cada cosa</p>
-                  <ol class="opening-index" id="cn-open-index"></ol>
+                  <p class="opening-index__title">Cuatro bloques — índice</p>
+                  <ul class="opening-index" id="cn-open-index"></ul>
                 </nav>
               </div>
             </div>
@@ -165,6 +165,25 @@
                   </thead>
                   <tbody id="cn-tam-metric-tbody"></tbody>
                 </table>
+              </div>
+              <div class="pp-mag-bridge" id="cn-tam-bridge-wrap">
+                <p class="pp-mag-bridge__kicker">Puente metodológico</p>
+                <h3 class="pp-mag-bridge__h" id="cn-tam-bridge-title"></h3>
+                <p class="pp-mag-lead pp-mag-lead--bridge" id="cn-tam-bridge-intro"></p>
+                <div class="pp-mag-table-wrap pp-mag-table-wrap--bridge">
+                  <table
+                    class="pp-mag-table pp-mag-table--compact pp-mag-table--bridge"
+                    aria-describedby="cn-tam-bridge-intro"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">Supuesto</th>
+                        <th scope="col">Qué fija este caso</th>
+                      </tr>
+                    </thead>
+                    <tbody id="cn-tam-bridge-tbody"></tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </article>
@@ -326,6 +345,13 @@
               <div class="pp-mag-chart pp-mag-chart--cierre">
                 <canvas id="cnChartEconomia" aria-label="Gráfica economía"></canvas>
               </div>
+              <div class="pp-mag-profit" id="cn-profit-wrap" aria-labelledby="cn-profit-h">
+                <div class="pp-mag-head pp-mag-head--sub pp-mag-head--profit">
+                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-profit-h"></h2>
+                </div>
+                <p class="pp-mag-lead pp-mag-lead--profit" id="cn-profit-intro"></p>
+                <ul class="pp-mag-profit-grid" id="cn-profit-grid"></ul>
+              </div>
               <hr class="pp-mag-divider" />
               <div class="pp-mag-subblock">
                 <p class="pp-mag-continua">Siguiente bloque</p>
@@ -476,6 +502,14 @@
       if (idxEl && D.indicePaginas && D.indicePaginas.length) {
         idxEl.innerHTML = '';
         D.indicePaginas.forEach(function (row) {
+          if (row.capitulo) {
+            var capLi = document.createElement('li');
+            capLi.className = 'opening-index__capitulo';
+            capLi.textContent = row.capitulo;
+            idxEl.appendChild(capLi);
+            return;
+          }
+          if (row.pagina == null) return;
           var li = document.createElement('li');
           var btn = document.createElement('button');
           btn.type = 'button';
@@ -626,6 +660,28 @@
             });
             mt.appendChild(tr);
           });
+        }
+        var bridgeWrap = document.getElementById('cn-tam-bridge-wrap');
+        var btb = document.getElementById('cn-tam-bridge-tbody');
+        if (bridgeWrap && btb) {
+          if (tam.puenteFilas && tam.puenteFilas.length) {
+            bridgeWrap.hidden = false;
+            set('cn-tam-bridge-title', tam.puenteTitulo || '');
+            set('cn-tam-bridge-intro', tam.puenteIntro || '');
+            btb.innerHTML = '';
+            tam.puenteFilas.forEach(function (r) {
+              var tr = document.createElement('tr');
+              var tdS = document.createElement('td');
+              tdS.textContent = r.supuesto || '';
+              var tdD = document.createElement('td');
+              tdD.textContent = r.detalle || '';
+              tr.appendChild(tdS);
+              tr.appendChild(tdD);
+              btb.appendChild(tr);
+            });
+          } else {
+            bridgeWrap.hidden = true;
+          }
         }
         var nt = document.getElementById('cn-tam-nivel-tbody');
         if (nt && tam.niveles) {
@@ -848,6 +904,186 @@
       }
       set('cn-demo-h', t.demo.titulo);
       set('cn-demo-intro', t.demo.intro);
+
+      (function initGananciaProfit() {
+        var cfg = D.gananciaAnual;
+        var grid = document.getElementById('cn-profit-grid');
+        if (!cfg || !grid) return;
+        set('cn-profit-h', cfg.titulo || '');
+        set('cn-profit-intro', cfg.intro || '');
+        var anios = cfg.anios || [];
+        if (!anios.length) return;
+        var maxM = 0;
+        anios.forEach(function (a) {
+          maxM = Math.max(maxM, Number(a.montoUsd) || 0);
+        });
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var ns = 'http://www.w3.org/2000/svg';
+        var R = 36;
+        var C = 2 * Math.PI * R;
+
+        function fmtProfitUsd(n) {
+          return '$' + Number(Math.round(n)).toLocaleString('en-US');
+        }
+
+        function animateNode(btn, arc, valEl, target, ringFrac, duration) {
+          var start = null;
+          function easeOut(t) {
+            return 1 - Math.pow(1 - t, 3);
+          }
+          function step(ts) {
+            if (!start) start = ts;
+            var raw = Math.min(1, (ts - start) / duration);
+            var e = easeOut(raw);
+            var amt = Math.round(target * e);
+            var off = C * (1 - ringFrac * e);
+            arc.setAttribute('stroke-dashoffset', String(off));
+            valEl.textContent = fmtProfitUsd(amt);
+            if (raw < 1) {
+              window.requestAnimationFrame(step);
+            } else {
+              valEl.textContent = fmtProfitUsd(target);
+              arc.setAttribute('stroke-dashoffset', String(C * (1 - ringFrac)));
+            }
+          }
+          arc.setAttribute('stroke-dashoffset', String(C));
+          valEl.textContent = fmtProfitUsd(0);
+          if (reduceMotion) {
+            arc.setAttribute('stroke-dashoffset', String(C * (1 - ringFrac)));
+            valEl.textContent = fmtProfitUsd(target);
+            return;
+          }
+          window.requestAnimationFrame(step);
+        }
+
+        grid.innerHTML = '';
+        var nodes = [];
+        anios.forEach(function (row, idx) {
+          var monto = Number(row.montoUsd) || 0;
+          var ringFrac = maxM > 0 ? monto / maxM : 0;
+          var li = document.createElement('li');
+          li.className = 'pp-mag-profit-grid__item';
+
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pp-mag-profit-node';
+          btn.setAttribute('aria-label', 'Año ' + row.n + ', ganancia ' + fmtProfitUsd(monto));
+          btn.setAttribute('aria-pressed', 'false');
+
+          var svg = document.createElementNS(ns, 'svg');
+          svg.setAttribute('viewBox', '0 0 88 88');
+          svg.setAttribute('class', 'pp-mag-profit-svg');
+          svg.setAttribute('aria-hidden', 'true');
+          var track = document.createElementNS(ns, 'circle');
+          track.setAttribute('cx', '44');
+          track.setAttribute('cy', '44');
+          track.setAttribute('r', String(R));
+          track.setAttribute('fill', 'none');
+          track.setAttribute('stroke', 'rgba(148, 163, 184, 0.45)');
+          track.setAttribute('stroke-width', '7');
+          var arc = document.createElementNS(ns, 'circle');
+          arc.setAttribute('cx', '44');
+          arc.setAttribute('cy', '44');
+          arc.setAttribute('r', String(R));
+          arc.setAttribute('fill', 'none');
+          arc.setAttribute('stroke', 'url(#cnProfitGrad-' + idx + ')');
+          arc.setAttribute('stroke-width', '7');
+          arc.setAttribute('stroke-linecap', 'round');
+          arc.setAttribute('stroke-dasharray', String(C));
+          arc.setAttribute('stroke-dashoffset', String(C));
+          arc.setAttribute('transform', 'rotate(-90 44 44)');
+          arc.setAttribute('class', 'pp-mag-profit-arc');
+          var defs = document.createElementNS(ns, 'defs');
+          var lg = document.createElementNS(ns, 'linearGradient');
+          lg.setAttribute('id', 'cnProfitGrad-' + idx);
+          lg.setAttribute('x1', '0%');
+          lg.setAttribute('y1', '0%');
+          lg.setAttribute('x2', '100%');
+          lg.setAttribute('y2', '100%');
+          var s1 = document.createElementNS(ns, 'stop');
+          s1.setAttribute('offset', '0%');
+          s1.setAttribute('stop-color', '#5462e6');
+          var s2 = document.createElementNS(ns, 'stop');
+          s2.setAttribute('offset', '100%');
+          s2.setAttribute('stop-color', '#3738ab');
+          lg.appendChild(s1);
+          lg.appendChild(s2);
+          defs.appendChild(lg);
+          svg.appendChild(defs);
+          svg.appendChild(track);
+          svg.appendChild(arc);
+
+          var core = document.createElement('span');
+          core.className = 'pp-mag-profit-node__core';
+          var yl = document.createElement('span');
+          yl.className = 'pp-mag-profit-node__year';
+          yl.textContent = 'Año ' + row.n;
+          var val = document.createElement('span');
+          val.className = 'pp-mag-profit-node__val';
+          val.textContent = reduceMotion ? fmtProfitUsd(monto) : '—';
+          core.appendChild(yl);
+          core.appendChild(val);
+
+          btn.appendChild(svg);
+          btn.appendChild(core);
+          li.appendChild(btn);
+          grid.appendChild(li);
+
+          nodes.push({ btn: btn, arc: arc, val: val, monto: monto, ringFrac: ringFrac });
+
+          btn.addEventListener('click', function () {
+            nodes.forEach(function (x) {
+              x.btn.classList.remove('is-selected');
+              x.btn.setAttribute('aria-pressed', 'false');
+            });
+            btn.classList.add('is-selected');
+            btn.setAttribute('aria-pressed', 'true');
+            animateNode(btn, arc, val, monto, ringFrac, 900);
+          });
+        });
+
+        var wrap = document.getElementById('cn-profit-wrap');
+        var played = false;
+        function runStagger() {
+          if (played) return;
+          played = true;
+          nodes.forEach(function (x, i) {
+            window.setTimeout(
+              function () {
+                animateNode(x.btn, x.arc, x.val, x.monto, x.ringFrac, 850);
+              },
+              reduceMotion ? 0 : i * 100
+            );
+          });
+        }
+
+        if (!wrap || !window.IntersectionObserver) {
+          if (wrap) wrap.classList.add('pp-mag-profit--visible');
+          runStagger();
+          return;
+        }
+
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (en) {
+              if (en.isIntersecting && en.intersectionRatio >= 0.15) {
+                wrap.classList.add('pp-mag-profit--visible');
+                runStagger();
+                io.disconnect();
+              }
+            });
+          },
+          { threshold: [0, 0.15, 0.35] }
+        );
+        io.observe(wrap);
+
+        window.setTimeout(function () {
+          if (!played && wrap) {
+            wrap.classList.add('pp-mag-profit--visible');
+            runStagger();
+          }
+        }, 2600);
+      })();
     });
 
     window.addEventListener('load', function () {
