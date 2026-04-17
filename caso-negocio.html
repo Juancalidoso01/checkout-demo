@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <a class="pp-skip-flipbook" href="#magazineBook">Saltar al flipbook</a>
   <header class="magazine-chrome" aria-label="Cabecera">
     <div class="magazine-chrome__row">
       <div class="magazine-chrome__brand">
@@ -22,7 +21,7 @@
       </div>
       <div class="magazine-chrome__meta">
         <a class="magazine-chrome__map-link" href="index.html">← Mapa del proceso</a>
-        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 16</span>
+        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 17</span>
       </div>
     </div>
   </header>
@@ -32,17 +31,15 @@
       <div class="magazine-book" id="magazineBook" role="region" aria-roledescription="flipbook" aria-label="Caso de negocio Punto Pago">
         <div class="magazine-track" id="magazineTrack">
           <article class="magazine-page magazine-page--cover magazine-page--opening-left" data-page="1" id="p1" aria-label="Portada">
-            <div class="magazine-page__inner magazine-page__inner--cover">
-              <div class="cover__masthead">
+            <div class="magazine-page__inner magazine-page__inner--cover cover-visual">
+              <div class="cover-visual__top">
                 <span class="cover__issue" id="cn-cover-eyebrow"></span>
-                <span class="cover__page-no">01</span>
+                <span class="cover__page-no" aria-hidden="true">01</span>
               </div>
-              <div class="cover__hero">
-                <p class="cover__eyebrow" id="cn-cover-label"></p>
-                <h1 class="cover__title" id="cn-cover-title"></h1>
-                <p class="cover__subtitle" id="cn-cover-sub"></p>
+              <div class="cover-visual__bottom">
+                <h1 class="cover__title cover-visual__title" id="cn-cover-title"></h1>
+                <p class="cover__subtitle cover-visual__subtitle" id="cn-cover-sub"></p>
               </div>
-              <div class="cover__feature-list" id="cn-cover-lines" aria-label="Temas de la sesión"></div>
             </div>
           </article>
 
@@ -53,18 +50,28 @@
                 <h2 class="opening-summary__title" id="cn-open-title"></h2>
                 <p class="opening-summary__text" id="cn-open-body"></p>
                 <div class="opening-summary__chips" id="cn-open-chips" aria-label="Temas" hidden></div>
-                <nav class="opening-index-wrap" aria-label="Ir al contenido">
-                  <p class="opening-index__title" id="cn-open-index-title"></p>
-                  <ul class="opening-index" id="cn-open-index"></ul>
-                </nav>
               </div>
             </div>
           </article>
 
-          <article class="magazine-page" data-page="3" id="p3" aria-label="Panamá en contexto">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="3" id="p3" aria-label="Índice del caso">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--indice">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">03</span>
+                <h2 class="pp-mag-h2" id="cn-indice-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-indice-intro"></p>
+              <nav class="pp-mag-indice__nav" aria-label="Índice del flipbook">
+                <p class="pp-mag-indice__nav-title" id="cn-indice-nav-title"></p>
+                <ul class="opening-index pp-mag-indice__list" id="cn-indice-list"></ul>
+              </nav>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="4" id="p4" aria-label="Panamá en contexto">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">04</span>
                 <h2 class="pp-mag-h2" id="cn-pa-h"></h2>
               </div>
               <p class="pp-mag-lead pp-mag-lead--accent" id="cn-pa-sub"></p>
@@ -77,10 +84,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="4" id="p4" aria-label="Territorio y reparto ilustrativo de red">
+          <article class="magazine-page" data-page="5" id="p5" aria-label="Territorio y reparto ilustrativo de red">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--dist">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">04</span>
+                <span class="pp-mag-kicker">05</span>
                 <h2 class="pp-mag-h2" id="cn-dist-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-dist-intro"></p>
@@ -101,10 +108,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="5" id="p5" aria-label="Escenarios comparativos">
+          <article class="magazine-page" data-page="6" id="p6" aria-label="Escenarios comparativos">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--escenarios">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">05</span>
+                <span class="pp-mag-kicker">06</span>
                 <h2 class="pp-mag-h2" id="cn-esc-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-esc-intro"></p>
@@ -135,10 +142,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="6" id="p6" aria-label="Comparación mercado Colombia Panamá">
+          <article class="magazine-page" data-page="7" id="p7" aria-label="Comparación mercado Colombia Panamá">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--tam-a">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">06</span>
+                <span class="pp-mag-kicker">07</span>
                 <h2 class="pp-mag-h2" id="cn-tam-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-tam-intro"></p>
@@ -177,10 +184,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="7" id="p7" aria-label="TAM SAM SOM y gráfica">
+          <article class="magazine-page" data-page="8" id="p8" aria-label="TAM SAM SOM y gráfica">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--tam-b">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">07</span>
+                <span class="pp-mag-kicker">08</span>
                 <h2 class="pp-mag-h2" id="cn-tam2-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-tam2-intro"></p>
@@ -203,10 +210,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="8" id="p8" aria-label="Recursos marketing meses 1 a 6">
+          <article class="magazine-page" data-page="9" id="p9" aria-label="Recursos marketing meses 1 a 6">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--recursos">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">08</span>
+                <span class="pp-mag-kicker">09</span>
                 <h2 class="pp-mag-h2" id="cn-rec1-h"></h2>
               </div>
               <p class="pp-mag-lead pp-mag-lead--tight" id="cn-rec1-intro"></p>
@@ -219,10 +226,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="9" id="p9" aria-label="Recursos marketing meses 7 a 12">
+          <article class="magazine-page" data-page="10" id="p10" aria-label="Recursos marketing meses 7 a 12">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--recursos">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">09</span>
+                <span class="pp-mag-kicker">10</span>
                 <h2 class="pp-mag-h2" id="cn-rec2-h"></h2>
               </div>
               <p class="pp-mag-lead pp-mag-lead--tight" id="cn-rec2-intro"></p>
@@ -235,10 +242,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="10" id="p10" aria-label="Guía negocio hoy">
+          <article class="magazine-page" data-page="11" id="p11" aria-label="Guía negocio hoy">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">10</span>
+                <span class="pp-mag-kicker">11</span>
                 <h2 class="pp-mag-h2" id="cn-qa10-title"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-qa10-intro"></p>
@@ -246,10 +253,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="11" id="p11" aria-label="Guía herramientas y procesos">
+          <article class="magazine-page" data-page="12" id="p12" aria-label="Guía herramientas y procesos">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">11</span>
+                <span class="pp-mag-kicker">12</span>
                 <h2 class="pp-mag-h2" id="cn-qa11-title"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-qa11-intro"></p>
@@ -257,10 +264,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="12" id="p12" aria-label="Guía mercado y problema">
+          <article class="magazine-page" data-page="13" id="p13" aria-label="Guía mercado y problema">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">12</span>
+                <span class="pp-mag-kicker">13</span>
                 <h2 class="pp-mag-h2" id="cn-qa12-title"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-qa12-intro"></p>
@@ -268,10 +275,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="13" id="p13" aria-label="Guía propuesta y ejecución">
+          <article class="magazine-page" data-page="14" id="p14" aria-label="Guía propuesta y ejecución">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">13</span>
+                <span class="pp-mag-kicker">14</span>
                 <h2 class="pp-mag-h2" id="cn-qa13-title"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-qa13-intro"></p>
@@ -279,10 +286,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="14" id="p14" aria-label="Segmento">
+          <article class="magazine-page" data-page="15" id="p15" aria-label="Segmento">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">14</span>
+                <span class="pp-mag-kicker">15</span>
                 <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-seg-sub"></p>
@@ -294,10 +301,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="15" id="p15" aria-label="Mercado y problema">
+          <article class="magazine-page" data-page="16" id="p16" aria-label="Mercado y problema">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">15</span>
+                <span class="pp-mag-kicker">16</span>
                 <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-mer-intro"></p>
@@ -316,10 +323,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="16" id="p16" aria-label="Solución economía riesgos demo">
+          <article class="magazine-page" data-page="17" id="p17" aria-label="Solución economía riesgos demo">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--cierre">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">16</span>
+                <span class="pp-mag-kicker">17</span>
                 <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-sol-intro"></p>
@@ -452,30 +459,13 @@
       var cov = D.cover || {};
       document.title = (cov.titulo || t.tituloPagina || 'Caso de negocio') + ' — Punto Pago';
       set('cn-cover-eyebrow', cov.eyebrow || '');
-      var heroLab = document.getElementById('cn-cover-label');
-      if (heroLab) {
-        var lab = cov.etiquetaHero != null ? String(cov.etiquetaHero).trim() : '';
-        heroLab.textContent = lab;
-        heroLab.hidden = !lab;
-      }
       set('cn-cover-title', cov.titulo || t.tituloPagina);
       set('cn-cover-sub', cov.subtitulo || (t.segmento && t.segmento.subtitulo) || '');
-
-      var linesEl = document.getElementById('cn-cover-lines');
-      if (linesEl && cov.lineas) {
-        linesEl.innerHTML = '';
-        cov.lineas.forEach(function (line) {
-          var s = document.createElement('span');
-          s.textContent = line;
-          linesEl.appendChild(s);
-        });
-      }
 
       var ap = D.apertura || {};
       set('cn-open-eyebrow', ap.eyebrow || 'Sesión');
       set('cn-open-title', ap.titulo || '');
       set('cn-open-body', ap.cuerpo || '');
-      set('cn-open-index-title', ap.indiceTitulo || 'Ir a');
 
       var chips = document.getElementById('cn-open-chips');
       if (chips) {
@@ -493,16 +483,20 @@
         }
       }
 
-      var indexRows = ap.atajos && ap.atajos.length ? ap.atajos : D.indicePaginas || [];
-      var idxEl = document.getElementById('cn-open-index');
-      if (idxEl && indexRows.length) {
-        idxEl.innerHTML = '';
-        indexRows.forEach(function (row) {
+      var idf = D.indiceFlipbook || {};
+      set('cn-indice-h', idf.titulo || 'Índice');
+      set('cn-indice-intro', idf.intro || '');
+      set('cn-indice-nav-title', idf.navTitulo || 'Contenido');
+
+      var idxFull = document.getElementById('cn-indice-list');
+      if (idxFull && D.indicePaginas && D.indicePaginas.length) {
+        idxFull.innerHTML = '';
+        D.indicePaginas.forEach(function (row) {
           if (row.capitulo) {
             var capLi = document.createElement('li');
             capLi.className = 'opening-index__capitulo';
             capLi.textContent = row.capitulo;
-            idxEl.appendChild(capLi);
+            idxFull.appendChild(capLi);
             return;
           }
           if (row.pagina == null) return;
@@ -521,13 +515,13 @@
           btn.appendChild(no);
           btn.appendChild(tx);
           li.appendChild(btn);
-          idxEl.appendChild(li);
+          idxFull.appendChild(li);
         });
-        idxEl.addEventListener('click', function (ev) {
-          var t = ev.target.closest('[data-caso-page]');
-          if (!t || typeof window.PPMagazineGoToPage !== 'function') return;
-          var p = parseInt(t.getAttribute('data-caso-page'), 10);
-          window.PPMagazineGoToPage(p);
+        idxFull.addEventListener('click', function (ev) {
+          var tgt = ev.target.closest('[data-caso-page]');
+          if (!tgt || typeof window.PPMagazineGoToPage !== 'function') return;
+          var pNum = parseInt(tgt.getAttribute('data-caso-page'), 10);
+          window.PPMagazineGoToPage(pNum);
         });
       }
 

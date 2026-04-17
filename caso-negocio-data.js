@@ -15,28 +15,46 @@
 
     cover: {
       eyebrow: 'Punto Pago',
-      etiquetaHero: '',
       titulo: 'Agentes en Panamá',
       subtitulo: 'Mercado, inversión digital y retorno a accionistas.',
-      lineas: ['Tamaño del mercado (referente Colombia)', 'Cierre con economía y ganancia'],
     },
 
     apertura: {
       eyebrow: 'Sesión',
       titulo: 'Lo que vemos hoy',
       cuerpo:
-        'Un recorrido breve por el mercado en Panamá, el plan comercial digital y las cifras de retorno. El detalle está en las páginas siguientes.',
-      indiceTitulo: 'Saltar a',
-      atajos: [
-        { pagina: 3, texto: 'País y escenarios' },
-        { pagina: 6, texto: 'Mercado y supuestos' },
-        { pagina: 8, texto: 'Presupuesto digital' },
-        { pagina: 16, texto: 'Economía y ganancia' },
-      ],
+        'Contexto breve en esta página. El índice de todo el caso está en la página siguiente (03).',
     },
 
+    indiceFlipbook: {
+      titulo: 'Índice',
+      intro: 'Elige una sección para saltar a esa página.',
+      navTitulo: 'Contenido',
+    },
+
+    indicePaginas: [
+      { capitulo: 'I · Panamá y escenarios (4–6)' },
+      { pagina: 4, texto: 'Demografía y urbano / rural' },
+      { pagina: 5, texto: 'Territorio: peso poblacional y puntos ilustrativos' },
+      { pagina: 6, texto: 'Escenarios con 2 500 puntos' },
+      { capitulo: 'II · Tamaño del mercado (7–8)' },
+      { pagina: 7, texto: 'Colombia vs Panamá + supuestos del ajuste' },
+      { pagina: 8, texto: 'TAM / SAM / SOM y visual' },
+      { capitulo: 'III · Esfuerzo comercial (9–10)' },
+      { pagina: 9, texto: 'Presupuesto digital (M1–M6)' },
+      { pagina: 10, texto: 'Presupuesto digital (M7–M12) + red' },
+      { capitulo: 'IV · Decisión y retorno (11–17)' },
+      { pagina: 11, texto: 'Lo esencial para la junta' },
+      { pagina: 12, texto: 'Referente Colombia → Panamá (lectura corta)' },
+      { pagina: 13, texto: 'Adquisición y esfuerzo digital' },
+      { pagina: 14, texto: 'Próxima versión (datos operativos)' },
+      { pagina: 15, texto: 'Segmento (resumen)' },
+      { pagina: 16, texto: 'Mercado y problema' },
+      { pagina: 17, texto: 'Solución, economía, ganancia y demo' },
+    ],
+
     /**
-     * Gastos y esfuerzos digitales (plan anual): dos tablas en el flipbook (08–09).
+     * Gastos y esfuerzos digitales (plan anual): dos tablas en el flipbook (09–10).
      * Valores mensuales en US$ salvo filas de puntos (enteros) y CAC (US$ por punto nuevo).
      */
     recursosMarketing: {
@@ -105,7 +123,7 @@
     },
 
     /**
-     * Bloques cortos para junta (pp. 10–13): pocos bullets, sin duplicar tablas de 06–07.
+     * Bloques cortos para junta (pp. 11–14): pocos bullets, sin duplicar tablas de 07–08.
      * etiqueta: pendiente | referencia | sintesis (misma UI que antes).
      */
     guiasPreguntas: [
@@ -118,13 +136,13 @@
             pregunta: '¿Cuál es la tesis en una frase?',
             etiqueta: 'referencia',
             respuesta:
-              'Dimensionar Panamá con un referente maduro en Colombia, explicitar supuestos (p. 06), cuantificar TAM/SAM/SOM (p. 07) y cerrar con economía y ganancia para accionistas (p. 16).',
+              'Dimensionar Panamá con un referente maduro en Colombia, explicitar supuestos (p. 07), cuantificar TAM/SAM/SOM (p. 08) y cerrar con economía y ganancia para accionistas (p. 17).',
           },
           {
             pregunta: '¿Dónde está cada tipo de cifra?',
             etiqueta: 'referencia',
             respuesta:
-              'País: p. 03. Territorio (peso poblacional y reparto ilustrativo de la red de ejemplo): p. 04. Escenarios: p. 05. Comparación y supuestos: p. 06. TAM/SAM/SOM: p. 07. Presupuesto digital: p. 08–09.',
+              'Índice: p. 03. País: p. 04. Territorio: p. 05. Escenarios: p. 06. Comparación y supuestos: p. 07. TAM/SAM/SOM: p. 08. Presupuesto digital: p. 09–10.',
           },
           {
             pregunta: '¿Qué no está todavía en el libro?',
@@ -149,7 +167,7 @@
             pregunta: '¿Qué cambia al pasar a Panamá?',
             etiqueta: 'referencia',
             respuesta:
-              'Población, ticket, número de corresponsales y competencia. Los tres supuestos explícitos del ajuste están en la tabla bajo la comparación (p. 06).',
+              'Población, ticket, número de corresponsales y competencia. Los tres supuestos explícitos del ajuste están en la tabla bajo la comparación (p. 07).',
           },
         ],
       },
@@ -162,19 +180,19 @@
             pregunta: '¿Con qué red trabajamos en los escenarios?',
             etiqueta: 'referencia',
             respuesta:
-              '2 500 puntos como ejemplo de red; el rango de corresponsales en Panamá está en la tabla de mercado (p. 06–07).',
+              '2 500 puntos como ejemplo de red; el rango de corresponsales en Panamá está en la tabla de mercado (p. 07–08).',
           },
           {
             pregunta: '¿Dónde está el plan de gasto digital?',
             etiqueta: 'referencia',
             respuesta:
-              'Presupuesto mensual por canal, puntos nuevos y CAC de referencia del plan: p. 08–09.',
+              'Presupuesto mensual por canal, puntos nuevos y CAC de referencia del plan: p. 09–10.',
           },
           {
             pregunta: '¿Cómo se explica la ganancia a accionistas?',
             etiqueta: 'referencia',
             respuesta:
-              'Proyección de ganancia año tras año e ingreso ilustrativo del canal: p. 16 (scroll si hace falta).',
+              'Proyección de ganancia año tras año e ingreso ilustrativo del canal: p. 17 (scroll si hace falta).',
           },
         ],
       },
@@ -233,7 +251,7 @@
       'Ocho cabeceras con más población (referencia 2023). La última columna pregunta: si la red de ejemplo fuera de 2 500 puntos y se repartieran en proporción a esta muestra, ¿cuántos puntos caerían en cada distrito? Es un ejercicio visual para junta, no el plan comercial.',
 
     distritosNota:
-      'Las cuotas reales las fijan comercial, regulación y viabilidad por zona. Aquí solo se relaciona población relativa con el mismo orden de magnitud de red que usamos en escenarios (p. 05).',
+      'Las cuotas reales las fijan comercial, regulación y viabilidad por zona. Aquí solo se relaciona población relativa con el mismo orden de magnitud de red que usamos en escenarios (p. 06).',
 
     /** Escenarios de negocio — 2 500 puntos, ingreso bruto 1,2 % */
     escenarios: {
@@ -280,7 +298,7 @@
     },
 
     /**
-     * Mercado en dos páginas: 06 = comparación; 07 = TAM/SAM/SOM + gráfica + tabla niveles.
+     * Mercado en dos páginas: 07 = comparación; 08 = TAM/SAM/SOM + gráfica + tabla niveles.
      */
     tamSam: {
       titulo: 'Colombia y Panamá en la misma idea',
@@ -413,7 +431,7 @@
       mercado: {
         titulo: 'Mercado y oportunidad',
         intro:
-          'Gráfica de ejemplo: el canal físico sigue relevante junto al digital; el tamaño en dinero ya está en 06–07.',
+          'Gráfica de ejemplo: el canal físico sigue relevante junto al digital; el tamaño en dinero ya está en 07–08.',
       },
 
       problema: {
@@ -436,7 +454,7 @@
       economia: {
         titulo: 'Lógica económica (resumen)',
         intro:
-          'Mix de ingresos de ejemplo; contrastar con p. 05 y 06–07. Debajo: ganancia año tras año (ejemplo) para accionistas.',
+          'Mix de ingresos de ejemplo; contrastar con p. 06 y 07–08. Debajo: ganancia año tras año (ejemplo) para accionistas.',
       },
 
       riesgos: {
@@ -456,7 +474,7 @@
     },
 
     /**
-     * Proyección ilustrativa — página 16 (cierre), bloque interactivo bajo la gráfica de economía.
+     * Proyección ilustrativa — página 17 (cierre), bloque interactivo bajo la gráfica de economía.
      */
     gananciaAnual: {
       titulo: 'Ganancia año tras año',

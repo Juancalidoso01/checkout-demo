@@ -499,48 +499,118 @@ body {
  * Foto de agente: una sola vez en la apertura (p. 2), centrada, sin estirar (contain).
  * La portada p. 1 solo usa gradiente — no repetimos la imagen en el spread.
  */
+/* Portada (p. 1): foto a pantalla con texto solo en franja inferior */
 .magazine-page--cover.magazine-page--opening-left {
-  background-image: none !important;
-  background-size: auto !important;
-  background-position: center !important;
-  background:
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 36%),
-    linear-gradient(160deg, #818cf8 0%, #5462e6 40%, #312e81 100%) !important;
-}
-
-.magazine-page--cover.magazine-page--opening-right {
-  background-color: #0f172a;
+  background-color: #0b1020;
   background-image:
-    linear-gradient(180deg, rgba(49, 46, 129, 0.42), rgba(15, 23, 42, 0.68)),
+    linear-gradient(180deg, rgba(6, 10, 24, 0.15) 0%, rgba(6, 10, 24, 0.2) 35%, rgba(6, 10, 24, 0.88) 100%),
     url("assets/magazine/portada-flipbook.png") !important;
-  /* Velo a escala normal; foto con relación de aspecto intacta */
-  background-size: 100% 100%, contain !important;
-  background-position: center, center !important;
+  background-size: cover, cover !important;
+  background-position: center top, center top !important;
   background-repeat: no-repeat, no-repeat !important;
 }
 
-.magazine-page--cover.magazine-page--opening-right::before {
-  opacity: 0.5;
+.magazine-page--cover.magazine-page--opening-right {
+  background-color: #0c1222;
+  background-image: linear-gradient(165deg, #1e1b4b 0%, #0f172a 55%, #020617 100%) !important;
+}
+
+.magazine-page__inner--cover.cover-visual {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 1.05rem 1.15rem;
+  box-sizing: border-box;
+}
+
+.cover-visual__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.cover-visual__bottom {
+  max-width: min(20rem, 92%);
+  padding-top: 0.5rem;
+}
+
+.cover-visual__title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.35rem, 4.2vw, 2.15rem) !important;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #fff !important;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+}
+
+.cover-visual__subtitle {
+  margin: 0;
+  font-size: clamp(0.78rem, 2vw, 0.9rem) !important;
+  line-height: 1.35;
+  color: rgba(248, 250, 252, 0.92) !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+  max-width: 18rem;
+}
+
+.pp-mag-page--indice .pp-mag-lead {
+  font-size: 0.82rem;
+  margin-bottom: 0.5rem;
+}
+
+.pp-mag-indice__nav {
+  margin-top: 0.25rem;
+}
+
+.pp-mag-indice__nav-title {
+  margin: 0 0 0.45rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pp-mag-page--indice .opening-index__btn {
+  color: var(--ink);
+  background: var(--paper-alt);
+  border-color: var(--line);
+}
+
+.pp-mag-page--indice .opening-index__btn:hover {
+  background: #fff;
+  border-color: rgba(84, 98, 230, 0.35);
+}
+
+.pp-mag-page--indice .opening-index__no {
+  color: var(--brand-blue-dark);
+}
+
+.pp-mag-page--indice .opening-index__txt {
+  color: var(--ink);
+}
+
+.pp-mag-page--indice .opening-index__capitulo {
+  color: var(--brand-blue-dark);
+  border-left: 3px solid var(--brand-blue);
+  padding-left: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.pp-mag-page--indice .opening-index__capitulo:first-child {
+  margin-top: 0.15rem;
+}
+
+.pp-mag-indice__list {
+  max-height: min(58vh, 520px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 0.15rem;
 }
 
 /* —— Flipbook UX Punto Pago —— */
-
-.pp-skip-flipbook {
-  position: fixed;
-  top: calc(var(--chrome-h) + 6px);
-  left: 10px;
-  z-index: 60;
-  padding: 0.35rem 0.65rem;
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-decoration: none;
-  color: #fff !important;
-  background: rgba(84, 98, 230, 0.95);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  transform: translateY(-120%);
-  transition: transform 0.2s ease;
-}
 
 /* Clic en el libro ya no hace zoom; el cursor zoom-in confundía con la navegación */
 .magazine-book {
@@ -549,12 +619,6 @@ body {
 
 .magazine-book.is-zoomed {
   cursor: pointer !important;
-}
-
-.pp-skip-flipbook:focus {
-  transform: translateY(0);
-  outline: 3px solid rgba(255, 255, 255, 0.6);
-  outline-offset: 2px;
 }
 
 @media (min-width: 721px) {
