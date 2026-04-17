@@ -21,7 +21,7 @@
   var total = pages.length;
   var index = 0;
   var turnTimer = null;
-  var soundEnabled = true;
+  var soundEnabled = false;
   /** Punto Pago: vacío = sin logos en esquina (evita marca de otro proyecto). */
   var logoUrl = "";
   var zoomLevel = 1;
@@ -256,6 +256,12 @@
     if (btnNext) btnNext.disabled = index >= maxIndex();
     updateDots();
     updateZoomUi();
+
+    try {
+      window.dispatchEvent(
+        new CustomEvent("pp-magazine-layout", { detail: { index: index, total: total } })
+      );
+    } catch (e) {}
   }
 
   function goTo(nextIndex) {

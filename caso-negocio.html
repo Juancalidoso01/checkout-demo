@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+  <a class="pp-skip-flipbook" href="#magazineBook">Saltar al flipbook</a>
   <header class="magazine-chrome" aria-label="Cabecera">
     <div class="magazine-chrome__row">
       <div class="magazine-chrome__brand">
@@ -51,7 +52,7 @@
               <div class="cover__footer">
                 <div class="cover__hint">
                   <span class="cover__hint-icon" aria-hidden="true">→</span>
-                  Flechas, botones o deslizar para pasar página
+                  Flechas, botones o deslizar; en pantallas muy anchas hay zonas táctiles en los bordes
                 </div>
                 <div class="cover__contact">Demo · uso interno</div>
               </div>
@@ -95,9 +96,12 @@
               <div class="pp-mag-chart pp-mag-chart--short">
                 <canvas id="cnChartMercado" aria-label="Gráfica mercado"></canvas>
               </div>
-              <div class="pp-mag-head" style="margin-top: 0.5rem; border: 0; padding: 0">
-                <span class="pp-mag-kicker" style="font-size: 1rem">05</span>
-                <h2 class="pp-mag-h2" id="cn-prob-h"></h2>
+              <hr class="pp-mag-divider" />
+              <div class="pp-mag-subblock">
+                <p class="pp-mag-continua">Siguiente bloque</p>
+                <div class="pp-mag-head pp-mag-head--sub">
+                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-prob-h"></h2>
+                </div>
               </div>
               <p class="pp-mag-lead" id="cn-prob-intro"></p>
               <ul class="pp-mag-list" id="cn-prob-list"></ul>
@@ -107,13 +111,16 @@
           <article class="magazine-page" data-page="5" id="p5" aria-label="Solución y economía">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">06</span>
+                <span class="pp-mag-kicker">05</span>
                 <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-sol-intro"></p>
-              <div class="pp-mag-head" style="margin-top: 0.75rem; border: 0; padding: 0">
-                <span class="pp-mag-kicker" style="font-size: 1rem">07</span>
-                <h2 class="pp-mag-h2" id="cn-eco-h"></h2>
+              <hr class="pp-mag-divider" />
+              <div class="pp-mag-subblock">
+                <p class="pp-mag-continua">Siguiente bloque</p>
+                <div class="pp-mag-head pp-mag-head--sub">
+                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-eco-h"></h2>
+                </div>
               </div>
               <p class="pp-mag-lead" id="cn-eco-intro"></p>
               <div class="pp-mag-chart">
@@ -125,13 +132,16 @@
           <article class="magazine-page" data-page="6" id="p6" aria-label="Riesgos y demo">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">08</span>
+                <span class="pp-mag-kicker">06</span>
                 <h2 class="pp-mag-h2" id="cn-ries-h"></h2>
               </div>
               <ul class="pp-mag-list" id="cn-ries-list"></ul>
-              <div class="pp-mag-head" style="margin-top: 0.75rem; border: 0; padding: 0">
-                <span class="pp-mag-kicker" style="font-size: 1rem">09</span>
-                <h2 class="pp-mag-h2" id="cn-demo-h"></h2>
+              <hr class="pp-mag-divider" />
+              <div class="pp-mag-subblock">
+                <p class="pp-mag-continua">Siguiente bloque</p>
+                <div class="pp-mag-head pp-mag-head--sub">
+                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-demo-h"></h2>
+                </div>
               </div>
               <p class="pp-mag-lead" id="cn-demo-intro"></p>
               <div class="pp-mag-actions">
@@ -144,6 +154,18 @@
         </div>
       </div>
     </section>
+    <button
+      type="button"
+      class="pp-flip-zone pp-flip-zone--prev"
+      id="ppFlipPrev"
+      aria-label="Página anterior (zona táctil)"
+    ></button>
+    <button
+      type="button"
+      class="pp-flip-zone pp-flip-zone--next"
+      id="ppFlipNext"
+      aria-label="Página siguiente (zona táctil)"
+    ></button>
   </main>
 
   <nav class="magazine-controls" aria-label="Navegación de páginas">
@@ -162,7 +184,7 @@
         <span aria-hidden="true">+</span>
       </button>
     </div>
-    <button type="button" class="magazine-btn magazine-btn--sound is-on" id="btnSound" aria-pressed="true" aria-label="Desactivar sonido de página">
+    <button type="button" class="magazine-btn magazine-btn--sound" id="btnSound" aria-pressed="false" aria-label="Activar sonido de página">
       <span class="magazine-btn__label">SFX</span>
     </button>
     <button type="button" class="magazine-btn magazine-btn--next" id="btnNext" aria-label="Página siguiente">
@@ -184,6 +206,21 @@
     } catch (e) {}
 
     document.addEventListener('DOMContentLoaded', function () {
+      var prevBtn = document.getElementById('btnPrev');
+      var nextBtn = document.getElementById('btnNext');
+      var zPrev = document.getElementById('ppFlipPrev');
+      var zNext = document.getElementById('ppFlipNext');
+      if (zPrev && prevBtn) {
+        zPrev.addEventListener('click', function () {
+          prevBtn.click();
+        });
+      }
+      if (zNext && nextBtn) {
+        zNext.addEventListener('click', function () {
+          nextBtn.click();
+        });
+      }
+
       var D = window.PP_CASO_NEGOCIO;
       if (!D || !D.texto) return;
 
@@ -290,6 +327,18 @@
       window.setTimeout(function () {
         initCasoCharts();
       }, 500);
+    });
+
+    window.addEventListener('pp-magazine-layout', function () {
+      window.requestAnimationFrame(function () {
+        if (typeof Chart === 'undefined') return;
+        ['cnChartSegCanal', 'cnChartMercado', 'cnChartEconomia'].forEach(function (id) {
+          var canvas = document.getElementById(id);
+          if (!canvas) return;
+          var ch = Chart.getChart(canvas);
+          if (ch) ch.resize();
+        });
+      });
     });
 
     function initCasoCharts() {
