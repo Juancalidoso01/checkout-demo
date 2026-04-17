@@ -15,41 +15,43 @@
 
     cover: {
       eyebrow: 'Revista digital · Punto Pago',
-      lineas: ['14 páginas', 'Datos 03–06 · Guía 07–10', 'Cierre 11–14'],
+      lineas: ['16 páginas', 'Datos 03–07 · Guía 08–11', 'Cierre 12–16'],
     },
 
     /** Índice en la apertura (p. 2): enlaces saltan a la página indicada */
     indicePaginas: [
       { pagina: 3, texto: 'Panamá: demografía, urbano/rural y cifras' },
       { pagina: 4, texto: 'Tabla población por distrito (2023)' },
-      { pagina: 5, texto: 'Escenarios: gráficas + tabla (TX, ticket, volumen)' },
-      { pagina: 6, texto: 'Tamaño del mercado: comparación y pasteles TAM / SAM / SOM' },
-      { pagina: 7, texto: 'Guía: negocio hoy y volumen por agente (referencias)' },
-      { pagina: 8, texto: 'Guía: costes, herramientas y procesos hoy' },
-      { pagina: 9, texto: 'Guía: oportunidad Panamá, mercado y problema' },
-      { pagina: 10, texto: 'Guía: red objetivo, pagos y propuesta' },
-      { pagina: 11, texto: 'Segmento y razón comercial' },
-      { pagina: 12, texto: 'Mercado y problema' },
-      { pagina: 13, texto: 'Solución y economía' },
-      { pagina: 14, texto: 'Riesgos y enlaces al demo' },
+      { pagina: 5, texto: 'Escenarios: gráficas y tabla' },
+      { pagina: 6, texto: 'Mercado: Colombia vs Panamá (tabla)' },
+      { pagina: 7, texto: 'Mercado: TAM / SAM / SOM, gráfica y tabla' },
+      { pagina: 8, texto: 'Guía: negocio hoy y volumen por agente' },
+      { pagina: 9, texto: 'Guía: costes, herramientas y procesos' },
+      { pagina: 10, texto: 'Guía: oportunidad, tamaño y problema' },
+      { pagina: 11, texto: 'Guía: red, pagos y propuesta' },
+      { pagina: 12, texto: 'Segmento y razón comercial' },
+      { pagina: 13, texto: 'Mercado y problema' },
+      { pagina: 14, texto: 'Solución y economía' },
+      { pagina: 15, texto: 'Riesgos y dependencias' },
+      { pagina: 16, texto: 'Demo y enlaces' },
     ],
 
     apertura: {
       titulo: 'Resumen ejecutivo',
       cuerpo:
-        'Primero situamos el país (demografía y cabeceras), escenarios y TAM/SAM. Luego, páginas 07–10: guía de preguntas frecuentes del caso — con respuestas donde ya hay cifras del modelo de referencia y recuadros “pendiente” donde falta información del modelo de agentes actual (la completarás después). Cierra el hilo comercial y el demo en 11–14.',
+        'País y cabeceras (03–04), escenarios (05), mercado en dos páginas (06–07). Guía de preguntas (08–11) y cierre 12–16 (riesgos y demo en páginas separadas).',
       chips: [
         'Contexto Panamá',
         'Escenarios de TX',
         'TAM / SAM / SOM',
-        'Guía preguntas 07–10',
+        'Guía preguntas 08–11',
         'Segmento y mercado',
         'Demo',
       ],
     },
 
     /**
-     * Preguntas guía (pp. 07–10): respuestas con la información ya incorporada al caso.
+     * Preguntas guía (pp. 08–11): respuestas con la información ya incorporada al caso.
      * etiqueta: pendiente = espera datos del modelo operativo actual; referencia = tablas/escenarios; sintesis = redacción del caso.
      */
     guiasPreguntas: [
@@ -130,7 +132,7 @@
             pregunta: '¿Cuál es el problema que queremos resolver?',
             etiqueta: 'sintesis',
             respuesta:
-              'Hoy el dolor es que todo está repartido en muchas herramientas, cuesta caro y lento meter comercios nuevos, hay riesgo operativo y casi nadie ve de un solo vistazo qué le pasó al cliente y qué le pasó al agente. Más adelante en esta misma revista el bloque “Problema” lo dice en la misma línea, y el mapa del demo muestra el camino único que queremos.',
+              'Hoy el dolor es que todo está repartido en muchas herramientas, cuesta caro y lento meter comercios nuevos, hay riesgo operativo y casi nadie ve de un solo vistazo qué le pasó al cliente y qué le pasó al agente. El bloque “Problema” (página 13) lo dice en la misma línea, y el mapa del demo muestra el camino único que queremos.',
           },
           {
             pregunta: '¿Queremos incrementar transacciones en zonas donde no podemos llevar kioscos?',
@@ -143,7 +145,7 @@
       {
         titulo: 'Red objetivo, economía del canal y propuesta',
         introduccion:
-          'Cierra la guía con números del caso y con la propuesta de valor; productos concretos quedan como familias típicas hasta que los fijes. Si no ves todas las tarjetas, desplaza dentro de esta página.',
+          'Cierre de la guía: números del caso y propuesta de valor. Hay muchas tarjetas; usa el scroll solo en esta página si hace falta.',
         items: [
           {
             pregunta: '¿Cuántos agentes queremos tener?',
@@ -252,9 +254,9 @@
     escenarios: {
       titulo: 'Escenarios comparativos',
       intro:
-        'Aquí imaginamos cuatro formas distintas de crecer en un año: una forma prudente, una forma equilibrada, una forma ambiciosa y una cuarta fila que copia el ritmo de un negocio grande en Colombia (Puntored, 2024) pero ajustado a nuestro relato. Cada fila dice cuántas ventas haría la red en un año, cuánto dinero mueve cada venta en promedio, cuántas ventas al mes le tocarían a cada punto si tuviéramos 2 500 puntos, y cuánto dinero bruto quedaría si cobráramos el 1,2 % sobre todo lo que pasó. También dejamos escrito cuánto cuesta en Colombia adquirir un cliente en un mercado ya maduro (CAC entre US$200 y US$260) para tener una idea de esfuerzo comercial.',
+        'Cuatro cuentos para un mismo año: prudente, equilibrado, ambicioso y uno extra que imita el ritmo de Puntored en Colombia (2024) ajustado a nuestro relato. Cada fila = ventas al año, ticket medio, volumen, ventas por punto y mes con 2 500 puntos, e ingreso bruto si cobramos 1,2 % del volumen. Las barras resumen volumen e ingreso; el detalle está en la tabla.',
       notaCac:
-        'CAC significa “cuánto nos cuesta ganar un cliente nuevo”. En Colombia, en mercados parecidos, ese costo suele estar entre US$200 y US$260 por cliente.',
+        'CAC = costo de ganar un cliente nuevo. Referencia Colombia (mercado maduro): US$200–US$260 por cliente.',
       filas: [
         {
           escenario: 'Conservador',
@@ -292,60 +294,58 @@
       ],
     },
 
-    /** Colombia real vs Panamá ajustada + niveles TAM / SAM / SOM */
+    /**
+     * Mercado en dos páginas: 06 = comparación; 07 = TAM/SAM/SOM + gráfica + tabla niveles.
+     */
     tamSam: {
-      titulo: 'Qué tan grande es el mercado y qué parte podemos tocar',
-      intro:
-        'Esta página cuenta dos historias con números. La primera historia pone al lado a Colombia y a Panamá. Colombia tiene muchas más personas y ya mueve pagos enormes en tiendas y puntos; los números de Colombia son reales de 2024 y usamos el ejemplo público de Puntored solo para ver cómo se ve un país cuando el negocio ya está muy crecido. Los números de Panamá no son una copia: los armamos pensando que aquí vive menos gente, que cada pago suele ser de un monto distinto y que una red de puntos en Panamá no puede ser del mismo tamaño que en un país tan grande. Por eso en cada fila ves la misma idea (personas, ventas al año, dinero que se mueve) explicada en dos tamaños de país distintos. La segunda historia usa tres palabras que suenan raras pero solo miden el tamaño del pastel. TAM es el pastel gigante: todo el dinero que en teoría podría pagarse con ayuda humana o en ventanilla si nadie faltara al plan. SAM es el pastel mediano: la parte donde sí tiene sentido que la gente use una red con agentes y comercios como los que estamos imaginando. SOM es el pedazo que podemos planear de verdad cuando hay competencia y no todo sale perfecto; por eso hay varias filas de SOM, desde un plan cuidadoso hasta un plan fuerte y otro que se parece en proporción al ejemplo grande de Colombia, para que nadie crea que existe una sola cifra mágica.',
+      titulo: 'Colombia y Panamá en la misma idea',
+      introComparacion:
+        'Colombia trae números reales 2024 (ejemplo Puntored): país grande y red ya madura. Panamá trae números del caso: menos gente, ticket distinto y menos puntos; no es copiar y pegar. Cada fila compara la misma métrica en los dos países.',
+      tituloSegunda: 'TAM, SAM y SOM: tres tamaños del pastel',
+      introPasteles:
+        'TAM = todo lo que podría pagarse con ayuda en ventanilla o punto si todo fuera ideal. SAM = la parte donde sí tendría sentido nuestra red física. SOM = lo que podemos planear de verdad con competencia; por eso hay varias filas (prudente, fuerte y una inspirada en la proporción del ejemplo colombiano). La barra y la tabla de abajo cuantifican esos tamaños.',
       metricas: [
         {
           metrica: 'Población',
           colombia: '52 M',
           panama: '4,4 M',
-          explicacion:
-            'Hay muchas más personas viviendo en Colombia que en Panamá; por eso cualquier número de Panamá va a ser más chico casi siempre.',
+          explicacion: 'Panamá es mucho más chica en habitantes.',
         },
         {
           metrica: 'Usuarios activos mensuales',
           colombia: '11 M',
           panama: '700 k – 950 k',
-          explicacion:
-            'Usuarios activos significa “personas que al menos una vez al mes usan la red”. En Panamá, si la red funciona bien, podríamos estar hablando de entre 700 mil y 950 mil personas en ese hábito.',
+          explicacion: 'Personas que usan la red al menos una vez al mes.',
         },
         {
           metrica: 'Transacciones anuales',
           colombia: '330 M',
           panama: '28 M – 32 M',
-          explicacion:
-            'Una transacción es cada vez que alguien paga o cobra algo a través del canal. Al año, en Panamá, el cuento del caso se mueve en decenas de millones de transacciones, no en cientos como en el país grande.',
+          explicacion: 'Cada pago o cobro que pasa por el canal en un año.',
         },
         {
           metrica: 'Ticket promedio',
           colombia: 'US$17',
           panama: 'US$25 – US$35',
-          explicacion:
-            'Ticket es “cuánto dinero entra en cada venta en promedio”. En Panamá el caso supone montos un poco mayores por venta que en el ejemplo colombiano.',
+          explicacion: 'Monto promedio por venta; en el caso Panamá va un poco más alto.',
         },
         {
           metrica: 'Volumen anual',
           colombia: 'US$5,5 B',
           panama: 'US$700 M – US$1,0 B',
-          explicacion:
-            'Volumen es todo el dinero que pasa por el sistema en un año sumando todas las ventas. Panamá, siendo más chica, mueve cientos de millones al año en este cuento, no miles de millones como el ejemplo grande.',
+          explicacion: 'Dinero total que mueve el canal en un año.',
         },
         {
           metrica: 'Corresponsales activos',
           colombia: '55 000',
           panama: '2 000 – 3 000',
-          explicacion:
-            'Corresponsal es un punto o comercio que hace de “mini banco” para la gente. En un país grande caben decenas de miles; en Panamá el caso habla de unos pocos miles bien trabajados.',
+          explicacion: 'Puntos o comercios que atienden como red.',
         },
         {
           metrica: 'Transacciones por punto / mes',
           colombia: '500',
           panama: '400 – 600',
-          explicacion:
-            'Aquí se pregunta: si tengo un punto abierto, ¿cuántas ventas le entran en un mes? El caso de Panamá se queda en un rango parecido al del país grande, para no prometer algo imposible.',
+          explicacion: 'Ventas mensuales por punto; rango parecido al país grande.',
         },
       ],
       niveles: [
@@ -386,7 +386,7 @@
     texto: {
       tituloPagina: 'Caso de negocio — Agentes en Panamá',
       heroDek:
-        'Secuencia: Panamá → escenarios → TAM/SAM → guía de preguntas (07–10) → segmento → mercado → solución → riesgos → demo.',
+        'Panamá → escenarios → mercado (06–07) → guía (08–11) → segmento → mercado/problema → solución → riesgos → demo (16 páginas).',
 
       segmento: {
         titulo: 'Segmento y razón comercial',
@@ -435,7 +435,7 @@
       economia: {
         titulo: 'Lógica económica (resumen)',
         intro:
-          'La gráfica resume un mix de ingresos objetivo; calibrar con los escenarios de volumen e ingreso bruto (sección Escenarios) y con TAM/SAM, además de la hoja de trabajo.',
+          'La gráfica resume un mix de ingresos objetivo; calibrar con la página 05 (escenarios) y con el mercado en 06–07, más la hoja de trabajo.',
       },
 
       riesgos: {

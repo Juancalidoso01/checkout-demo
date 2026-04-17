@@ -28,7 +28,7 @@
           target="_blank"
           rel="noopener noreferrer"
         >Modelo revista (GitHub)</a>
-        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 14</span>
+        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 16</span>
       </div>
     </div>
   </header>
@@ -113,21 +113,21 @@
           </article>
 
           <article class="magazine-page" data-page="5" id="p5" aria-label="Escenarios comparativos">
-            <div class="magazine-page__inner pp-mag-page">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--escenarios">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">05</span>
                 <h2 class="pp-mag-h2" id="cn-esc-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-esc-intro"></p>
-              <div class="pp-mag-two-charts">
-                <div class="pp-mag-chart pp-mag-chart--short">
+              <div class="pp-mag-two-charts pp-mag-two-charts--compact">
+                <div class="pp-mag-chart pp-mag-chart--scenario">
                   <canvas id="cnChartEscenariosVol" aria-label="Volumen anual por escenario"></canvas>
                 </div>
-                <div class="pp-mag-chart pp-mag-chart--short">
+                <div class="pp-mag-chart pp-mag-chart--scenario">
                   <canvas id="cnChartEscenariosIng" aria-label="Ingreso bruto por escenario"></canvas>
                 </div>
               </div>
-              <div class="pp-mag-table-wrap pp-mag-table-wrap--tight">
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--escenarios">
                 <table class="pp-mag-table pp-mag-table--compact" id="cn-esc-table">
                   <thead>
                     <tr>
@@ -146,14 +146,14 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="6" id="p6" aria-label="TAM y SAM">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="6" id="p6" aria-label="Comparación mercado Colombia Panamá">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--tam-a">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">06</span>
                 <h2 class="pp-mag-h2" id="cn-tam-h"></h2>
               </div>
-              <p class="pp-mag-lead pp-mag-lead--long" id="cn-tam-intro"></p>
-              <div class="pp-mag-table-wrap pp-mag-table-wrap--tight">
+              <p class="pp-mag-lead" id="cn-tam-intro"></p>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--tam-metrics">
                 <table class="pp-mag-table pp-mag-table--compact" id="cn-tam-metric-table">
                   <thead>
                     <tr>
@@ -166,10 +166,20 @@
                   <tbody id="cn-tam-metric-tbody"></tbody>
                 </table>
               </div>
-              <div class="pp-mag-chart pp-mag-chart--short">
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="7" id="p7" aria-label="TAM SAM SOM y gráfica">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--tam-b">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">07</span>
+                <h2 class="pp-mag-h2" id="cn-tam2-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-tam2-intro"></p>
+              <div class="pp-mag-chart pp-mag-chart--tam-bar">
                 <canvas id="cnChartTamSom" aria-label="Volumen por nivel TAM SAM SOM"></canvas>
               </div>
-              <div class="pp-mag-table-wrap pp-mag-table-wrap--tight">
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--tam-niveles">
                 <table class="pp-mag-table pp-mag-table--compact" id="cn-tam-nivel-table">
                   <thead>
                     <tr>
@@ -185,18 +195,7 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="7" id="p7" aria-label="Guía negocio hoy">
-            <div class="magazine-page__inner pp-mag-page">
-              <div class="pp-mag-head">
-                <span class="pp-mag-kicker">07</span>
-                <h2 class="pp-mag-h2" id="cn-qa7-title"></h2>
-              </div>
-              <p class="pp-mag-lead" id="cn-qa7-intro"></p>
-              <div class="pp-mag-qa-list" id="cn-qa7-list"></div>
-            </div>
-          </article>
-
-          <article class="magazine-page" data-page="8" id="p8" aria-label="Guía herramientas y procesos">
+          <article class="magazine-page" data-page="8" id="p8" aria-label="Guía negocio hoy">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">08</span>
@@ -207,7 +206,7 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="9" id="p9" aria-label="Guía mercado y problema">
+          <article class="magazine-page" data-page="9" id="p9" aria-label="Guía herramientas y procesos">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">09</span>
@@ -218,7 +217,7 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="10" id="p10" aria-label="Guía propuesta y ejecución">
+          <article class="magazine-page" data-page="10" id="p10" aria-label="Guía mercado y problema">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">10</span>
@@ -229,10 +228,21 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="11" id="p11" aria-label="Segmento">
+          <article class="magazine-page" data-page="11" id="p11" aria-label="Guía propuesta y ejecución">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">11</span>
+                <h2 class="pp-mag-h2" id="cn-qa11-title"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-qa11-intro"></p>
+              <div class="pp-mag-qa-list" id="cn-qa11-list"></div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="12" id="p12" aria-label="Segmento">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">12</span>
                 <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-seg-sub"></p>
@@ -244,10 +254,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="12" id="p12" aria-label="Mercado y problema">
+          <article class="magazine-page" data-page="13" id="p13" aria-label="Mercado y problema">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">12</span>
+                <span class="pp-mag-kicker">13</span>
                 <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-mer-intro"></p>
@@ -266,10 +276,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="13" id="p13" aria-label="Solución y economía">
+          <article class="magazine-page" data-page="14" id="p14" aria-label="Solución y economía">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">13</span>
+                <span class="pp-mag-kicker">14</span>
                 <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-sol-intro"></p>
@@ -287,19 +297,21 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="14" id="p14" aria-label="Riesgos y demo">
+          <article class="magazine-page" data-page="15" id="p15" aria-label="Riesgos">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">14</span>
+                <span class="pp-mag-kicker">15</span>
                 <h2 class="pp-mag-h2" id="cn-ries-h"></h2>
               </div>
               <ul class="pp-mag-list" id="cn-ries-list"></ul>
-              <hr class="pp-mag-divider" />
-              <div class="pp-mag-subblock">
-                <p class="pp-mag-continua">Siguiente bloque</p>
-                <div class="pp-mag-head pp-mag-head--sub">
-                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-demo-h"></h2>
-                </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="16" id="p16" aria-label="Demo">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">16</span>
+                <h2 class="pp-mag-h2" id="cn-demo-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-demo-intro"></p>
               <div class="pp-mag-actions">
@@ -570,8 +582,10 @@
 
       var tam = D.tamSam;
       if (tam) {
-        set('cn-tam-h', tam.titulo);
-        set('cn-tam-intro', tam.intro);
+        set('cn-tam-h', tam.titulo || '');
+        set('cn-tam-intro', tam.introComparacion || tam.intro || '');
+        set('cn-tam2-h', tam.tituloSegunda || '');
+        set('cn-tam2-intro', tam.introPasteles || '');
         var mt = document.getElementById('cn-tam-metric-tbody');
         if (mt && tam.metricas) {
           mt.innerHTML = '';
@@ -611,7 +625,7 @@
       if (caps && caps.length) {
         for (var qi = 0; qi < caps.length && qi < 4; qi++) {
           var cap = caps[qi];
-          var n = 7 + qi;
+          var n = 8 + qi;
           set('cn-qa' + n + '-title', cap.titulo || '');
           set('cn-qa' + n + '-intro', cap.introduccion || '');
           var qList = document.getElementById('cn-qa' + n + '-list');

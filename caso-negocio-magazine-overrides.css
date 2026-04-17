@@ -166,6 +166,55 @@ body {
   max-height: min(24vh, 200px);
 }
 
+/* Pág. 05 escenarios: texto más corto + gráficas bajas + tabla con tope claro */
+.pp-mag-page--escenarios .pp-mag-lead {
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.pp-mag-two-charts--compact {
+  gap: 0.35rem;
+}
+
+.pp-mag-page--escenarios .pp-mag-chart--scenario {
+  min-height: 70px;
+  max-height: min(19vh, 148px);
+}
+
+.pp-mag-table-wrap--escenarios {
+  max-height: min(34vh, 260px);
+}
+
+/* Pág. 06: solo comparación + tabla */
+.pp-mag-page--tam-a .pp-mag-lead {
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.pp-mag-table-wrap--tam-metrics {
+  flex: 1;
+  min-height: 0;
+  max-height: min(56vh, 480px);
+}
+
+/* Pág. 07: pastel + barra + tabla niveles */
+.pp-mag-page--tam-b .pp-mag-lead {
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.pp-mag-chart--tam-bar {
+  min-height: 100px;
+  max-height: min(28vh, 220px);
+  margin-top: 0.35rem;
+}
+
+.pp-mag-table-wrap--tam-niveles {
+  flex: 1;
+  min-height: 0;
+  max-height: min(38vh, 300px);
+}
+
 .pp-mag-lead--accent {
   font-weight: 700;
   color: var(--ink) !important;
