@@ -4,322 +4,178 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#5462e6">
-  <title>Punto Pago — Caso de negocio</title>
+  <title>Punto Pago — Caso de negocio (revista digital)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="caso-negocio-magazine.css">
+  <link rel="stylesheet" href="caso-negocio-magazine-overrides.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .cn-page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: linear-gradient(180deg, #f4f6ff 0%, #ffffff 38%, #f6f6f6 100%);
-      font-family: var(--pp-font, system-ui, sans-serif);
-      color: var(--pp-text);
-      -webkit-font-smoothing: antialiased;
-    }
-    .cn-nav {
-      background: linear-gradient(135deg, #5462e6 0%, #4352d4 40%, #3738ab 100%);
-      color: #fff;
-      padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 20px rgba(84, 98, 230, 0.25);
-      position: sticky;
-      top: 0;
-      z-index: 40;
-    }
-    .cn-nav-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-    .cn-nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.8rem;
-      padding: 10px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      background: rgba(255, 255, 255, 0.12);
-      white-space: nowrap;
-    }
-    .cn-nav a:hover {
-      background: rgba(255, 255, 255, 0.22);
-    }
-    .cn-nav h1 {
-      margin: 0;
-      font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
-      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-    .cn-nav .cn-sub {
-      display: block;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.9;
-      margin-top: 4px;
-    }
-    .cn-main {
-      flex: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 20px 18px 48px;
-      box-sizing: border-box;
-    }
-    .cn-sheet-banner {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px 16px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: #fffbeb;
-      border: 1px solid #fcd34d;
-      font-size: 0.8rem;
-      color: #92400e;
-      margin-bottom: 20px;
-      line-height: 1.45;
-    }
-    .cn-sheet-banner a {
-      font-weight: 800;
-      color: #b45309;
-      text-decoration: none;
-      word-break: break-all;
-    }
-    .cn-sheet-banner a:hover {
-      text-decoration: underline;
-    }
-    .cn-sheet-banner--ok {
-      background: rgba(84, 98, 230, 0.08);
-      border-color: rgba(84, 98, 230, 0.22);
-      color: #3730a3;
-    }
-    .cn-sheet-banner--ok a {
-      color: #4338ca;
-    }
-    .cn-hero-title {
-      margin: 0 0 8px;
-      font-size: clamp(1.25rem, 3.2vw, 1.65rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: #0f172a;
-      line-height: 1.2;
-    }
-    .cn-hero-dek {
-      margin: 0 0 28px;
-      font-size: 0.95rem;
-      color: #64748b;
-      font-weight: 600;
-      max-width: 40em;
-      line-height: 1.5;
-    }
-    .cn-block {
-      margin-bottom: 32px;
-    }
-    .cn-block h2 {
-      margin: 0 0 6px;
-      font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.02em;
-    }
-    .cn-block .cn-sub {
-      margin: 0 0 12px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--pp-primary);
-    }
-    .cn-block > .cn-intro {
-      margin: 0 0 16px;
-      font-size: 0.92rem;
-      line-height: 1.58;
-      color: #475569;
-      max-width: 52em;
-    }
-    .cn-pill-grid {
-      display: grid;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    @media (min-width: 640px) {
-      .cn-pill-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-    .cn-pill {
-      padding: 14px 14px 16px;
-      border-radius: 16px;
-      background: #fff;
-      border: 1px solid rgba(84, 98, 230, 0.14);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
-    }
-    .cn-pill h3 {
-      margin: 0 0 8px;
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--pp-primary);
-    }
-    .cn-pill p {
-      margin: 0;
-      font-size: 0.84rem;
-      line-height: 1.45;
-      color: #64748b;
-    }
-    .cn-chart-grid {
-      display: grid;
-      gap: 18px;
-      margin-top: 8px;
-    }
-    @media (min-width: 800px) {
-      .cn-chart-grid--2 {
-        grid-template-columns: 1fr 1fr;
-        align-items: start;
-      }
-    }
-    .cn-chart-card {
-      padding: 14px 14px 10px;
-      border-radius: 16px;
-      background: #fff;
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
-    }
-    .cn-chart-card h3 {
-      margin: 0 0 10px;
-      font-size: 0.78rem;
-      font-weight: 800;
-      color: #334155;
-      line-height: 1.3;
-    }
-    .cn-chart-card .cn-canvas-wrap {
-      position: relative;
-      height: min(260px, 52vw);
-      max-height: 280px;
-    }
-    .cn-list {
-      margin: 0;
-      padding-left: 1.15rem;
-      font-size: 0.9rem;
-      line-height: 1.55;
-      color: #475569;
-    }
-    .cn-list li {
-      margin-bottom: 8px;
-    }
-    .cn-foot {
-      margin-top: 36px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(84, 98, 230, 0.12);
-      font-size: 0.82rem;
-      color: #64748b;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 20px;
-      align-items: center;
-    }
-    .cn-foot a {
-      font-weight: 700;
-      color: var(--pp-primary);
-      text-decoration: none;
-    }
-    .cn-foot a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
-<body class="cn-page">
-  <header class="cn-nav">
-    <div class="cn-nav-inner">
-      <div>
-        <h1>Punto Pago</h1>
-        <span class="cn-sub">Caso de negocio</span>
+<body>
+  <header class="magazine-chrome" aria-label="Cabecera">
+    <div class="magazine-chrome__row">
+      <div class="magazine-chrome__brand">
+        <span class="magazine-chrome__logo">Punto Pago</span>
+        <span class="magazine-chrome__tag">Caso de negocio · formato revista digital</span>
       </div>
-      <a href="index.html"><i class="fas fa-map" aria-hidden="true"></i> Volver al mapa</a>
+      <div class="magazine-chrome__meta">
+        <a class="magazine-chrome__map-link" href="index.html">← Mapa del proceso</a>
+        <a
+          class="magazine-chrome__modelo-link"
+          href="https://github.com/Juancalidoso01/revisita-modelo"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Modelo revista (GitHub)</a>
+        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 6</span>
+      </div>
     </div>
   </header>
 
-  <main class="cn-main" id="cn-main">
-    <div id="cn-banner" class="cn-sheet-banner" hidden></div>
-    <h2 class="cn-hero-title" id="cn-hero-title"></h2>
-    <p class="cn-hero-dek" id="cn-hero-dek"></p>
+  <main class="magazine-viewport" id="magazineViewport">
+    <section class="magazine-scene">
+      <div class="magazine-book" id="magazineBook" role="region" aria-roledescription="flipbook" aria-label="Caso de negocio Punto Pago">
+        <div class="magazine-track" id="magazineTrack">
+          <article class="magazine-page magazine-page--cover magazine-page--opening-left" data-page="1" id="p1" aria-label="Portada">
+            <div class="magazine-page__inner magazine-page__inner--cover">
+              <div class="cover__masthead">
+                <span class="cover__issue" id="cn-cover-eyebrow"></span>
+                <span class="cover__page-no">01</span>
+              </div>
+              <div class="cover__hero">
+                <p class="cover__eyebrow">Proyecto</p>
+                <h1 class="cover__title" id="cn-cover-title"></h1>
+                <p class="cover__subtitle" id="cn-cover-sub"></p>
+              </div>
+              <div class="cover__feature-list" id="cn-cover-lines" aria-label="Líneas de portada"></div>
+              <div class="cover__footer">
+                <div class="cover__hint">
+                  <span class="cover__hint-icon" aria-hidden="true">→</span>
+                  Flechas, botones o deslizar para pasar página
+                </div>
+                <div class="cover__contact">Demo · uso interno</div>
+              </div>
+            </div>
+          </article>
 
-    <section class="cn-block" id="cn-segmento" aria-labelledby="cn-seg-h">
-      <h2 id="cn-seg-h"></h2>
-      <p class="cn-sub" id="cn-seg-sub"></p>
-      <p class="cn-intro" id="cn-seg-intro"></p>
-      <div class="cn-pill-grid" id="cn-seg-pills"></div>
-      <div class="cn-chart-grid cn-chart-grid--2">
-        <figure class="cn-chart-card">
-          <h3 id="cn-chart-seg-t"></h3>
-          <div class="cn-canvas-wrap"><canvas id="cnChartSegCanal" aria-label="Gráfica segmento"></canvas></div>
-        </figure>
+          <article class="magazine-page magazine-page--cover magazine-page--opening-right" data-page="2" id="p2" aria-label="Apertura">
+            <div class="magazine-page__inner magazine-page__inner--opening-side">
+              <div class="opening-summary">
+                <p class="opening-summary__eyebrow">Apertura</p>
+                <h2 class="opening-summary__title" id="cn-open-title"></h2>
+                <p class="opening-summary__text" id="cn-open-body"></p>
+                <div class="opening-summary__chips" id="cn-open-chips" aria-label="Temas"></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="3" id="p3" aria-label="Segmento">
+            <div class="magazine-page__inner pp-mag-page">
+              <div id="cn-banner" class="pp-mag-banner" hidden></div>
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">03</span>
+                <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-seg-sub"></p>
+              <p class="pp-mag-lead" id="cn-seg-intro"></p>
+              <div class="pp-mag-pills" id="cn-seg-pills"></div>
+              <div class="pp-mag-chart">
+                <canvas id="cnChartSegCanal" aria-label="Gráfica segmento"></canvas>
+              </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="4" id="p4" aria-label="Mercado y problema">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">04</span>
+                <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-mer-intro"></p>
+              <div class="pp-mag-chart pp-mag-chart--short">
+                <canvas id="cnChartMercado" aria-label="Gráfica mercado"></canvas>
+              </div>
+              <div class="pp-mag-head" style="margin-top: 0.5rem; border: 0; padding: 0">
+                <span class="pp-mag-kicker" style="font-size: 1rem">05</span>
+                <h2 class="pp-mag-h2" id="cn-prob-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-prob-intro"></p>
+              <ul class="pp-mag-list" id="cn-prob-list"></ul>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="5" id="p5" aria-label="Solución y economía">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">06</span>
+                <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-sol-intro"></p>
+              <div class="pp-mag-head" style="margin-top: 0.75rem; border: 0; padding: 0">
+                <span class="pp-mag-kicker" style="font-size: 1rem">07</span>
+                <h2 class="pp-mag-h2" id="cn-eco-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-eco-intro"></p>
+              <div class="pp-mag-chart">
+                <canvas id="cnChartEconomia" aria-label="Gráfica economía"></canvas>
+              </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="6" id="p6" aria-label="Riesgos y demo">
+            <div class="magazine-page__inner pp-mag-page">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">08</span>
+                <h2 class="pp-mag-h2" id="cn-ries-h"></h2>
+              </div>
+              <ul class="pp-mag-list" id="cn-ries-list"></ul>
+              <div class="pp-mag-head" style="margin-top: 0.75rem; border: 0; padding: 0">
+                <span class="pp-mag-kicker" style="font-size: 1rem">09</span>
+                <h2 class="pp-mag-h2" id="cn-demo-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-demo-intro"></p>
+              <div class="pp-mag-actions">
+                <a href="index.html"><i class="fas fa-map" aria-hidden="true"></i> Abrir mapa del proceso</a>
+                <a href="modules-map.html">Catálogo técnico</a>
+                <a id="cn-sheet-link" href="#" target="_blank" rel="noopener">Hoja de datos</a>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
-
-    <section class="cn-block" id="cn-mercado" aria-labelledby="cn-mer-h">
-      <h2 id="cn-mer-h"></h2>
-      <p class="cn-intro" id="cn-mer-intro"></p>
-      <figure class="cn-chart-card">
-        <h3 id="cn-chart-mer-t"></h3>
-        <div class="cn-canvas-wrap"><canvas id="cnChartMercado" aria-label="Gráfica mercado"></canvas></div>
-      </figure>
-    </section>
-
-    <section class="cn-block" id="cn-problema" aria-labelledby="cn-prob-h">
-      <h2 id="cn-prob-h"></h2>
-      <p class="cn-intro" id="cn-prob-intro"></p>
-      <ul class="cn-list" id="cn-prob-list"></ul>
-    </section>
-
-    <section class="cn-block" id="cn-solucion" aria-labelledby="cn-sol-h">
-      <h2 id="cn-sol-h"></h2>
-      <p class="cn-intro" id="cn-sol-intro"></p>
-    </section>
-
-    <section class="cn-block" id="cn-economia" aria-labelledby="cn-eco-h">
-      <h2 id="cn-eco-h"></h2>
-      <p class="cn-intro" id="cn-eco-intro"></p>
-      <figure class="cn-chart-card">
-        <h3 id="cn-chart-eco-t"></h3>
-        <div class="cn-canvas-wrap"><canvas id="cnChartEconomia" aria-label="Gráfica economía"></canvas></div>
-      </figure>
-    </section>
-
-    <section class="cn-block" id="cn-riesgos" aria-labelledby="cn-ries-h">
-      <h2 id="cn-ries-h"></h2>
-      <ul class="cn-list" id="cn-ries-list"></ul>
-    </section>
-
-    <section class="cn-block" id="cn-demo" aria-labelledby="cn-demo-h">
-      <h2 id="cn-demo-h"></h2>
-      <p class="cn-intro" id="cn-demo-intro"></p>
-    </section>
-
-    <footer class="cn-foot">
-      <span>Fuente de datos: <a id="cn-sheet-link" href="#" target="_blank" rel="noopener">Hoja de cálculo</a></span>
-      <span>Catálogo técnico: <a href="modules-map.html">modules-map.html</a></span>
-    </footer>
   </main>
+
+  <nav class="magazine-controls" aria-label="Navegación de páginas">
+    <button type="button" class="magazine-btn magazine-btn--prev" id="btnPrev" aria-label="Página anterior">
+      <span aria-hidden="true">‹</span>
+    </button>
+    <div class="magazine-dots" id="magazineDots" role="tablist" aria-label="Ir a página"></div>
+    <div class="magazine-zoom" aria-label="Controles de zoom">
+      <button type="button" class="magazine-btn magazine-btn--zoom" id="btnZoomOut" aria-label="Reducir zoom">
+        <span aria-hidden="true">−</span>
+      </button>
+      <button type="button" class="magazine-btn magazine-btn--zoom" id="btnZoomReset" aria-label="Restablecer zoom">
+        <span class="magazine-btn__label">100%</span>
+      </button>
+      <button type="button" class="magazine-btn magazine-btn--zoom" id="btnZoomIn" aria-label="Aumentar zoom">
+        <span aria-hidden="true">+</span>
+      </button>
+    </div>
+    <button type="button" class="magazine-btn magazine-btn--sound is-on" id="btnSound" aria-pressed="true" aria-label="Desactivar sonido de página">
+      <span class="magazine-btn__label">SFX</span>
+    </button>
+    <button type="button" class="magazine-btn magazine-btn--next" id="btnNext" aria-label="Página siguiente">
+      <span aria-hidden="true">›</span>
+    </button>
+  </nav>
+
+  <audio id="pageTurnAudio" preload="auto" src="assets/magazine/page-turn-sound.mp3"></audio>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
   <script src="caso-negocio-data.js"></script>
-  <script src="auth.js"></script>
+  <script src="caso-negocio-magazine.js" defer></script>
+  <script src="auth.js" defer></script>
   <script>
     try {
       if (window.PPAuth && typeof window.PPAuth.markProcessTourFromHubPage === 'function') {
@@ -327,54 +183,74 @@
       }
     } catch (e) {}
 
-    (function () {
+    document.addEventListener('DOMContentLoaded', function () {
       var D = window.PP_CASO_NEGOCIO;
       if (!D || !D.texto) return;
 
       var t = D.texto;
-      var charts = D.charts || {};
-
       document.title = (t.tituloPagina || 'Caso de negocio') + ' — Punto Pago';
-
-      var banner = document.getElementById('cn-banner');
-      if (banner && D.fuenteHoja) {
-        banner.hidden = false;
-        banner.className =
-          'cn-sheet-banner' + (D.usarDatosEjemplo ? '' : ' cn-sheet-banner--ok');
-        banner.innerHTML =
-          (D.usarDatosEjemplo
-            ? '<span><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> <strong>Cifras de ejemplo.</strong> Sustituye arrays en <code>caso-negocio-data.js</code> con tu export desde la hoja (o publica CSV y convierte).</span>'
-            : '<span><i class="fas fa-circle-check" aria-hidden="true"></i> Datos cargados desde tu configuración.</span>') +
-          ' <a href="' +
-          D.fuenteHoja.replace(/"/g, '&quot;') +
-          '" target="_blank" rel="noopener">Abrir Google Sheet</a>';
-      }
-
-      var link = document.getElementById('cn-sheet-link');
-      if (link && D.fuenteHoja) link.href = D.fuenteHoja;
 
       function set(id, txt) {
         var el = document.getElementById(id);
         if (el) el.textContent = txt || '';
       }
 
-      set('cn-hero-title', t.tituloPagina);
-      set('cn-hero-dek', t.heroDek || '');
+      var cov = D.cover || {};
+      set('cn-cover-eyebrow', cov.eyebrow || '');
+      set('cn-cover-title', t.tituloPagina);
+      set('cn-cover-sub', t.segmento && t.segmento.subtitulo ? t.segmento.subtitulo : '');
+
+      var linesEl = document.getElementById('cn-cover-lines');
+      if (linesEl && cov.lineas) {
+        linesEl.innerHTML = '';
+        cov.lineas.forEach(function (line) {
+          var s = document.createElement('span');
+          s.textContent = line;
+          linesEl.appendChild(s);
+        });
+      }
+
+      var ap = D.apertura || {};
+      set('cn-open-title', ap.titulo || '');
+      set('cn-open-body', ap.cuerpo || '');
+      var chips = document.getElementById('cn-open-chips');
+      if (chips && t.segmento && t.segmento.bullets) {
+        chips.innerHTML = '';
+        t.segmento.bullets.forEach(function (b) {
+          var sp = document.createElement('span');
+          sp.textContent = b.titulo || '';
+          chips.appendChild(sp);
+        });
+      }
+
+      var banner = document.getElementById('cn-banner');
+      if (banner && D.fuenteHoja) {
+        banner.hidden = false;
+        banner.className = 'pp-mag-banner' + (D.usarDatosEjemplo ? '' : ' pp-mag-banner--ok');
+        banner.innerHTML =
+          (D.usarDatosEjemplo
+            ? '<span><strong>Ejemplo:</strong> sustituye series en <code>caso-negocio-data.js</code> desde tu export CSV.</span> '
+            : '<span>Datos según tu configuración.</span> ') +
+          '<a href="' +
+          String(D.fuenteHoja).replace(/"/g, '') +
+          '" target="_blank" rel="noopener">Abrir hoja</a>';
+      }
+
+      var sl = document.getElementById('cn-sheet-link');
+      if (sl && D.fuenteHoja) sl.href = D.fuenteHoja;
 
       set('cn-seg-h', t.segmento.titulo);
       set('cn-seg-sub', t.segmento.subtitulo);
       set('cn-seg-intro', t.segmento.intro);
-
-      var pills = document.getElementById('cn-seg-pills');
-      if (pills && t.segmento.bullets) {
-        pills.innerHTML = '';
+      var segPills = document.getElementById('cn-seg-pills');
+      if (segPills && t.segmento.bullets) {
+        segPills.innerHTML = '';
         t.segmento.bullets.forEach(function (b) {
-          var art = document.createElement('article');
-          art.className = 'cn-pill';
-          art.innerHTML = '<h3></h3><p></p>';
-          art.querySelector('h3').textContent = b.titulo || '';
-          art.querySelector('p').textContent = b.desc || '';
-          pills.appendChild(art);
+          var pill = document.createElement('span');
+          pill.className = 'pp-mag-pill';
+          pill.textContent = (b.titulo || '') + ' — ' + (b.desc || '');
+          pill.title = b.desc || '';
+          segPills.appendChild(pill);
         });
       }
 
@@ -406,35 +282,31 @@
           riesList.appendChild(li);
         });
       }
-
       set('cn-demo-h', t.demo.titulo);
       set('cn-demo-intro', t.demo.intro);
+    });
 
+    window.addEventListener('load', function () {
+      window.setTimeout(function () {
+        initCasoCharts();
+      }, 500);
+    });
+
+    function initCasoCharts() {
+      if (window.__ppCasoChartsDone) return;
+      window.__ppCasoChartsDone = true;
+      var D = window.PP_CASO_NEGOCIO;
+      if (!D || typeof Chart === 'undefined') return;
+      var charts = D.charts || {};
       var col = {
-        primary: '#5462e6',
-        primaryDark: '#3738ab',
         grid: 'rgba(148, 163, 184, 0.25)',
         text: '#475569',
       };
 
       function makeChart(canvasId, cfg) {
-        if (typeof Chart === 'undefined' || !cfg) return;
+        if (!cfg) return;
         var canvas = document.getElementById(canvasId);
         if (!canvas || !cfg.labels || !cfg.values) return;
-        var elTitle = document.getElementById(cfg.titleEl);
-        if (elTitle) elTitle.textContent = cfg.titulo || '';
-
-        var common = {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: cfg.tipo === 'doughnut',
-              position: 'bottom',
-              labels: { boxWidth: 10, font: { size: 11 } },
-            },
-          },
-        };
 
         if (cfg.tipo === 'doughnut') {
           new Chart(canvas.getContext('2d'), {
@@ -445,26 +317,30 @@
                 {
                   data: cfg.values,
                   backgroundColor: [
-                    'rgba(84, 98, 230, 0.85)',
-                    'rgba(124, 58, 237, 0.75)',
-                    'rgba(14, 165, 233, 0.7)',
-                    'rgba(13, 148, 136, 0.7)',
-                    'rgba(245, 158, 11, 0.75)',
+                    'rgba(84, 98, 230, 0.88)',
+                    'rgba(124, 58, 237, 0.78)',
+                    'rgba(14, 165, 233, 0.72)',
+                    'rgba(13, 148, 136, 0.72)',
                   ].slice(0, cfg.labels.length),
                   borderWidth: 0,
                 },
               ],
             },
             options: {
-              ...common,
-              cutout: '58%',
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: { display: true, text: cfg.titulo || '', font: { size: 12, weight: '600' } },
+                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
+              },
+              cutout: '54%',
             },
           });
           return;
         }
 
-        var indexAxis = cfg.horizontal ? 'y' : 'x';
-        var scales = cfg.horizontal
+        var horizontal = !!cfg.horizontal;
+        var scales = horizontal
           ? {
               x: {
                 beginAtZero: true,
@@ -472,16 +348,10 @@
                 ticks: { color: col.text },
                 title: { display: !!cfg.unit, text: cfg.unit || '' },
               },
-              y: {
-                grid: { display: false },
-                ticks: { color: col.text },
-              },
+              y: { grid: { display: false }, ticks: { color: col.text } },
             }
           : {
-              x: {
-                grid: { color: col.grid },
-                ticks: { color: col.text, maxRotation: 45 },
-              },
+              x: { grid: { color: col.grid }, ticks: { color: col.text, maxRotation: 45 } },
               y: {
                 beginAtZero: true,
                 grid: { color: col.grid },
@@ -489,6 +359,7 @@
                 title: { display: !!cfg.unit, text: cfg.unit || '' },
               },
             };
+
         new Chart(canvas.getContext('2d'), {
           type: 'bar',
           data: {
@@ -497,17 +368,18 @@
               {
                 label: cfg.unit || 'Valor',
                 data: cfg.values,
-                backgroundColor: 'rgba(84, 98, 230, 0.75)',
+                backgroundColor: 'rgba(84, 98, 230, 0.78)',
                 borderRadius: 8,
-                maxBarThickness: cfg.horizontal ? 28 : 48,
+                maxBarThickness: horizontal ? 26 : 44,
               },
             ],
           },
           options: {
-            indexAxis: indexAxis,
+            indexAxis: horizontal ? 'y' : 'x',
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
+              title: { display: true, text: cfg.titulo || '', font: { size: 12, weight: '600' } },
               legend: { display: false },
             },
             scales: scales,
@@ -516,16 +388,7 @@
       }
 
       var cs = charts.segmentoCanal;
-      if (cs) {
-        makeChart('cnChartSegCanal', {
-          tipo: cs.tipo,
-          titulo: cs.titulo,
-          labels: cs.labels,
-          values: cs.values,
-          titleEl: 'cn-chart-seg-t',
-        });
-      }
-
+      if (cs) makeChart('cnChartSegCanal', { tipo: cs.tipo, titulo: cs.titulo, labels: cs.labels, values: cs.values });
       var cm = charts.mercadoCrecimiento;
       if (cm) {
         makeChart('cnChartMercado', {
@@ -534,10 +397,8 @@
           labels: cm.labels,
           values: cm.values,
           unit: cm.unit,
-          titleEl: 'cn-chart-mer-t',
         });
       }
-
       var ce = charts.economiaMix;
       if (ce) {
         makeChart('cnChartEconomia', {
@@ -547,10 +408,13 @@
           values: ce.values,
           unit: ce.unit,
           horizontal: ce.horizontal,
-          titleEl: 'cn-chart-eco-t',
         });
       }
-    })();
+
+      if (typeof window.dispatchEvent === 'function') {
+        window.dispatchEvent(new Event('resize'));
+      }
+    }
   </script>
 </body>
 </html>

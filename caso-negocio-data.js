@@ -13,6 +13,19 @@
     /** true = muestra aviso de que las cifras son plantilla */
     usarDatosEjemplo: true,
 
+    /** Portada de la revista (p. 1) */
+    cover: {
+      eyebrow: 'Revista digital · Punto Pago',
+      lineas: ['Panamá', 'Red de agentes', 'Prototipo ejecutivo'],
+    },
+
+    /** Apertura (p. 2): lectura rápida antes del detalle */
+    apertura: {
+      titulo: 'Resumen ejecutivo',
+      cuerpo:
+        'Presentamos el caso de negocio en formato revista digital (mismo patrón que el modelo de referencia). El hilo: segmento y razón comercial en Panamá, mercado, problema, solución con agentes, economía, riesgos y cómo el mapa del demo materializa el recorrido.',
+    },
+
     /**
      * Orden de presentación: 1) segmento / razón comercial (Panamá + agentes)
      * Ajusta títulos y textos a las filas de tu pestaña.
