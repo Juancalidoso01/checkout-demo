@@ -21,7 +21,7 @@
       </div>
       <div class="magazine-chrome__meta">
         <a class="magazine-chrome__map-link" href="index.html">← Mapa del proceso</a>
-        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 15</span>
+        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 16</span>
       </div>
     </div>
   </header>
@@ -395,6 +395,20 @@
                 <a href="modules-map.html">Catálogo técnico</a>
                 <a id="cn-sheet-link" href="#" target="_blank" rel="noopener">Hoja de datos</a>
               </div>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="16" id="p16" aria-label="Benchmark de competencia">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--bench">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">16</span>
+                <h2 class="pp-mag-h2" id="cn-bench-h"></h2>
+              </div>
+              <p class="pp-mag-lead" id="cn-bench-intro"></p>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--bench" id="cn-bench-wrap">
+                <table class="pp-mag-table pp-mag-table--bench" id="cn-bench-tabla" aria-describedby="cn-bench-intro"></table>
+              </div>
+              <p class="pp-mag-note pp-mag-note--bench" id="cn-bench-nota"></p>
             </div>
           </article>
         </div>
@@ -1116,6 +1130,89 @@
             tbodyOv.appendChild(tr);
           });
           ovTab.appendChild(tbodyOv);
+        }
+      }
+
+      var bench = t.benchmarkCompetencia;
+      if (bench) {
+        set('cn-bench-h', bench.titulo || '');
+        set('cn-bench-intro', bench.intro || '');
+        set('cn-bench-nota', bench.notaPie || '');
+        var benchTab = document.getElementById('cn-bench-tabla');
+        var comps = bench.competidores || [];
+        var filasBench = bench.filas || [];
+        if (benchTab && comps.length && filasBench.length) {
+          benchTab.innerHTML = '';
+          var theadB = document.createElement('thead');
+          var trh = document.createElement('tr');
+          var th0 = document.createElement('th');
+          th0.className = 'pp-bench-th pp-bench-th--criterio';
+          th0.textContent = 'Criterio';
+          trh.appendChild(th0);
+          comps.forEach(function (c) {
+            var th = document.createElement('th');
+            th.className = 'pp-bench-th pp-bench-th--marca';
+            var wrap = document.createElement('div');
+            wrap.className = 'pp-bench-brand';
+            if (c.logo) {
+              var img = document.createElement('img');
+              img.src = c.logo;
+              img.alt = c.nombre || '';
+              img.className = 'pp-bench-brand__logo';
+              img.width = 112;
+              img.height = 36;
+              img.loading = 'lazy';
+              wrap.appendChild(img);
+            } else {
+              var nm = document.createElement('span');
+              nm.className = 'pp-bench-brand__nombre';
+              nm.textContent = c.nombre || '';
+              wrap.appendChild(nm);
+            }
+            th.appendChild(wrap);
+            trh.appendChild(th);
+          });
+          theadB.appendChild(trh);
+          benchTab.appendChild(theadB);
+          var tbodyB = document.createElement('tbody');
+          filasBench.forEach(function (fila) {
+            var tr = document.createElement('tr');
+            var tdL = document.createElement('td');
+            tdL.className = 'pp-bench-td pp-bench-td--criterio';
+            tdL.textContent = fila.criterio || '';
+            tr.appendChild(tdL);
+            var tipo = fila.tipo === 'bool' ? 'bool' : 'texto';
+            (fila.celdas || []).forEach(function (cel) {
+              var td = document.createElement('td');
+              if (tipo === 'bool') {
+                td.className = 'pp-bench-td pp-bench-td--bool';
+                if (cel === true) {
+                  var ok = document.createElement('i');
+                  ok.className = 'fas fa-check pp-bench-ico pp-bench-ico--si';
+                  ok.setAttribute('aria-label', 'Sí');
+                  td.appendChild(ok);
+                } else if (cel === false) {
+                  var no = document.createElement('i');
+                  no.className = 'fas fa-xmark pp-bench-ico pp-bench-ico--no';
+                  no.setAttribute('aria-label', 'No');
+                  td.appendChild(no);
+                } else {
+                  var pend = document.createElement('span');
+                  pend.className = 'pp-bench-pend';
+                  pend.setAttribute('aria-label', 'Por confirmar');
+                  pend.textContent = '—';
+                  td.appendChild(pend);
+                }
+              } else {
+                td.className = 'pp-bench-td pp-bench-td--texto';
+                td.style.whiteSpace = 'pre-line';
+                td.textContent = cel == null ? '—' : String(cel);
+              }
+              tr.appendChild(td);
+            });
+            tbodyB.appendChild(tr);
+          });
+          benchTab.appendChild(tbodyB);
         }
       }
 

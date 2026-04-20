@@ -43,12 +43,13 @@
       { capitulo: 'III · Esfuerzo comercial (9–10)' },
       { pagina: 9, texto: 'Presupuesto digital (M1–M6)' },
       { pagina: 10, texto: 'Presupuesto digital (M7–M12) + red' },
-      { capitulo: 'IV · Decisión y retorno (11–15)' },
+      { capitulo: 'IV · Decisión y retorno (11–16)' },
       { pagina: 11, texto: 'Cronograma pipeline (1/2): Fundación a producto' },
       { pagina: 12, texto: 'Cronograma pipeline (2/2): Comercial a rebranding' },
       { pagina: 13, texto: 'Participación por segmento (gráfico)' },
       { pagina: 14, texto: 'Oferta de valor: comercio y cliente' },
       { pagina: 15, texto: 'Solución, economía, ganancia y demo' },
+      { pagina: 16, texto: 'Benchmark de competencia' },
     ],
 
     /**
@@ -515,6 +516,54 @@
         titulo: 'Cómo se conecta el demo Punto Pago',
         intro:
           'Mapa del recorrido captación → operación; enlace al mapa y a la hoja cuando la tengas.',
+      },
+
+      /**
+       * Benchmark (p. 16): columnas = competidor + logo. Celdas bool: true / false / null (null = pendiente, se muestra —).
+       * Texto: cadenas por columna; use \\n para segunda línea. Sustituye logos en assets/magazine/competitors/ si usas marca oficial.
+       */
+      benchmarkCompetencia: {
+        titulo: 'Benchmark de competencia',
+        intro:
+          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Los totales de puntos se completan cuando tengas el listado por provincia.',
+        notaPie:
+          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios.',
+        competidores: [
+          { nombre: 'Rapibac', logo: 'assets/magazine/competitors/rapibac.svg' },
+          { nombre: 'Caja Amiga', logo: 'assets/magazine/competitors/caja-amiga.svg' },
+          { nombre: 'Banistmo PTM', logo: 'assets/magazine/competitors/banistmo-ptm.svg' },
+          { nombre: 'Western Union', logo: 'assets/magazine/competitors/western-union.svg' },
+        ],
+        filas: [
+          {
+            criterio: 'Cantidad de puntos (total)',
+            tipo: 'texto',
+            celdas: [
+              '—\nPor provincia: pendiente',
+              '—\nPor provincia: pendiente',
+              '—\nPor provincia: pendiente',
+              '—\nPor provincia: pendiente',
+            ],
+          },
+          { criterio: 'Terminal POS', tipo: 'bool', celdas: [null, null, null, null] },
+          { criterio: 'Operación con balance de cuentas', tipo: 'bool', celdas: [null, null, null, null] },
+          { criterio: 'Exclusivo de su propio banco (red cerrada)', tipo: 'bool', celdas: [null, null, null, null] },
+          {
+            criterio: 'Solo pagos y corresponsalía bancaria (sin mix más amplio)',
+            tipo: 'bool',
+            celdas: [null, null, null, null],
+          },
+          {
+            criterio: 'Debida diligencia y tiempo de alta',
+            tipo: 'texto',
+            celdas: [
+              '—\nRegular / tradicional: pendiente',
+              '—\nRegular / tradicional: pendiente',
+              '—\nRegular / tradicional: pendiente',
+              '—\nRegular / tradicional: pendiente',
+            ],
+          },
+        ],
       },
     },
 
