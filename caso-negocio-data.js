@@ -44,8 +44,8 @@
       { pagina: 9, texto: 'Presupuesto digital (M1–M6)' },
       { pagina: 10, texto: 'Presupuesto digital (M7–M12) + red' },
       { capitulo: 'IV · Decisión y retorno (11–15)' },
-      { pagina: 11, texto: 'Gantt relanzamiento (1/2): Fundación a producto' },
-      { pagina: 12, texto: 'Gantt relanzamiento (2/2): Comercial a rebranding' },
+      { pagina: 11, texto: 'Cronograma pipeline (1/2): Fundación a producto' },
+      { pagina: 12, texto: 'Cronograma pipeline (2/2): Comercial a rebranding' },
       { pagina: 13, texto: 'Participación por segmento (gráfico)' },
       { pagina: 14, texto: 'Oferta de valor: comercio y cliente' },
       { pagina: 15, texto: 'Solución, economía, ganancia y demo' },
@@ -127,7 +127,7 @@
      */
     guiasPreguntas: [
       {
-        titulo: 'Relanzamiento — Gantt (1/2): Fundación a producto',
+        titulo: 'Relanzamiento — Cronograma pipeline (1/2): Fundación a producto',
         tipo: 'gantt',
         introduccion:
           'Cada columna agrupa 4 semanas (hasta 20 semanas). Las barras muestran intensidad relativa de ejecución, no fechas fijas. Fase 2 acelera primera transacción; Fase 3 suma servicios y monetización incremental.',
@@ -163,7 +163,7 @@
         ],
       },
       {
-        titulo: 'Relanzamiento — Gantt (2/2): Comercial a rebranding',
+        titulo: 'Relanzamiento — Cronograma pipeline (2/2): Comercial a rebranding',
         tipo: 'gantt',
         introduccion:
           'Fase 4 llena el embudo; Fase 5 acelera escala con aliados cuando el producto y APIs sostienen volumen. Fase 6 captura valor recurrente; Fase 7 cuando la operación y conversión ya están sostenidas.',
@@ -296,7 +296,7 @@
     tamSam: {
       titulo: 'Colombia y Panamá en la misma idea',
       introComparacion:
-        'Colombia (referente 2024, ejemplo Puntored): red madura. Panamá: cifras del caso, no copia. Cada fila compara una misma métrica. Debajo, tres supuestos que explican el salto de país.',
+        'Misma métrica en ambos países: Colombia como referente de red consolidada (2024; ej. Puntored) y Panamá con las cifras de este caso. Abajo, tres supuestos que contextualizan la brecha.',
       puenteTitulo: 'Tres supuestos del ajuste Panamá',
       puenteIntro:
         'Transparencia breve: qué fijamos para que el referente no se lea como “lo mismo en otro país”.',
