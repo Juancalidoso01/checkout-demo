@@ -263,6 +263,10 @@
     applyTrackTransform();
     updateVisiblePages();
 
+    if (book) {
+      book.setAttribute("data-cover-spread", !isMobile() && index === 0 ? "true" : "false");
+    }
+
     if (pageLabel) pageLabel.textContent = labelForIndex(index);
     if (btnPrev) btnPrev.disabled = index === 0;
     if (btnNext) btnNext.disabled = index >= maxIndex();

@@ -842,34 +842,54 @@ body {
     linear-gradient(160deg, #818cf8 0%, #5462e6 40%, #312e81 100%) !important;
 }
 
-/**
- * Apertura (p. 1 + p. 2): misma foto alineada al lomo, bastante más chica que 200%
- * para priorizar proporción natural y evitar sensación de estiramiento,
- * aunque aparezcan márgenes oscuros a los lados.
- * Alto en `auto` para no deformar la foto: puede quedar banda oscura arriba/abajo (letterbox).
- */
+.pp-cover-spread {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pp-cover-spread img {
+  display: block;
+  width: 88%;
+  height: auto;
+  max-height: 92%;
+  object-fit: contain;
+  filter: saturate(0.98) contrast(1.01);
+}
+
+.magazine-book[data-cover-spread="true"] .pp-cover-spread {
+  display: flex;
+}
+
 .magazine-page--cover.magazine-page--opening-left {
   background-color: #0b1020;
   background-image:
-    linear-gradient(180deg, rgba(6, 10, 24, 0.1) 0%, rgba(6, 10, 24, 0.28) 42%, rgba(6, 10, 24, 0.88) 100%),
-    url("assets/magazine/cover-spread-punto-pago.png") !important;
-  background-size: 100% 100%, 150% auto !important;
-  background-position: center, left center !important;
-  background-repeat: no-repeat, no-repeat !important;
+    linear-gradient(180deg, rgba(6, 10, 24, 0.06) 0%, rgba(6, 10, 24, 0.16) 38%, rgba(6, 10, 24, 0.82) 100%) !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 .magazine-page--cover.magazine-page--opening-right {
   background-color: #0c1222;
   background-image:
     linear-gradient(180deg, rgba(6, 10, 24, 0.18) 0%, rgba(6, 10, 24, 0.42) 50%, rgba(15, 23, 42, 0.82) 100%),
-    linear-gradient(90deg, transparent 0%, rgba(15, 23, 42, 0.35) 38%, rgba(15, 23, 42, 0.72) 100%),
-    url("assets/magazine/cover-spread-punto-pago.png") !important;
-  background-size: 100% 100%, 100% 100%, 150% auto !important;
-  background-position: center, center, right center !important;
-  background-repeat: no-repeat, no-repeat, no-repeat !important;
+    linear-gradient(90deg, transparent 0%, rgba(15, 23, 42, 0.35) 38%, rgba(15, 23, 42, 0.72) 100%) !important;
+  background-size: 100% 100%, 100% 100% !important;
+  background-position: center, center !important;
+  background-repeat: no-repeat, no-repeat !important;
 }
 
 @media (max-width: 720px) {
+  .pp-cover-spread {
+    display: none !important;
+  }
+
   .magazine-page--cover.magazine-page--opening-left {
     background-image:
       linear-gradient(180deg, rgba(6, 10, 24, 0.12) 0%, rgba(6, 10, 24, 0.82) 100%),
