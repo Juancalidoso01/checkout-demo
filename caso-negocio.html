@@ -459,6 +459,30 @@
     src="assets/magazine/page-turn-sound.mp3"
   >Tu navegador no reproduce audio embebido.</audio>
 
+  <dialog id="cn-bench-dialog" class="pp-bench-dialog" aria-labelledby="cn-bench-dialog-title">
+    <div class="pp-bench-dialog__panel">
+      <header class="pp-bench-dialog__head">
+        <h3 class="pp-bench-dialog__title" id="cn-bench-dialog-title">Detalle</h3>
+        <button type="button" class="pp-bench-dialog__close" id="cn-bench-dialog-close" aria-label="Cerrar">
+          <span aria-hidden="true">×</span>
+        </button>
+      </header>
+      <div class="pp-bench-dialog__body">
+        <iframe
+          id="cn-bench-dialog-iframe"
+          class="pp-bench-dialog__iframe"
+          title="Detalle puntos"
+          hidden
+        ></iframe>
+        <embed id="cn-bench-dialog-embed" class="pp-bench-dialog__embed" type="application/pdf" hidden />
+        <p id="cn-bench-dialog-msg" class="pp-bench-dialog__msg" hidden></p>
+        <p class="pp-bench-dialog__foot">
+          <a id="cn-bench-dialog-link" class="pp-bench-dialog__link" href="#" target="_blank" rel="noopener">Abrir en una pestaña nueva</a>
+        </p>
+      </div>
+    </div>
+  </dialog>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
   <script src="caso-negocio-data.js"></script>
   <script src="caso-negocio-magazine.js" defer></script>
@@ -1133,6 +1157,75 @@
         }
       }
 
+      function cnBenchResolveUrl(comp, benchCfg) {
+        var u = (comp && comp.archivoPuntos != null ? String(comp.archivoPuntos) : '').trim();
+        if (u) return u;
+        var d = (benchCfg && benchCfg.archivoPuntosDefecto != null ? String(benchCfg.archivoPuntosDefecto) : '').trim();
+        return d || '';
+      }
+
+      function cnBenchClearDialog() {
+        var ifr = document.getElementById('cn-bench-dialog-iframe');
+        var emb = document.getElementById('cn-bench-dialog-embed');
+        var msg = document.getElementById('cn-bench-dialog-msg');
+        if (ifr) {
+          ifr.removeAttribute('src');
+          ifr.hidden = true;
+        }
+        if (emb) {
+          emb.removeAttribute('src');
+          emb.hidden = true;
+        }
+        if (msg) {
+          msg.hidden = true;
+          msg.textContent = '';
+        }
+      }
+
+      function cnBenchOpenDetalle(nombre, url, benchCfg) {
+        var dlg = document.getElementById('cn-bench-dialog');
+        var ttl = document.getElementById('cn-bench-dialog-title');
+        var lk = document.getElementById('cn-bench-dialog-link');
+        var ifr = document.getElementById('cn-bench-dialog-iframe');
+        var emb = document.getElementById('cn-bench-dialog-embed');
+        var msg = document.getElementById('cn-bench-dialog-msg');
+        if (!dlg || !url || !lk || !ifr || !emb || !msg) return;
+        cnBenchClearDialog();
+        if (ttl) ttl.textContent = (nombre || 'Competidor') + ' · detalle de puntos';
+        lk.href = url;
+        var path = url.split('?')[0].split('#')[0].toLowerCase();
+        var isPdf = path.slice(-4) === '.pdf';
+        var isHtml = path.slice(-5) === '.html' || path.slice(-4) === '.htm';
+        var isSheet = url.indexOf('docs.google.com') !== -1 || url.indexOf('sheets.google') !== -1;
+        if (isHtml && !isSheet) {
+          ifr.title = (nombre || 'Detalle') + ' — puntos';
+          ifr.src = url;
+          ifr.hidden = false;
+        } else if (isPdf) {
+          emb.src = url;
+          emb.hidden = false;
+        } else {
+          msg.textContent =
+            'Este enlace se abre mejor en una pestaña nueva (Excel, Google Sheets u otro formato).';
+          msg.hidden = false;
+        }
+        if (typeof dlg.showModal === 'function') dlg.showModal();
+      }
+
+      (function cnBenchInitDialog() {
+        var dlg = document.getElementById('cn-bench-dialog');
+        if (!dlg) return;
+        dlg.addEventListener('click', function (ev) {
+          if (ev.target === dlg) dlg.close();
+        });
+        dlg.addEventListener('close', cnBenchClearDialog);
+        var btnClose = document.getElementById('cn-bench-dialog-close');
+        if (btnClose)
+          btnClose.addEventListener('click', function () {
+            dlg.close();
+          });
+      })();
+
       var bench = t.benchmarkCompetencia;
       if (bench) {
         set('cn-bench-h', bench.titulo || '');
@@ -1152,24 +1245,49 @@
           comps.forEach(function (c) {
             var th = document.createElement('th');
             th.className = 'pp-bench-th pp-bench-th--marca';
-            var wrap = document.createElement('div');
-            wrap.className = 'pp-bench-brand';
-            if (c.logo) {
-              var img = document.createElement('img');
-              img.src = c.logo;
-              img.alt = c.nombre || '';
-              img.className = 'pp-bench-brand__logo';
-              img.width = 112;
-              img.height = 36;
-              img.loading = 'lazy';
-              wrap.appendChild(img);
-            } else {
-              var nm = document.createElement('span');
-              nm.className = 'pp-bench-brand__nombre';
-              nm.textContent = c.nombre || '';
-              wrap.appendChild(nm);
+            var urlDet = cnBenchResolveUrl(c, bench);
+            function addBrandMedia(host) {
+              if (c.logo) {
+                var img = document.createElement('img');
+                img.src = c.logo;
+                img.alt = c.nombre || '';
+                img.className = 'pp-bench-brand__logo';
+                img.width = 112;
+                img.height = 36;
+                img.loading = 'lazy';
+                host.appendChild(img);
+              } else {
+                var nm = document.createElement('span');
+                nm.className = 'pp-bench-brand__nombre';
+                nm.textContent = c.nombre || '';
+                host.appendChild(nm);
+              }
             }
-            th.appendChild(wrap);
+            if (urlDet) {
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'pp-bench-brand pp-bench-brand--accion';
+              btn.setAttribute('aria-label', (c.nombre || 'Competidor') + ': ' + (bench.etiquetaVerPuntos || 'Ver puntos'));
+              addBrandMedia(btn);
+              var hint = document.createElement('span');
+              hint.className = 'pp-bench-brand__hint';
+              hint.textContent = bench.etiquetaVerPuntos || 'Ver puntos';
+              btn.appendChild(hint);
+              btn.addEventListener('click', function (ev) {
+                ev.stopPropagation();
+                cnBenchOpenDetalle(c.nombre, urlDet, bench);
+              });
+              th.appendChild(btn);
+            } else {
+              var wrap = document.createElement('div');
+              wrap.className = 'pp-bench-brand pp-bench-brand--estatico';
+              addBrandMedia(wrap);
+              var pend = document.createElement('span');
+              pend.className = 'pp-bench-brand__pendiente';
+              pend.textContent = bench.sinArchivoLeyenda || 'Archivo próximo';
+              wrap.appendChild(pend);
+              th.appendChild(wrap);
+            }
             trh.appendChild(th);
           });
           theadB.appendChild(trh);

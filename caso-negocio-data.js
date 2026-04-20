@@ -521,29 +521,30 @@
       /**
        * Benchmark (p. 16): columnas = competidor + logo. Celdas bool: true / false / null (null = pendiente, se muestra —).
        * Texto: cadenas por columna; use \\n para segunda línea. Sustituye logos en assets/magazine/competitors/ si usas marca oficial.
+       * Puntos por provincia: `archivoPuntos` por competidor (URL o ruta bajo el repo). Si todos comparten el mismo archivo, usa solo `archivoPuntosDefecto`.
+       * Formatos: .html embebible; .pdf con visor del navegador; Excel/Sheets/enlace genérico → solo botón «Abrir en pestaña nueva».
        */
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
         intro:
-          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Los totales de puntos se completan cuando tengas el listado por provincia.',
+          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Toca la cabecera de cada competidor (logo) para abrir el detalle de puntos por provincia cuando el archivo esté enlazado.',
         notaPie:
-          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios.',
+          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios. Los totales de la primera fila se pueden alinear con ese detalle.',
+        etiquetaVerPuntos: 'Ver puntos por provincia',
+        sinArchivoLeyenda: 'Archivo próximo',
+        /** Misma ruta para todos los competidores si comparten un solo documento (p. ej. PDF con secciones). */
+        archivoPuntosDefecto: '',
         competidores: [
-          { nombre: 'Rapibac', logo: 'assets/magazine/competitors/rapibac.svg' },
-          { nombre: 'Caja Amiga', logo: 'assets/magazine/competitors/caja-amiga.svg' },
-          { nombre: 'Banistmo PTM', logo: 'assets/magazine/competitors/banistmo-ptm.svg' },
-          { nombre: 'Western Union', logo: 'assets/magazine/competitors/western-union.svg' },
+          { nombre: 'Rapibac', logo: 'assets/magazine/competitors/rapibac.svg', archivoPuntos: '' },
+          { nombre: 'Caja Amiga', logo: 'assets/magazine/competitors/caja-amiga.svg', archivoPuntos: '' },
+          { nombre: 'Banistmo PTM', logo: 'assets/magazine/competitors/banistmo-ptm.svg', archivoPuntos: '' },
+          { nombre: 'Western Union', logo: 'assets/magazine/competitors/western-union.svg', archivoPuntos: '' },
         ],
         filas: [
           {
             criterio: 'Cantidad de puntos (total)',
             tipo: 'texto',
-            celdas: [
-              '—\nPor provincia: pendiente',
-              '—\nPor provincia: pendiente',
-              '—\nPor provincia: pendiente',
-              '—\nPor provincia: pendiente',
-            ],
+            celdas: ['—', '—', '—', '—'],
           },
           { criterio: 'Terminal POS', tipo: 'bool', celdas: [null, null, null, null] },
           { criterio: 'Operación con balance de cuentas', tipo: 'bool', celdas: [null, null, null, null] },

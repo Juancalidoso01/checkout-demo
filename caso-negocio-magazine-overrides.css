@@ -334,6 +334,152 @@ body {
   color: var(--muted);
 }
 
+.pp-bench-brand--accion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.25rem 0.2rem 0.35rem;
+  border: none;
+  border-radius: 10px;
+  background: rgba(84, 98, 230, 0.06);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pp-bench-brand--accion:hover {
+  background: rgba(84, 98, 230, 0.12);
+  box-shadow: 0 0 0 1px rgba(84, 98, 230, 0.2);
+}
+
+.pp-bench-brand--accion:focus-visible {
+  outline: 2px solid var(--brand-blue, #5462e6);
+  outline-offset: 2px;
+}
+
+.pp-bench-brand--estatico {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.25rem 0.15rem 0.3rem;
+}
+
+.pp-bench-brand__hint {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-blue-dark);
+}
+
+.pp-bench-brand__pendiente {
+  font-size: 0.48rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.pp-bench-dialog {
+  width: min(96vw, 52rem);
+  max-height: min(92vh, 44rem);
+  padding: 0;
+  border: none;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink, #0f172a);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+}
+
+.pp-bench-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.pp-bench-dialog__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: min(92vh, 44rem);
+}
+
+.pp-bench-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+  flex-shrink: 0;
+}
+
+.pp-bench-dialog__title {
+  margin: 0;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pp-bench-dialog__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(241, 245, 249, 0.95);
+  color: var(--ink);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pp-bench-dialog__close:hover {
+  background: #e2e8f0;
+}
+
+.pp-bench-dialog__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem 0.85rem 0.75rem;
+  gap: 0.5rem;
+}
+
+.pp-bench-dialog__iframe,
+.pp-bench-dialog__embed {
+  width: 100%;
+  flex: 1;
+  min-height: min(58vh, 28rem);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.pp-bench-dialog__msg {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.pp-bench-dialog__foot {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.pp-bench-dialog__link {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brand-blue-dark, #3730a3);
+}
+
 .pp-mag-subhead {
   margin: 0.4rem 0 0.12rem;
   font-family: Montserrat, system-ui, sans-serif;
