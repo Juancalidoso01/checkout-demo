@@ -843,8 +843,9 @@ body {
 }
 
 /**
- * Apertura (p. 1 + p. 2): misma foto alineada al lomo, pero un poco más chica que 200%
- * para que el centro no se sienta tan "cortado" entre páginas.
+ * Apertura (p. 1 + p. 2): misma foto alineada al lomo, bastante más chica que 200%
+ * para priorizar proporción natural y evitar sensación de estiramiento,
+ * aunque aparezcan márgenes oscuros a los lados.
  * Alto en `auto` para no deformar la foto: puede quedar banda oscura arriba/abajo (letterbox).
  */
 .magazine-page--cover.magazine-page--opening-left {
@@ -852,7 +853,7 @@ body {
   background-image:
     linear-gradient(180deg, rgba(6, 10, 24, 0.1) 0%, rgba(6, 10, 24, 0.28) 42%, rgba(6, 10, 24, 0.88) 100%),
     url("assets/magazine/cover-spread-punto-pago.png") !important;
-  background-size: 100% 100%, 188% auto !important;
+  background-size: 100% 100%, 150% auto !important;
   background-position: center, left center !important;
   background-repeat: no-repeat, no-repeat !important;
 }
@@ -863,7 +864,7 @@ body {
     linear-gradient(180deg, rgba(6, 10, 24, 0.18) 0%, rgba(6, 10, 24, 0.42) 50%, rgba(15, 23, 42, 0.82) 100%),
     linear-gradient(90deg, transparent 0%, rgba(15, 23, 42, 0.35) 38%, rgba(15, 23, 42, 0.72) 100%),
     url("assets/magazine/cover-spread-punto-pago.png") !important;
-  background-size: 100% 100%, 100% 100%, 188% auto !important;
+  background-size: 100% 100%, 100% 100%, 150% auto !important;
   background-position: center, center, right center !important;
   background-repeat: no-repeat, no-repeat, no-repeat !important;
 }
