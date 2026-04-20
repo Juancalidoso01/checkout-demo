@@ -226,16 +226,16 @@
 
     /** Mapa por provincia (referencia 2023 aproximada para storytelling). */
     provinciasMapa: [
-      { nombre: 'Bocas del Toro', poblacion: 170000, x: 11, y: 24 },
-      { nombre: 'Chiriqui', poblacion: 470000, x: 17, y: 55 },
-      { nombre: 'Veraguas', poblacion: 260000, x: 31, y: 59 },
-      { nombre: 'Cocle', poblacion: 280000, x: 45, y: 48 },
-      { nombre: 'Herrera', poblacion: 125000, x: 45, y: 70 },
-      { nombre: 'Los Santos', poblacion: 100000, x: 51, y: 81 },
-      { nombre: 'Colon', poblacion: 300000, x: 45, y: 30 },
-      { nombre: 'Panama Oeste', poblacion: 730000, x: 54, y: 39 },
-      { nombre: 'Panama', poblacion: 2050000, x: 61, y: 36 },
-      { nombre: 'Darien', poblacion: 80000, x: 80, y: 49 },
+      { nombre: 'Bocas del Toro', poblacion: 170000, x: 13, y: 30, align: 'right' },
+      { nombre: 'Chiriqui', poblacion: 470000, x: 14, y: 58, align: 'right' },
+      { nombre: 'Veraguas', poblacion: 260000, x: 27, y: 63, align: 'right' },
+      { nombre: 'Cocle', poblacion: 280000, x: 40, y: 54, align: 'right' },
+      { nombre: 'Herrera', poblacion: 125000, x: 38, y: 74, align: 'right' },
+      { nombre: 'Los Santos', poblacion: 100000, x: 47, y: 84, align: 'right' },
+      { nombre: 'Colon', poblacion: 300000, x: 37, y: 38, align: 'right' },
+      { nombre: 'Panama Oeste', poblacion: 730000, x: 49, y: 45, align: 'right' },
+      { nombre: 'Panama', poblacion: 2050000, x: 59, y: 41, align: 'right' },
+      { nombre: 'Darien', poblacion: 80000, x: 84, y: 53, align: 'left' },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */

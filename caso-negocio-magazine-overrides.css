@@ -177,61 +177,9 @@ body {
 
 /* Pág. 05: contexto + barras (sin tabla densa) */
 .pp-mag-territorio {
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
-  gap: 0.65rem;
-  align-items: stretch;
+  display: block;
   min-height: 0;
   flex: 1;
-}
-
-@media (max-width: 560px) {
-  .pp-mag-territorio {
-    grid-template-columns: 1fr;
-  }
-}
-
-.pp-mag-locator {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  min-height: 0;
-}
-
-.pp-mag-locator__mapcard {
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.95), rgba(238, 242, 255, 0.88));
-  padding: 0.45rem 0.5rem 0.5rem;
-  box-shadow: 0 8px 24px rgba(30, 27, 75, 0.06);
-}
-
-.pp-mag-locator__svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 108px;
-}
-
-.pp-mag-locator__cap {
-  margin: 0.35rem 0 0;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.pp-mag-locator__facts {
-  margin: 0;
-  padding-left: 1.05rem;
-  font-size: 0.68rem;
-  line-height: 1.45;
-  color: var(--ink);
-}
-
-.pp-mag-locator__facts li + li {
-  margin-top: 0.28rem;
 }
 
 .pp-panama-map {
@@ -271,6 +219,12 @@ body {
 
 .pp-panama-map__marker--left {
   flex-direction: row-reverse;
+}
+.pp-panama-map__marker--top {
+  flex-direction: column-reverse;
+}
+.pp-panama-map__marker--bottom {
+  flex-direction: column;
 }
 
 .pp-panama-map__dot {
