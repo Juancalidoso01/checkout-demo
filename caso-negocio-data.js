@@ -123,95 +123,125 @@
     },
 
     /**
-     * Bloques cortos para junta (pp. 11–14): pocos bullets, sin duplicar tablas de 07–08.
-     * etiqueta: pendiente | referencia | sintesis (misma UI que antes).
+     * Bloques de trabajo pendientes (pp. 11–14).
+     * etiqueta: pendiente | referencia | sintesis (la UI actual muestra solo pendiente).
      */
     guiasPreguntas: [
       {
-        titulo: 'Lo esencial para la junta',
+        titulo: 'Estrategia de mejora de producto',
         introduccion:
-          'Tres respuestas: tesis del caso, dónde viven los números y qué falta sustituir con datos internos.',
+          'Prioridad uno: fortalecer producto antes de escalar mercado. Formato de ejecución: trimestre + dueño.',
         items: [
           {
-            pregunta: '¿Cuál es la tesis en una frase?',
-            etiqueta: 'referencia',
-            respuesta:
-              'Dimensionar Panamá con un referente maduro en Colombia, explicitar supuestos (p. 07), cuantificar TAM/SAM/SOM (p. 08) y cerrar con economía y ganancia para accionistas (p. 17).',
-          },
-          {
-            pregunta: '¿Dónde está cada tipo de cifra?',
-            etiqueta: 'referencia',
-            respuesta:
-              'Índice: p. 03. País: p. 04. Territorio (contexto + población): p. 05. Escenarios (red de ejemplo 2.500 puntos): p. 06. Comparación y supuestos: p. 07. TAM/SAM/SOM: p. 08. Presupuesto digital: p. 09–10.',
-          },
-          {
-            pregunta: '¿Qué no está todavía en el libro?',
+            pregunta: 'Q1 · Dueño: Producto + Growth — Comercialización virtual y canal web',
             etiqueta: 'pendiente',
             respuesta:
-              'Tu operación real (base de puntos, costos, stack). Cuando lo compartas, se reemplaza texto marcado como pendiente sin cambiar la estructura de las páginas.',
-          },
-        ],
-      },
-      {
-        titulo: 'Referente Colombia → Panamá',
-        introduccion:
-          'Evitar la confusión “Colombia = Panamá”: el referente solo ordena magnitudes; Panamá lleva su propio rango en la tabla.',
-        items: [
-          {
-            pregunta: '¿Para qué usamos Puntored / Colombia?',
-            etiqueta: 'referencia',
-            respuesta:
-              'Como ancla de un segmento ya maduro (órdenes de magnitud de usuarios, volumen y ritmo por punto). No es pronóstico de resultados en Panamá.',
+              'Acelerar adquisición desde la página web con mejor acceso, flujo de alta claro y conversión desde contenido comercial.',
           },
           {
-            pregunta: '¿Qué cambia al pasar a Panamá?',
-            etiqueta: 'referencia',
-            respuesta:
-              'Población, ticket, número de corresponsales y competencia. Los tres supuestos explícitos del ajuste están en la tabla bajo la comparación (p. 07).',
-          },
-        ],
-      },
-      {
-        titulo: 'Adquisición y esfuerzo digital',
-        introduccion:
-          'Cómo se conecta el plan de puntos con el dinero que se invierte en canales.',
-        items: [
-          {
-            pregunta: '¿Con qué red trabajamos en los escenarios?',
-            etiqueta: 'referencia',
-            respuesta:
-              '2 500 puntos como ejemplo de red; el rango de corresponsales en Panamá está en la tabla de mercado (p. 07–08).',
-          },
-          {
-            pregunta: '¿Dónde está el plan de gasto digital?',
-            etiqueta: 'referencia',
-            respuesta:
-              'Presupuesto mensual por canal, puntos nuevos y CAC de referencia del plan: p. 09–10.',
-          },
-          {
-            pregunta: '¿Cómo se explica la ganancia a accionistas?',
-            etiqueta: 'referencia',
-            respuesta:
-              'Proyección de ganancia año tras año e ingreso ilustrativo del canal: p. 17 (scroll si hace falta).',
-          },
-        ],
-      },
-      {
-        titulo: 'Próxima versión',
-        introduccion:
-          'Lo que reservamos para una edición con más datos operativos; no bloquea la lectura del sizing.',
-        items: [
-          {
-            pregunta: '¿Qué profundidad operativa quitamos por ahora?',
-            etiqueta: 'sintesis',
-            respuesta:
-              'Listas largas de herramientas, procesos y producto: fuera de esta revista para no competir con el mensaje de mercado y retorno.',
-          },
-          {
-            pregunta: '¿Qué conviene traer después?',
+            pregunta: 'Q1–Q2 · Dueño: Producto + Integraciones — Nuevos servicios de valor',
             etiqueta: 'pendiente',
             respuesta:
-              'Base instalada real, costo por transacción, inventario de sistemas y checklist legal/regulatorio — enlazados a la hoja de trabajo cuando existan.',
+              'Agregar recarga con tarjeta Wompi, tarjeta débito para disponer fondos, vinculación con PayPal, integración con Yappy y transferencias ACH a cuentas.',
+          },
+          {
+            pregunta: 'Q2 · Dueño: Producto + Tecnología — Automatización y experiencia digital',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Eliminar acreditación manual (solo automática), mejorar interfaz y relanzar promoción de la app P2P con enfoque de uso recurrente.',
+          },
+          {
+            pregunta: 'Q2–Q3 · Dueño: Producto + CX — Retención y expansión de propuesta',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Habilitar canal directo tipo Intercom para retención y sumar remesas desde app Punto Pago con WebKYC para incorporar luego clientes app.',
+          },
+        ],
+      },
+      {
+        titulo: 'Mejoras operativas y de ventas',
+        introduccion:
+          'Eficiencia operativa + crecimiento comercial: onboarding más corto, mejor economics y adquisición multicanal.',
+        items: [
+          {
+            pregunta: 'Q1 · Dueño: Operaciones + Compliance — Onboarding por segmentos',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Crear cuentas express y ordenar credenciales. Para PyME/dueño: KYC Matti + contrato afiliación + documentos empresa + KYB. Para empresas grandes/cooperativas: contrato afiliación + documentos empresa + KYB.',
+          },
+          {
+            pregunta: 'Q1–Q2 · Dueño: Operaciones + Finanzas — Modelo económico operativo',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Automatizar facturación y ajustar esquema de comisión para pagar menos pero más rápido, cuidando activación y retención del agente.',
+          },
+          {
+            pregunta: 'Q2 · Dueño: Comercial + Growth — Adquisición digital de nuevos agentes',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Performance Max con geo-targeting, landing de adquisición, formulario digital, email/SMS/WhatsApp, Google Search, instructivos de uso y programa de referidos.',
+          },
+          {
+            pregunta: 'Q2–Q3 · Dueño: Comercial + Producto — Palancas de crecimiento',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Incluir agentes en mapas y app Punto Pago, gamificación con recompensas por desempeño y evaluar relanzamiento de marca pública (PuntoYa / PuntoExpress / PuntoMaxx).',
+          },
+          {
+            pregunta: 'Q3 · Dueño: Comercial Tradicional — Canal offline',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Mantener fuerza de ventas de campo con visitas a comercios como soporte de cierre en zonas de baja digitalización.',
+          },
+        ],
+      },
+      {
+        titulo: 'Métricas administrativas y foco comercial',
+        introduccion:
+          'Definir tablero único con revisión semanal para medir rentabilidad real por agente y calidad de activación.',
+        items: [
+          {
+            pregunta: 'Q1 · Dueño: BI + Finanzas — KPIs administrativos base',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Medir CAC por agente activado, porcentaje de agentes que transaccionan en 7 días, GMV por agente, retención 30/60/90 días y costo por agente activo (CPA real).',
+          },
+          {
+            pregunta: 'Q1–Q2 · Dueño: Comercial + Marketing — Comunicación por perfil',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Dirigir mensaje comercial a tiendas pequeñas, emprendedores, freelancers, minimarkets, farmacias, talleres y servicios informales/semi-formales.',
+          },
+          {
+            pregunta: 'Q2–Q3 · Dueño: Dirección Comercial — Disciplina de seguimiento',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Revisar semanalmente cohortes de activación y retención para ajustar pauta, discurso y oferta por segmento con evidencia.',
+          },
+        ],
+      },
+      {
+        titulo: 'Partnerships digitales (B2B2B)',
+        introduccion:
+          'Escalar distribución vía aliados con acceso a base de comercios y operación recurrente.',
+        items: [
+          {
+            pregunta: 'Q1 · Dueño: Alianzas B2B — Canales priorizados',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Abrir frentes con distribuidores, mayoristas, cooperativas, asociaciones de comerciantes y proveedores de POS, contabilidad e internet.',
+          },
+          {
+            pregunta: 'Q2 · Dueño: Alianzas + Operaciones — Modelo de activación',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Diseñar paquete comercial para aliado (comisión, capacitación, kit digital y SLA) y embudo de referidos hacia onboarding express.',
+          },
+          {
+            pregunta: 'Q3 · Dueño: Dirección Comercial — Meta esperada',
+            etiqueta: 'pendiente',
+            respuesta:
+              'Reducir CAC, mejorar velocidad de alta y aumentar calidad de agentes activos a través de canales con confianza ya instalada.',
           },
         ],
       },

@@ -811,37 +811,66 @@
       }
 
       var caps = D.guiasPreguntas;
+      var pendingCaps = [];
       if (caps && caps.length) {
-        for (var qi = 0; qi < caps.length && qi < 4; qi++) {
-          var cap = caps[qi];
-          var n = 10 + qi;
-          set('cn-qa' + n + '-title', cap.titulo || '');
-          set('cn-qa' + n + '-intro', cap.introduccion || '');
-          var qList = document.getElementById('cn-qa' + n + '-list');
-          if (!qList || !cap.items) continue;
-          qList.innerHTML = '';
-          cap.items.forEach(function (it) {
-            var block = document.createElement('div');
-            var et = it.etiqueta || '';
-            block.className = 'pp-mag-qa' + (et === 'pendiente' ? ' pp-mag-qa--pendiente' : '');
-            var lab = etiquetaQa(et);
-            if (lab) {
-              var tag = document.createElement('span');
-              tag.className = 'pp-mag-qa__tag pp-mag-qa__tag--' + et;
-              tag.textContent = lab;
-              block.appendChild(tag);
-            }
-            var pq = document.createElement('p');
-            pq.className = 'pp-mag-qa__q';
-            pq.textContent = it.pregunta || '';
-            var pa = document.createElement('p');
-            pa.className = 'pp-mag-qa__a';
-            pa.textContent = it.respuesta || '';
-            block.appendChild(pq);
-            block.appendChild(pa);
-            qList.appendChild(block);
+        caps.forEach(function (cap) {
+          var onlyPending = (cap.items || []).filter(function (it) {
+            return (it.etiqueta || '') === 'pendiente';
           });
+          if (onlyPending.length) {
+            pendingCaps.push({
+              titulo: cap.titulo || '',
+              introduccion: cap.introduccion || '',
+              items: onlyPending,
+            });
+          }
+        });
+      }
+      for (var qi = 0; qi < 4; qi++) {
+        var n = 10 + qi;
+        var cap = pendingCaps[qi];
+        var qList = document.getElementById('cn-qa' + n + '-list');
+        if (!qList) continue;
+        qList.innerHTML = '';
+        if (!cap) {
+          set('cn-qa' + n + '-title', 'Pendientes por responder');
+          set('cn-qa' + n + '-intro', 'Espacio reservado para respuestas que aún faltan.');
+          var empty = document.createElement('div');
+          empty.className = 'pp-mag-qa pp-mag-qa--pendiente';
+          var t = document.createElement('span');
+          t.className = 'pp-mag-qa__tag pp-mag-qa__tag--pendiente';
+          t.textContent = etiquetaQa('pendiente');
+          var p = document.createElement('p');
+          p.className = 'pp-mag-qa__a';
+          p.textContent = 'Cuando compartas la información, la cargamos aquí.';
+          empty.appendChild(t);
+          empty.appendChild(p);
+          qList.appendChild(empty);
+          continue;
         }
+        set('cn-qa' + n + '-title', cap.titulo || '');
+        set('cn-qa' + n + '-intro', cap.introduccion || '');
+        cap.items.forEach(function (it) {
+          var block = document.createElement('div');
+          var et = it.etiqueta || '';
+          block.className = 'pp-mag-qa' + (et === 'pendiente' ? ' pp-mag-qa--pendiente' : '');
+          var lab = etiquetaQa(et);
+          if (lab) {
+            var tag = document.createElement('span');
+            tag.className = 'pp-mag-qa__tag pp-mag-qa__tag--' + et;
+            tag.textContent = lab;
+            block.appendChild(tag);
+          }
+          var pq = document.createElement('p');
+          pq.className = 'pp-mag-qa__q';
+          pq.textContent = it.pregunta || '';
+          var pa = document.createElement('p');
+          pa.className = 'pp-mag-qa__a';
+          pa.textContent = it.respuesta || '';
+          block.appendChild(pq);
+          block.appendChild(pa);
+          qList.appendChild(block);
+        });
       }
 
       set('cn-seg-h', t.segmento.titulo);
