@@ -467,6 +467,17 @@ body {
   gap: 0.35rem;
 }
 
+.pp-gantt-seccion-subtitulo {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-blue-dark);
+}
+
 .pp-gantt-wrap {
   flex: 1;
   min-height: 0;

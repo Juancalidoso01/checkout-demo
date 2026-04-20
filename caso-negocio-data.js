@@ -43,14 +43,12 @@
       { capitulo: 'III · Esfuerzo comercial (9–10)' },
       { pagina: 9, texto: 'Presupuesto digital (M1–M6)' },
       { pagina: 10, texto: 'Presupuesto digital (M7–M12) + red' },
-      { capitulo: 'IV · Decisión y retorno (11–17)' },
-      { pagina: 11, texto: 'Gantt relanzamiento (1/4): Fundación' },
-      { pagina: 12, texto: 'Gantt relanzamiento (2/4): Activación y producto' },
-      { pagina: 13, texto: 'Gantt relanzamiento (3/4): Comercial y distribución' },
-      { pagina: 14, texto: 'Gantt relanzamiento (4/4): Retención y rebranding' },
-      { pagina: 15, texto: 'Segmento (resumen)' },
-      { pagina: 16, texto: 'Mercado y problema' },
-      { pagina: 17, texto: 'Solución, economía, ganancia y demo' },
+      { capitulo: 'IV · Decisión y retorno (11–15)' },
+      { pagina: 11, texto: 'Gantt relanzamiento (1/2): Fundación a producto' },
+      { pagina: 12, texto: 'Gantt relanzamiento (2/2): Comercial a rebranding' },
+      { pagina: 13, texto: 'Segmento (resumen)' },
+      { pagina: 14, texto: 'Mercado y problema' },
+      { pagina: 15, texto: 'Solución, economía, ganancia y demo' },
     ],
 
     /**
@@ -123,75 +121,77 @@
     },
 
     /**
-     * Gantt de relanzamiento (pp. 11–14).
-     * tipo: gantt — se renderiza como tabla con barras por ventana de 4 semanas.
+     * Gantt de relanzamiento (pp. 11–12): dos páginas con dos tablas cada una (secciones).
+     * tipo: gantt — secciones[] opcional: cada bloque reutiliza columnas y notaPie en la última sección si aplica.
      * w[] por fila: 0 vacío, 1 ligero, 2 medio, 3 alto (según bloques █ del plan).
      */
     guiasPreguntas: [
       {
-        titulo: 'Relanzamiento — Gantt (1/4): Fundación',
+        titulo: 'Relanzamiento — Gantt (1/2): Fundación a producto',
         tipo: 'gantt',
         introduccion:
-          'Cada columna agrupa 4 semanas (hasta 20 semanas). Las barras muestran intensidad relativa de ejecución, no fechas fijas.',
+          'Cada columna agrupa 4 semanas (hasta 20 semanas). Las barras muestran intensidad relativa de ejecución, no fechas fijas. Fase 2 acelera primera transacción; Fase 3 suma servicios y monetización incremental.',
         columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
-        filas: [
+        secciones: [
           {
-            fase: '1. Fundación',
-            bloque: 'Onboarding digital (KYC, contratos, credenciales)',
-            w: [3, 2, 0, 0, 0],
-            obs: 'Base para activación',
+            subtitulo: '1 · Fundación',
+            filas: [
+              {
+                fase: '1. Fundación',
+                bloque: 'Onboarding digital (KYC, contratos, credenciales)',
+                w: [3, 2, 0, 0, 0],
+                obs: 'Base para activación',
+              },
+              { fase: '', bloque: 'Acreditación automática', w: [3, 2, 0, 0, 0], obs: 'Eliminación de procesos manuales' },
+              { fase: '', bloque: 'Facturación y comisiones optimizadas', w: [3, 2, 0, 0, 0], obs: 'Mejora flujo financiero' },
+              { fase: '', bloque: 'Estabilidad operativa', w: [3, 3, 2, 0, 0], obs: 'Continuo' },
+              { fase: '', bloque: 'Mejora APIs operadores', w: [3, 3, 0, 0, 0], obs: 'Crítico para conversión' },
+              { fase: '', bloque: 'Mejora consulta de clientes', w: [3, 3, 0, 0, 0], obs: 'Reduce errores y reclamos' },
+            ],
           },
-          { fase: '', bloque: 'Acreditación automática', w: [3, 2, 0, 0, 0], obs: 'Eliminación de procesos manuales' },
-          { fase: '', bloque: 'Facturación y comisiones optimizadas', w: [3, 2, 0, 0, 0], obs: 'Mejora flujo financiero' },
-          { fase: '', bloque: 'Estabilidad operativa', w: [3, 3, 2, 0, 0], obs: 'Continuo' },
-          { fase: '', bloque: 'Mejora APIs operadores', w: [3, 3, 0, 0, 0], obs: 'Crítico para conversión' },
-          { fase: '', bloque: 'Mejora consulta de clientes', w: [3, 3, 0, 0, 0], obs: 'Reduce errores y reclamos' },
+          {
+            subtitulo: '2 y 3 · Activación y producto',
+            filas: [
+              { fase: '2. Activación', bloque: 'Flujo de primer uso', w: [0, 0, 3, 2, 0], obs: 'Reduce tiempo a primera transacción' },
+              { fase: '', bloque: 'Incentivos iniciales', w: [0, 0, 3, 2, 0], obs: 'Activación temprana' },
+              { fase: '', bloque: 'Soporte (chat / Intercom)', w: [0, 0, 3, 3, 2], obs: 'Soporte continuo' },
+              { fase: '3. Producto', bloque: 'Nuevos servicios (ACH, Yappy, PayPal)', w: [0, 0, 0, 3, 2], obs: 'Incremento de valor' },
+              { fase: '', bloque: 'Tarjeta débito / uso de fondos', w: [0, 0, 0, 3, 2], obs: 'Monetización' },
+              { fase: '', bloque: 'Remesas / P2P en app', w: [0, 0, 3, 3, 2], obs: 'Expansión de ecosistema' },
+            ],
+          },
         ],
       },
       {
-        titulo: 'Relanzamiento — Gantt (2/4): Activación y producto',
+        titulo: 'Relanzamiento — Gantt (2/2): Comercial a rebranding',
         tipo: 'gantt',
         introduccion:
-          'Fase 2 acelera primera transacción; Fase 3 suma servicios y monetización incremental.',
+          'Fase 4 llena el embudo; Fase 5 acelera escala con aliados cuando el producto y APIs sostienen volumen. Fase 6 captura valor recurrente; Fase 7 cuando la operación y conversión ya están sostenidas.',
         columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
-        filas: [
-          { fase: '2. Activación', bloque: 'Flujo de primer uso', w: [0, 0, 3, 2, 0], obs: 'Reduce tiempo a primera transacción' },
-          { fase: '', bloque: 'Incentivos iniciales', w: [0, 0, 3, 2, 0], obs: 'Activación temprana' },
-          { fase: '', bloque: 'Soporte (chat / Intercom)', w: [0, 0, 3, 3, 2], obs: 'Soporte continuo' },
-          { fase: '3. Producto', bloque: 'Nuevos servicios (ACH, Yappy, PayPal)', w: [0, 0, 0, 3, 2], obs: 'Incremento de valor' },
-          { fase: '', bloque: 'Tarjeta débito / uso de fondos', w: [0, 0, 0, 3, 2], obs: 'Monetización' },
-          { fase: '', bloque: 'Remesas / P2P en app', w: [0, 0, 3, 3, 2], obs: 'Expansión de ecosistema' },
+        secciones: [
+          {
+            subtitulo: '4 y 5 · Comercialización y distribución',
+            filas: [
+              { fase: '4. Comercialización', bloque: 'Preparación comercial (scripts, materiales)', w: [0, 0, 2, 2, 0], obs: 'Etapa de validación' },
+              { fase: '', bloque: 'Campañas digitales', w: [0, 0, 0, 3, 2], obs: 'Escalamiento' },
+              { fase: '', bloque: 'Canales directos (WhatsApp, email)', w: [0, 0, 0, 3, 2], obs: 'Conversión' },
+              { fase: '', bloque: 'Programa de referidos', w: [0, 0, 2, 3, 2], obs: 'Optimización CAC' },
+              { fase: '5. Distribución', bloque: 'Partnerships (B2B2B)', w: [0, 0, 0, 2, 3], obs: 'Escala no lineal' },
+              { fase: '', bloque: 'Integraciones con terceros', w: [0, 0, 0, 2, 3], obs: 'Dependiente de APIs' },
+            ],
+          },
+          {
+            subtitulo: '6 y 7 · Retención y rebranding',
+            filas: [
+              { fase: '6. Retención y expansión', bloque: 'Gamificación e incentivos', w: [0, 0, 0, 3, 3], obs: 'Incremento de uso' },
+              { fase: '', bloque: 'Cross-sell / upsell', w: [0, 0, 0, 3, 3], obs: 'Mayor ingreso por cliente' },
+              { fase: '7. Rebranding', bloque: 'Estrategia de marca', w: [0, 0, 0, 2, 3], obs: 'Preparación' },
+              { fase: '', bloque: 'Lanzamiento al mercado', w: [0, 0, 0, 0, 3], obs: 'Activación masiva' },
+            ],
+            notaPie:
+              'Control sugerido: CAC por agente activado, % que transacciona en 7 días, GMV por agente, retención 30/60/90 y CPA real.',
+          },
         ],
-      },
-      {
-        titulo: 'Relanzamiento — Gantt (3/4): Comercialización y distribución',
-        tipo: 'gantt',
-        introduccion:
-          'Fase 4 llena el embudo; Fase 5 acelera escala con aliados cuando el producto y APIs sostienen volumen.',
-        columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
-        filas: [
-          { fase: '4. Comercialización', bloque: 'Preparación comercial (scripts, materiales)', w: [0, 0, 2, 2, 0], obs: 'Etapa de validación' },
-          { fase: '', bloque: 'Campañas digitales', w: [0, 0, 0, 3, 2], obs: 'Escalamiento' },
-          { fase: '', bloque: 'Canales directos (WhatsApp, email)', w: [0, 0, 0, 3, 2], obs: 'Conversión' },
-          { fase: '', bloque: 'Programa de referidos', w: [0, 0, 2, 3, 2], obs: 'Optimización CAC' },
-          { fase: '5. Distribución', bloque: 'Partnerships (B2B2B)', w: [0, 0, 0, 2, 3], obs: 'Escala no lineal' },
-          { fase: '', bloque: 'Integraciones con terceros', w: [0, 0, 0, 2, 3], obs: 'Dependiente de APIs' },
-        ],
-      },
-      {
-        titulo: 'Relanzamiento — Gantt (4/4): Retención y rebranding',
-        tipo: 'gantt',
-        introduccion:
-          'Fase 6 captura valor recurrente; Fase 7 es visible solo cuando la operación y conversión ya están sostenidas.',
-        columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
-        filas: [
-          { fase: '6. Retención y expansión', bloque: 'Gamificación e incentivos', w: [0, 0, 0, 3, 3], obs: 'Incremento de uso' },
-          { fase: '', bloque: 'Cross-sell / upsell', w: [0, 0, 0, 3, 3], obs: 'Mayor ingreso por cliente' },
-          { fase: '7. Rebranding', bloque: 'Estrategia de marca', w: [0, 0, 0, 2, 3], obs: 'Preparación' },
-          { fase: '', bloque: 'Lanzamiento al mercado', w: [0, 0, 0, 0, 3], obs: 'Activación masiva' },
-        ],
-        notaPie:
-          'Control sugerido: CAC por agente activado, % que transacciona en 7 días, GMV por agente, retención 30/60/90 y CPA real.',
       },
     ],
 
@@ -464,7 +464,7 @@
     },
 
     /**
-     * Proyección ilustrativa — página 17 (cierre), bloque interactivo bajo la gráfica de economía.
+     * Proyección ilustrativa — página 15 (cierre), bloque interactivo bajo la gráfica de economía.
      */
     gananciaAnual: {
       titulo: 'Ganancia año tras año',

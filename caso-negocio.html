@@ -21,7 +21,7 @@
       </div>
       <div class="magazine-chrome__meta">
         <a class="magazine-chrome__map-link" href="index.html">← Mapa del proceso</a>
-        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 17</span>
+        <span class="magazine-chrome__issue" id="pageLabel" aria-live="polite">1–2 / 15</span>
       </div>
     </div>
   </header>
@@ -242,7 +242,7 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="11" id="p11" aria-label="Gantt relanzamiento parte 1">
+          <article class="magazine-page" data-page="11" id="p11" aria-label="Gantt relanzamiento fundación a producto">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">11</span>
@@ -253,7 +253,7 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="12" id="p12" aria-label="Gantt relanzamiento parte 2">
+          <article class="magazine-page" data-page="12" id="p12" aria-label="Gantt relanzamiento comercial a rebranding">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">12</span>
@@ -264,32 +264,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="13" id="p13" aria-label="Gantt relanzamiento parte 3">
-            <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
-              <div class="pp-mag-head">
-                <span class="pp-mag-kicker">13</span>
-                <h2 class="pp-mag-h2" id="cn-qa12-title"></h2>
-              </div>
-              <p class="pp-mag-lead" id="cn-qa12-intro"></p>
-              <div class="pp-mag-qa-list" id="cn-qa12-list"></div>
-            </div>
-          </article>
-
-          <article class="magazine-page" data-page="14" id="p14" aria-label="Gantt relanzamiento parte 4">
-            <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
-              <div class="pp-mag-head">
-                <span class="pp-mag-kicker">14</span>
-                <h2 class="pp-mag-h2" id="cn-qa13-title"></h2>
-              </div>
-              <p class="pp-mag-lead" id="cn-qa13-intro"></p>
-              <div class="pp-mag-qa-list" id="cn-qa13-list"></div>
-            </div>
-          </article>
-
-          <article class="magazine-page" data-page="15" id="p15" aria-label="Segmento">
+          <article class="magazine-page" data-page="13" id="p13" aria-label="Segmento">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">15</span>
+                <span class="pp-mag-kicker">13</span>
                 <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-seg-sub"></p>
@@ -301,10 +279,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="16" id="p16" aria-label="Mercado y problema">
+          <article class="magazine-page" data-page="14" id="p14" aria-label="Mercado y problema">
             <div class="magazine-page__inner pp-mag-page">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">16</span>
+                <span class="pp-mag-kicker">14</span>
                 <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-mer-intro"></p>
@@ -323,10 +301,10 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="17" id="p17" aria-label="Solución economía riesgos demo">
+          <article class="magazine-page" data-page="15" id="p15" aria-label="Solución economía riesgos demo">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--cierre">
               <div class="pp-mag-head">
-                <span class="pp-mag-kicker">17</span>
+                <span class="pp-mag-kicker">15</span>
                 <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
               </div>
               <p class="pp-mag-lead" id="cn-sol-intro"></p>
@@ -855,9 +833,7 @@
         return '';
       }
 
-      function buildGanttTable(host, cap) {
-        var cols = cap.columnas || ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'];
-        var filas = cap.filas || [];
+      function appendGanttTableBlock(host, cols, filas, notaPie) {
         var wrap = document.createElement('div');
         wrap.className = 'pp-gantt-wrap';
         var tbl = document.createElement('table');
@@ -880,12 +856,13 @@
 
         var tbody = document.createElement('tbody');
         var r = 0;
-        while (r < filas.length) {
-          var phaseLabel = filas[r].fase != null ? String(filas[r].fase) : '';
+        var rowList = filas || [];
+        while (r < rowList.length) {
+          var phaseLabel = rowList[r].fase != null ? String(rowList[r].fase) : '';
           var rs = 1;
-          while (r + rs < filas.length && (filas[r + rs].fase === '' || filas[r + rs].fase == null)) rs++;
+          while (r + rs < rowList.length && (rowList[r + rs].fase === '' || rowList[r + rs].fase == null)) rs++;
           for (var k = 0; k < rs; k++) {
-            var row = filas[r + k];
+            var row = rowList[r + k];
             var tr = document.createElement('tr');
             if (k === 0) {
               var tdF = document.createElement('td');
@@ -923,17 +900,35 @@
         }
         tbl.appendChild(tbody);
         wrap.appendChild(tbl);
-        if (cap.notaPie) {
+        if (notaPie) {
           var np = document.createElement('p');
           np.className = 'pp-gantt-foot';
-          np.textContent = cap.notaPie;
+          np.textContent = notaPie;
           wrap.appendChild(np);
         }
         host.appendChild(wrap);
       }
 
+      function buildGanttTable(host, cap) {
+        var cols = cap.columnas || ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'];
+        var secciones = cap.secciones;
+        if (secciones && secciones.length) {
+          secciones.forEach(function (sec) {
+            if (sec.subtitulo) {
+              var h3 = document.createElement('h3');
+              h3.className = 'pp-gantt-seccion-subtitulo';
+              h3.textContent = sec.subtitulo;
+              host.appendChild(h3);
+            }
+            appendGanttTableBlock(host, cols, sec.filas || [], sec.notaPie || '');
+          });
+          return;
+        }
+        appendGanttTableBlock(host, cols, cap.filas || [], cap.notaPie || '');
+      }
+
       var caps = D.guiasPreguntas || [];
-      for (var qi = 0; qi < 4; qi++) {
+      for (var qi = 0; qi < caps.length; qi++) {
         var n = 10 + qi;
         var cap = caps[qi];
         var qList = document.getElementById('cn-qa' + n + '-list');
