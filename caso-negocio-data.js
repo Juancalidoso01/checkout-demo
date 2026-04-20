@@ -226,16 +226,16 @@
 
     /** Mapa por provincia (referencia 2023 aproximada para storytelling). */
     provinciasMapa: [
-      { nombre: 'Bocas del Toro', poblacion: 170000, x: 21, y: 53 },
-      { nombre: 'Chiriqui', poblacion: 470000, x: 30, y: 64 },
-      { nombre: 'Veraguas', poblacion: 260000, x: 42, y: 58 },
-      { nombre: 'Cocle', poblacion: 280000, x: 52, y: 60 },
-      { nombre: 'Herrera', poblacion: 125000, x: 56, y: 67 },
-      { nombre: 'Los Santos', poblacion: 100000, x: 61, y: 73 },
-      { nombre: 'Colon', poblacion: 300000, x: 62, y: 46 },
-      { nombre: 'Panama Oeste', poblacion: 730000, x: 64, y: 57 },
-      { nombre: 'Panama', poblacion: 2050000, x: 73, y: 59 },
-      { nombre: 'Darien', poblacion: 80000, x: 83, y: 62 },
+      { nombre: 'Bocas del Toro', poblacion: 170000, x: 11, y: 24 },
+      { nombre: 'Chiriqui', poblacion: 470000, x: 17, y: 55 },
+      { nombre: 'Veraguas', poblacion: 260000, x: 31, y: 59 },
+      { nombre: 'Cocle', poblacion: 280000, x: 45, y: 48 },
+      { nombre: 'Herrera', poblacion: 125000, x: 45, y: 70 },
+      { nombre: 'Los Santos', poblacion: 100000, x: 51, y: 81 },
+      { nombre: 'Colon', poblacion: 300000, x: 45, y: 30 },
+      { nombre: 'Panama Oeste', poblacion: 730000, x: 54, y: 39 },
+      { nombre: 'Panama', poblacion: 2050000, x: 61, y: 36 },
+      { nombre: 'Darien', poblacion: 80000, x: 80, y: 49 },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
