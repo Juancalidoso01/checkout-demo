@@ -44,10 +44,10 @@
       { pagina: 9, texto: 'Presupuesto digital (M1–M6)' },
       { pagina: 10, texto: 'Presupuesto digital (M7–M12) + red' },
       { capitulo: 'IV · Decisión y retorno (11–17)' },
-      { pagina: 11, texto: 'Lo esencial para la junta' },
-      { pagina: 12, texto: 'Referente Colombia → Panamá (lectura corta)' },
-      { pagina: 13, texto: 'Adquisición y esfuerzo digital' },
-      { pagina: 14, texto: 'Próxima versión (datos operativos)' },
+      { pagina: 11, texto: 'Gantt relanzamiento (1/4): Fundación' },
+      { pagina: 12, texto: 'Gantt relanzamiento (2/4): Activación y producto' },
+      { pagina: 13, texto: 'Gantt relanzamiento (3/4): Comercial y distribución' },
+      { pagina: 14, texto: 'Gantt relanzamiento (4/4): Retención y rebranding' },
       { pagina: 15, texto: 'Segmento (resumen)' },
       { pagina: 16, texto: 'Mercado y problema' },
       { pagina: 17, texto: 'Solución, economía, ganancia y demo' },
@@ -123,91 +123,75 @@
     },
 
     /**
-     * Bloques de trabajo pendientes (pp. 11–14).
-     * etiqueta: pendiente | referencia | sintesis (la UI actual muestra solo pendiente).
+     * Gantt de relanzamiento (pp. 11–14).
+     * tipo: gantt — se renderiza como tabla con barras por ventana de 4 semanas.
+     * w[] por fila: 0 vacío, 1 ligero, 2 medio, 3 alto (según bloques █ del plan).
      */
     guiasPreguntas: [
       {
-        titulo: 'Pipeline de relanzamiento (I): Fundación y Activación',
+        titulo: 'Relanzamiento — Gantt (1/4): Fundación',
+        tipo: 'gantt',
         introduccion:
-          'Primero la base operativa y luego el primer ingreso del agente. Si esto falla, todo lo demás pierde eficiencia.',
-        items: [
+          'Cada columna agrupa 4 semanas (hasta 20 semanas). Las barras muestran intensidad relativa de ejecución, no fechas fijas.',
+        columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
+        filas: [
           {
-            pregunta: '1) Fundación — Prioridad 🔴 Crítica',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: eliminar fricción antes de salir. Iniciativas: onboarding digital completo (KYC + contrato + credenciales), acreditación 100% automática, facturación automática con ajuste de comisiones y estabilidad operativa (pagos, recargas, uptime). Impacto esperado: menos abandono en onboarding, menor costo operativo y mayor velocidad de activación.',
+            fase: '1. Fundación',
+            bloque: 'Onboarding digital (KYC, contratos, credenciales)',
+            w: [3, 2, 0, 0, 0],
+            obs: 'Base para activación',
           },
-          {
-            pregunta: '2) Activación — Prioridad 🔴 Crítica',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: reducir tiempo a primera transacción. Iniciativas: flujo guiado de primer uso, instructivos simples de recarga/pagos, soporte directo (Intercom o chat web) e incentivo a primera transacción. Impacto esperado: menor tiempo a revenue y mayor conversión de agente activo.',
-          },
+          { fase: '', bloque: 'Acreditación automática', w: [3, 2, 0, 0, 0], obs: 'Eliminación de procesos manuales' },
+          { fase: '', bloque: 'Facturación y comisiones optimizadas', w: [3, 2, 0, 0, 0], obs: 'Mejora flujo financiero' },
+          { fase: '', bloque: 'Estabilidad operativa', w: [3, 3, 2, 0, 0], obs: 'Continuo' },
+          { fase: '', bloque: 'Mejora APIs operadores', w: [3, 3, 0, 0, 0], obs: 'Crítico para conversión' },
+          { fase: '', bloque: 'Mejora consulta de clientes', w: [3, 3, 0, 0, 0], obs: 'Reduce errores y reclamos' },
         ],
       },
       {
-        titulo: 'Pipeline de relanzamiento (II): Propuesta de Valor y Adquisición',
+        titulo: 'Relanzamiento — Gantt (2/4): Activación y producto',
+        tipo: 'gantt',
         introduccion:
-          'Con la operación estable, se fortalece el producto para competir y luego se llena el embudo comercial.',
-        items: [
-          {
-            pregunta: '3) Propuesta de valor — Prioridad 🟠 Alta (faseada)',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: que el producto gane frente al mercado. Iniciativas: ACH, integración con Yappy, vínculo con PayPal, tarjeta débito para uso de fondos, remesas vía app y P2P en app para recurrencia. Impacto esperado: mayor uso del ecosistema, más ingresos por agente y diferenciación.',
-          },
-          {
-            pregunta: '4) Adquisición — Prioridad 🟠 Alta',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: generar volumen de nuevos agentes. Iniciativas: landing de adquisición, campañas Google con geo-targeting, WhatsApp/email a base existente, programa de referidos e inclusión en mapas para visibilidad. Impacto esperado: más leads y menor costo de adquisición.',
-          },
+          'Fase 2 acelera primera transacción; Fase 3 suma servicios y monetización incremental.',
+        columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
+        filas: [
+          { fase: '2. Activación', bloque: 'Flujo de primer uso', w: [0, 0, 3, 2, 0], obs: 'Reduce tiempo a primera transacción' },
+          { fase: '', bloque: 'Incentivos iniciales', w: [0, 0, 3, 2, 0], obs: 'Activación temprana' },
+          { fase: '', bloque: 'Soporte (chat / Intercom)', w: [0, 0, 3, 3, 2], obs: 'Soporte continuo' },
+          { fase: '3. Producto', bloque: 'Nuevos servicios (ACH, Yappy, PayPal)', w: [0, 0, 0, 3, 2], obs: 'Incremento de valor' },
+          { fase: '', bloque: 'Tarjeta débito / uso de fondos', w: [0, 0, 0, 3, 2], obs: 'Monetización' },
+          { fase: '', bloque: 'Remesas / P2P en app', w: [0, 0, 3, 3, 2], obs: 'Expansión de ecosistema' },
         ],
       },
       {
-        titulo: 'Pipeline de relanzamiento (III): Distribución y Retención',
+        titulo: 'Relanzamiento — Gantt (3/4): Comercialización y distribución',
+        tipo: 'gantt',
         introduccion:
-          'Escalar por aliados y capturar valor en la permanencia; la rentabilidad vive en retención y frecuencia.',
-        items: [
-          {
-            pregunta: '5) Distribución — Prioridad 🟡 Media-Alta',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: escalar sin depender solo de marketing. Iniciativas: partnerships con distribuidores, mayoristas, cooperativas y proveedores POS/internet bajo modelo B2B2B. Impacto esperado: adquisición masiva, menor CAC y mayor cobertura geográfica.',
-          },
-          {
-            pregunta: '6) Retención y expansión — Prioridad 🟡 Media',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: aumentar volumen por agente activo. Iniciativas: gamificación tipo Puntored, incentivos por volumen, cross-sell de servicios y comunicación directa por Intercom/chat. Impacto esperado: mayor frecuencia, mayor ticket promedio y menor churn.',
-          },
+          'Fase 4 llena el embudo; Fase 5 acelera escala con aliados cuando el producto y APIs sostienen volumen.',
+        columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
+        filas: [
+          { fase: '4. Comercialización', bloque: 'Preparación comercial (scripts, materiales)', w: [0, 0, 2, 2, 0], obs: 'Etapa de validación' },
+          { fase: '', bloque: 'Campañas digitales', w: [0, 0, 0, 3, 2], obs: 'Escalamiento' },
+          { fase: '', bloque: 'Canales directos (WhatsApp, email)', w: [0, 0, 0, 3, 2], obs: 'Conversión' },
+          { fase: '', bloque: 'Programa de referidos', w: [0, 0, 2, 3, 2], obs: 'Optimización CAC' },
+          { fase: '5. Distribución', bloque: 'Partnerships (B2B2B)', w: [0, 0, 0, 2, 3], obs: 'Escala no lineal' },
+          { fase: '', bloque: 'Integraciones con terceros', w: [0, 0, 0, 2, 3], obs: 'Dependiente de APIs' },
         ],
       },
       {
-        titulo: 'Pipeline de relanzamiento (IV): Rebranding y control de ejecución',
+        titulo: 'Relanzamiento — Gantt (4/4): Retención y rebranding',
+        tipo: 'gantt',
         introduccion:
-          'El relanzamiento visible se activa cuando la operación base ya cumple nivel mínimo de servicio y conversión.',
-        items: [
-          {
-            pregunta: '7) Rebranding — Prioridad 🟢 Condicionada',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Objetivo: cambiar percepción de mercado con sustento operativo. Iniciativas: nuevo nombre comercial (ej. PuntoYa / PuntoExpress / PuntoMaxx), nueva narrativa (liquidez, facilidad, ingresos para el comercio) y ajuste de branding en app, web y kioscos. Condición: ejecutar después de Fundación + Activación estables.',
-          },
-          {
-            pregunta: 'Gate de salida a mercado',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Checklist mínimo para lanzar: onboarding automático estable, time-to-first-transaction controlado, soporte directo activo y propuesta de valor inicial habilitada (al menos ACH + un integrador clave).',
-          },
-          {
-            pregunta: 'Métricas de control semanal',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Tablero único: CAC por agente activado, % agentes que transaccionan en 7 días, GMV por agente, retención 30/60/90 y CPA real. Segmentación objetivo de comunicación: tiendas pequeñas, emprendedores, freelancers, minimarkets, farmacias, talleres y servicios semi-formales.',
-          },
+          'Fase 6 captura valor recurrente; Fase 7 es visible solo cuando la operación y conversión ya están sostenidas.',
+        columnas: ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'],
+        filas: [
+          { fase: '6. Retención y expansión', bloque: 'Gamificación e incentivos', w: [0, 0, 0, 3, 3], obs: 'Incremento de uso' },
+          { fase: '', bloque: 'Cross-sell / upsell', w: [0, 0, 0, 3, 3], obs: 'Mayor ingreso por cliente' },
+          { fase: '7. Rebranding', bloque: 'Estrategia de marca', w: [0, 0, 0, 2, 3], obs: 'Preparación' },
+          { fase: '', bloque: 'Lanzamiento al mercado', w: [0, 0, 0, 0, 3], obs: 'Activación masiva' },
         ],
+        notaPie:
+          'Control sugerido: CAC por agente activado, % que transacciona en 7 días, GMV por agente, retención 30/60/90 y CPA real.',
       },
     ],
 

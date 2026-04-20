@@ -458,6 +458,126 @@ body {
   color: var(--muted);
 }
 
+.pp-mag-page--gantt .pp-mag-lead {
+  font-size: 0.7rem;
+  line-height: 1.42;
+}
+
+.pp-mag-qa-list--gantt {
+  gap: 0.35rem;
+}
+
+.pp-gantt-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 0.35rem 0.4rem 0.45rem;
+}
+
+.pp-gantt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.52rem;
+  color: var(--ink);
+}
+
+.pp-gantt-table th,
+.pp-gantt-table td {
+  border-bottom: 1px solid rgba(84, 98, 230, 0.12);
+  padding: 0.22rem 0.2rem;
+  vertical-align: middle;
+}
+
+.pp-gantt-table tr:last-child td {
+  border-bottom: none;
+}
+
+.pp-gantt-th {
+  font-family: Montserrat, system-ui, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.48rem;
+  color: var(--brand-blue-dark);
+  text-align: left;
+}
+
+.pp-gantt-th--bar {
+  text-align: center;
+}
+
+.pp-gantt-th--fase {
+  width: 11%;
+}
+
+.pp-gantt-th--bloque {
+  width: 30%;
+}
+
+.pp-gantt-th--obs {
+  width: 18%;
+}
+
+.pp-gantt-td--fase {
+  font-weight: 800;
+  font-size: 0.52rem;
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.pp-gantt-td--bloque {
+  font-size: 0.52rem;
+  line-height: 1.35;
+}
+
+.pp-gantt-td--obs {
+  font-size: 0.48rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.pp-gantt-td--bar {
+  padding-left: 0.12rem;
+  padding-right: 0.12rem;
+}
+
+.pp-gantt-track {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.22);
+  overflow: hidden;
+}
+
+.pp-gantt-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(84, 98, 230, 0.85), rgba(14, 165, 233, 0.78));
+  width: 0;
+}
+
+.pp-gantt-fill--1 {
+  width: 38%;
+}
+
+.pp-gantt-fill--2 {
+  width: 68%;
+}
+
+.pp-gantt-fill--3 {
+  width: 100%;
+}
+
+.pp-gantt-foot {
+  margin: 0.35rem 0 0;
+  font-size: 0.52rem;
+  line-height: 1.4;
+  color: var(--muted);
+  font-style: italic;
+}
+
 .pp-mag-table-wrap {
   overflow: auto;
   max-height: min(42vh, 320px);

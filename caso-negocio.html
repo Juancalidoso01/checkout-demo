@@ -242,8 +242,8 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="11" id="p11" aria-label="Guía negocio hoy">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="11" id="p11" aria-label="Gantt relanzamiento parte 1">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">11</span>
                 <h2 class="pp-mag-h2" id="cn-qa10-title"></h2>
@@ -253,8 +253,8 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="12" id="p12" aria-label="Guía herramientas y procesos">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="12" id="p12" aria-label="Gantt relanzamiento parte 2">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">12</span>
                 <h2 class="pp-mag-h2" id="cn-qa11-title"></h2>
@@ -264,8 +264,8 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="13" id="p13" aria-label="Guía mercado y problema">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="13" id="p13" aria-label="Gantt relanzamiento parte 3">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">13</span>
                 <h2 class="pp-mag-h2" id="cn-qa12-title"></h2>
@@ -275,8 +275,8 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="14" id="p14" aria-label="Guía propuesta y ejecución">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="14" id="p14" aria-label="Gantt relanzamiento parte 4">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--gantt">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">14</span>
                 <h2 class="pp-mag-h2" id="cn-qa13-title"></h2>
@@ -855,67 +855,126 @@
         return '';
       }
 
-      var caps = D.guiasPreguntas;
-      var pendingCaps = [];
-      if (caps && caps.length) {
-        caps.forEach(function (cap) {
-          var onlyPending = (cap.items || []).filter(function (it) {
-            return (it.etiqueta || '') === 'pendiente';
-          });
-          if (onlyPending.length) {
-            pendingCaps.push({
-              titulo: cap.titulo || '',
-              introduccion: cap.introduccion || '',
-              items: onlyPending,
-            });
-          }
+      function buildGanttTable(host, cap) {
+        var cols = cap.columnas || ['S 1–4', 'S 5–8', 'S 9–12', 'S 13–16', 'S 17–20'];
+        var filas = cap.filas || [];
+        var wrap = document.createElement('div');
+        wrap.className = 'pp-gantt-wrap';
+        var tbl = document.createElement('table');
+        tbl.className = 'pp-gantt-table';
+        tbl.setAttribute('role', 'grid');
+
+        var thead = document.createElement('thead');
+        var hr = document.createElement('tr');
+        ;['Fase', 'Iniciativa / bloque'].concat(cols).concat(['Observaciones']).forEach(function (lab) {
+          var th = document.createElement('th');
+          th.textContent = lab;
+          if (lab === 'Fase') th.className = 'pp-gantt-th pp-gantt-th--fase';
+          else if (lab === 'Iniciativa / bloque') th.className = 'pp-gantt-th pp-gantt-th--bloque';
+          else if (lab === 'Observaciones') th.className = 'pp-gantt-th pp-gantt-th--obs';
+          else th.className = 'pp-gantt-th pp-gantt-th--bar';
+          hr.appendChild(th);
         });
+        thead.appendChild(hr);
+        tbl.appendChild(thead);
+
+        var tbody = document.createElement('tbody');
+        var r = 0;
+        while (r < filas.length) {
+          var phaseLabel = filas[r].fase != null ? String(filas[r].fase) : '';
+          var rs = 1;
+          while (r + rs < filas.length && (filas[r + rs].fase === '' || filas[r + rs].fase == null)) rs++;
+          for (var k = 0; k < rs; k++) {
+            var row = filas[r + k];
+            var tr = document.createElement('tr');
+            if (k === 0) {
+              var tdF = document.createElement('td');
+              tdF.className = 'pp-gantt-td pp-gantt-td--fase';
+              tdF.rowSpan = rs;
+              tdF.textContent = phaseLabel;
+              tr.appendChild(tdF);
+            }
+            var tdB = document.createElement('td');
+            tdB.className = 'pp-gantt-td pp-gantt-td--bloque';
+            tdB.textContent = row.bloque || '';
+            tr.appendChild(tdB);
+            var wArr = row.w || [];
+            for (var c = 0; c < cols.length; c++) {
+              var lv = Number(wArr[c]) || 0;
+              if (lv < 0) lv = 0;
+              if (lv > 3) lv = 3;
+              var tdW = document.createElement('td');
+              tdW.className = 'pp-gantt-td pp-gantt-td--bar';
+              var track = document.createElement('div');
+              track.className = 'pp-gantt-track';
+              var fill = document.createElement('div');
+              fill.className = 'pp-gantt-fill pp-gantt-fill--' + lv;
+              track.appendChild(fill);
+              tdW.appendChild(track);
+              tr.appendChild(tdW);
+            }
+            var tdO = document.createElement('td');
+            tdO.className = 'pp-gantt-td pp-gantt-td--obs';
+            tdO.textContent = row.obs || '';
+            tr.appendChild(tdO);
+            tbody.appendChild(tr);
+          }
+          r += rs;
+        }
+        tbl.appendChild(tbody);
+        wrap.appendChild(tbl);
+        if (cap.notaPie) {
+          var np = document.createElement('p');
+          np.className = 'pp-gantt-foot';
+          np.textContent = cap.notaPie;
+          wrap.appendChild(np);
+        }
+        host.appendChild(wrap);
       }
+
+      var caps = D.guiasPreguntas || [];
       for (var qi = 0; qi < 4; qi++) {
         var n = 10 + qi;
-        var cap = pendingCaps[qi];
+        var cap = caps[qi];
         var qList = document.getElementById('cn-qa' + n + '-list');
         if (!qList) continue;
         qList.innerHTML = '';
+        qList.className = 'pp-mag-qa-list';
         if (!cap) {
-          set('cn-qa' + n + '-title', 'Pendientes por responder');
-          set('cn-qa' + n + '-intro', 'Espacio reservado para respuestas que aún faltan.');
-          var empty = document.createElement('div');
-          empty.className = 'pp-mag-qa pp-mag-qa--pendiente';
-          var t = document.createElement('span');
-          t.className = 'pp-mag-qa__tag pp-mag-qa__tag--pendiente';
-          t.textContent = etiquetaQa('pendiente');
-          var p = document.createElement('p');
-          p.className = 'pp-mag-qa__a';
-          p.textContent = 'Cuando compartas la información, la cargamos aquí.';
-          empty.appendChild(t);
-          empty.appendChild(p);
-          qList.appendChild(empty);
+          set('cn-qa' + n + '-title', 'Relanzamiento');
+          set('cn-qa' + n + '-intro', 'Espacio reservado.');
           continue;
         }
         set('cn-qa' + n + '-title', cap.titulo || '');
         set('cn-qa' + n + '-intro', cap.introduccion || '');
-        cap.items.forEach(function (it) {
-          var block = document.createElement('div');
-          var et = it.etiqueta || '';
-          block.className = 'pp-mag-qa' + (et === 'pendiente' ? ' pp-mag-qa--pendiente' : '');
-          var lab = etiquetaQa(et);
-          if (lab) {
-            var tag = document.createElement('span');
-            tag.className = 'pp-mag-qa__tag pp-mag-qa__tag--' + et;
-            tag.textContent = lab;
-            block.appendChild(tag);
-          }
-          var pq = document.createElement('p');
-          pq.className = 'pp-mag-qa__q';
-          pq.textContent = it.pregunta || '';
-          var pa = document.createElement('p');
-          pa.className = 'pp-mag-qa__a';
-          pa.textContent = it.respuesta || '';
-          block.appendChild(pq);
-          block.appendChild(pa);
-          qList.appendChild(block);
-        });
+        if (cap.tipo === 'gantt') {
+          qList.className = 'pp-mag-qa-list pp-mag-qa-list--gantt';
+          buildGanttTable(qList, cap);
+          continue;
+        }
+        if (cap.items && cap.items.length) {
+          cap.items.forEach(function (it) {
+            var block = document.createElement('div');
+            var et = it.etiqueta || '';
+            block.className = 'pp-mag-qa' + (et === 'pendiente' ? ' pp-mag-qa--pendiente' : '');
+            var lab = etiquetaQa(et);
+            if (lab) {
+              var tag = document.createElement('span');
+              tag.className = 'pp-mag-qa__tag pp-mag-qa__tag--' + et;
+              tag.textContent = lab;
+              block.appendChild(tag);
+            }
+            var pq = document.createElement('p');
+            pq.className = 'pp-mag-qa__q';
+            pq.textContent = it.pregunta || '';
+            var pa = document.createElement('p');
+            pa.className = 'pp-mag-qa__a';
+            pa.textContent = it.respuesta || '';
+            block.appendChild(pq);
+            block.appendChild(pa);
+            qList.appendChild(block);
+          });
+        }
       }
 
       set('cn-seg-h', t.segmento.titulo);
