@@ -247,9 +247,7 @@ body {
 
 /* Pág. 05: contexto + barras (sin tabla densa) */
 .pp-mag-territorio {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
+  display: block;
   min-height: 0;
   flex: 1;
 }
@@ -260,12 +258,9 @@ body {
   border: 1px solid var(--line);
   background: linear-gradient(165deg, rgba(255, 255, 255, 0.95), rgba(238, 242, 255, 0.88));
   box-shadow: 0 8px 24px rgba(30, 27, 75, 0.06);
-  min-height: 200px;
-  max-height: min(48vh, 380px);
+  min-height: 230px;
+  max-height: min(56vh, 440px);
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .pp-panama-map__img {
@@ -323,43 +318,24 @@ body {
   white-space: nowrap;
 }
 
-.pp-mag-table-wrap--provincias {
-  max-height: min(22vh, 200px);
-  overflow: auto;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--paper);
-}
-
-.pp-mag-table--provincias {
-  font-size: 0.62rem;
-}
-
-.pp-mag-table--provincias th,
-.pp-mag-table--provincias td {
-  padding: 0.28rem 0.45rem;
-}
-
-.pp-mag-table--provincias th {
-  position: sticky;
-  top: 0;
-  background: rgba(248, 250, 252, 0.98);
-  z-index: 1;
+.pp-panama-map__label--cifra {
+  font-variant-numeric: tabular-nums;
+  padding: 0.12rem 0.32rem;
   font-size: 0.58rem;
 }
 
 @media (max-width: 640px) {
   .pp-panama-map {
-    min-height: 180px;
-  }
-
-  .pp-mag-table-wrap--provincias {
-    max-height: min(26vh, 220px);
+    min-height: 205px;
   }
 
   .pp-panama-map__label {
-    font-size: 0.58rem;
-    padding: 0.12rem 0.3rem;
+    font-size: 0.54rem;
+    padding: 0.1rem 0.28rem;
+  }
+
+  .pp-panama-map__label--cifra {
+    font-size: 0.52rem;
   }
 }
 

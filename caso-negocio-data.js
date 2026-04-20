@@ -208,18 +208,21 @@
         'Población total de referencia ~4,4 millones (2023–2024). Urbanización ~73 % urbano / ~27 % rural (órdenes de magnitud típicos Banco Mundial / ONU). Cifras redondeadas para storytelling; cierre oficial con INEC.',
     },
 
-    /** Población por provincia para la tabla junto al mapa (referencia ~2023, storytelling). Sin coordenadas: el mapa lleva el trazado y los nombres en la imagen. */
+    /**
+     * Población por provincia (referencia ~2023, storytelling). Los nombres en el mapa vienen de la imagen;
+     * x/y son % del rectángulo visible del PNG (esquina superior izquierda = 0,0) para colocar la cifra junto a cada provincia.
+     */
     provinciasMapa: [
-      { nombre: 'Bocas del Toro', poblacion: 170000 },
-      { nombre: 'Chiriquí', poblacion: 470000 },
-      { nombre: 'Veraguas', poblacion: 260000 },
-      { nombre: 'Coclé', poblacion: 280000 },
-      { nombre: 'Herrera', poblacion: 125000 },
-      { nombre: 'Los Santos', poblacion: 100000 },
-      { nombre: 'Colón', poblacion: 300000 },
-      { nombre: 'Panamá Oeste', poblacion: 730000 },
-      { nombre: 'Panamá', poblacion: 2050000 },
-      { nombre: 'Darién', poblacion: 80000 },
+      { nombre: 'Bocas del Toro', poblacion: 170000, x: 6, y: 22, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Chiriquí', poblacion: 470000, x: 10, y: 55, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Veraguas', poblacion: 260000, x: 26, y: 56, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Coclé', poblacion: 280000, x: 38, y: 46, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Herrera', poblacion: 125000, x: 39, y: 70, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Los Santos', poblacion: 100000, x: 45, y: 80, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Colón', poblacion: 300000, x: 43, y: 28, align: 'top', dx: 0, dy: 0 },
+      { nombre: 'Panamá Oeste', poblacion: 730000, x: 50, y: 40, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Panamá', poblacion: 2050000, x: 56, y: 38, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Darién', poblacion: 80000, x: 80, y: 50, align: 'left', dx: 0, dy: 0 },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
@@ -228,7 +231,7 @@
     distritosTitulo: 'Territorio: contexto para quien no conoce Panamá',
 
     distritosIntro:
-      'El mapa muestra el trazado y los nombres de provincia en la propia imagen (sin puntos superpuestos que se desalineen al redimensionar). Debajo, población aproximada por provincia para el relato; cierre oficial con INEC.',
+      'Los nombres de provincia están en el mapa de referencia; al lado de cada una mostramos solo la población aproximada (el punto se recalcula al cambiar tamaño de ventana). Cierre oficial con INEC.',
 
     distritosNota:
       'Cifras referenciales para narrativa ejecutiva (INEC en version final). La red de 2.500 puntos se usa en la pagina siguiente solo como escenario de modelado.',
