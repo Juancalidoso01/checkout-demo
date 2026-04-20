@@ -234,11 +234,70 @@ body {
   margin-top: 0.28rem;
 }
 
-.pp-mag-chart--dist-pop {
-  min-height: 140px;
-  max-height: min(46vh, 320px);
-  flex: 1;
-  margin-top: 0;
+.pp-panama-map {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.95), rgba(238, 242, 255, 0.88));
+  box-shadow: 0 8px 24px rgba(30, 27, 75, 0.06);
+  min-height: 200px;
+  max-height: min(52vh, 360px);
+  overflow: hidden;
+}
+
+.pp-panama-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pp-panama-map__markers {
+  position: absolute;
+  inset: 0;
+}
+
+.pp-panama-map__marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+
+.pp-panama-map__marker--left {
+  flex-direction: row-reverse;
+}
+
+.pp-panama-map__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #4338ca;
+  box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.24);
+}
+
+.pp-panama-map__label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  border-radius: 999px;
+  padding: 0.14rem 0.38rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .pp-panama-map {
+    min-height: 188px;
+  }
+
+  .pp-panama-map__label {
+    font-size: 0.58rem;
+    padding: 0.12rem 0.3rem;
+  }
 }
 
 .pp-mag-table-wrap--escenarios {

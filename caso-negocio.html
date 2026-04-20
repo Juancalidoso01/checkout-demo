@@ -110,8 +110,24 @@
                   </div>
                   <ul class="pp-mag-locator__facts" id="cn-dist-locator-facts"></ul>
                 </aside>
-                <div class="pp-mag-chart pp-mag-chart--dist-pop">
-                  <canvas id="cnChartDistritosPop" aria-label="Población por cabecera en miles de habitantes"></canvas>
+                <div class="pp-panama-map" id="cn-panama-map" aria-label="Mapa de Panamá con población por provincia">
+                  <svg class="pp-panama-map__svg" viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                      <linearGradient id="ppPanamaFill" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="rgba(99, 102, 241, 0.32)" />
+                        <stop offset="100%" stop-color="rgba(14, 165, 233, 0.2)" />
+                      </linearGradient>
+                    </defs>
+                    <rect x="1" y="1" width="478" height="218" rx="14" fill="rgba(248, 250, 252, 0.72)" stroke="rgba(84, 98, 230, 0.2)" />
+                    <path
+                      d="M 64 132 C 46 108 52 66 82 54 C 118 40 172 50 198 84 C 218 108 238 102 278 88 C 332 68 396 70 418 94 C 436 114 430 150 396 170 C 366 188 316 184 272 174 C 222 162 206 190 156 192 C 110 194 74 176 64 132 Z"
+                      fill="url(#ppPanamaFill)"
+                      stroke="rgba(84, 98, 230, 0.58)"
+                      stroke-width="2"
+                    />
+                    <text x="240" y="28" text-anchor="middle" font-size="13" fill="#64748b" font-family="system-ui, sans-serif">Mapa esquemático de referencia (no escala exacta)</text>
+                  </svg>
+                  <div class="pp-panama-map__markers" id="cn-prov-markers"></div>
                 </div>
               </div>
               <p class="pp-mag-note" id="cn-dist-nota"></p>
@@ -592,6 +608,32 @@
           var li = document.createElement('li');
           li.textContent = line;
           locFacts.appendChild(li);
+        });
+      }
+      function fmtProvPop(n) {
+        var v = Number(n) || 0;
+        if (v >= 1000000) return (v / 1000000).toFixed(1).replace('.', ',') + ' M';
+        if (v >= 1000) return (v / 1000).toFixed(0) + 'k';
+        return fmtIntEs(v);
+      }
+      var provMarkers = document.getElementById('cn-prov-markers');
+      if (provMarkers) {
+        provMarkers.innerHTML = '';
+        (D.provinciasMapa || []).forEach(function (p) {
+          var item = document.createElement('div');
+          item.className = 'pp-panama-map__marker' + ((Number(p.x) || 0) > 66 ? ' pp-panama-map__marker--left' : '');
+          item.style.left = String(p.x || 50) + '%';
+          item.style.top = String(p.y || 50) + '%';
+
+          var dot = document.createElement('span');
+          dot.className = 'pp-panama-map__dot';
+          var lb = document.createElement('span');
+          lb.className = 'pp-panama-map__label';
+          lb.textContent = (p.nombre || 'Provincia') + ' · ' + fmtProvPop(p.poblacion);
+
+          item.appendChild(dot);
+          item.appendChild(lb);
+          provMarkers.appendChild(item);
         });
       }
 
@@ -1111,7 +1153,6 @@
         if (typeof Chart === 'undefined') return;
         [
           'cnChartPanamaUrbano',
-          'cnChartDistritosPop',
           'cnChartEscenariosVol',
           'cnChartEscenariosIng',
           'cnChartTamSom',
@@ -1224,23 +1265,6 @@
 
       var cpu = charts.panamaUrbano;
       if (cpu) makeChart('cnChartPanamaUrbano', { tipo: cpu.tipo, titulo: cpu.titulo, labels: cpu.labels, values: cpu.values });
-
-      if (D.distritos && D.distritos.length) {
-        var dLabs = [];
-        var dVals = [];
-        D.distritos.forEach(function (d) {
-          dLabs.push(d.nombre || '—');
-          var p = Number(d.poblacion) || 0;
-          dVals.push(Math.round(p / 100) / 10);
-        });
-        makeChart('cnChartDistritosPop', {
-          horizontal: true,
-          titulo: 'Población por cabecera (miles; ref. 2023)',
-          unit: 'miles hab.',
-          labels: dLabs,
-          values: dVals,
-        });
-      }
 
       var cev = charts.escenariosVolumen;
       if (cev) {

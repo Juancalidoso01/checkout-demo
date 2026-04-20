@@ -133,13 +133,13 @@
           'Primero la base operativa y luego el primer ingreso del agente. Si esto falla, todo lo demás pierde eficiencia.',
         items: [
           {
-            pregunta: '1) Fundación — Prioridad 🔴 Crítica · Dueño: Operaciones + Producto + Tecnología',
+            pregunta: '1) Fundación — Prioridad 🔴 Crítica',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: eliminar fricción antes de salir. Iniciativas: onboarding digital completo (KYC + contrato + credenciales), acreditación 100% automática, facturación automática con ajuste de comisiones y estabilidad operativa (pagos, recargas, uptime). Impacto esperado: menos abandono en onboarding, menor costo operativo y mayor velocidad de activación.',
           },
           {
-            pregunta: '2) Activación — Prioridad 🔴 Crítica · Dueño: Producto + CX + Comercial',
+            pregunta: '2) Activación — Prioridad 🔴 Crítica',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: reducir tiempo a primera transacción. Iniciativas: flujo guiado de primer uso, instructivos simples de recarga/pagos, soporte directo (Intercom o chat web) e incentivo a primera transacción. Impacto esperado: menor tiempo a revenue y mayor conversión de agente activo.',
@@ -152,13 +152,13 @@
           'Con la operación estable, se fortalece el producto para competir y luego se llena el embudo comercial.',
         items: [
           {
-            pregunta: '3) Propuesta de valor — Prioridad 🟠 Alta (faseada) · Dueño: Producto + Integraciones',
+            pregunta: '3) Propuesta de valor — Prioridad 🟠 Alta (faseada)',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: que el producto gane frente al mercado. Iniciativas: ACH, integración con Yappy, vínculo con PayPal, tarjeta débito para uso de fondos, remesas vía app y P2P en app para recurrencia. Impacto esperado: mayor uso del ecosistema, más ingresos por agente y diferenciación.',
           },
           {
-            pregunta: '4) Adquisición — Prioridad 🟠 Alta · Dueño: Growth + Comercial',
+            pregunta: '4) Adquisición — Prioridad 🟠 Alta',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: generar volumen de nuevos agentes. Iniciativas: landing de adquisición, campañas Google con geo-targeting, WhatsApp/email a base existente, programa de referidos e inclusión en mapas para visibilidad. Impacto esperado: más leads y menor costo de adquisición.',
@@ -171,13 +171,13 @@
           'Escalar por aliados y capturar valor en la permanencia; la rentabilidad vive en retención y frecuencia.',
         items: [
           {
-            pregunta: '5) Distribución — Prioridad 🟡 Media-Alta · Dueño: Alianzas B2B',
+            pregunta: '5) Distribución — Prioridad 🟡 Media-Alta',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: escalar sin depender solo de marketing. Iniciativas: partnerships con distribuidores, mayoristas, cooperativas y proveedores POS/internet bajo modelo B2B2B. Impacto esperado: adquisición masiva, menor CAC y mayor cobertura geográfica.',
           },
           {
-            pregunta: '6) Retención y expansión — Prioridad 🟡 Media · Dueño: Producto + Comercial + CX',
+            pregunta: '6) Retención y expansión — Prioridad 🟡 Media',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: aumentar volumen por agente activo. Iniciativas: gamificación tipo Puntored, incentivos por volumen, cross-sell de servicios y comunicación directa por Intercom/chat. Impacto esperado: mayor frecuencia, mayor ticket promedio y menor churn.',
@@ -190,19 +190,19 @@
           'El relanzamiento visible se activa cuando la operación base ya cumple nivel mínimo de servicio y conversión.',
         items: [
           {
-            pregunta: '7) Rebranding — Prioridad 🟢 Condicionada · Dueño: Dirección + Marca + Comercial',
+            pregunta: '7) Rebranding — Prioridad 🟢 Condicionada',
             etiqueta: 'pendiente',
             respuesta:
               'Objetivo: cambiar percepción de mercado con sustento operativo. Iniciativas: nuevo nombre comercial (ej. PuntoYa / PuntoExpress / PuntoMaxx), nueva narrativa (liquidez, facilidad, ingresos para el comercio) y ajuste de branding en app, web y kioscos. Condición: ejecutar después de Fundación + Activación estables.',
           },
           {
-            pregunta: 'Gate de salida a mercado — Dueño: PMO del relanzamiento',
+            pregunta: 'Gate de salida a mercado',
             etiqueta: 'pendiente',
             respuesta:
               'Checklist mínimo para lanzar: onboarding automático estable, time-to-first-transaction controlado, soporte directo activo y propuesta de valor inicial habilitada (al menos ACH + un integrador clave).',
           },
           {
-            pregunta: 'Métricas de control semanal — Dueño: BI + Finanzas + Comercial',
+            pregunta: 'Métricas de control semanal',
             etiqueta: 'pendiente',
             respuesta:
               'Tablero único: CAC por agente activado, % agentes que transaccionan en 7 días, GMV por agente, retención 30/60/90 y CPA real. Segmentación objetivo de comunicación: tiendas pequeñas, emprendedores, freelancers, minimarkets, farmacias, talleres y servicios semi-formales.',
@@ -224,16 +224,18 @@
         'Población total de referencia ~4,4 millones (2023–2024). Urbanización ~73 % urbano / ~27 % rural (órdenes de magnitud típicos Banco Mundial / ONU). Cifras redondeadas para storytelling; cierre oficial con INEC.',
     },
 
-    /** Población total por distrito — referencia 2023 (subset ilustrativo) */
-    distritos: [
-      { nombre: 'Arraiján', poblacion: 299079 },
-      { nombre: 'La Chorrera', poblacion: 258221 },
-      { nombre: 'Colón City', poblacion: 240722 },
-      { nombre: 'David', poblacion: 156498 },
-      { nombre: 'Santiago de Veraguas', poblacion: 109605 },
-      { nombre: 'Penonomé', poblacion: 104326 },
-      { nombre: 'Chepo', poblacion: 65588 },
-      { nombre: 'Chitré', poblacion: 60957 },
+    /** Mapa por provincia (referencia 2023 aproximada para storytelling). */
+    provinciasMapa: [
+      { nombre: 'Bocas del Toro', poblacion: 170000, x: 21, y: 53 },
+      { nombre: 'Chiriqui', poblacion: 470000, x: 30, y: 64 },
+      { nombre: 'Veraguas', poblacion: 260000, x: 42, y: 58 },
+      { nombre: 'Cocle', poblacion: 280000, x: 52, y: 60 },
+      { nombre: 'Herrera', poblacion: 125000, x: 56, y: 67 },
+      { nombre: 'Los Santos', poblacion: 100000, x: 61, y: 73 },
+      { nombre: 'Colon', poblacion: 300000, x: 62, y: 46 },
+      { nombre: 'Panama Oeste', poblacion: 730000, x: 64, y: 57 },
+      { nombre: 'Panama', poblacion: 2050000, x: 73, y: 59 },
+      { nombre: 'Darien', poblacion: 80000, x: 83, y: 62 },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
@@ -242,10 +244,10 @@
     distritosTitulo: 'Territorio: contexto para quien no conoce Panamá',
 
     distritosIntro:
-      'Antes de números de red o de mercado, ubicamos dónde vive la gente en ocho cabeceras con más población (referencia 2023). El gráfico resume magnitudes; no es plan comercial por distrito.',
+      'Antes de números de red o de mercado, ubicamos la concentracion poblacional por provincia en Panama (referencia 2023, aproximada). El mapa es de contexto para junta y no reemplaza la validacion oficial con INEC.',
 
     distritosNota:
-      'Cifras para storytelling; cierre oficial con INEC. El ejemplo de 2.500 puntos de red aparece en la página siguiente (escenarios), no aquí.',
+      'Cifras referenciales para narrativa ejecutiva (INEC en version final). La red de 2.500 puntos se usa en la pagina siguiente solo como escenario de modelado.',
 
     /** Tarjeta de contexto geográfico (p. 05): audiencias que no ubican el país. */
     distritosContexto: {
