@@ -128,120 +128,84 @@
      */
     guiasPreguntas: [
       {
-        titulo: 'Estrategia de mejora de producto',
+        titulo: 'Pipeline de relanzamiento (I): Fundación y Activación',
         introduccion:
-          'Prioridad uno: fortalecer producto antes de escalar mercado. Formato de ejecución: trimestre + dueño.',
+          'Primero la base operativa y luego el primer ingreso del agente. Si esto falla, todo lo demás pierde eficiencia.',
         items: [
           {
-            pregunta: 'Q1 · Dueño: Producto + Growth — Comercialización virtual y canal web',
+            pregunta: '1) Fundación — Prioridad 🔴 Crítica · Dueño: Operaciones + Producto + Tecnología',
             etiqueta: 'pendiente',
             respuesta:
-              'Acelerar adquisición desde la página web con mejor acceso, flujo de alta claro y conversión desde contenido comercial.',
+              'Objetivo: eliminar fricción antes de salir. Iniciativas: onboarding digital completo (KYC + contrato + credenciales), acreditación 100% automática, facturación automática con ajuste de comisiones y estabilidad operativa (pagos, recargas, uptime). Impacto esperado: menos abandono en onboarding, menor costo operativo y mayor velocidad de activación.',
           },
           {
-            pregunta: 'Q1–Q2 · Dueño: Producto + Integraciones — Nuevos servicios de valor',
+            pregunta: '2) Activación — Prioridad 🔴 Crítica · Dueño: Producto + CX + Comercial',
             etiqueta: 'pendiente',
             respuesta:
-              'Agregar recarga con tarjeta Wompi, tarjeta débito para disponer fondos, vinculación con PayPal, integración con Yappy y transferencias ACH a cuentas.',
-          },
-          {
-            pregunta: 'Q2 · Dueño: Producto + Tecnología — Automatización y experiencia digital',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Eliminar acreditación manual (solo automática), mejorar interfaz y relanzar promoción de la app P2P con enfoque de uso recurrente.',
-          },
-          {
-            pregunta: 'Q2–Q3 · Dueño: Producto + CX — Retención y expansión de propuesta',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Habilitar canal directo tipo Intercom para retención y sumar remesas desde app Punto Pago con WebKYC para incorporar luego clientes app.',
+              'Objetivo: reducir tiempo a primera transacción. Iniciativas: flujo guiado de primer uso, instructivos simples de recarga/pagos, soporte directo (Intercom o chat web) e incentivo a primera transacción. Impacto esperado: menor tiempo a revenue y mayor conversión de agente activo.',
           },
         ],
       },
       {
-        titulo: 'Mejoras operativas y de ventas',
+        titulo: 'Pipeline de relanzamiento (II): Propuesta de Valor y Adquisición',
         introduccion:
-          'Eficiencia operativa + crecimiento comercial: onboarding más corto, mejor economics y adquisición multicanal.',
+          'Con la operación estable, se fortalece el producto para competir y luego se llena el embudo comercial.',
         items: [
           {
-            pregunta: 'Q1 · Dueño: Operaciones + Compliance — Onboarding por segmentos',
+            pregunta: '3) Propuesta de valor — Prioridad 🟠 Alta (faseada) · Dueño: Producto + Integraciones',
             etiqueta: 'pendiente',
             respuesta:
-              'Crear cuentas express y ordenar credenciales. Para PyME/dueño: KYC Matti + contrato afiliación + documentos empresa + KYB. Para empresas grandes/cooperativas: contrato afiliación + documentos empresa + KYB.',
+              'Objetivo: que el producto gane frente al mercado. Iniciativas: ACH, integración con Yappy, vínculo con PayPal, tarjeta débito para uso de fondos, remesas vía app y P2P en app para recurrencia. Impacto esperado: mayor uso del ecosistema, más ingresos por agente y diferenciación.',
           },
           {
-            pregunta: 'Q1–Q2 · Dueño: Operaciones + Finanzas — Modelo económico operativo',
+            pregunta: '4) Adquisición — Prioridad 🟠 Alta · Dueño: Growth + Comercial',
             etiqueta: 'pendiente',
             respuesta:
-              'Automatizar facturación y ajustar esquema de comisión para pagar menos pero más rápido, cuidando activación y retención del agente.',
-          },
-          {
-            pregunta: 'Q2 · Dueño: Comercial + Growth — Adquisición digital de nuevos agentes',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Performance Max con geo-targeting, landing de adquisición, formulario digital, email/SMS/WhatsApp, Google Search, instructivos de uso y programa de referidos.',
-          },
-          {
-            pregunta: 'Q2–Q3 · Dueño: Comercial + Producto — Palancas de crecimiento',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Incluir agentes en mapas y app Punto Pago, gamificación con recompensas por desempeño y evaluar relanzamiento de marca pública (PuntoYa / PuntoExpress / PuntoMaxx).',
-          },
-          {
-            pregunta: 'Q3 · Dueño: Comercial Tradicional — Canal offline',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Mantener fuerza de ventas de campo con visitas a comercios como soporte de cierre en zonas de baja digitalización.',
+              'Objetivo: generar volumen de nuevos agentes. Iniciativas: landing de adquisición, campañas Google con geo-targeting, WhatsApp/email a base existente, programa de referidos e inclusión en mapas para visibilidad. Impacto esperado: más leads y menor costo de adquisición.',
           },
         ],
       },
       {
-        titulo: 'Métricas administrativas y foco comercial',
+        titulo: 'Pipeline de relanzamiento (III): Distribución y Retención',
         introduccion:
-          'Definir tablero único con revisión semanal para medir rentabilidad real por agente y calidad de activación.',
+          'Escalar por aliados y capturar valor en la permanencia; la rentabilidad vive en retención y frecuencia.',
         items: [
           {
-            pregunta: 'Q1 · Dueño: BI + Finanzas — KPIs administrativos base',
+            pregunta: '5) Distribución — Prioridad 🟡 Media-Alta · Dueño: Alianzas B2B',
             etiqueta: 'pendiente',
             respuesta:
-              'Medir CAC por agente activado, porcentaje de agentes que transaccionan en 7 días, GMV por agente, retención 30/60/90 días y costo por agente activo (CPA real).',
+              'Objetivo: escalar sin depender solo de marketing. Iniciativas: partnerships con distribuidores, mayoristas, cooperativas y proveedores POS/internet bajo modelo B2B2B. Impacto esperado: adquisición masiva, menor CAC y mayor cobertura geográfica.',
           },
           {
-            pregunta: 'Q1–Q2 · Dueño: Comercial + Marketing — Comunicación por perfil',
+            pregunta: '6) Retención y expansión — Prioridad 🟡 Media · Dueño: Producto + Comercial + CX',
             etiqueta: 'pendiente',
             respuesta:
-              'Dirigir mensaje comercial a tiendas pequeñas, emprendedores, freelancers, minimarkets, farmacias, talleres y servicios informales/semi-formales.',
-          },
-          {
-            pregunta: 'Q2–Q3 · Dueño: Dirección Comercial — Disciplina de seguimiento',
-            etiqueta: 'pendiente',
-            respuesta:
-              'Revisar semanalmente cohortes de activación y retención para ajustar pauta, discurso y oferta por segmento con evidencia.',
+              'Objetivo: aumentar volumen por agente activo. Iniciativas: gamificación tipo Puntored, incentivos por volumen, cross-sell de servicios y comunicación directa por Intercom/chat. Impacto esperado: mayor frecuencia, mayor ticket promedio y menor churn.',
           },
         ],
       },
       {
-        titulo: 'Partnerships digitales (B2B2B)',
+        titulo: 'Pipeline de relanzamiento (IV): Rebranding y control de ejecución',
         introduccion:
-          'Escalar distribución vía aliados con acceso a base de comercios y operación recurrente.',
+          'El relanzamiento visible se activa cuando la operación base ya cumple nivel mínimo de servicio y conversión.',
         items: [
           {
-            pregunta: 'Q1 · Dueño: Alianzas B2B — Canales priorizados',
+            pregunta: '7) Rebranding — Prioridad 🟢 Condicionada · Dueño: Dirección + Marca + Comercial',
             etiqueta: 'pendiente',
             respuesta:
-              'Abrir frentes con distribuidores, mayoristas, cooperativas, asociaciones de comerciantes y proveedores de POS, contabilidad e internet.',
+              'Objetivo: cambiar percepción de mercado con sustento operativo. Iniciativas: nuevo nombre comercial (ej. PuntoYa / PuntoExpress / PuntoMaxx), nueva narrativa (liquidez, facilidad, ingresos para el comercio) y ajuste de branding en app, web y kioscos. Condición: ejecutar después de Fundación + Activación estables.',
           },
           {
-            pregunta: 'Q2 · Dueño: Alianzas + Operaciones — Modelo de activación',
+            pregunta: 'Gate de salida a mercado — Dueño: PMO del relanzamiento',
             etiqueta: 'pendiente',
             respuesta:
-              'Diseñar paquete comercial para aliado (comisión, capacitación, kit digital y SLA) y embudo de referidos hacia onboarding express.',
+              'Checklist mínimo para lanzar: onboarding automático estable, time-to-first-transaction controlado, soporte directo activo y propuesta de valor inicial habilitada (al menos ACH + un integrador clave).',
           },
           {
-            pregunta: 'Q3 · Dueño: Dirección Comercial — Meta esperada',
+            pregunta: 'Métricas de control semanal — Dueño: BI + Finanzas + Comercial',
             etiqueta: 'pendiente',
             respuesta:
-              'Reducir CAC, mejorar velocidad de alta y aumentar calidad de agentes activos a través de canales con confianza ya instalada.',
+              'Tablero único: CAC por agente activado, % agentes que transaccionan en 7 días, GMV por agente, retención 30/60/90 y CPA real. Segmentación objetivo de comunicación: tiendas pequeñas, emprendedores, freelancers, minimarkets, farmacias, talleres y servicios semi-formales.',
           },
         ],
       },
