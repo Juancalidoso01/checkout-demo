@@ -35,7 +35,7 @@
     indicePaginas: [
       { capitulo: 'I · Panamá y escenarios (4–6)' },
       { pagina: 4, texto: 'Demografía y urbano / rural' },
-      { pagina: 5, texto: 'Territorio: peso poblacional y puntos ilustrativos' },
+      { pagina: 5, texto: 'Territorio: contexto y población por cabecera' },
       { pagina: 6, texto: 'Escenarios con 2 500 puntos' },
       { capitulo: 'II · Tamaño del mercado (7–8)' },
       { pagina: 7, texto: 'Colombia vs Panamá + supuestos del ajuste' },
@@ -142,7 +142,7 @@
             pregunta: '¿Dónde está cada tipo de cifra?',
             etiqueta: 'referencia',
             respuesta:
-              'Índice: p. 03. País: p. 04. Territorio: p. 05. Escenarios: p. 06. Comparación y supuestos: p. 07. TAM/SAM/SOM: p. 08. Presupuesto digital: p. 09–10.',
+              'Índice: p. 03. País: p. 04. Territorio (contexto + población): p. 05. Escenarios (red de ejemplo 2.500 puntos): p. 06. Comparación y supuestos: p. 07. TAM/SAM/SOM: p. 08. Presupuesto digital: p. 09–10.',
           },
           {
             pregunta: '¿Qué no está todavía en el libro?',
@@ -245,19 +245,29 @@
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
     distritosRedReferencia: 2500,
 
-    distritosTitulo: 'Territorio: dónde está la “masa” y un reparto ilustrativo',
+    distritosTitulo: 'Territorio: contexto para quien no conoce Panamá',
 
     distritosIntro:
-      'Ocho cabeceras con más población (referencia 2023). La última columna pregunta: si la red de ejemplo fuera de 2 500 puntos y se repartieran en proporción a esta muestra, ¿cuántos puntos caerían en cada distrito? Es un ejercicio visual para junta, no el plan comercial.',
+      'Antes de números de red o de mercado, ubicamos dónde vive la gente en ocho cabeceras con más población (referencia 2023). El gráfico resume magnitudes; no es plan comercial por distrito.',
 
     distritosNota:
-      'Las cuotas reales las fijan comercial, regulación y viabilidad por zona. Aquí solo se relaciona población relativa con el mismo orden de magnitud de red que usamos en escenarios (p. 06).',
+      'Cifras para storytelling; cierre oficial con INEC. El ejemplo de 2.500 puntos de red aparece en la página siguiente (escenarios), no aquí.',
+
+    /** Tarjeta de contexto geográfico (p. 05): audiencias que no ubican el país. */
+    distritosContexto: {
+      caption: 'Referencia rápida',
+      bullets: [
+        'Panamá es un istmo en Centroamérica; frontera con Costa Rica (oeste) y Colombia (sureste).',
+        'Moneda de curso legal: balboa y dólar estadounidense (US$) a la par.',
+        'Mucho del comercio formal y la densidad de transacciones se concentran en el área metropolitana y corredores cercanos.',
+      ],
+    },
 
     /** Escenarios de negocio — 2 500 puntos, ingreso bruto 1,2 % */
     escenarios: {
       titulo: 'Escenarios comparativos',
       intro:
-        'Cuatro cuentos de un año con 2 500 puntos e ingreso bruto al 1,2 % del volumen. Una fila calibra ritmo tipo referente colombiano; las barras resumen; el detalle en la tabla.',
+        'En la página anterior vimos dónde se concentra la población; aquí fijamos una red de ejemplo de 2 500 puntos (solo para ordenar magnitudes) e ingreso bruto al 1,2 % del volumen. Cuatro escenarios; una fila calibra ritmo tipo referente colombiano; las barras resumen y el detalle está en la tabla.',
       notaCac:
         'CAC = costo de ganar un cliente nuevo. Referencia Colombia (mercado maduro): US$200–US$260 por cliente.',
       filas: [
