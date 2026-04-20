@@ -231,7 +231,7 @@
     distritosTitulo: 'Territorio: contexto para quien no conoce Panamá',
 
     distritosIntro:
-      'Mapa de referencia con límites provinciales; las zonas interactivas son aproximadas (pase el cursor o use Tab). Cierre oficial con INEC.',
+      'Mapa base con límites reales del PNG: cada provincia tiene su contorno interactivo; comarcas visibles sin dato al pasar el cursor. Pase el cursor o use Tab. Cierre oficial con INEC.',
 
     distritosNota:
       'Cifras referenciales para narrativa ejecutiva (INEC en version final). La red de 2.500 puntos se usa en la pagina siguiente solo como escenario de modelado.',

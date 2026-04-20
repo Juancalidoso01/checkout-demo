@@ -364,7 +364,7 @@ body {
 .pp-panama-prov {
   pointer-events: all;
   cursor: pointer;
-  transition: fill 0.15s ease, filter 0.15s ease;
+  transition: none;
   outline: none;
   fill: rgba(99, 102, 241, 0.06);
 }
@@ -372,7 +372,16 @@ body {
 .pp-panama-prov:hover,
 .pp-panama-prov--active {
   fill: rgba(79, 70, 229, 0.28);
-  filter: brightness(1.02);
+}
+
+.pp-panama-void {
+  pointer-events: none;
+}
+
+.pp-panama-void path {
+  pointer-events: all;
+  fill: transparent;
+  cursor: default;
 }
 
 .pp-panama-prov:focus-visible {
@@ -381,9 +390,13 @@ body {
   stroke-width: 1.5;
 }
 
+.pp-panama-void path:focus {
+  outline: none;
+}
+
 .pp-panama-map__tooltip {
-  position: absolute;
-  z-index: 4;
+  position: fixed;
+  z-index: 5000;
   min-width: 8.5rem;
   max-width: 14rem;
   padding: 0.45rem 0.6rem;
