@@ -46,8 +46,8 @@
       { capitulo: 'IV · Decisión y retorno (11–15)' },
       { pagina: 11, texto: 'Gantt relanzamiento (1/2): Fundación a producto' },
       { pagina: 12, texto: 'Gantt relanzamiento (2/2): Comercial a rebranding' },
-      { pagina: 13, texto: 'Segmento (resumen)' },
-      { pagina: 14, texto: 'Mercado y problema' },
+      { pagina: 13, texto: 'Segmento de agentes: totales y participación' },
+      { pagina: 14, texto: 'Detalle mensual por segmento + mercado y problema' },
       { pagina: 15, texto: 'Solución, economía, ganancia y demo' },
     ],
 
@@ -398,30 +398,30 @@
       heroDek: 'Mercado Panamá · plan digital · retorno a accionistas.',
 
       segmento: {
-        titulo: 'Segmento y razón comercial',
-        subtitulo: 'Por qué Panamá y por qué un modelo de red de agentes',
+        titulo: 'Segmento de agentes (situación actual)',
+        subtitulo: 'Cifras por tipo de punto y mes',
         intro:
-          'Tres ideas que cierran el “por qué aquí”: corredor, última milla humana, economía de canal vs. sucursal.',
+          'Distribución del volumen en US$ según el nombre de agente / segmento operativo. La tabla resume el periodo; el detalle mes a mes está en la página siguiente.',
         bullets: [
           {
-            titulo: 'Corredor',
-            desc: 'Remesas y pagos con alta rotación de efectivo.',
+            titulo: 'Cooperativa',
+            desc: 'Concentra la mayor parte del volumen reportado en el periodo.',
           },
           {
-            titulo: 'Última milla',
-            desc: 'Confianza y proximidad en comercio o agente.',
+            titulo: 'Long tail',
+            desc: 'Aeropuerto, farmacias, electrónica y comercios naturales complementan el mix.',
           },
           {
-            titulo: 'Operadora',
-            desc: 'Comisiones y datos; menos costo que ventanilla propia.',
+            titulo: 'Altas recientes',
+            desc: 'Minisuper y otros segmentos con arranque en meses recientes.',
           },
         ],
       },
 
       mercado: {
-        titulo: 'Mercado y oportunidad',
+        titulo: 'Detalle mensual y mercado',
         intro:
-          'Gráfica de ejemplo: el canal físico sigue relevante junto al digital; el tamaño en dinero ya está en 07–08.',
+          'Arriba, el volumen US$ mes a mes por segmento. Debajo, índice de actividad de referencia; el tamaño agregado del mercado sigue en 07–08.',
       },
 
       problema: {
@@ -461,6 +461,83 @@
         intro:
           'Mapa del recorrido captación → operación; enlace al mapa y a la hoja cuando la tengas.',
       },
+    },
+
+    /**
+     * Agregados por segmento (nombre agente) y mes 01–12. Celdas vacías = sin actividad en ese mes.
+     * Totales mensuales y gran total: fila de control del extracto compartido.
+     */
+    agentesSegmentoActual: {
+      tituloResumen: 'Totales por segmento (US$)',
+      introResumen:
+        'Participación sobre el total del periodo. Valores con separador de miles; “—” indica mes sin movimiento en ese segmento.',
+      tituloDetalle1: 'Enero a junio',
+      tituloDetalle2: 'Julio a diciembre + total anual por fila',
+      notaDetalle:
+        'La fila “Total mes” suma todos los segmentos; debe coincidir con la suma de la columna “Total” por segmento.',
+      chartTitulo: 'Participación por segmento (total US$ en el periodo)',
+      filas: [
+        {
+          segmento: 'Aeropuerto',
+          corto: 'Aeropuerto',
+          meses: [5557, 6195, 6583, 5426, 3353, 130, 82, 5571, 4335, 3393, 3658, 4385],
+          total: 48670,
+        },
+        {
+          segmento: 'Café internet',
+          corto: 'Café internet',
+          meses: [4221, 4902, 5400, 5677, 4442, 4818, 5992, 6163, 5611, 6323, 5661, 6282],
+          total: 65492,
+        },
+        {
+          segmento: 'Cooperativa',
+          corto: 'Cooperativa',
+          meses: [
+            235127, 218830, 201725, 197714, 239501, 221059, 221475, 214202, 216674, 218558, 171391, 207673,
+          ],
+          total: 2563928,
+        },
+        {
+          segmento: 'Electrónica',
+          corto: 'Electrónica',
+          meses: [11532, 8547, 7021, 6590, 8011, 7767, 8817, 7107, 11925, 6373, 5745, 7769],
+          total: 97205,
+        },
+        {
+          segmento: 'Farmacias',
+          corto: 'Farmacias',
+          meses: [4478, 4964, 5864, 5459, 6040, 6169, 6599, 7284, 7276, 7096, 5681, 7649],
+          total: 74558,
+        },
+        {
+          segmento: 'Minisuper',
+          corto: 'Minisuper',
+          meses: [null, null, null, null, null, null, null, null, 5243, 16337, 11011, null],
+          total: 32591,
+        },
+        {
+          segmento: 'Mueblería',
+          corto: 'Mueblería',
+          meses: [null, null, null, null, null, null, null, null, null, null, 6834, null],
+          total: 6834,
+        },
+        {
+          segmento: 'Naturales / pequeños comercios',
+          corto: 'Naturales',
+          meses: [6252, 6095, 7362, 13191, 7418, 7405, 11725, 11299, 10695, 14840, 11400, 11746],
+          total: 119429,
+        },
+        {
+          segmento: 'Servicios de contabilidad',
+          corto: 'Contabilidad',
+          meses: [12700, 17897, 7368, 11255, 11835, 8960, 20049, 18375, 19568, 16245, 15613, null],
+          total: 159865,
+        },
+      ],
+      totalesMensuales: [
+        267167, 262234, 251851, 241427, 280018, 259183, 263650, 271675, 274891, 281394, 236118, 278963,
+      ],
+      granTotal: 3168572,
     },
 
     /**

@@ -137,6 +137,76 @@ body {
   max-height: min(28vh, 220px);
 }
 
+.pp-mag-chart--segmento {
+  min-height: 140px;
+  max-height: min(34vh, 280px);
+}
+
+.pp-mag-subhead {
+  margin: 0.4rem 0 0.12rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-blue-dark);
+}
+
+.pp-mag-page--segmento .pp-mag-pills {
+  margin-bottom: 0.2rem;
+}
+
+.pp-mag-table-wrap--agentes-resumen {
+  max-height: min(30vh, 260px);
+}
+
+.pp-mag-table--agentes-resumen th,
+.pp-mag-table--agentes-resumen td {
+  font-size: 0.62rem;
+}
+
+.pp-mag-table-wrap--agentes-mensual {
+  max-height: min(34vh, 280px);
+  margin-bottom: 0.3rem;
+}
+
+.pp-mag-table--agentes-mensual {
+  font-size: 0.52rem;
+}
+
+.pp-mag-table--agentes-mensual th,
+.pp-mag-table--agentes-mensual td {
+  padding: 0.18rem 0.2rem;
+  white-space: nowrap;
+}
+
+.pp-mag-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.pp-mag-num--strong {
+  font-weight: 700;
+}
+
+.pp-mag-tr--total-mes td {
+  border-top: 1px solid var(--line);
+  background: rgba(84, 98, 230, 0.06);
+}
+
+.pp-mag-td--label {
+  font-weight: 800;
+  font-size: 0.58rem;
+}
+
+.pp-mag-note--agentes {
+  margin-bottom: 0.3rem;
+}
+
+.pp-mag-page--detalle-agentes .pp-mag-chart--short {
+  margin-top: 0.45rem;
+}
+
 .pp-mag-two-charts {
   display: grid;
   grid-template-columns: 1fr 1fr;

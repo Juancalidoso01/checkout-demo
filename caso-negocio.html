@@ -264,8 +264,8 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="13" id="p13" aria-label="Segmento">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="13" id="p13" aria-label="Segmento de agentes totales y participación">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--segmento">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">13</span>
                 <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
@@ -273,18 +273,37 @@
               <p class="pp-mag-lead" id="cn-seg-sub"></p>
               <p class="pp-mag-lead" id="cn-seg-intro"></p>
               <div class="pp-mag-pills" id="cn-seg-pills"></div>
-              <div class="pp-mag-chart">
-                <canvas id="cnChartSegCanal" aria-label="Gráfica segmento"></canvas>
+              <h3 class="pp-mag-subhead" id="cn-seg-res-h"></h3>
+              <p class="pp-mag-lead pp-mag-lead--tight" id="cn-seg-res-intro"></p>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--agentes-resumen" id="cn-seg-res-wrap">
+                <table
+                  class="pp-mag-table pp-mag-table--agentes-resumen"
+                  id="cn-seg-tbl-resumen"
+                  aria-describedby="cn-seg-res-intro"
+                ></table>
+              </div>
+              <div class="pp-mag-chart pp-mag-chart--segmento">
+                <canvas id="cnChartSegCanal" aria-label="Participación por segmento"></canvas>
               </div>
             </div>
           </article>
 
-          <article class="magazine-page" data-page="14" id="p14" aria-label="Mercado y problema">
-            <div class="magazine-page__inner pp-mag-page">
+          <article class="magazine-page" data-page="14" id="p14" aria-label="Detalle mensual por segmento y mercado">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--detalle-agentes">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">14</span>
                 <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
               </div>
+              <p class="pp-mag-note pp-mag-note--agentes" id="cn-seg-det-nota"></p>
+              <h3 class="pp-mag-subhead" id="cn-seg-det-h1"></h3>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--agentes-mensual">
+                <table class="pp-mag-table pp-mag-table--agentes-mensual" id="cn-seg-tbl-m1"></table>
+              </div>
+              <h3 class="pp-mag-subhead" id="cn-seg-det-h2"></h3>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--agentes-mensual">
+                <table class="pp-mag-table pp-mag-table--agentes-mensual" id="cn-seg-tbl-m2"></table>
+              </div>
+              <hr class="pp-mag-divider" id="cn-seg-mer-divider" />
               <p class="pp-mag-lead" id="cn-mer-intro"></p>
               <div class="pp-mag-chart pp-mag-chart--short">
                 <canvas id="cnChartMercado" aria-label="Gráfica mercado"></canvas>
@@ -987,6 +1006,150 @@
         });
       }
 
+      (function initAgentesSegmentoTablas() {
+        var ag = D.agentesSegmentoActual;
+        var gran = ag && Number(ag.granTotal) > 0 ? ag.granTotal : 0;
+        var hideEls = function (ids) {
+          ids.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+          });
+        };
+        if (!ag || !ag.filas || !ag.filas.length || !gran) {
+          hideEls([
+            'cn-seg-res-h',
+            'cn-seg-res-intro',
+            'cn-seg-res-wrap',
+            'cn-seg-det-nota',
+            'cn-seg-det-h1',
+            'cn-seg-det-h2',
+            'cn-seg-mer-divider',
+          ]);
+          var w1 = document.getElementById('cn-seg-tbl-m1');
+          var w2 = document.getElementById('cn-seg-tbl-m2');
+          if (w1 && w1.parentElement) w1.parentElement.style.display = 'none';
+          if (w2 && w2.parentElement) w2.parentElement.style.display = 'none';
+          return;
+        }
+
+        function fmtUsdCell(v) {
+          if (v == null || v === '') return '—';
+          return '$' + Number(v).toLocaleString('en-US');
+        }
+
+        set('cn-seg-res-h', ag.tituloResumen || '');
+        set('cn-seg-res-intro', ag.introResumen || '');
+        set('cn-seg-det-nota', ag.notaDetalle || '');
+        set('cn-seg-det-h1', ag.tituloDetalle1 || '');
+        set('cn-seg-det-h2', ag.tituloDetalle2 || '');
+
+        var tb = document.getElementById('cn-seg-tbl-resumen');
+        if (tb) {
+          tb.innerHTML = '';
+          var sorted = ag.filas.slice().sort(function (a, b) {
+            return (Number(b.total) || 0) - (Number(a.total) || 0);
+          });
+          var thead = document.createElement('thead');
+          var hr = document.createElement('tr');
+          ['Segmento', 'Total (US$)', '% del total'].forEach(function (lab) {
+            var th = document.createElement('th');
+            th.textContent = lab;
+            hr.appendChild(th);
+          });
+          thead.appendChild(hr);
+          tb.appendChild(thead);
+          var tbody = document.createElement('tbody');
+          sorted.forEach(function (row) {
+            var tr = document.createElement('tr');
+            var td0 = document.createElement('td');
+            td0.textContent = row.segmento || '';
+            var td1 = document.createElement('td');
+            td1.className = 'pp-mag-num';
+            td1.textContent = fmtUsdCell(row.total);
+            var td2 = document.createElement('td');
+            td2.className = 'pp-mag-num';
+            td2.textContent = ((Number(row.total) / gran) * 100).toFixed(1) + ' %';
+            tr.appendChild(td0);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tbody.appendChild(tr);
+          });
+          tb.appendChild(tbody);
+        }
+
+        var mesLabelsA = ['01', '02', '03', '04', '05', '06'];
+        var mesLabelsB = ['07', '08', '09', '10', '11', '12'];
+
+        function buildMensualTable(el, mesStart, mesEnd, showTotalCol) {
+          if (!el) return;
+          el.innerHTML = '';
+          var thead = document.createElement('thead');
+          var hr = document.createElement('tr');
+          var th0 = document.createElement('th');
+          th0.textContent = 'Segmento';
+          hr.appendChild(th0);
+          for (var m = mesStart; m <= mesEnd; m++) {
+            var th = document.createElement('th');
+            th.textContent = m < 6 ? mesLabelsA[m] : mesLabelsB[m - 6];
+            hr.appendChild(th);
+          }
+          if (showTotalCol) {
+            var thT = document.createElement('th');
+            thT.textContent = 'Total';
+            hr.appendChild(thT);
+          }
+          thead.appendChild(hr);
+          el.appendChild(thead);
+          var tbody = document.createElement('tbody');
+          ag.filas.forEach(function (row) {
+            var tr = document.createElement('tr');
+            var tdN = document.createElement('td');
+            tdN.textContent = row.segmento || '';
+            tr.appendChild(tdN);
+            for (var m = mesStart; m <= mesEnd; m++) {
+              var td = document.createElement('td');
+              td.className = 'pp-mag-num';
+              var mv = row.meses && row.meses[m] != null ? row.meses[m] : null;
+              td.textContent = fmtUsdCell(mv);
+              tr.appendChild(td);
+            }
+            if (showTotalCol) {
+              var tdTot = document.createElement('td');
+              tdTot.className = 'pp-mag-num pp-mag-num--strong';
+              tdTot.textContent = fmtUsdCell(row.total);
+              tr.appendChild(tdTot);
+            }
+            tbody.appendChild(tr);
+          });
+
+          var tm = ag.totalesMensuales || [];
+          var trF = document.createElement('tr');
+          trF.className = 'pp-mag-tr--total-mes';
+          var tdL = document.createElement('td');
+          tdL.textContent = 'Total mes';
+          tdL.className = 'pp-mag-td--label';
+          trF.appendChild(tdL);
+          for (var m2 = mesStart; m2 <= mesEnd; m2++) {
+            var tdm = document.createElement('td');
+            tdm.className = 'pp-mag-num pp-mag-num--strong';
+            var tv = tm[m2] != null ? tm[m2] : null;
+            tdm.textContent = fmtUsdCell(tv);
+            trF.appendChild(tdm);
+          }
+          if (showTotalCol) {
+            var tdG = document.createElement('td');
+            tdG.className = 'pp-mag-num pp-mag-num--strong';
+            tdG.textContent = fmtUsdCell(ag.granTotal);
+            trF.appendChild(tdG);
+          }
+          tbody.appendChild(trF);
+          el.appendChild(tbody);
+        }
+
+        buildMensualTable(document.getElementById('cn-seg-tbl-m1'), 0, 5, false);
+        buildMensualTable(document.getElementById('cn-seg-tbl-m2'), 6, 11, true);
+      })();
+
       set('cn-mer-h', t.mercado.titulo);
       set('cn-mer-intro', t.mercado.intro);
       set('cn-prob-h', t.problema.titulo);
@@ -1242,6 +1405,21 @@
         if (!canvas || !cfg.labels || !cfg.values) return;
 
         if (cfg.tipo === 'doughnut') {
+          var doughPalette = [
+            'rgba(84, 98, 230, 0.88)',
+            'rgba(124, 58, 237, 0.78)',
+            'rgba(14, 165, 233, 0.72)',
+            'rgba(13, 148, 136, 0.72)',
+            'rgba(234, 88, 12, 0.78)',
+            'rgba(219, 39, 119, 0.72)',
+            'rgba(34, 197, 94, 0.75)',
+            'rgba(234, 179, 8, 0.82)',
+            'rgba(99, 102, 241, 0.78)',
+            'rgba(20, 184, 166, 0.72)',
+          ];
+          var bg = (cfg.labels || []).map(function (_, i) {
+            return doughPalette[i % doughPalette.length];
+          });
           new Chart(canvas.getContext('2d'), {
             type: 'doughnut',
             data: {
@@ -1249,12 +1427,7 @@
               datasets: [
                 {
                   data: cfg.values,
-                  backgroundColor: [
-                    'rgba(84, 98, 230, 0.88)',
-                    'rgba(124, 58, 237, 0.78)',
-                    'rgba(14, 165, 233, 0.72)',
-                    'rgba(13, 148, 136, 0.72)',
-                  ].slice(0, cfg.labels.length),
+                  backgroundColor: bg,
                   borderWidth: 0,
                 },
               ],
@@ -1356,7 +1529,24 @@
       }
 
       var cs = charts.segmentoCanal;
-      if (cs) makeChart('cnChartSegCanal', { tipo: cs.tipo, titulo: cs.titulo, labels: cs.labels, values: cs.values });
+      var agSeg = D.agentesSegmentoActual;
+      if (agSeg && agSeg.filas && agSeg.filas.length) {
+        var sortedSeg = agSeg.filas.slice().sort(function (a, b) {
+          return (Number(b.total) || 0) - (Number(a.total) || 0);
+        });
+        makeChart('cnChartSegCanal', {
+          tipo: 'doughnut',
+          titulo: agSeg.chartTitulo || (cs && cs.titulo) || '',
+          labels: sortedSeg.map(function (r) {
+            return r.corto || r.segmento || '';
+          }),
+          values: sortedSeg.map(function (r) {
+            return Number(r.total) || 0;
+          }),
+        });
+      } else if (cs) {
+        makeChart('cnChartSegCanal', { tipo: cs.tipo, titulo: cs.titulo, labels: cs.labels, values: cs.values });
+      }
       var cm = charts.mercadoCrecimiento;
       if (cm) {
         makeChart('cnChartMercado', {
