@@ -208,18 +208,18 @@
         'Población total de referencia ~4,4 millones (2023–2024). Urbanización ~73 % urbano / ~27 % rural (órdenes de magnitud típicos Banco Mundial / ONU). Cifras redondeadas para storytelling; cierre oficial con INEC.',
     },
 
-    /** Mapa por provincia (referencia 2023 aproximada para storytelling). */
+    /** Población por provincia para la tabla junto al mapa (referencia ~2023, storytelling). Sin coordenadas: el mapa lleva el trazado y los nombres en la imagen. */
     provinciasMapa: [
-      { nombre: 'Bocas del Toro', poblacion: 170000, x: 7, y: 24, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Chiriquí', poblacion: 470000, x: 11, y: 58, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Veraguas', poblacion: 260000, x: 28, y: 58, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Coclé', poblacion: 280000, x: 40, y: 48, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Herrera', poblacion: 125000, x: 40, y: 72, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Los Santos', poblacion: 100000, x: 46, y: 82, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Colón', poblacion: 300000, x: 44, y: 30, align: 'top', dx: 0, dy: 0 },
-      { nombre: 'Panamá Oeste', poblacion: 730000, x: 52, y: 42, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Panamá', poblacion: 2050000, x: 58, y: 40, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Darién', poblacion: 80000, x: 82, y: 52, align: 'left', dx: 0, dy: 0 },
+      { nombre: 'Bocas del Toro', poblacion: 170000 },
+      { nombre: 'Chiriquí', poblacion: 470000 },
+      { nombre: 'Veraguas', poblacion: 260000 },
+      { nombre: 'Coclé', poblacion: 280000 },
+      { nombre: 'Herrera', poblacion: 125000 },
+      { nombre: 'Los Santos', poblacion: 100000 },
+      { nombre: 'Colón', poblacion: 300000 },
+      { nombre: 'Panamá Oeste', poblacion: 730000 },
+      { nombre: 'Panamá', poblacion: 2050000 },
+      { nombre: 'Darién', poblacion: 80000 },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
@@ -228,7 +228,7 @@
     distritosTitulo: 'Territorio: contexto para quien no conoce Panamá',
 
     distritosIntro:
-      'Antes de números de red o de mercado, ubicamos la concentracion poblacional por provincia en Panama (referencia 2023, aproximada). El mapa es de contexto para junta y no reemplaza la validacion oficial con INEC.',
+      'El mapa muestra el trazado y los nombres de provincia en la propia imagen (sin puntos superpuestos que se desalineen al redimensionar). Debajo, población aproximada por provincia para el relato; cierre oficial con INEC.',
 
     distritosNota:
       'Cifras referenciales para narrativa ejecutiva (INEC en version final). La red de 2.500 puntos se usa en la pagina siguiente solo como escenario de modelado.',
