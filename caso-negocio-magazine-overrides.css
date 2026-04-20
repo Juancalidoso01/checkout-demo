@@ -210,7 +210,7 @@ body {
 
 .pp-panama-map__marker {
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translate(var(--dx, 0), var(--dy, 0));
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;

@@ -586,6 +586,8 @@
           item.className = 'pp-panama-map__marker pp-panama-map__marker--' + align;
           item.style.left = String(p.x || 50) + '%';
           item.style.top = String(p.y || 50) + '%';
+          item.style.setProperty('--dx', String(Number(p.dx) || 0) + 'px');
+          item.style.setProperty('--dy', String(Number(p.dy) || 0) + 'px');
 
           var dot = document.createElement('span');
           dot.className = 'pp-panama-map__dot';
