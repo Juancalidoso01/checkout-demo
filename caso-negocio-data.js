@@ -424,7 +424,7 @@
       ofertaValor: {
         titulo: 'Oferta de valor',
         intro:
-          'Misma propuesta vista desde el comercio (agente / punto) y desde quien paga o cobra en el lugar. Complementa el tamaño de mercado en 07–08.',
+          'Oferta de valor en espejo: cada fila contrasta el mismo beneficio para el comercio que opera el punto y para quien paga o cobra ahí. Tras el tamaño de mercado (07–08), aquí se ve el valor percibido en la operación.',
         filas: [
           {
             dimension: 'Ingresos / Ahorro',
