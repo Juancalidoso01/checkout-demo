@@ -142,6 +142,71 @@ body {
   max-height: min(34vh, 280px);
 }
 
+.pp-mag-page--segmento-solo {
+  gap: 0.45rem;
+}
+
+.pp-mag-chart--segmento-full {
+  flex: 1;
+  min-height: 200px;
+  max-height: min(58vh, 520px);
+  margin-top: 0.25rem;
+}
+
+.pp-mag-page--oferta {
+  gap: 0.5rem;
+}
+
+.pp-mag-page--oferta .pp-mag-lead {
+  font-size: 0.76rem;
+  line-height: 1.42;
+}
+
+.pp-mag-table-wrap--oferta {
+  flex: 1;
+  min-height: 0;
+  max-height: min(65vh, 580px);
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.pp-mag-table--oferta {
+  font-size: 0.58rem;
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ink);
+}
+
+.pp-mag-table--oferta th,
+.pp-mag-table--oferta td {
+  padding: 0.3rem 0.42rem;
+  border-bottom: 1px solid rgba(84, 98, 230, 0.1);
+  vertical-align: top;
+  line-height: 1.38;
+}
+
+.pp-mag-table--oferta th {
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brand-blue-dark);
+  position: sticky;
+  top: 0;
+  background: rgba(248, 250, 252, 0.98);
+  z-index: 1;
+}
+
+.pp-mag-table--oferta td:first-child {
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  width: 24%;
+  max-width: 7.5rem;
+}
+
 .pp-mag-subhead {
   margin: 0.4rem 0 0.12rem;
   font-family: Montserrat, system-ui, sans-serif;

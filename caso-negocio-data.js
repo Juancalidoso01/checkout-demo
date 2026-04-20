@@ -46,8 +46,8 @@
       { capitulo: 'IV · Decisión y retorno (11–15)' },
       { pagina: 11, texto: 'Gantt relanzamiento (1/2): Fundación a producto' },
       { pagina: 12, texto: 'Gantt relanzamiento (2/2): Comercial a rebranding' },
-      { pagina: 13, texto: 'Segmento de agentes: totales y participación' },
-      { pagina: 14, texto: 'Detalle mensual por segmento + mercado y problema' },
+      { pagina: 13, texto: 'Participación por segmento (gráfico)' },
+      { pagina: 14, texto: 'Oferta de valor: comercio y cliente' },
       { pagina: 15, texto: 'Solución, economía, ganancia y demo' },
     ],
 
@@ -402,9 +402,9 @@
 
       segmento: {
         titulo: 'Segmento de agentes (situación actual)',
-        subtitulo: 'Cifras por tipo de punto y mes',
+        subtitulo: 'Participación del volumen por tipo de punto',
         intro:
-          'Distribución del volumen en US$ según el nombre de agente / segmento operativo. La tabla resume el periodo; el detalle mes a mes está en la página siguiente.',
+          'Total US$ por segmento en el periodo de referencia. En el gráfico, el monto aparece dentro de cada porción; la leyenda identifica el segmento.',
         bullets: [
           {
             titulo: 'Cooperativa',
@@ -421,10 +421,62 @@
         ],
       },
 
-      mercado: {
-        titulo: 'Detalle mensual y mercado',
+      ofertaValor: {
+        titulo: 'Oferta de valor',
         intro:
-          'Arriba, el volumen US$ mes a mes por segmento. Debajo, índice de actividad de referencia; el tamaño agregado del mercado sigue en 07–08.',
+          'Misma propuesta vista desde el comercio (agente / punto) y desde quien paga o cobra en el lugar. Complementa el tamaño de mercado en 07–08.',
+        filas: [
+          {
+            dimension: 'Ingresos / Ahorro',
+            comercio: 'Genera comisiones por cada transacción',
+            cliente: 'Ahorra tiempo y costos de desplazamiento',
+          },
+          {
+            dimension: 'Acceso',
+            comercio: 'Accede a servicios financieros sin ser banco',
+            cliente: 'Acceso cercano a servicios financieros',
+          },
+          {
+            dimension: 'Conveniencia',
+            comercio: 'Ofrece múltiples servicios en un solo punto',
+            cliente: 'Resuelve todo en un solo lugar',
+          },
+          {
+            dimension: 'Rapidez',
+            comercio: 'Procesos ágiles y acreditación rápida',
+            cliente: 'Transacciones inmediatas',
+          },
+          {
+            dimension: 'Liquidez',
+            comercio: 'Uso inmediato del dinero recibido',
+            cliente: 'Disponibilidad rápida de pagos y recargas',
+          },
+          {
+            dimension: 'Tráfico / Frecuencia',
+            comercio: 'Aumenta visitas al local',
+            cliente: 'Punto cercano y recurrente',
+          },
+          {
+            dimension: 'Fidelización / Confianza',
+            comercio: 'Se posiciona como punto clave en la comunidad',
+            cliente: 'Confía en un comercio conocido',
+          },
+          {
+            dimension: 'Portafolio',
+            comercio: 'Amplia oferta (recargas, pagos, billetera, transferencias)',
+            cliente: 'Variedad de servicios disponibles',
+          },
+          {
+            dimension: 'Simplicidad',
+            comercio: 'Operación fácil y onboarding rápido',
+            cliente: 'Uso simple y sin fricción',
+          },
+          {
+            dimension: 'Inclusión',
+            comercio: 'Amplía su alcance a más clientes',
+            cliente: 'Puede operar sin depender totalmente de un banco',
+          },
+        ],
       },
 
       problema: {

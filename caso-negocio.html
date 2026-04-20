@@ -268,8 +268,8 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="13" id="p13" aria-label="Segmento de agentes totales y participación">
-            <div class="magazine-page__inner pp-mag-page pp-mag-page--segmento">
+          <article class="magazine-page" data-page="13" id="p13" aria-label="Participación por segmento">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--segmento pp-mag-page--segmento-solo">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">13</span>
                 <h2 class="pp-mag-h2" id="cn-seg-h"></h2>
@@ -277,41 +277,32 @@
               <p class="pp-mag-lead" id="cn-seg-sub"></p>
               <p class="pp-mag-lead" id="cn-seg-intro"></p>
               <div class="pp-mag-pills" id="cn-seg-pills"></div>
-              <h3 class="pp-mag-subhead" id="cn-seg-res-h"></h3>
-              <p class="pp-mag-lead pp-mag-lead--tight" id="cn-seg-res-intro"></p>
-              <div class="pp-mag-table-wrap pp-mag-table-wrap--agentes-resumen" id="cn-seg-res-wrap">
-                <table
-                  class="pp-mag-table pp-mag-table--agentes-resumen"
-                  id="cn-seg-tbl-resumen"
-                  aria-describedby="cn-seg-res-intro"
-                ></table>
-              </div>
-              <div class="pp-mag-chart pp-mag-chart--segmento">
-                <canvas id="cnChartSegCanal" aria-label="Participación por segmento"></canvas>
+              <div class="pp-mag-chart pp-mag-chart--segmento pp-mag-chart--segmento-full">
+                <canvas id="cnChartSegCanal" aria-label="Participación por segmento, montos en US$"></canvas>
               </div>
             </div>
           </article>
 
-          <article class="magazine-page" data-page="14" id="p14" aria-label="Detalle mensual por segmento y mercado">
-            <div class="magazine-page__inner pp-mag-page pp-mag-page--detalle-agentes">
+          <article class="magazine-page" data-page="14" id="p14" aria-label="Oferta de valor">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--oferta">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">14</span>
-                <h2 class="pp-mag-h2" id="cn-mer-h"></h2>
+                <h2 class="pp-mag-h2" id="cn-ov-h"></h2>
               </div>
-              <p class="pp-mag-note pp-mag-note--agentes" id="cn-seg-det-nota"></p>
-              <h3 class="pp-mag-subhead" id="cn-seg-det-h1"></h3>
-              <div class="pp-mag-table-wrap pp-mag-table-wrap--agentes-mensual">
-                <table class="pp-mag-table pp-mag-table--agentes-mensual" id="cn-seg-tbl-m1"></table>
+              <p class="pp-mag-lead" id="cn-ov-intro"></p>
+              <div class="pp-mag-table-wrap pp-mag-table-wrap--oferta" id="cn-ov-wrap">
+                <table class="pp-mag-table pp-mag-table--oferta" id="cn-ov-tabla" aria-describedby="cn-ov-intro"></table>
               </div>
-              <h3 class="pp-mag-subhead" id="cn-seg-det-h2"></h3>
-              <div class="pp-mag-table-wrap pp-mag-table-wrap--agentes-mensual">
-                <table class="pp-mag-table pp-mag-table--agentes-mensual" id="cn-seg-tbl-m2"></table>
+            </div>
+          </article>
+
+          <article class="magazine-page" data-page="15" id="p15" aria-label="Solución problema economía riesgos demo">
+            <div class="magazine-page__inner pp-mag-page pp-mag-page--cierre">
+              <div class="pp-mag-head">
+                <span class="pp-mag-kicker">15</span>
+                <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
               </div>
-              <hr class="pp-mag-divider" id="cn-seg-mer-divider" />
-              <p class="pp-mag-lead" id="cn-mer-intro"></p>
-              <div class="pp-mag-chart pp-mag-chart--short">
-                <canvas id="cnChartMercado" aria-label="Gráfica mercado"></canvas>
-              </div>
+              <p class="pp-mag-lead" id="cn-sol-intro"></p>
               <hr class="pp-mag-divider" />
               <div class="pp-mag-subblock">
                 <p class="pp-mag-continua">Siguiente bloque</p>
@@ -321,16 +312,6 @@
               </div>
               <p class="pp-mag-lead" id="cn-prob-intro"></p>
               <ul class="pp-mag-list" id="cn-prob-list"></ul>
-            </div>
-          </article>
-
-          <article class="magazine-page" data-page="15" id="p15" aria-label="Solución economía riesgos demo">
-            <div class="magazine-page__inner pp-mag-page pp-mag-page--cierre">
-              <div class="pp-mag-head">
-                <span class="pp-mag-kicker">15</span>
-                <h2 class="pp-mag-h2" id="cn-sol-h"></h2>
-              </div>
-              <p class="pp-mag-lead" id="cn-sol-intro"></p>
               <hr class="pp-mag-divider" />
               <div class="pp-mag-subblock">
                 <p class="pp-mag-continua">Siguiente bloque</p>
@@ -1016,152 +997,36 @@
         });
       }
 
-      (function initAgentesSegmentoTablas() {
-        var ag = D.agentesSegmentoActual;
-        var gran = ag && Number(ag.granTotal) > 0 ? ag.granTotal : 0;
-        var hideEls = function (ids) {
-          ids.forEach(function (id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-          });
-        };
-        if (!ag || !ag.filas || !ag.filas.length || !gran) {
-          hideEls([
-            'cn-seg-res-h',
-            'cn-seg-res-intro',
-            'cn-seg-res-wrap',
-            'cn-seg-det-nota',
-            'cn-seg-det-h1',
-            'cn-seg-det-h2',
-            'cn-seg-mer-divider',
-          ]);
-          var w1 = document.getElementById('cn-seg-tbl-m1');
-          var w2 = document.getElementById('cn-seg-tbl-m2');
-          if (w1 && w1.parentElement) w1.parentElement.style.display = 'none';
-          if (w2 && w2.parentElement) w2.parentElement.style.display = 'none';
-          return;
-        }
-
-        function fmtUsdCell(v) {
-          if (v == null || v === '') return '—';
-          return '$' + Number(v).toLocaleString('en-US');
-        }
-
-        set('cn-seg-res-h', ag.tituloResumen || '');
-        set('cn-seg-res-intro', ag.introResumen || '');
-        set('cn-seg-det-nota', ag.notaDetalle || '');
-        set('cn-seg-det-h1', ag.tituloDetalle1 || '');
-        set('cn-seg-det-h2', ag.tituloDetalle2 || '');
-
-        var tb = document.getElementById('cn-seg-tbl-resumen');
-        if (tb) {
-          tb.innerHTML = '';
-          var sorted = ag.filas.slice().sort(function (a, b) {
-            return (Number(b.total) || 0) - (Number(a.total) || 0);
-          });
-          var thead = document.createElement('thead');
-          var hr = document.createElement('tr');
-          ['Segmento', 'Total (US$)', '% del total'].forEach(function (lab) {
+      var ov = t.ofertaValor;
+      if (ov) {
+        set('cn-ov-h', ov.titulo || '');
+        set('cn-ov-intro', ov.intro || '');
+        var ovTab = document.getElementById('cn-ov-tabla');
+        if (ovTab && ov.filas && ov.filas.length) {
+          ovTab.innerHTML = '';
+          var theadOv = document.createElement('thead');
+          var hrov = document.createElement('tr');
+          ['Dimensión', 'Para el comercio', 'Para el cliente'].forEach(function (lab) {
             var th = document.createElement('th');
             th.textContent = lab;
-            hr.appendChild(th);
+            hrov.appendChild(th);
           });
-          thead.appendChild(hr);
-          tb.appendChild(thead);
-          var tbody = document.createElement('tbody');
-          sorted.forEach(function (row) {
+          theadOv.appendChild(hrov);
+          ovTab.appendChild(theadOv);
+          var tbodyOv = document.createElement('tbody');
+          ov.filas.forEach(function (row) {
             var tr = document.createElement('tr');
-            var td0 = document.createElement('td');
-            td0.textContent = row.segmento || '';
-            var td1 = document.createElement('td');
-            td1.className = 'pp-mag-num';
-            td1.textContent = fmtUsdCell(row.total);
-            var td2 = document.createElement('td');
-            td2.className = 'pp-mag-num';
-            td2.textContent = ((Number(row.total) / gran) * 100).toFixed(1) + ' %';
-            tr.appendChild(td0);
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tbody.appendChild(tr);
-          });
-          tb.appendChild(tbody);
-        }
-
-        var mesLabelsA = ['01', '02', '03', '04', '05', '06'];
-        var mesLabelsB = ['07', '08', '09', '10', '11', '12'];
-
-        function buildMensualTable(el, mesStart, mesEnd, showTotalCol) {
-          if (!el) return;
-          el.innerHTML = '';
-          var thead = document.createElement('thead');
-          var hr = document.createElement('tr');
-          var th0 = document.createElement('th');
-          th0.textContent = 'Segmento';
-          hr.appendChild(th0);
-          for (var m = mesStart; m <= mesEnd; m++) {
-            var th = document.createElement('th');
-            th.textContent = m < 6 ? mesLabelsA[m] : mesLabelsB[m - 6];
-            hr.appendChild(th);
-          }
-          if (showTotalCol) {
-            var thT = document.createElement('th');
-            thT.textContent = 'Total';
-            hr.appendChild(thT);
-          }
-          thead.appendChild(hr);
-          el.appendChild(thead);
-          var tbody = document.createElement('tbody');
-          ag.filas.forEach(function (row) {
-            var tr = document.createElement('tr');
-            var tdN = document.createElement('td');
-            tdN.textContent = row.segmento || '';
-            tr.appendChild(tdN);
-            for (var m = mesStart; m <= mesEnd; m++) {
+            [row.dimension, row.comercio, row.cliente].forEach(function (cell) {
               var td = document.createElement('td');
-              td.className = 'pp-mag-num';
-              var mv = row.meses && row.meses[m] != null ? row.meses[m] : null;
-              td.textContent = fmtUsdCell(mv);
+              td.textContent = cell || '';
               tr.appendChild(td);
-            }
-            if (showTotalCol) {
-              var tdTot = document.createElement('td');
-              tdTot.className = 'pp-mag-num pp-mag-num--strong';
-              tdTot.textContent = fmtUsdCell(row.total);
-              tr.appendChild(tdTot);
-            }
-            tbody.appendChild(tr);
+            });
+            tbodyOv.appendChild(tr);
           });
-
-          var tm = ag.totalesMensuales || [];
-          var trF = document.createElement('tr');
-          trF.className = 'pp-mag-tr--total-mes';
-          var tdL = document.createElement('td');
-          tdL.textContent = 'Total mes';
-          tdL.className = 'pp-mag-td--label';
-          trF.appendChild(tdL);
-          for (var m2 = mesStart; m2 <= mesEnd; m2++) {
-            var tdm = document.createElement('td');
-            tdm.className = 'pp-mag-num pp-mag-num--strong';
-            var tv = tm[m2] != null ? tm[m2] : null;
-            tdm.textContent = fmtUsdCell(tv);
-            trF.appendChild(tdm);
-          }
-          if (showTotalCol) {
-            var tdG = document.createElement('td');
-            tdG.className = 'pp-mag-num pp-mag-num--strong';
-            tdG.textContent = fmtUsdCell(ag.granTotal);
-            trF.appendChild(tdG);
-          }
-          tbody.appendChild(trF);
-          el.appendChild(tbody);
+          ovTab.appendChild(tbodyOv);
         }
+      }
 
-        buildMensualTable(document.getElementById('cn-seg-tbl-m1'), 0, 5, false);
-        buildMensualTable(document.getElementById('cn-seg-tbl-m2'), 6, 11, true);
-      })();
-
-      set('cn-mer-h', t.mercado.titulo);
-      set('cn-mer-intro', t.mercado.intro);
       set('cn-prob-h', t.problema.titulo);
       set('cn-prob-intro', t.problema.intro);
       var probList = document.getElementById('cn-prob-list');
@@ -1387,7 +1252,6 @@
           'cnChartEscenariosIng',
           'cnChartTamSom',
           'cnChartSegCanal',
-          'cnChartMercado',
           'cnChartEconomia',
         ].forEach(function (id) {
           var canvas = document.getElementById(id);
@@ -1408,6 +1272,39 @@
         grid: 'rgba(148, 163, 184, 0.25)',
         text: '#475569',
       };
+
+      if (!window.__ppDoughnutMontosPluginReg && typeof Chart.register === 'function') {
+        window.__ppDoughnutMontosPluginReg = true;
+        Chart.register({
+          id: 'ppDoughnutMontos',
+          afterDatasetsDraw: function (chart) {
+            var plug = chart.options.plugins && chart.options.plugins.ppDoughnutMontos;
+            if (!plug || !plug.labels || !plug.labels.length) return;
+            var ctx = chart.ctx;
+            var labels = plug.labels;
+            var meta = chart.getDatasetMeta(0);
+            if (!meta || !meta.data) return;
+            meta.data.forEach(function (el, i) {
+              var txt = labels[i];
+              if (!txt) return;
+              var a0 = el.startAngle;
+              var a1 = el.endAngle;
+              if (a1 - a0 < 0.14) return;
+              var p = el.tooltipPosition();
+              ctx.save();
+              ctx.font = '600 8.5px Montserrat, system-ui, sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.lineWidth = 2.5;
+              ctx.strokeStyle = 'rgba(15, 23, 42, 0.42)';
+              ctx.fillStyle = '#f8fafc';
+              ctx.strokeText(txt, p.x, p.y);
+              ctx.fillText(txt, p.x, p.y);
+              ctx.restore();
+            });
+          },
+        });
+      }
 
       function makeChart(canvasId, cfg) {
         if (!cfg) return;
@@ -1430,6 +1327,13 @@
           var bg = (cfg.labels || []).map(function (_, i) {
             return doughPalette[i % doughPalette.length];
           });
+          var doughPlugins = {
+            title: { display: true, text: cfg.titulo || '', font: { size: 12, weight: '600' } },
+            legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 }, padding: 6 } },
+          };
+          if (cfg.innerLabels && cfg.innerLabels.length) {
+            doughPlugins.ppDoughnutMontos = { labels: cfg.innerLabels };
+          }
           new Chart(canvas.getContext('2d'), {
             type: 'doughnut',
             data: {
@@ -1445,11 +1349,8 @@
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              plugins: {
-                title: { display: true, text: cfg.titulo || '', font: { size: 12, weight: '600' } },
-                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
-              },
-              cutout: '54%',
+              plugins: doughPlugins,
+              cutout: '52%',
             },
           });
           return;
@@ -1538,11 +1439,21 @@
         });
       }
 
+      function fmtMontoDona(n) {
+        var v = Number(n) || 0;
+        if (v >= 1000000) return '$' + (v / 1000000).toFixed(2).replace('.', ',') + ' M';
+        if (v >= 1000) return '$' + Math.round(v / 1000) + ' k';
+        return '$' + v;
+      }
+
       var cs = charts.segmentoCanal;
       var agSeg = D.agentesSegmentoActual;
       if (agSeg && agSeg.filas && agSeg.filas.length) {
         var sortedSeg = agSeg.filas.slice().sort(function (a, b) {
           return (Number(b.total) || 0) - (Number(a.total) || 0);
+        });
+        var valsSeg = sortedSeg.map(function (r) {
+          return Number(r.total) || 0;
         });
         makeChart('cnChartSegCanal', {
           tipo: 'doughnut',
@@ -1550,22 +1461,13 @@
           labels: sortedSeg.map(function (r) {
             return r.corto || r.segmento || '';
           }),
-          values: sortedSeg.map(function (r) {
-            return Number(r.total) || 0;
+          values: valsSeg,
+          innerLabels: valsSeg.map(function (t) {
+            return fmtMontoDona(t);
           }),
         });
       } else if (cs) {
         makeChart('cnChartSegCanal', { tipo: cs.tipo, titulo: cs.titulo, labels: cs.labels, values: cs.values });
-      }
-      var cm = charts.mercadoCrecimiento;
-      if (cm) {
-        makeChart('cnChartMercado', {
-          tipo: cm.tipo,
-          titulo: cm.titulo,
-          labels: cm.labels,
-          values: cm.values,
-          unit: cm.unit,
-        });
       }
       var ce = charts.economiaMix;
       if (ce) {
