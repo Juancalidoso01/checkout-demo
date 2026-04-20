@@ -98,132 +98,88 @@
                 <div
                   class="pp-panama-map"
                   id="cn-panama-map"
-                  aria-label="Esquema de provincias de Panamá; población al pasar el cursor o al enfocar cada región"
+                  aria-label="Mapa de Panamá por provincias; población al pasar el cursor o al enfocar cada región"
                 >
-                  <div class="pp-panama-map__svg-wrap">
+                  <div class="pp-panama-map__figure">
+                    <img
+                      class="pp-panama-map__base"
+                      src="assets/magazine/panama-provincias-outline.png"
+                      width="1024"
+                      height="448"
+                      alt="Mapa esquemático de Panamá con límites provinciales"
+                      loading="eager"
+                      decoding="async"
+                    />
+                    <!-- Polígonos en coords 1024×448 (alineados al PNG); orden: fondo → frente para solapes -->
                     <svg
-                      class="pp-panama-svg"
+                      class="pp-panama-map__overlay"
                       id="cn-panama-svg"
-                      viewBox="0 0 110 95"
+                      viewBox="0 0 1024 448"
+                      preserveAspectRatio="xMidYMid meet"
                       role="img"
                       aria-labelledby="cn-panama-svg-title"
                     >
-                      <title id="cn-panama-svg-title">Panamá — provincias (esquema)</title>
-                      <g
-                        class="pp-panama-svg__provs"
-                        fill="rgba(99, 102, 241, 0.14)"
-                        stroke="rgba(67, 56, 202, 0.42)"
-                        stroke-width="0.45"
-                      >
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="bocas-del-toro"
-                          tabindex="0"
-                          x="3"
-                          y="4"
-                          width="17"
-                          height="12"
-                          rx="1.4"
-                          ry="1.4"
-                        />
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="colon"
-                          tabindex="0"
-                          x="22"
-                          y="3"
-                          width="25"
-                          height="14"
-                          rx="1.4"
-                          ry="1.4"
-                        />
-                        <rect
+                      <title id="cn-panama-svg-title">Panamá — provincias (zonas interactivas aproximadas)</title>
+                      <g class="pp-panama-svg__hit" stroke="none">
+                        <polygon
                           class="pp-panama-prov"
                           data-prov="chiriqui"
                           tabindex="0"
-                          x="2"
-                          y="20"
-                          width="27"
-                          height="32"
-                          rx="1.4"
-                          ry="1.4"
+                          points="72,96 352,88 352,292 78,304"
                         />
-                        <rect
+                        <polygon
                           class="pp-panama-prov"
                           data-prov="veraguas"
                           tabindex="0"
-                          x="31"
-                          y="22"
-                          width="21"
-                          height="34"
-                          rx="1.4"
-                          ry="1.4"
+                          points="348,96 524,92 538,322 354,328"
                         />
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="cocle"
-                          tabindex="0"
-                          x="54"
-                          y="24"
-                          width="11"
-                          height="16"
-                          rx="1.2"
-                          ry="1.2"
-                        />
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="herrera"
-                          tabindex="0"
-                          x="54"
-                          y="42"
-                          width="11"
-                          height="14"
-                          rx="1.2"
-                          ry="1.2"
-                        />
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="los-santos"
-                          tabindex="0"
-                          x="54"
-                          y="58"
-                          width="11"
-                          height="16"
-                          rx="1.2"
-                          ry="1.2"
-                        />
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="panama-oeste"
-                          tabindex="0"
-                          x="67"
-                          y="26"
-                          width="13"
-                          height="18"
-                          rx="1.2"
-                          ry="1.2"
-                        />
-                        <rect
-                          class="pp-panama-prov"
-                          data-prov="panama"
-                          tabindex="0"
-                          x="82"
-                          y="24"
-                          width="17"
-                          height="22"
-                          rx="1.2"
-                          ry="1.2"
-                        />
-                        <rect
+                        <polygon
                           class="pp-panama-prov"
                           data-prov="darien"
                           tabindex="0"
-                          x="96"
-                          y="46"
-                          width="11"
-                          height="30"
-                          rx="1.2"
-                          ry="1.2"
+                          points="836,92 1010,84 1020,398 840,404"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="panama"
+                          tabindex="0"
+                          points="696,108 852,100 864,272 700,276"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="colon"
+                          tabindex="0"
+                          points="526,20 762,16 772,142 530,148"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="panama-oeste"
+                          tabindex="0"
+                          points="554,143 702,138 712,252 558,256"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="cocle"
+                          tabindex="0"
+                          points="518,116 596,112 604,254 506,260"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="herrera"
+                          tabindex="0"
+                          points="504,252 602,248 612,364 508,372"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="los-santos"
+                          tabindex="0"
+                          points="510,368 616,362 626,440 514,444"
+                        />
+                        <polygon
+                          class="pp-panama-prov"
+                          data-prov="bocas-del-toro"
+                          tabindex="0"
+                          points="22,10 178,6 188,102 28,112"
                         />
                       </g>
                     </svg>

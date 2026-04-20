@@ -326,42 +326,59 @@ body {
   min-height: 220px;
   max-height: min(56vh, 440px);
   overflow: hidden;
-}
-
-.pp-panama-map__svg-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.65rem 0.75rem 0.85rem;
+  padding: 0.5rem 0.55rem 0.6rem;
   box-sizing: border-box;
-  min-height: 200px;
 }
 
-.pp-panama-svg {
+.pp-panama-map__figure {
+  position: relative;
   display: block;
   width: 100%;
-  max-width: min(100%, 520px);
+  max-width: min(100%, 560px);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.pp-panama-map__base {
+  display: block;
+  width: 100%;
   height: auto;
-  max-height: min(48vh, 380px);
+  vertical-align: top;
+  border-radius: 10px;
+}
+
+.pp-panama-map__overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: 10px;
+}
+
+.pp-panama-svg__hit {
+  pointer-events: none;
 }
 
 .pp-panama-prov {
+  pointer-events: all;
   cursor: pointer;
-  transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease;
+  transition: fill 0.15s ease, filter 0.15s ease;
   outline: none;
+  fill: rgba(99, 102, 241, 0.06);
 }
 
 .pp-panama-prov:hover,
 .pp-panama-prov--active {
-  fill: rgba(79, 70, 229, 0.32);
-  stroke: rgba(55, 48, 163, 0.65);
+  fill: rgba(79, 70, 229, 0.28);
   filter: brightness(1.02);
 }
 
 .pp-panama-prov:focus-visible {
-  fill: rgba(79, 70, 229, 0.28);
-  stroke: rgba(55, 48, 163, 0.85);
-  stroke-width: 0.75;
+  fill: rgba(79, 70, 229, 0.32);
+  stroke: rgba(55, 48, 163, 0.55);
+  stroke-width: 1.5;
 }
 
 .pp-panama-map__tooltip {
@@ -401,11 +418,7 @@ body {
 @media (max-width: 640px) {
   .pp-panama-map {
     min-height: 200px;
-  }
-
-  .pp-panama-map__svg-wrap {
-    min-height: 188px;
-    padding: 0.5rem 0.55rem 0.7rem;
+    padding: 0.4rem 0.45rem 0.5rem;
   }
 
   .pp-panama-map__tooltip {
