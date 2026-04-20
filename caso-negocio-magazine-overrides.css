@@ -321,86 +321,96 @@ body {
   position: relative;
   border-radius: 14px;
   border: 1px solid var(--line);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.95), rgba(238, 242, 255, 0.88));
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 255, 0.92));
   box-shadow: 0 8px 24px rgba(30, 27, 75, 0.06);
-  min-height: 230px;
+  min-height: 220px;
   max-height: min(56vh, 440px);
   overflow: hidden;
 }
 
-.pp-panama-map__img {
+.pp-panama-map__svg-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 0.75rem 0.85rem;
+  box-sizing: border-box;
+  min-height: 200px;
+}
+
+.pp-panama-svg {
   display: block;
   width: 100%;
+  max-width: min(100%, 520px);
   height: auto;
-  max-height: 100%;
-  object-fit: contain;
-  object-position: center;
-  margin: 0 auto;
-  box-sizing: border-box;
+  max-height: min(48vh, 380px);
 }
 
-.pp-panama-map__markers {
-  position: absolute;
-  inset: 0;
+.pp-panama-prov {
+  cursor: pointer;
+  transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease;
+  outline: none;
 }
 
-.pp-panama-map__marker {
+.pp-panama-prov:hover,
+.pp-panama-prov--active {
+  fill: rgba(79, 70, 229, 0.32);
+  stroke: rgba(55, 48, 163, 0.65);
+  filter: brightness(1.02);
+}
+
+.pp-panama-prov:focus-visible {
+  fill: rgba(79, 70, 229, 0.28);
+  stroke: rgba(55, 48, 163, 0.85);
+  stroke-width: 0.75;
+}
+
+.pp-panama-map__tooltip {
   position: absolute;
-  transform: translate(-50%, -50%) translate(var(--dx, 0), var(--dy, 0));
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
+  z-index: 4;
+  min-width: 8.5rem;
+  max-width: 14rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.94);
+  color: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.28);
   pointer-events: none;
+  font-size: 0.68rem;
+  line-height: 1.35;
 }
 
-.pp-panama-map__marker--left {
-  flex-direction: row-reverse;
-}
-.pp-panama-map__marker--top {
-  flex-direction: column-reverse;
-}
-.pp-panama-map__marker--bottom {
-  flex-direction: column;
+.pp-panama-map__tooltip[hidden] {
+  display: none !important;
 }
 
-.pp-panama-map__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: #4338ca;
-  box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.24);
-}
-
-.pp-panama-map__label {
-  font-size: 0.62rem;
+.pp-panama-map__tooltip-name {
+  display: block;
   font-weight: 700;
-  line-height: 1.2;
-  color: #1e293b;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(99, 102, 241, 0.28);
-  border-radius: 999px;
-  padding: 0.14rem 0.38rem;
-  white-space: nowrap;
+  letter-spacing: 0.01em;
 }
 
-.pp-panama-map__label--cifra {
+.pp-panama-map__tooltip-pop {
+  display: block;
+  margin-top: 0.2rem;
   font-variant-numeric: tabular-nums;
-  padding: 0.12rem 0.32rem;
-  font-size: 0.58rem;
+  color: #cbd5e1;
+  font-size: 0.64rem;
 }
 
 @media (max-width: 640px) {
   .pp-panama-map {
-    min-height: 205px;
+    min-height: 200px;
   }
 
-  .pp-panama-map__label {
-    font-size: 0.54rem;
-    padding: 0.1rem 0.28rem;
+  .pp-panama-map__svg-wrap {
+    min-height: 188px;
+    padding: 0.5rem 0.55rem 0.7rem;
   }
 
-  .pp-panama-map__label--cifra {
-    font-size: 0.52rem;
+  .pp-panama-map__tooltip {
+    font-size: 0.62rem;
+    max-width: 12rem;
   }
 }
 

@@ -209,20 +209,20 @@
     },
 
     /**
-     * Población por provincia (referencia ~2023, storytelling). Los nombres en el mapa vienen de la imagen;
-     * x/y son % del rectángulo visible del PNG (esquina superior izquierda = 0,0) para colocar la cifra junto a cada provincia.
+     * Población por provincia (referencia ~2023, storytelling).
+     * `slug` enlaza cada región del SVG esquemático (caso-negocio.html) con la cifra (tooltip al hover / foco).
      */
     provinciasMapa: [
-      { nombre: 'Bocas del Toro', poblacion: 170000, x: 6, y: 22, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Chiriquí', poblacion: 470000, x: 10, y: 55, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Veraguas', poblacion: 260000, x: 26, y: 56, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Coclé', poblacion: 280000, x: 38, y: 46, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Herrera', poblacion: 125000, x: 39, y: 70, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Los Santos', poblacion: 100000, x: 45, y: 80, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Colón', poblacion: 300000, x: 43, y: 28, align: 'top', dx: 0, dy: 0 },
-      { nombre: 'Panamá Oeste', poblacion: 730000, x: 50, y: 40, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Panamá', poblacion: 2050000, x: 56, y: 38, align: 'right', dx: 0, dy: 0 },
-      { nombre: 'Darién', poblacion: 80000, x: 80, y: 50, align: 'left', dx: 0, dy: 0 },
+      { slug: 'bocas-del-toro', nombre: 'Bocas del Toro', poblacion: 170000 },
+      { slug: 'chiriqui', nombre: 'Chiriquí', poblacion: 470000 },
+      { slug: 'veraguas', nombre: 'Veraguas', poblacion: 260000 },
+      { slug: 'cocle', nombre: 'Coclé', poblacion: 280000 },
+      { slug: 'herrera', nombre: 'Herrera', poblacion: 125000 },
+      { slug: 'los-santos', nombre: 'Los Santos', poblacion: 100000 },
+      { slug: 'colon', nombre: 'Colón', poblacion: 300000 },
+      { slug: 'panama-oeste', nombre: 'Panamá Oeste', poblacion: 730000 },
+      { slug: 'panama', nombre: 'Panamá', poblacion: 2050000 },
+      { slug: 'darien', nombre: 'Darién', poblacion: 80000 },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */
@@ -231,7 +231,7 @@
     distritosTitulo: 'Territorio: contexto para quien no conoce Panamá',
 
     distritosIntro:
-      'Los nombres de provincia están en el mapa de referencia; al lado de cada una mostramos solo la población aproximada (el punto se recalcula al cambiar tamaño de ventana). Cierre oficial con INEC.',
+      'Esquema simplificado de provincias: pase el cursor por cada región (o use Tab para enfocar) para ver la población aproximada. Cierre oficial con INEC.',
 
     distritosNota:
       'Cifras referenciales para narrativa ejecutiva (INEC en version final). La red de 2.500 puntos se usa en la pagina siguiente solo como escenario de modelado.',

@@ -98,17 +98,142 @@
                 <div
                   class="pp-panama-map"
                   id="cn-panama-map"
-                  aria-label="Mapa de Panamá con población aproximada por provincia"
+                  aria-label="Esquema de provincias de Panamá; población al pasar el cursor o al enfocar cada región"
                 >
-                  <img
-                    class="pp-panama-map__img"
-                    id="cn-panama-map-img"
-                    src="assets/magazine/panama-provincias-etiquetado.png"
-                    alt="Mapa político de Panamá con nombres de provincias; las cifras junto a cada punto son población aproximada."
-                    loading="eager"
-                    decoding="async"
-                  />
-                  <div class="pp-panama-map__markers" id="cn-prov-markers"></div>
+                  <div class="pp-panama-map__svg-wrap">
+                    <svg
+                      class="pp-panama-svg"
+                      id="cn-panama-svg"
+                      viewBox="0 0 110 95"
+                      role="img"
+                      aria-labelledby="cn-panama-svg-title"
+                    >
+                      <title id="cn-panama-svg-title">Panamá — provincias (esquema)</title>
+                      <g
+                        class="pp-panama-svg__provs"
+                        fill="rgba(99, 102, 241, 0.14)"
+                        stroke="rgba(67, 56, 202, 0.42)"
+                        stroke-width="0.45"
+                      >
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="bocas-del-toro"
+                          tabindex="0"
+                          x="3"
+                          y="4"
+                          width="17"
+                          height="12"
+                          rx="1.4"
+                          ry="1.4"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="colon"
+                          tabindex="0"
+                          x="22"
+                          y="3"
+                          width="25"
+                          height="14"
+                          rx="1.4"
+                          ry="1.4"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="chiriqui"
+                          tabindex="0"
+                          x="2"
+                          y="20"
+                          width="27"
+                          height="32"
+                          rx="1.4"
+                          ry="1.4"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="veraguas"
+                          tabindex="0"
+                          x="31"
+                          y="22"
+                          width="21"
+                          height="34"
+                          rx="1.4"
+                          ry="1.4"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="cocle"
+                          tabindex="0"
+                          x="54"
+                          y="24"
+                          width="11"
+                          height="16"
+                          rx="1.2"
+                          ry="1.2"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="herrera"
+                          tabindex="0"
+                          x="54"
+                          y="42"
+                          width="11"
+                          height="14"
+                          rx="1.2"
+                          ry="1.2"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="los-santos"
+                          tabindex="0"
+                          x="54"
+                          y="58"
+                          width="11"
+                          height="16"
+                          rx="1.2"
+                          ry="1.2"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="panama-oeste"
+                          tabindex="0"
+                          x="67"
+                          y="26"
+                          width="13"
+                          height="18"
+                          rx="1.2"
+                          ry="1.2"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="panama"
+                          tabindex="0"
+                          x="82"
+                          y="24"
+                          width="17"
+                          height="22"
+                          rx="1.2"
+                          ry="1.2"
+                        />
+                        <rect
+                          class="pp-panama-prov"
+                          data-prov="darien"
+                          tabindex="0"
+                          x="96"
+                          y="46"
+                          width="11"
+                          height="30"
+                          rx="1.2"
+                          ry="1.2"
+                        />
+                      </g>
+                    </svg>
+                  </div>
+                  <div
+                    class="pp-panama-map__tooltip"
+                    id="cn-panama-tooltip"
+                    role="tooltip"
+                    hidden
+                  ></div>
                 </div>
               </div>
               <p class="pp-mag-note" id="cn-dist-nota"></p>
@@ -563,73 +688,108 @@
         if (v >= 1000) return (v / 1000).toFixed(0) + 'k';
         return fmtIntEs(v);
       }
-      var provMarkers = document.getElementById('cn-prov-markers');
-      var panImg = document.getElementById('cn-panama-map-img');
-      if (provMarkers) {
-        provMarkers.innerHTML = '';
+      (function initPanamaSchematicMap() {
+        var mapRoot = document.getElementById('cn-panama-map');
+        var tip = document.getElementById('cn-panama-tooltip');
+        if (!mapRoot || !tip) return;
+
+        var bySlug = {};
         (D.provinciasMapa || []).forEach(function (p) {
-          var item = document.createElement('div');
-          var align = p.align || 'right';
-          item.className = 'pp-panama-map__marker pp-panama-map__marker--' + align;
-          item.dataset.xPct = String(p.x != null ? p.x : 50);
-          item.dataset.yPct = String(p.y != null ? p.y : 50);
-          item.style.setProperty('--dx', String(Number(p.dx) || 0) + 'px');
-          item.style.setProperty('--dy', String(Number(p.dy) || 0) + 'px');
-          var popTxt = fmtProvPop(p.poblacion);
-          item.setAttribute(
-            'aria-label',
-            (p.nombre || 'Provincia') + ', población aproximada ' + popTxt
-          );
-
-          var dot = document.createElement('span');
-          dot.className = 'pp-panama-map__dot';
-          dot.setAttribute('aria-hidden', 'true');
-          var lb = document.createElement('span');
-          lb.className = 'pp-panama-map__label pp-panama-map__label--cifra';
-          lb.textContent = popTxt;
-
-          item.appendChild(dot);
-          item.appendChild(lb);
-          provMarkers.appendChild(item);
+          if (p && p.slug) bySlug[p.slug] = p;
         });
 
-        function layoutProvinciasMarkers() {
-          var wrap = document.getElementById('cn-panama-map');
-          var img = panImg;
-          if (!wrap || !img || !provMarkers) return;
-          var wr = wrap.getBoundingClientRect();
-          var ir = img.getBoundingClientRect();
-          var offX = ir.left - wr.left;
-          var offY = ir.top - wr.top;
-          var iw = ir.width;
-          var ih = ir.height;
-          if (!iw || !ih) return;
-          Array.prototype.forEach.call(provMarkers.querySelectorAll('.pp-panama-map__marker'), function (el) {
-            var xp = parseFloat(el.dataset.xPct);
-            var yp = parseFloat(el.dataset.yPct);
-            if (!isFinite(xp) || !isFinite(yp)) return;
-            var leftPx = offX + (iw * xp) / 100;
-            var topPx = offY + (ih * yp) / 100;
-            el.style.left = leftPx + 'px';
-            el.style.top = topPx + 'px';
-          });
+        var activeEl = null;
+
+        function hideTip() {
+          tip.hidden = true;
+          tip.textContent = '';
+          if (activeEl) {
+            activeEl.classList.remove('pp-panama-prov--active');
+            activeEl = null;
+          }
         }
 
-        var rafProv = null;
-        function scheduleLayoutProv() {
-          if (rafProv) cancelAnimationFrame(rafProv);
-          rafProv = requestAnimationFrame(function () {
-            rafProv = null;
-            layoutProvinciasMarkers();
-          });
+        function showTipForEl(el, clientX, clientY) {
+          var slug = el.getAttribute('data-prov');
+          var p = bySlug[slug];
+          if (!p) return;
+          var popTxt = fmtProvPop(p.poblacion);
+          tip.innerHTML =
+            '<span class="pp-panama-map__tooltip-name">' +
+            (p.nombre || '') +
+            '</span>' +
+            '<span class="pp-panama-map__tooltip-pop">~' +
+            popTxt +
+            ' hab.</span>';
+          tip.hidden = false;
+          if (activeEl && activeEl !== el) activeEl.classList.remove('pp-panama-prov--active');
+          activeEl = el;
+          el.classList.add('pp-panama-prov--active');
+
+          var mr = mapRoot.getBoundingClientRect();
+          var tr = tip.getBoundingClientRect();
+          var pad = 10;
+          var left = clientX - mr.left + pad;
+          var top = clientY - mr.top + pad;
+          if (left + tr.width > mr.width - 6) left = mr.width - tr.width - 6;
+          if (top + tr.height > mr.height - 6) top = mr.height - tr.height - 6;
+          if (left < 6) left = 6;
+          if (top < 6) top = 6;
+          tip.style.left = left + 'px';
+          tip.style.top = top + 'px';
         }
 
-        if (panImg && panImg.complete) scheduleLayoutProv();
-        else if (panImg) panImg.addEventListener('load', scheduleLayoutProv, { once: true });
-        window.addEventListener('resize', scheduleLayoutProv);
-        window.addEventListener('pp-magazine-layout', scheduleLayoutProv);
-        scheduleLayoutProv();
-      }
+        function pointerFromEl(el) {
+          var r = el.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }
+
+        mapRoot.querySelectorAll('.pp-panama-prov').forEach(function (el) {
+          var slug = el.getAttribute('data-prov');
+          var p = bySlug[slug];
+          if (p) {
+            el.setAttribute('aria-label', p.nombre + ', población aproximada ' + fmtProvPop(p.poblacion));
+          }
+          el.addEventListener('pointerenter', function (ev) {
+            if (ev.pointerType === 'touch') return;
+            showTipForEl(el, ev.clientX, ev.clientY);
+          });
+          el.addEventListener('pointermove', function (ev) {
+            if (ev.pointerType === 'touch') return;
+            if (!tip.hidden) showTipForEl(el, ev.clientX, ev.clientY);
+          });
+          el.addEventListener('pointerleave', function (ev) {
+            if (ev.pointerType === 'touch') return;
+            hideTip();
+          });
+          el.addEventListener('focus', function () {
+            var pt = pointerFromEl(el);
+            showTipForEl(el, pt.x, pt.y);
+          });
+          el.addEventListener('blur', hideTip);
+          el.addEventListener('pointerdown', function (ev) {
+            if (ev.pointerType !== 'touch') return;
+            ev.stopPropagation();
+            showTipForEl(el, ev.clientX, ev.clientY);
+          });
+        });
+
+        document.addEventListener(
+          'click',
+          function (ev) {
+            if (!mapRoot.contains(ev.target)) hideTip();
+          },
+          true
+        );
+
+        window.addEventListener(
+          'scroll',
+          function () {
+            hideTip();
+          },
+          true
+        );
+      })();
 
       var esc = D.escenarios;
       if (esc) {
