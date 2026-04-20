@@ -226,16 +226,16 @@
 
     /** Mapa por provincia (referencia 2023 aproximada para storytelling). */
     provinciasMapa: [
-      { nombre: 'Bocas del Toro', poblacion: 170000, x: 9, y: 33, align: 'right', dx: 10, dy: -4 },
-      { nombre: 'Chiriquí', poblacion: 470000, x: 14, y: 61, align: 'right', dx: 8, dy: -2 },
-      { nombre: 'Veraguas', poblacion: 260000, x: 28, y: 62, align: 'right', dx: 10, dy: 8 },
-      { nombre: 'Coclé', poblacion: 280000, x: 40, y: 54, align: 'right', dx: 8, dy: 10 },
-      { nombre: 'Herrera', poblacion: 125000, x: 38, y: 74, align: 'right', dx: 8, dy: 0 },
-      { nombre: 'Los Santos', poblacion: 100000, x: 49, y: 84, align: 'right', dx: 8, dy: 0 },
-      { nombre: 'Colón', poblacion: 300000, x: 37, y: 38, align: 'top', dx: 6, dy: -9 },
-      { nombre: 'Panamá Oeste', poblacion: 730000, x: 49, y: 45, align: 'right', dx: 10, dy: 8 },
-      { nombre: 'Panamá', poblacion: 2050000, x: 58, y: 42, align: 'right', dx: 12, dy: -2 },
-      { nombre: 'Darién', poblacion: 80000, x: 84, y: 53, align: 'left', dx: -10, dy: 0 },
+      { nombre: 'Bocas del Toro', poblacion: 170000, x: 7, y: 24, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Chiriquí', poblacion: 470000, x: 11, y: 58, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Veraguas', poblacion: 260000, x: 28, y: 58, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Coclé', poblacion: 280000, x: 40, y: 48, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Herrera', poblacion: 125000, x: 40, y: 72, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Los Santos', poblacion: 100000, x: 46, y: 82, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Colón', poblacion: 300000, x: 44, y: 30, align: 'top', dx: 0, dy: 0 },
+      { nombre: 'Panamá Oeste', poblacion: 730000, x: 52, y: 42, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Panamá', poblacion: 2050000, x: 58, y: 40, align: 'right', dx: 0, dy: 0 },
+      { nombre: 'Darién', poblacion: 80000, x: 82, y: 52, align: 'left', dx: 0, dy: 0 },
     ],
 
     /** Alineado con la red de ejemplo en escenarios (2 500 puntos). */

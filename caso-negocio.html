@@ -95,9 +95,10 @@
                 <div class="pp-panama-map" id="cn-panama-map" aria-label="Mapa de Panamá con población por provincia">
                   <img
                     class="pp-panama-map__img"
+                    id="cn-panama-map-img"
                     src="assets/magazine/panama-provincias-base.png"
                     alt="Mapa de Panamá por provincias"
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
                   />
                   <div class="pp-panama-map__markers" id="cn-prov-markers"></div>
@@ -578,14 +579,15 @@
         return fmtIntEs(v);
       }
       var provMarkers = document.getElementById('cn-prov-markers');
+      var panImg = document.getElementById('cn-panama-map-img');
       if (provMarkers) {
         provMarkers.innerHTML = '';
         (D.provinciasMapa || []).forEach(function (p) {
           var item = document.createElement('div');
           var align = p.align || 'right';
           item.className = 'pp-panama-map__marker pp-panama-map__marker--' + align;
-          item.style.left = String(p.x || 50) + '%';
-          item.style.top = String(p.y || 50) + '%';
+          item.dataset.xPct = String(p.x != null ? p.x : 50);
+          item.dataset.yPct = String(p.y != null ? p.y : 50);
           item.style.setProperty('--dx', String(Number(p.dx) || 0) + 'px');
           item.style.setProperty('--dy', String(Number(p.dy) || 0) + 'px');
 
@@ -599,6 +601,43 @@
           item.appendChild(lb);
           provMarkers.appendChild(item);
         });
+
+        function layoutProvinciasMarkers() {
+          var wrap = document.getElementById('cn-panama-map');
+          var img = panImg;
+          if (!wrap || !img || !provMarkers) return;
+          var wr = wrap.getBoundingClientRect();
+          var ir = img.getBoundingClientRect();
+          var offX = ir.left - wr.left;
+          var offY = ir.top - wr.top;
+          var iw = ir.width;
+          var ih = ir.height;
+          if (!iw || !ih) return;
+          Array.prototype.forEach.call(provMarkers.querySelectorAll('.pp-panama-map__marker'), function (el) {
+            var xp = parseFloat(el.dataset.xPct);
+            var yp = parseFloat(el.dataset.yPct);
+            if (!isFinite(xp) || !isFinite(yp)) return;
+            var leftPx = offX + (iw * xp) / 100;
+            var topPx = offY + (ih * yp) / 100;
+            el.style.left = leftPx + 'px';
+            el.style.top = topPx + 'px';
+          });
+        }
+
+        var raf = null;
+        function scheduleLayoutProv() {
+          if (raf) cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(function () {
+            raf = null;
+            layoutProvinciasMarkers();
+          });
+        }
+
+        if (panImg && panImg.complete) scheduleLayoutProv();
+        else if (panImg) panImg.addEventListener('load', scheduleLayoutProv, { once: true });
+        window.addEventListener('resize', scheduleLayoutProv);
+        window.addEventListener('pp-magazine-layout', scheduleLayoutProv);
+        scheduleLayoutProv();
       }
 
       var esc = D.escenarios;
