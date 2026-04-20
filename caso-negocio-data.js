@@ -527,9 +527,9 @@
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
         intro:
-          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Toca la cabecera de cada competidor para el detalle de puntos: Rapibac y Caja Amiga (PDF); Banistmo (CSV y resumen en texto, datos del buscador público del banco); Western Union (referencia panama50.com).',
+          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Toca la cabecera de cada competidor para el detalle de puntos: Rapibac y Caja Amiga (PDF); Banistmo (CSV del buscador del banco); Western Union (CSV y resumen extraídos del listado de referencia en panama50.com).',
         notaPie:
-          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios. Banistmo: para actualizar el CSV tras cambios en la web, desde la raíz del repo ejecutar python3 scripts/extract-banistmo-puntos.py. Fuentes: Rapibac y Caja Amiga (PDF); Banistmo (banistmo.com/personas/buscador-sucursales); Western Union (panama50.com).',
+          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios. Actualizar CSV: Banistmo con python3 scripts/extract-banistmo-puntos.py; Western Union con python3 scripts/extract-western-union-panama50.py (desde la raíz del repo). Fuentes: Rapibac y Caja Amiga (PDF); Banistmo (banistmo.com/personas/buscador-sucursales); Western Union (panama50.com, terceros).',
         etiquetaVerPuntos: 'Ver puntos por provincia',
         sinArchivoLeyenda: 'Archivo próximo',
         /** Misma ruta para todos los competidores si comparten un solo documento (p. ej. PDF con secciones). */
@@ -560,7 +560,7 @@
           {
             criterio: 'Cantidad de puntos (total)',
             tipo: 'texto',
-            celdas: ['—', '—', '371\n334 ATM + 37 suc.', '—'],
+            celdas: ['—', '—', '371\n334 ATM + 37 suc.', '84\n40 zonas (ref.)'],
           },
           { criterio: 'Terminal POS', tipo: 'bool', celdas: [null, null, null, null] },
           { criterio: 'Operación con balance de cuentas', tipo: 'bool', celdas: [null, null, null, null] },

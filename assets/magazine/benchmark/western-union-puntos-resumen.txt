@@ -1,0 +1,48 @@
+Western Union (referencia) — puntos extraídos del listado en panama50.com.
+Total filas (puntos / sublocales listados): 84
+Zonas (encabezados h3): 40
+
+Puntos por zona:
+  San Miguelito: 9
+  Colón: 7
+  Chiriquí: 6
+  Los Santos: 6
+  Santiago: 6
+  Chorrera: 4
+  Centro comercial Los Andes: 3
+  Chitré: 3
+  Metromall: 3
+  24 de Diciembre: 2
+  Arraiján: 2
+  Bocas del Toro: 2
+  Brisas del Golf: 2
+  Penonomé: 2
+  Santa Ana: 2
+  Aguadulce: 1
+  Atrio Mall: 1
+  Bella Vista: 1
+  Bella Vista 2: 1
+  Calle 50: 1
+  Cerro Viento: 1
+  Costa del Este: 1
+  El Dorado: 1
+  Juan Díaz: 1
+  La Esmeralda: 1
+  Los Andes: 1
+  Macaracas: 1
+  Pacora: 1
+  Pan de Azúcar: 1
+  Río abajo: 1
+  San Carlos: 1
+  Santiago Mall: 1
+  Sona: 1
+  Tumba muerto: 1
+  Veraguas: 1
+  Villa Lucre: 1
+  Vista Alegre: 1
+  Vista hermosa: 1
+  Vía Argentina: 1
+  Vía Porras: 1
+
+Fuente: https://panama50.com/sucursales-y-horarios-de-western-union-en-panama/
+Aviso: contenido de terceros; validar con Western Union para uso oficial.
