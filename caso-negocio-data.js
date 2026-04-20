@@ -527,18 +527,34 @@
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
         intro:
-          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Toca la cabecera de cada competidor (logo) para abrir el detalle de puntos por provincia cuando el archivo esté enlazado.',
+          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Toca la cabecera de cada competidor para el detalle de puntos: Rapibac y Caja Amiga abren PDF del repositorio; Banistmo enlaza al buscador oficial de sucursales; Western Union a un listado de referencia (sitio tercero).',
         notaPie:
-          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios. Los totales de la primera fila se pueden alinear con ese detalle.',
+          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios. Fuentes puntos: listados Rapibac y Caja Amiga (PDF); Banistmo (mapa/buscador web); Western Union (referencia panama50.com).',
         etiquetaVerPuntos: 'Ver puntos por provincia',
         sinArchivoLeyenda: 'Archivo próximo',
         /** Misma ruta para todos los competidores si comparten un solo documento (p. ej. PDF con secciones). */
         archivoPuntosDefecto: '',
         competidores: [
-          { nombre: 'Rapibac', logo: 'assets/magazine/competitors/rapibac.svg', archivoPuntos: '' },
-          { nombre: 'Caja Amiga', logo: 'assets/magazine/competitors/caja-amiga.svg', archivoPuntos: '' },
-          { nombre: 'Banistmo PTM', logo: 'assets/magazine/competitors/banistmo-ptm.svg', archivoPuntos: '' },
-          { nombre: 'Western Union', logo: 'assets/magazine/competitors/western-union.svg', archivoPuntos: '' },
+          {
+            nombre: 'Rapibac',
+            logo: 'assets/magazine/competitors/rapibac.svg',
+            archivoPuntos: 'assets/magazine/benchmark/rapibac-puntos.pdf',
+          },
+          {
+            nombre: 'Caja Amiga',
+            logo: 'assets/magazine/competitors/caja-amiga.svg',
+            archivoPuntos: 'assets/magazine/benchmark/caja-amiga-puntos.pdf',
+          },
+          {
+            nombre: 'Banistmo PTM',
+            logo: 'assets/magazine/competitors/banistmo-ptm.svg',
+            archivoPuntos: 'https://www.banistmo.com/personas/buscador-sucursales',
+          },
+          {
+            nombre: 'Western Union',
+            logo: 'assets/magazine/competitors/western-union.svg',
+            archivoPuntos: 'https://panama50.com/sucursales-y-horarios-de-western-union-en-panama/',
+          },
         ],
         filas: [
           {
