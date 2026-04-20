@@ -1,0 +1,26 @@
+Banistmo — puntos extraídos del buscador público (personas/buscador-sucursales).
+ATM (cajeros): 334 | Sucursales (filial branches): 37 | Total filas: 371
+
+Por provincia — ATM:
+  Panamá: 201
+  Panamá Oeste: 47
+  Chiriquí: 28
+  Colón: 22
+  Coclé: 13
+  Veraguas: 11
+  Herrera: 6
+  Los Santos: 4
+  Bocas del Toro: 2
+
+Por provincia — Sucursales:
+  Panamá: 23
+  Panamá Oeste: 4
+  Chiriquí: 3
+  Coclé: 2
+  Colón: 2
+  Herrera: 1
+  Los Santos: 1
+  Veraguas: 1
+
+Detalle completo (nombre, dirección, coordenadas, horarios): ver banistmo-puntos.csv
+Fuente: https://www.banistmo.com/personas/buscador-sucursales

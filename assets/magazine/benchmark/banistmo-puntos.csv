@@ -1,0 +1,372 @@
+﻿categoria,id,nombre,provincia,direccion,telefono,latitud,longitud,lunes,sabado
+ATM,201,Suc. Plaza Marbella,Panamá,"Marbella Casa Matriz, Bella Vista, Calle 47 y Aquilino de la Guardia.",3064700,8.97770063362369,-79.5226607842259,00:00 - 23:59,00:00 - 23:59
+ATM,203,Xtra Maxi Feria Chilibre,Panamá,"La Palmita, Carr Transístmica, Provincia de Panamá",3064700,9.18070732264158,-79.6159310506551,00:00 - 23:59,00:00 - 23:59
+ATM,204,Rey El Bosque,Panamá,"Vía Ricardo J.Alfaro, a un costado de la USMA",3064700,9.030761,-79.518706,00:00 - 23:59,00:00 - 23:59
+ATM,205,Super 99 - Punta Pacífica,Panamá,"Punta Pacifica, San Francisco, Calle 56 Este, Ramón Jurado",3064700,8.97875520686592,-79.5105836205472,00:00 - 23:59,00:00 - 23:59
+ATM,206,El Costo 4 Altos Colón,Colón,"Cristobal, Almacén El Costo 4 Altos en Colón, Edificio Local # 72",3064700,9.33807214242077,-79.8845082528155,00:00 - 23:59,00:00 - 23:59
+ATM,208,Mall Multiplaza Pacific (elevador),Panamá,"San Francisco, Multiplaza, Planta baja - Entrada de la Selva, frente a los elevadores",3064700,8.98556137290575,-79.5109936699264,00:00 - 23:59,00:00 - 23:59
+ATM,209,C.C. El Dorado,Panamá,"Betania, Ave Ricardo J Alfaro, Supercentro El Dorado, a un costado de Gran Morrison",3064700,9.00970296790835,-79.5357653506449,00:00 - 23:59,00:00 - 23:59
+ATM,210,Riba Smith Transístmica,Panamá,Via Simon Bolivar (Transistmica),3064700,8.998994,-79.525172,00:00 - 23:59,00:00 - 23:59
+ATM,211,Super 99 - David,Chiriquí,Calle F Sur San Mateo,3064700,8.427551,-82.437063,00:00 - 23:59,00:00 - 23:59
+ATM,212,Suc. Transístmica Betania,Panamá,"Pueblo Nuevo, Betania Transistmica, Urbanizacion La Florida Frente a Panamotor, al lado del Banco Nacional de transitmica.",3064700,9.001789,-79.523395,00:00 - 23:59,00:00 - 23:59
+ATM,213,Farmastore Pacora Las Garzas,Panamá,"Correguimiento Pacora, Las Garzas, Carretera Panamaricana vía las garzas, Barriada 8 dic, C Comercial Las Garzas local #3",3064700,9.122094,-79.251811,00:00 - 23:59,00:00 - 23:59
+ATM,216,Super 99 - Albrook,Panamá,"Ancon, sector Albrook, Ave De La Amistad, Albrook Mall",3064700,8.978587,-79.550531,00:00 - 23:59,00:00 - 23:59
+ATM,217,Xtra Las Tablas,Los Santos,"Ave. Dr. Belisario Porras  y calle Carlos Calzadillas, vía a pedasí, diagonal al estadio flaco bala  Hernandez.",3064700,7.7690965015582,-80.2679629052092,00:00 - 23:59,00:00 - 23:59
+ATM,218,El Fuerte Burunga,Panamá Oeste,"Ave Principal Burunga, carretera camino",3064700,8.95199,-79.667123,00:00 - 23:59,00:00 - 23:59
+ATM,219,Farmacias Arrocha Calle 50,Panamá,"Bella Vista, calle 45",3064700,8.977178,-79.530402,00:00 - 23:59,00:00 - 23:59
+ATM,220,Rey Plaza Las Américas,Panamá,Plaza Comercial Las Amércias,3064700,9.07824114915235,-79.3996033610227,00:00 - 23:59,00:00 - 23:59
+ATM,221,Hospital Nacional,Panamá,"Dist. Panamá, Correg. Calidonia, Ave Justo Arosemena, entre calle38 y 39, Hospital Nacional",3064700,8.972382,-79.533815,00:00 - 23:59,00:00 - 23:59
+ATM,222,Super 99 - Costa del Este,Panamá,"Juan Diaz, Costa del Este",3064700,9.016332,-79.46551,00:00 - 23:59,00:00 - 23:59
+ATM,223,El Fuerte - 24 Diciembre,Panamá,Vía Tocumen,3064700,9.096046,-79.391765,00:00 - 23:59,00:00 - 23:59
+ATM,224,Rey Calle 50 San Francisco,Panamá,"San Francisco, calle 50, entre calle 75 y 76 este",3064700,8.992879,-79.503637,00:00 - 23:59,00:00 - 23:59
+ATM,225,Suc. Torre Obarrio ADR,Panamá,"Bella Vista, Ave. Samuel Lewis, Obarrio, Torre ADR, Planta Baja",3064700,8.98697639703059,-79.518645550308,00:00 - 23:59,00:00 - 23:59
+ATM,226,Suc. David Centro,Chiriquí,"David, calle 4a y calle c norte, Frente al Correo Nacional",3064700,8.42947451735764,-82.4244090456822,00:00 - 23:59,00:00 - 23:59
+ATM,228,ACP - Diablo,Panamá,"Ancon, Diablo",3064700,8.966435,-79.57095,00:00 - 23:59,00:00 - 23:59
+ATM,229,ACP - Miraflores,Panamá,"Ancon, Esclusas de Miraflores",3064700,8.997563,-79.591028,00:00 - 23:59,00:00 - 23:59
+ATM,230,ACP - Pedro Miguel,Panamá,"Ancon, Esclusas de Pedro Miguel",3064700,9.017743,-79.611258,00:00 - 23:59,00:00 - 23:59
+ATM,231,ACP - Gamboa,Colón,"División de dragado ACP, Gamboa",3064700,9.11736,-79.702843,00:00 - 23:59,00:00 - 23:59
+ATM,232,ACP - Gatún,Colón,"Gatun, Cristobal",3064700,9.272648,-79.922043,00:00 - 23:59,00:00 - 23:59
+ATM,233,Mini Market Shopper Brisas Amador,Panamá,"Ancon, Calzada de Amador",3064700,8.916034,-79.527334,00:00 - 23:59,00:00 - 23:59
+ATM,234,Super 99 - Condado del Rey,Panamá,Condado del Rey,3064700,9.037588,-79.529579,00:00 - 23:59,00:00 - 23:59
+ATM,235,Panama Ports Balboa Cafetería,Panamá,"Ancon, Balboa, edif 39",3064700,8.958914,-79.561187,00:00 - 23:59,00:00 - 23:59
+ATM,236,Riba Smith Chitré,Herrera,"Calle Circunvalación, Centro comercial Cúbita",3064700,7.96623297262095,-80.4579336439852,00:00 - 23:59,00:00 - 23:59
+ATM,237,Coop. Juan XXIII Santiago,Veraguas,"Albrook, Edif 812, Ave Diógenes De La Rosa",3064700,8.09743003161692,-80.9823026591757,00:00 - 23:59,00:00 - 23:59
+ATM,238,Super 99 - Colón 2000,Colón,"Paseo Gorgas, Plaza Colón 2000",3064700,9.356791,-79.892284,00:00 - 23:59,00:00 - 23:59
+ATM,239,Suc. Torre Obarrio ADR,Panamá,"Bella Vista, Ave. Samuel Lewis, Obarrio, Torre ADR, Planta Baja",3064700,8.98697639703059,-79.518645550308,00:00 - 23:59,00:00 - 23:59
+ATM,240,Agrotecnología del Barú,Chiriquí,Rodolfo Aguilar Delgado Sector: Manaca Norte,3064700,8.33984462981469,-82.8084100764323,00:00 - 23:59,00:00 - 23:59
+ATM,241,Suc. Multimax Tumba Muerto,Panamá,"Via Ricardo J. Alfaro (Tumba Muerto), Centro Comercial Multimax",3064700,9.02063377994669,-79.5313977016125,00:00 - 23:59,00:00 - 23:59
+ATM,242,Panama Ports Colón Cristóbal,Colón,"Calle 11 Avenida Cristobal, Barrio Sur Colon, Oficinas de Panama Port Company",3064700,9.354437,-79.90456,00:00 - 23:59,00:00 - 23:59
+ATM,243,Talleres Industriales,Colón,"Colon, Barrio Sur, Calle 15 y 16 de Ave. Central",3064700,9.351916,-79.899105,00:00 - 23:59,00:00 - 23:59
+ATM,244,Maxi Mercado Cabra,Panamá,"Plaza El Trebol, Vía Cabra",3064700,9.11356162817207,-79.3354219945679,00:00 - 23:59,00:00 - 23:59
+ATM,245,Xtra Chitré,Herrera,"Chitré Cabecera, Vía Cincunvalación, Azuero, Plaza Terminal",3064700,7.95412798911311,-80.4300705296653,00:00 - 23:59,00:00 - 23:59
+ATM,246,Cerv. Nal. La Chorrera,Panamá Oeste,"Carretera interamericana, después de pasar el Machetazo",3064700,8.912465,-79.744114,00:00 - 23:59,00:00 - 23:59
+ATM,247,Xtra Tumba Muerto,Panamá,"Tumba Muerto, Betania, Ave Ricardo J Alfaro",3064700,9.026048,-79.521397,00:00 - 23:59,00:00 - 23:59
+ATM,248,C.C. Los Andes US Polo,Panamá,"Belisario Porras, PH. Centro Comercial Los Andes,\r\nLocal B-12, modulo B.",3064700,9.049764,-79.50732,00:00 - 23:59,00:00 - 23:59
+ATM,4903,Suc. Brisas del Golf,Panamá,"San Miguelito, Brisas del Golf, Plaza Super 99 en toda la Esquina.",3064700,9.069642,-79.452891,00:00 - 23:59,00:00 - 23:59
+ATM,251,Rey Vía España,Panamá,"Bella Vista, Vía España",3064700,8.98475823003201,-79.525092971538,00:00 - 23:59,00:00 - 23:59
+ATM,252,"Supermercado Barú, David",Chiriquí,"David, Via Panamericana y Ave de Obaldia",3064700,8.444573,-82.421941,00:00 - 23:59,00:00 - 23:59
+ATM,253,Rey 12 de Octubre,Panamá,"C Comercial Metro Plaza, Ave 12 de Octubre",3064700,9.012421,-79.510036,00:00 - 23:59,00:00 - 23:59
+ATM,255,Rey Bella Vista,Panamá,"Calle 42 y 43 Este, subiendo por el Parque Urracá",3064700,8.97462508034174,-79.5310998425501,00:00 - 23:59,00:00 - 23:59
+ATM,256,Mall Multiplaza Nivel 200,Panamá,"Vía Israel, Centro comercial Multiplaza, nivel 200, local 7",3064700,8.986378,-79.511256,00:00 - 23:59,00:00 - 23:59
+ATM,257,Xtra Pacora,Panamá,"Centro Comercial Pacora, local #2, Vía Interamericana, diagonal a la entrada de Pacora.",3064700,9.09922216745321,-79.2856258199169,00:00 - 23:59,00:00 - 23:59
+ATM,258,Est. Metro Cincuentenario L2,Panamá,Ave. Domingo Díaz y Vía Cincuentenario,3064700,9.03025525647394,-79.4915003645438,00:00 - 23:59,00:00 - 23:59
+ATM,259,Super 99 - Valle Hermoso,Panamá Oeste,"Arraijan, Valle Hermoso",3064700,8.927558,-79.726904,00:00 - 23:59,00:00 - 23:59
+ATM,260,Maxi Xtra Vacamonte,Panamá Oeste,"Vacamonte, Ave Principal hacia el puerto",3064700,8.908448,-79.686204,00:00 - 23:59,00:00 - 23:59
+ATM,261,Pizza Hut Chanis,Panamá,"Parque Lefevre, Chanis",3064700,9.018212,-79.484069,00:00 - 23:59,00:00 - 23:59
+ATM,262,Suc. Los Pueblos Auto,Panamá,"Juan Díaz, Urbanización Centro Comercial Los Pueblos, Calle Central edificio , Apto. Local Planta Baja.",3064700,9.0495,-79.449414,00:00 - 23:59,00:00 - 23:59
+ATM,263,Mr Precio Pedregal #2,Panamá,"José María Torrijos, Calle N - Plaza Stone",3064700,9.068338,-79.421545,00:00 - 23:59,00:00 - 23:59
+ATM,264,Super 99 - Mañanitas,Panamá,"Ave. José A Arango, Plaza Las mañanitas",3064700,9.08021,-79.408966,00:00 - 23:59,00:00 - 23:59
+ATM,265,Rey Paseo Arraijan,Panamá Oeste,Plaza Paseo Arraijan,3064700,8.94759554716977,-79.6754244898593,00:00 - 23:59,00:00 - 23:59
+ATM,266,Hospital Mae Lewis David,Chiriquí,"David-Chiriquí, Carretera Panamericana y final de Calle B Sur.",3064700,8.435403,-82.439806,00:00 - 23:59,00:00 - 23:59
+ATM,267,Suc. Plaza Marbella,Panamá,"Bella Vista, Marbella",3064700,8.97773459279558,-79.5226296946452,00:00 - 23:59,00:00 - 23:59
+ATM,268,Super 99 - Vacamonte,Panamá Oeste,"Arraijan, Vacamonte, Vía hacia el Tecal",3064700,8.91484902237355,-79.7059209226066,00:00 - 23:59,00:00 - 23:59
+ATM,269,Machetazo Arraiján,Panamá Oeste,"Arraijan, entrada Barriada Hato Montaña",3064700,8.91599139642492,-79.7432509309306,00:00 - 23:59,00:00 - 23:59
+ATM,270,"Xtra Maxi Feria, Ave. Libertador",Panamá Oeste,"Chorrera, Ave. Libertador Barrio Colon",3064700,8.87934729657958,-79.7805615574818,00:00 - 23:59,00:00 - 23:59
+ATM,271,Suc. Villa Lucre,Panamá,"Jose Domingo Espinar, Centro Comercial Villa Lucre, Plaza Villa Lucre # 10",3064700,9.03849984312612,-79.4822961677689,00:00 - 23:59,00:00 - 23:59
+ATM,273,Suc. Punta Pacifica,Panamá,"San Francisco, Punta Pacifica, Edificio Torre de las Americas.",3064700,8.9829589072428,-79.5095755225063,00:00 - 23:59,00:00 - 23:59
+ATM,274,Suc. Multimax Autobanco,Panamá,"Via Ricardo J. Alfaro (Tumba Muerto), Centro Comercial Multimax",3064700,9.02037529187616,-79.5312126321834,00:00 - 23:59,00:00 - 23:59
+ATM,275,Super La Pagoda 24 de Dic.,Panamá,"Tocumen, Sector La 24 Dic, frente al centro comercial La Doña",3064700,9.103205,-79.371232,00:00 - 23:59,00:00 - 23:59
+ATM,276,Panadería Río de Oro Pedregal,Panamá,Panaderia Rio de Oro. Pedregal (La Concordia),3064700,9.058691,-79.432205,00:00 - 23:59,00:00 - 23:59
+ATM,277,Rey Brisas del Golf,Panamá,"Ave. Manuel F. Zarate y Calle Domingo Diaz, Plaza del Golf, Entrda de Brisas del Golf",3064700,9.06972284279015,-79.4517149634697,00:00 - 23:59,00:00 - 23:59
+ATM,278,Super 99 - Los Ángeles,Panamá,Ave Ricardo J Alfaro y calle 63 Oeste,3064700,9.000056,-79.532957,00:00 - 23:59,00:00 - 23:59
+ATM,279,Super La Pagoda Mañanitas,Panamá,"Las Mañanitas, Ave Panamericana",3064700,9.079677,-79.403966,00:00 - 23:59,00:00 - 23:59
+ATM,280,Xtra Las Acacias,Panamá,"Juan Diaz, Las Acacias",3064700,9.059691,-79.427488,00:00 - 23:59,00:00 - 23:59
+ATM,282,Prolacsa El Roble,Coclé,"Vía Panamericana, Aguadulce, sector del Roble, frente a la planta de Tropigas",3064700,8.15460837694089,-80.6794823218056,00:00 - 23:59,00:00 - 23:59
+ATM,283,Hotel Las Américas Golden Tower,Panamá,"Avenida Balboa y Calle 53 Esquina, Marbella, Ciudad de Panamá",3064700,8.978833,-79.516925,00:00 - 23:59,00:00 - 23:59
+ATM,284,Albrook Mall Food Court 2° piso,Panamá,"Ancon, Albrook Mall",3064700,8.9743041490281,-79.5525593548731,00:00 - 23:59,00:00 - 23:59
+ATM,285,Riba Smith Costa del Este,Panamá,"Juan Diaz, Costa del Este",3064700,9.02390008291623,-79.462547303351,00:00 - 23:59,00:00 - 23:59
+ATM,286,Tzanetatos Tocumen,Panamá,"Vía Tocumen, fente a Plaza Tocumen, edif Tzanetatos",3064700,9.06414270320798,-79.4199259660567,00:00 - 23:59,00:00 - 23:59
+ATM,287,Hotel Hilton,Panamá,"Ave. Balboa, Frente a la Cinta Costera",3064700,8.97609740930325,-79.5226619033513,00:00 - 23:59,00:00 - 23:59
+ATM,289,El Fuerte - Federal Mall,Chiriquí,"Vía Boquete, David",3064700,8.45780372763694,-82.427349089862,00:00 - 23:59,00:00 - 23:59
+ATM,290,Camping Resort,Panamá,"Chilibre, Camping Resort",3064700,9.13795838998812,-79.6213620702675,00:00 - 23:59,00:00 - 23:59
+ATM,291,Pio Pio Ciudad Bolivar,Panamá,"Ave panamericana, Buena vista",3064700,9.10993264332484,-79.5419266091375,00:00 - 23:59,00:00 - 23:59
+ATM,292,Est. Metro El Crisol L2,Panamá,"Ancon, Albrook Mall, pasillo         , frente a Cinemark",3064700,9.04392594967781,-79.4716788157179,00:00 - 23:59,00:00 - 23:59
+ATM,293,Super Smart - Capira,Panamá Oeste,"Vía Interamericana, Super Smart",3064700,8.75183,-79.87947,00:00 - 23:59,00:00 - 23:59
+ATM,294,Xtra Changuinola,Bocas del Toro,"Ave. Omar Torrijos, al lado de la Policía Nacional, diagonal a la Terminal de Transporte.",3064700,9.44928562463746,-82.5181453896144,00:00 - 23:59,00:00 - 23:59
+ATM,295,Panama Ports Balboa Administración,Panamá,"Ancon, Balboa, Edificio 1501",3064700,8.958914,-79.561187,00:00 - 23:59,00:00 - 23:59
+ATM,296,Riba Smith Brisas del Golf,Panamá,"San Miguelito, Brisas del Golf, Hacienda Plaza",3064700,9.07014146068569,-79.4635724880067,00:00 - 23:59,00:00 - 23:59
+ATM,297,Rey Parque Lefevre,Panamá,"Betania, Plaza Edisón",3064700,9.01662320756992,-79.495355788007,00:00 - 23:59,00:00 - 23:59
+ATM,298,Albrook Mall Oca Loca,Panamá,"Ancon, Albrook Mall",3064700,8.97639356334879,-79.5523508722914,00:00 - 23:59,00:00 - 23:59
+ATM,4889,Super 99 - Oficina Monte Oscuro,Panamá,"Calle 16 Rio Abajo, Panama, Provincia de Panama",3064700,9.05200358539859,-79.5091219863497,00:00 - 23:59,00:00 - 23:59
+ATM,8901,Mini Super Uribe Arjona,Veraguas,Carretera Panamericana. C.C. Uribe - Arjona.,3064700,9.018643,-79.498837,00:00 - 23:59,00:00 - 23:59
+ATM,4935,Xtra El Lago,Panamá,"Corregimiento las Cumbres, Carretera Boyd Roosevelt, entrada Corredor Panamá Norte,  Plaza comercial del Lago, Local N° 1",3064700,9.10311777045132,-79.521178818011,00:00 - 23:59,00:00 - 23:59
+ATM,4869,Super 99 - El Coco La Chorrera,Panamá Oeste,Ave de las Américas,3064700,8.87372209426624,-79.7949802168438,00:00 - 23:59,00:00 - 23:59
+ATM,4892,Xtra Las Anclas Mall,Panamá Oeste,"La Chorrera, Barrio Colon, Carretera Panamericana, Centro Comercial Anclas Mall",3064700,8.89216063129978,-79.763481392458,00:00 - 23:59,00:00 - 23:59
+ATM,4900,Super 99 - Ondgo Chorrera,Panamá Oeste,"On D' Go La Chorrera, Autop. Arraiján - La Chorrera, La Chorrera",3064700,8.87838452561487,-79.7607748,00:00 - 23:59,00:00 - 23:59
+ATM,4812,Xtra Villa Lucre,Panamá,"Ave Domingo Díaz, Plaza Villa Lucre.",3064700,9.03996355034765,-79.4809312203968,00:00 - 23:59,00:00 - 23:59
+ATM,4814,Super 99 Aguadulce,Coclé,"Super 99 Aguadulce, Plaza On D´ GO",3064700,8.24873047589426,-80.551001630339,00:00 - 23:59,00:00 - 23:59
+ATM,4815,Rey Santamaría,Panamá,"Panama, Juan díaz/Santamaría Plaza",3064700,9.0270441247713,-79.468187089859,00:00 - 23:59,00:00 - 23:59
+ATM,4817,Panadería Río de Oro La Cabima,Panamá,Centro Comercial La Cabima.,3064700,9.1091345927771,-79.5365951237647,00:00 - 23:59,00:00 - 23:59
+ATM,4877,Farmacia Janeth La Siesta,Panamá,"Tocumen, Calle principal La Siesta, Entrada de El Brillante.",3064700,9.0873639816761,-79.3662228105955,00:00 - 23:59,00:00 - 23:59
+ATM,4879,Suc. Casco Antiguo,Panamá,"Frente Parque Herrera, calle 9na San Felipe Edif Lewis",3064700,8.95164961021912,-79.5365645556283,00:00 - 23:59,00:00 - 23:59
+ATM,8817,Delta Gualaca,Chiriquí,"Corregimiento Chiriquí, Ave Interamericana, entrada hacia Gualaca.",3064700,8.39937054912666,-82.3191441624277,00:00 - 23:59,00:00 - 23:59
+ATM,4828,Pacific Center,Panamá,"Entre Calle Ramón H. Jurado de Paitilla, El Boulevard de Punta Pacífica Ciudad de Panamá.",3064700,8.97915706328774,-79.511326284656,00:00 - 23:59,00:00 - 23:59
+ATM,4832,Machetazo Brisas del Golf,Panamá,Plaza Signature,3064700,9.0693654886599,-79.4615382871585,00:00 - 23:59,00:00 - 23:59
+ATM,4833,Est. Metro Brisas del Golf L2,Panamá,"Bella Vista, Calle 50 entre calle 54 y 56 Este Nivel 200",3064700,9.04914932703062,-79.4590776976235,00:00 - 23:59,00:00 - 23:59
+ATM,4834,Lobby - Casa Matriz - Soho,Panamá,"Bella Vista, Calle 50",3064700,8.98300780368957,-79.5202174809321,00:00 - 23:59,00:00 - 23:59
+ATM,4835,Estación del Metro - Los Andes,Panamá,Estación del Metro Los Andes,3064700,9.0492249105647,-79.5084433440639,00:00 - 23:59,00:00 - 23:59
+ATM,4836,Estación del Metro - San Miguelito,Panamá,"Estación del Metro San Miguelito, espacio #2",3064700,9.03010673852952,-79.5064926935517,00:00 - 23:59,00:00 - 23:59
+ATM,4837,Estación del Metro - El Ingenio,Panamá,"Estación del Metro El Ingenio, espacio #2",3064700,9.00793013222167,-79.5189740313683,00:00 - 23:59,00:00 - 23:59
+ATM,4838,Estación del Metro - Vía Argentina,Panamá,"Estación del Metro Vía Argentina, espacio #2",3064700,8.98905141308167,-79.5223774155032,00:00 - 23:59,00:00 - 23:59
+ATM,4839,Estación del Metro - Santo Thomas,Panamá,"Estación del Metro Santo Thomas, espacio #3",3064700,8.97326431523637,-79.5328012835627,00:00 - 23:59,00:00 - 23:59
+ATM,4841,Rey Versalles,Panamá,Plaza Versalles,3064700,9.04362018930217,-79.4157930610228,00:00 - 23:59,00:00 - 23:59
+ATM,4842,Rey El Dorado,Panamá,C.C. El Dorado,3064700,9.00987123335228,-79.5351718610231,00:00 - 23:59,00:00 - 23:59
+ATM,4843,Rey Centennial,Panamá,"Bethania, Vía Centenario",3064700,9.03056610642995,-79.531694991711,00:00 - 23:59,00:00 - 23:59
+ATM,4844,Rey Costa Verde Chorrera,Panamá Oeste,Boulevard Costa Verde,3064700,8.89288549086158,-79.7507767340397,00:00 - 23:59,00:00 - 23:59
+ATM,4845,Rey Chorrera,Panamá Oeste,"Urbanización Calle 26 Sur Balboa,",3064700,8.8784676996289,-79.7818673052037,00:00 - 23:59,00:00 - 23:59
+ATM,4846,Rey Sabanita,Colón,Colón,3064700,9.34726870933104,-79.80707540716,00:00 - 23:59,00:00 - 23:59
+ATM,4847,Est. Metro Corredor Sur - UTP L2,Panamá,"Ave. Domingo Díaz, entrada de la UTP",3064700,9.06902515407553,-79.4071278596548,00:00 - 23:59,00:00 - 23:59
+ATM,4848,Rey Calle 7 Colón,Colón,Colón,3064700,9.35990443605105,-79.9020197132644,00:00 - 23:59,00:00 - 23:59
+ATM,4849,Rey Calle 13 Colón,Colón,Colón,3064700,9.35439077512213,-79.8991964591691,00:00 - 23:59,00:00 - 23:59
+ATM,4913,Suc. Brisas del Golf,Panamá,"San Miguelito, Brisas del Golf, Plaza Super 99 en toda la Esquina.",3064700,9.06956282625796,-79.4527974230473,00:00 - 23:59,00:00 - 23:59
+ATM,4851,Suc. Albrook Mall Fuente,Panamá,"Ancon, Albrook Mall",3064700,8.97685540661185,-79.5525745601463,00:00 - 23:59,00:00 - 23:59
+ATM,4852,Suc. Parque Lefevre,Panamá,"Parque Lefevre, Calle Primera con Via España",3064700,9.00840256747144,-79.5070335157684,00:00 - 23:59,00:00 - 23:59
+ATM,4853,Farmazone Chilibre,Panamá,"Chilibre, Calle Principal San Vicente, Edif. Zona Libre Mall, entrada por la estación Delta",3064700,9.122483,-79.594271,00:00 - 23:59,00:00 - 23:59
+ATM,4940,Suc. Zona Libre Colón,Colón,"Calle 13 Santa Isabel, Zona Libre de Colon, Plaza Cirebon Peak",3064700,9.35483794908356,-79.8963285377411,00:00 - 23:59,00:00 - 23:59
+ATM,4855,Xtra 24 de Dic. #1,Panamá,"Carretera panamericana, cruce con Ave Agustin Arango, 24 de Diciembre",3064700,9.10376857993049,-79.3668718052025,00:00 - 23:59,00:00 - 23:59
+ATM,4856,Xtra Cativá,Colón,"Carretera panamericana, cruce con Ave Agustin Arango, 24 de Diciembre",3064700,9.35746191645398,-79.8421427536859,00:00 - 23:59,00:00 - 23:59
+ATM,4857,Est. Metro Altos de Tocumen L2,Panamá,"Ave. Domingo Díaz, Tocumen",3064700,9.10342920778499,-79.3802643993969,00:00 - 23:59,00:00 - 23:59
+ATM,4858,Video Pap´s Plaza 5 de Mayo #2,Panamá,"Santa Ana, Avenida Central, La Peatonal, Edificio # 27278.",3064700,8.960076,-79.541097,00:00 - 23:59,00:00 - 23:59
+ATM,4859,McDonald´s Peatonal Ave Central,Panamá,"Santa Ana, Avenida Central",3064700,8.95845078420899,-79.5410318868332,00:00 - 23:59,00:00 - 23:59
+ATM,4860,Xtra Los Pueblos,Panamá,"Juan Diaz, Frente a Los Pueblos",3064700,9.04438056390362,-79.4511823831129,00:00 - 23:59,00:00 - 23:59
+ATM,4861,Super 99 - Los Andes C.C.,Panamá,"San Miguelito, Belisario Porras, Los Andes",3064700,9.04890382242678,-79.5062447009244,00:00 - 23:59,00:00 - 23:59
+ATM,4862,Super 99 - La Doña,Panamá,"Carretera Panamericana, Centro Comercial La Doña, 24 Diciembre",3064700,9.10401964192548,-79.3689499456786,00:00 - 23:59,00:00 - 23:59
+ATM,4863,Pizza Hut Chorrera,Panamá Oeste,"La Chorrera, Barrio Colon, Avenida Libertador.",3064700,8.878471326212,-79.7817296985423,00:00 - 23:59,00:00 - 23:59
+ATM,227,Terminal de Santiago,Veraguas,Terminal de Transporte Santiago,3064700,8.10464434711465,-80.9740917724118,00:00 - 23:59,00:00 - 23:59
+ATM,4865,Xtra La Marquesa,Panamá Oeste,"Nuevo Chorrillo, Vía hacia Chapala",3064700,8.9718532823686,-79.705181281197,00:00 - 23:59,00:00 - 23:59
+ATM,4866,Terminal Albrook #1,Panamá,"Ancon, sector Albrook, Ave Roosevelt, Terminal de Albrook",3064700,8.974363,-79.551645,00:00 - 23:59,00:00 - 23:59
+ATM,4867,Terminal Albrook #3 (Pasillo Sur),Panamá,"Ancon, sector Albrook, Ave Roosevelt, Terminal de Albrook",3064700,8.973621,-79.551648,00:00 - 23:59,00:00 - 23:59
+ATM,4868,Terminal Albrook #2 (Entrada Sur),Panamá,"Ancon, sector Albrook, Ave Roosevelt, Terminal de Albrook",3064700,8.975888,-79.55122,00:00 - 23:59,00:00 - 23:59
+ATM,8801,Rey 4 Altos,Colón,"Urbanización, Comercial Plaza Cuatro Altos, Av. Boyd Roosevelt Calle, Cativá",3064700,9.33811459985279,-79.8861705321852,00:00 - 23:59,00:00 - 23:59
+ATM,8804,Suc. Chorrera,Panamá Oeste,"La Chorrera, Barrio Colon",3064700,8.88250295769834,-79.7784854845449,00:00 - 23:59,00:00 - 23:59
+ATM,8806,Suc. Chitré,Herrera,"Chitre, Calle Manuel Maria Correa.",3064700,7.96442874560691,-80.4308868019628,00:00 - 23:59,00:00 - 23:59
+ATM,8807,Suc. Volcán,Chiriquí,"Volcan, Calle Principal, frente a la sucursal de Melo y Cia, Bugaba Chiriquí",3064700,8.77547607619303,-82.6392605584342,00:00 - 23:59,00:00 - 23:59
+ATM,8917,Suc. Penonomé,Coclé,"Penonome, Avenida Juan Demóstenes Arosemena",3064700,8.51603611366361,-80.3523593534739,00:00 - 23:59,00:00 - 23:59
+ATM,8809,Suc. Los Pueblos,Panamá,"Juan Díaz, Urbanización Centro Comercial Los Pueblos, Calle Central edificio , Apto. Local Planta Baja.",3064700,9.04967377586932,-79.4489795367867,00:00 - 23:59,00:00 - 23:59
+ATM,8811,Aerop. Tocumen Nivel 200 Copa A.,Panamá,"Ave Domingo Díaz, vía Tocumen",3064700,9.06327020734743,-79.3899182821607,00:00 - 23:59,00:00 - 23:59
+ATM,8812,Aerop.Tocumen Terminal #2-Nivel 200,Panamá,"Ave Domingo Díaz, vía Tocumen",3064700,9.06327020734743,-79.3899182821607,00:00 - 23:59,00:00 - 23:59
+ATM,8813,Suc. Aguadulce,Coclé,"Aguadulce, Avenida Rodolfo Chiari.",3064700,8.24239726173223,-80.5398567954741,00:00 - 23:59,00:00 - 23:59
+ATM,8814,Super 99 - La Chorrera,Panamá Oeste,"La Chorrera, Barrio Colon, Plaza Italia",3064700,8.8885206686688,-79.7706519159177,00:00 - 23:59,00:00 - 23:59
+ATM,8815,Suc. Dorado,Panamá,"Bethania, Urbanización El Dorado, Boulevard El Dorado, Edificio Centro Comercial Dorado Mall",3064700,9.00979740631781,-79.536654241993,00:00 - 23:59,00:00 - 23:59
+ATM,8816,Cerv. Nal. T. Muerto Pasadena,Panamá,"Betania, Via Simon Bolivar (Transistmica)",3064700,8.98977029806482,-79.5331785515007,00:00 - 23:59,00:00 - 23:59
+ATM,8818,Xtra Ojo de Agua,Panamá,"San Miguelito, Belisario Porras, Ojo de Agua",3064700,9.05558460523825,-79.5083884935475,00:00 - 23:59,00:00 - 23:59
+ATM,8819,Aerop. Tocumen Satelite B,Panamá,"Ave Domingo Díaz, vía Tocumen",3064700,9.066409,-79.387218,00:00 - 23:59,00:00 - 23:59
+ATM,8820,Suc. Colón Cristobal,Colón,"Calle 11 Avenida Cristobal, Barrio Sur Colon, al lado de Panama Port Company",3064700,9.35480545200425,-79.9044631101681,00:00 - 23:59,00:00 - 23:59
+ATM,8821,Super 99 - Puerto Escondido Colón,Colón,"Puerto Escondido, Cristobal",3064700,9.34050332369756,-79.8717002308333,00:00 - 23:59,00:00 - 23:59
+ATM,8822,Super 99 - Plaza Tocumen,Panamá,"Vía Tocumen, Plaza Tocumen",3064700,9.06146480648207,-79.4226976782188,00:00 - 23:59,00:00 - 23:59
+ATM,8823,Aerop. Tocumen Nivel 100,Panamá,"Ave Domingo Díaz, vía Tocumen",3064700,9.067461,-79.386988,00:00 - 23:59,00:00 - 23:59
+ATM,8824,Suc. Mall Multiplaza,Panamá,"Vía Israel, Centro comercial Multiplaza, nivel 200",3064700,8.98556137290575,-79.5109936699264,00:00 - 23:59,00:00 - 23:59
+ATM,8825,Suc. Villa Zaita,Panamá,"Correg. Las Cumbre, Carretera Boyd Roosevelt con Vía Principal de Villa Zaita. C.C. Villa Zaita frente a urbanización El Lago",3064700,9.07471076491828,-79.523870363911,00:00 - 23:59,00:00 - 23:59
+ATM,8826,Suc. Dorado,Panamá,"Bethania , Urbanización El Dorado, Boulevard El Dorado, Edificio Centro Comercial Dorado Mall, Local # 19.",3064700,9.00979740631781,-79.536654241993,00:00 - 23:59,00:00 - 23:59
+ATM,8828,Metro Mall (Planta Baja),Panamá,"Carretera Panamaricana, Juan Diaz, Centro Comercial Metromall",3064700,9.05213037846313,-79.4515727225062,00:00 - 23:59,00:00 - 23:59
+ATM,8831,Suc. Plaza Edison,Panamá,"Betania, Plaza Edisón, Planta Baja.",3064700,8.99522759376341,-79.5333117217871,00:00 - 23:59,00:00 - 23:59
+ATM,8832,El Fuerte Westland Mall,Panamá Oeste,Centro comercial Westland Mall,3064700,8.92070877888384,-79.7059643685198,00:00 - 23:59,00:00 - 23:59
+ATM,8833,Machetazo Metro Mall,Panamá,"Carretera Panamaricana, Juan Diaz, Centro Comercial Metromall",3064700,9.05155239422338,-79.4511036890445,00:00 - 23:59,00:00 - 23:59
+ATM,8834,Farmacia Arrocha Vía Argentina,Panamá,"Vía Argentina, edif         local",3064700,8.98827135769086,-79.5286737970471,00:00 - 23:59,00:00 - 23:59
+ATM,8835,Mall Multiplaza (Frente Riba Smith),Panamá,"San Francisco, Multiplaza, Piso 2",3064700,8.98584462294188,-79.5104348877593,00:00 - 23:59,00:00 - 23:59
+ATM,8836,Universidad Latina,Panamá,"Ricardo J. Alfaro, a lado de Los Libertadores",3064700,9.02814531644378,-79.5183680561466,00:00 - 23:59,00:00 - 23:59
+ATM,8837,Riba Smith Panamá Pacífico,Panamá Oeste,"Vía Intercontinental con Avenida Hendrikson. Calle 41 Oeste, Edificio 4103 Oeste",3064700,8.91786000422799,-79.592730921626,00:00 - 23:59,00:00 - 23:59
+ATM,8838,"Xtra Market, Ave. Las Américas",Panamá Oeste,"La Chorrera, Las Americas",3064700,8.88585101156648,-79.7755538380995,00:00 - 23:59,00:00 - 23:59
+ATM,8839,Poll Mart Chitré (Machetazo),Herrera,"Herrera, Chitre, Paseo Enrique Geenzier y Ave francisco Audia",3064700,7.96538830211767,-80.4342586033564,00:00 - 23:59,00:00 - 23:59
+ATM,8840,Albrook Mall Food Court #2,Panamá,"Ancon, Albrrok Mall, pasillo , Food court, planta baja",3064700,8.97418354263723,-79.5526485930034,00:00 - 23:59,00:00 - 23:59
+ATM,8841,Super 99 - El Dorado,Panamá,"Betania, el Dorado",3064700,9.00795894205133,-79.5354045967695,00:00 - 23:59,00:00 - 23:59
+ATM,8842,Suc. Los Andes,Panamá,"San Miguelito,Corregimiento de Belisario Porras,centro comercial Los Andes,Local F-25",3064700,9.04817437205411,-79.5068434530754,00:00 - 23:59,00:00 - 23:59
+ATM,8843,Suc. Costa del Este,Panamá,"Correg. Juan Diaz, Avenida Centenario, Costa del Este Centro Comercial Royal Plaza, Planta Baja",3064700,9.01003360519388,-79.4765446527789,00:00 - 23:59,00:00 - 23:59
+ATM,8844,Machetazo Penonomé,Coclé,"Vía panamericana, Penonome, Llano Marín",3064700,8.49704773841092,-80.3343444282755,00:00 - 23:59,00:00 - 23:59
+ATM,8846,Riba Smith Versalles,Panamá,"Ave. Principal Alto Plaza Tocumen, Plaza Ven Versalles",3064700,9.04267268483021,-79.4140982637917,00:00 - 23:59,00:00 - 23:59
+ATM,8847,Super El Ahorro Buena Vista,Colón,"Vía Transístmica, hacia Colon, Buena Vista",3064700,9.27202932287929,-79.692145190303,00:00 - 23:59,00:00 - 23:59
+ATM,8848,Aerop. Tocumen Muelle Norte,Panamá,"Ave Domingo Díaz, vía Tocumen",3064700,9.067732,-79.386292,00:00 - 23:59,00:00 - 23:59
+ATM,8849,ACP - Corozal,Panamá,"Ancon, Corozal",3064700,8.981698,-79.57355,00:00 - 23:59,00:00 - 23:59
+ATM,8850,Suc. Albrook Mall Fuente,Panamá,"Ancon, Centro Comercial Albrook Mall, Pasillo de la Fuente.",3064700,8.97685540661185,-79.5525745601463,00:00 - 23:59,00:00 - 23:59
+ATM,8851,Suc. David Centro,Chiriquí,"David, calle 4a y calle c norte, Frente al Correo Nacional",3064700,8.42947451735764,-82.4244090456822,00:00 - 23:59,00:00 - 23:59
+ATM,8853,Mr Precio La Siesta,Panamá,"Plaza Mas, Av. Buena Vista, Panamá",3064700,9.07773,-79.36392,00:00 - 23:59,00:00 - 23:59
+ATM,8854,Comasa Cerro Azul,Panamá,"Altos de Pacora, Cerro Azul",3064700,9.19425660437623,-79.401294330334,00:00 - 23:59,00:00 - 23:59
+ATM,8855,Machetazo Nuevo Tocumen,Panamá,"Plaza Nuevo Tocumen, 24 de Diciembre",3064700,9.10119211280601,-79.3554437438265,00:00 - 23:59,00:00 - 23:59
+ATM,8856,Mini Market La Pita,Veraguas,"Santiago, La Pita, Canto del Llano",3064700,8.13665106434096,-80.9572374533778,00:00 - 23:59,00:00 - 23:59
+ATM,8858,Xtra Santiago - Plaza Banconal,Veraguas,"Santiago Cabecera, Plaza Banconal Vía Interamericana",3064700,8.105835823134,-80.970768701827,00:00 - 23:59,00:00 - 23:59
+ATM,8859,Machetazo Chitré,Herrera,"Herrera, Chitre, Paseo Enrique Geenzier y calle San Padro",3064700,7.9649602023846,-80.4314710898643,00:00 - 23:59,00:00 - 23:59
+ATM,8861,Riba Smith Bella Vista - pared,Panamá,"Bella Vista, calle 45",3064700,8.97736232112089,-79.5301607456792,00:00 - 23:59,00:00 - 23:59
+ATM,8862,Soho Mall Planta Baja,Panamá,"Panamá, Bella Vista, Calle 50 entre calle 54 y 56 Este Nivel 300",3064700,8.98305783377121,-79.5194592383435,00:00 - 23:59,00:00 - 23:59
+ATM,8863,Delta Sabanitas,Colón,"Carretera Transistmica, Sabanitas, Colón",3064700,9.348111,-79.809502,00:00 - 23:59,00:00 - 23:59
+ATM,8865,Galerías Plaza Carolina,Panamá,"Parque Lefevre, Plaza Carolina",3064700,9.02612985044428,-79.4824811882422,00:00 - 23:59,00:00 - 23:59
+ATM,8866,Aerop.Tocumen Terminal #2-Gate 204,Panamá,"Ave Domingo Díaz, vía Tocumen",3064700,9.06327020734743,-79.3899182821607,00:00 - 23:59,00:00 - 23:59
+ATM,8869,Jumbo Market - Vacamonte,Panamá Oeste,"Vacamonte, Vista Alegre",3064700,8.92189831834048,-79.6967960137326,00:00 - 23:59,00:00 - 23:59
+ATM,8870,Xtra San Miguelito,Panamá,"San Miguelito, Belisario Porras",3064700,9.03616719658721,-79.5056523021581,00:00 - 23:59,00:00 - 23:59
+ATM,8873,Machetazo Calidonia (Planta Baja),Panamá,"Calidonia, Planta Baja",3064700,8.96723539511082,-79.5392388214463,00:00 - 23:59,00:00 - 23:59
+ATM,8874,C.C. Antón,Coclé,"Vía interamericana, Centro Comercial Antón",3064700,8.39836192253291,-80.2646181344378,00:00 - 23:59,00:00 - 23:59
+ATM,8875,Machetazo San Miguelito,Panamá,"San Miguelito, Victoriano Lorenzo",3064700,9.02989750684306,-79.507774545679,00:00 - 23:59,00:00 - 23:59
+ATM,8876,Farmacia San Gerardo Chanis,Panamá,"Parque Lefevre, Chanis",3064700,9.01812265037177,-79.4840225010418,00:00 - 23:59,00:00 - 23:59
+ATM,8877,Machetazo Ave. Central,Panamá,"Santa Ana, Avenida Central",3064700,8.95468845837711,-79.5389992390181,00:00 - 23:59,00:00 - 23:59
+ATM,8878,Suc. Las Tablas,Los Santos,"Las Tablas, Ave. Belisario Porras y Cl. 8 de noviembre.",3064700,7.76627758257508,-80.2774852279836,00:00 - 23:59,00:00 - 23:59
+ATM,8879,Suc. Aguadulce,Coclé,"Aguadulce, Avenida Rodolfo Chiari.",3064700,8.24239726173223,-80.5398567954741,00:00 - 23:59,00:00 - 23:59
+ATM,8880,Universidad ISAE,Panamá,"Tumba Muerto, Frente a la UIP",3064700,9.03134744835746,-79.5168646725688,00:00 - 23:59,00:00 - 23:59
+ATM,8881,Super 99 - La Doña,Panamá,"Carretera Panamericana, Centro Comercial La Doña, 24 Diciembre",3064700,9.10401964192548,-79.3689499456786,00:00 - 23:59,00:00 - 23:59
+ATM,8882,Machetazo Tocumen,Panamá,"Carretera Panamericana, vía Tocumen",3064700,9.09853999567958,-79.3890679505938,00:00 - 23:59,00:00 - 23:59
+ATM,8941,Suc. Penonomé,Coclé,"Penonome, Avenida Juan Demóstenes Arosemena.",3064700,8.51603611366361,-80.3523593534739,00:00 - 23:59,00:00 - 23:59
+ATM,8884,"Xtra Maxi Feria, Buena Vista",Colón,"Vía Transístmica, hacia Colon, Buena Vista",3064700,9.27400761658385,-79.6953414828229,00:00 - 23:59,00:00 - 23:59
+ATM,8886,Super Carnes - Vista Alegre,Panamá Oeste,"Plaza de Gracia, Carr. Panamericana, Vista Alegre",3064700,8.93392218196594,-79.6994983269777,00:00 - 23:59,00:00 - 23:59
+ATM,8888,Suc. Las Tablas,Los Santos,"Las Tablas, Ave. Belisario Porras y Cl. 8 de noviembre.",3064700,7.76627758257508,-80.2774852279836,00:00 - 23:59,00:00 - 23:59
+ATM,8889,Machetazo Coronado,Panamá Oeste,"Coronado, Chame, Centro Comercial Plaza The Village",3064700,8.54473855452122,-79.9144070069382,00:00 - 23:59,00:00 - 23:59
+ATM,8890,Jumbo Market - Nuevo Arraijan,Panamá Oeste,"Juan Demostenes Arosemena, Vista Alegre en Arraijan",3064700,8.92601457175203,-79.7135021321875,00:00 - 23:59,00:00 - 23:59
+ATM,8891,Multicarnes Pedregal,Panamá,"Entrada de Villalobos, Corregimiento de Pedregal, Vía Principal Pedregal.",3064700,9.0699082185367,-79.4296057574393,00:00 - 23:59,00:00 - 23:59
+ATM,8892,"Xtra La Chorrera, El Coco",Panamá Oeste,"La Chorrera, Barrio Colon",3064700,8.87047918462992,-79.800631455891,00:00 - 23:59,00:00 - 23:59
+ATM,8894,Super 99 - Towncenter Arraiján,Panamá Oeste,"Town Center Arraijan corregimiento de burunga, la 2000 1003 Panama, Burunga",3064700,8.95996194988797,-79.6536848456794,00:00 - 23:59,00:00 - 23:59
+ATM,8896,Suc. Volcán,Chiriquí,"Volcan, Calle Principal, frente a la sucursal de Melo y Cia, Bugaba Chiriquí",3064700,8.77547607619303,-82.6392605584342,00:00 - 23:59,00:00 - 23:59
+ATM,8898,Albrook Mall Cinnabond,Panamá,"Ancon, Albrook Mall",3064700,8.97324338862587,-79.5527658769201,00:00 - 23:59,00:00 - 23:59
+ATM,8902,Super 99 - Transistmica,Panamá,"Carr Transístmica, Panamá, Provincia de Panamá",3064700,8.990406,-79.516640,00:00 - 23:59,00:00 - 23:59
+ATM,8904,Suc. San Francisco,Panamá,"San Francisco, Vía Porras y calle 50, Edificio , planta baja (al frente de Deli Gourmet)",3064700,8.99332792573596,-79.5018941422471,00:00 - 23:59,00:00 - 23:59
+ATM,8905,Tajonazo Tecal,Panamá Oeste,"Vacamonte, Vista Alegre",3064700,8.90948318594049,-79.7122092033516,00:00 - 23:59,00:00 - 23:59
+ATM,8906,Super 99 - Santiago,Veraguas,"Santiago Centro, entre Calle 9na y 10ma Frente a los Bomberos.",3064700,8.098268,-80.977684,00:00 - 23:59,00:00 - 23:59
+ATM,8908,Suc. David Terronal,Chiriquí,"David, Plaza Terronal, Vía Interamericana detrás del Restaurante Friday's",3064700,8.44603548329567,-82.4210320604719,00:00 - 23:59,00:00 - 23:59
+ATM,8909,Suc. David Terronal,Chiriquí,"David, Plaza Terronal, Vía Interamericana detrás del Restaurante Friday's",3064700,8.44603548329567,-82.4210320604719,00:00 - 23:59,00:00 - 23:59
+ATM,8910,Suc. Santiago,Veraguas,"Santiago, Ave central entre calle octava y Séptima Edificio Don Julio.",3064700,8.09733129730233,-80.9793901610277,00:00 - 23:59,00:00 - 23:59
+ATM,8911,Super 99 - Villa Lucre,Panamá,"Correguimiento José Domingo Espinar, Carretera panamericana, Ave Domingo Díaz y Ave Rafael E AlemanCentro Comercial Villa Lucre,",3064700,9.04126884234383,-79.4784354965593,00:00 - 23:59,00:00 - 23:59
+ATM,8912,Suc. Villa Lucre,Panamá,"Jose Domingo Espinar, Centro Comercial Villa Lucre, Plaza Villa Lucre # 10",3064700,9.03849984312612,-79.4822961677689,00:00 - 23:59,00:00 - 23:59
+ATM,8916,Suc. Santiago,Veraguas,"Santiago, Ave central entre calle octava y Séptima Edificio Don Julio.",3064700,8.09733129730233,-80.9793901610277,00:00 - 23:59,00:00 - 23:59
+ATM,4941,Suc. Coronado,Panamá Oeste,"Chame, Avenida principal de la calle Einsman, Coronado Mall",3064700,8.54203511992483,-79.913616695198,00:00 - 23:59,00:00 - 23:59
+ATM,8918,Suc. Chitré,Herrera,"Chitre, Calle Manuel Maria Correa.",3064700,7.96442874560691,-80.4308868019628,00:00 - 23:59,00:00 - 23:59
+ATM,8920,El Fuerte Villa Zaita,Panamá,"Centro Comercial Villa Zaita, Frente a Urbanización el Lago,",3064700,9.07606791792854,-79.5239523898586,00:00 - 23:59,00:00 - 23:59
+ATM,8922,Panadería Río de Oro Sabanitas,Colón,"Centro Comercial Veras Plaza, Provincia de Colón, en Sabanitas, Vía Transístmica",3064700,9.34800717990442,-79.8073575979764,00:00 - 23:59,00:00 - 23:59
+ATM,8923,Dicarina,Panamá,PARQUE SUR | Ctro. Logistico,3064700,9.06035206422075,-79.4080109678849,00:00 - 23:59,00:00 - 23:59
+ATM,8924,Riba Smith Market Plaza,Panamá Oeste,"Urbanización Costa Verde,Centro Comercial Market Plaza, Planta baja modulo B",3064700,8.88898049996404,-79.7499134962712,00:00 - 23:59,00:00 - 23:59
+ATM,8925,Suc. Parque Lefevre,Panamá,"Parque Lefevre, Calle Primera con Via España",3064700,9.00840256747144,-79.5070335157684,00:00 - 23:59,00:00 - 23:59
+ATM,8926,Suc. Los Andes,Panamá,"San Miguelito,Corregimiento de Belisario Porras,centro comercial Los Andes,Local F-25",3064700,9.04817437205411,-79.5068434530754,00:00 - 23:59,00:00 - 23:59
+ATM,8929,S/C. Nuevo Chorrillo Arraiján,Panamá Oeste,"Distrito Arraijan, Ave Principal, 1era etapa",3064700,8.95229876839553,-79.6902356407113,00:00 - 23:59,00:00 - 23:59
+ATM,8931,Franklin Jurado Bugaba,Chiriquí,"Bugaba, Chiriquí, Corregimiento la Conceción, Calle Central",3064700,8.51636726086198,-82.6204217565492,00:00 - 23:59,00:00 - 23:59
+ATM,8932,Suc. San Francisco,Panamá,"San Francisco, Vía Porras y calle 50, Edificio , planta baja (al frente de Deli Gourmet)",3064700,8.99332792573596,-79.5018941422471,00:00 - 23:59,00:00 - 23:59
+ATM,8934,C.C. Los Andes (Frente a Global),Panamá,"San Miguelito, Centro Comercial Los Andes",3064700,9.04934,-79.507535,00:00 - 23:59,00:00 - 23:59
+ATM,8937,Suc. Villa Zaita,Panamá,"Correg. Las Cumbre, Carretera Boyd Roosevelt con Vía Principal de Villa Zaita. C.C. Villa Zaita frente a urbanización El Lago",3064700,9.07471076491828,-79.523870363911,00:00 - 23:59,00:00 - 23:59
+ATM,8938,Suc. Versalles,Panamá,"Juan Diaz, Las Acacias",3064700,9.04236606640592,-79.4190307675249,00:00 - 23:59,00:00 - 23:59
+ATM,4942,Suc. Coronado,Panamá Oeste,"Chame, Avenida principal de la calle Einsman, Coronado Mall",3064700,8.54203511992483,-79.913616695198,00:00 - 23:59,00:00 - 23:59
+ATM,8942,Suc. Chorrera,Panamá Oeste,"La Chorrera, Barrio Colon, Avenidas de Las Americas, Apartado # 262",3064700,8.88250295769834,-79.7784854845449,00:00 - 23:59,00:00 - 23:59
+ATM,8943,Xtra Transistmica,Panamá,"Pueblo Nuevo, Plaza Agora Transistmica",3064700,8.99449168844739,-79.5284591941368,00:00 - 23:59,00:00 - 23:59
+ATM,8946,Suc. Colón Cristobal,Colón,"Calle 11 Avenida Cristobal, Barrio Sur Colon, al lado de Panama Port Company",3064700,9.35480545200425,-79.9044631101681,00:00 - 23:59,00:00 - 23:59
+ATM,8947,Todo a Dolar Puerto Armuelles #2,Chiriquí,"Puerto Armuelles, Chiriquí",3064700,8.27360161042296,-82.8600071521736,00:00 - 23:59,00:00 - 23:59
+ATM,8948,Grupo Moreno La Villa Los Santos,Los Santos,"Corregimiento de La Villa De Los Santos, Carretera Nacional",3064700,7.9313871522115,-80.4090053101026,00:00 - 23:59,00:00 - 23:59
+ATM,8950,City Mall - Paso Canoas,Chiriquí,"Chiriqui, Distrito de Baru, Corregimiento Progreso",3064700,8.53820294801484,-82.8389765649936,00:00 - 23:59,00:00 - 23:59
+ATM,8951,Panadería Río de Oro Las Sabanas,Panamá,"San Francisco, Vía España, Edif. Camelia Plaza, frente a Clínica San Fernando.",3064700,9.00283968005209,-79.5156675080279,00:00 - 23:59,00:00 - 23:59
+ATM,8952,Rey Paseo Albrook,Panamá,"Sector Albrook, PH Paseo Albrook, planta baja, Paseo Andrews y Ave Canfield. Nivel 100, espacio espacio No 8 C - 8 debajo de las escaleras eléctricas, pasillo que lleva hacia el nuevo Supermercado Rey",3064700,8.97193174254414,-79.5603422456793,00:00 - 23:59,00:00 - 23:59
+ATM,8954,Xtra Villa Lobos,Panamá,"Pedregal, Villa Lobos",3064700,9.08637195930571,-79.4443381912657,00:00 - 23:59,00:00 - 23:59
+ATM,8956,Super 99 - Penonomé,Coclé,"Carretera Panamericana, Centro Comercial La Iguana Mall Diagonal a Domino's Pizza Penonomé Provincia",3064700,8.50866075195233,-80.3619874628778,00:00 - 23:59,00:00 - 23:59
+ATM,8957,Super Barú Mall,Chiriquí,"Distrito de David, Corregimiento de San Pablo Viejo, Via Interamericana, en el Mall.",3064700,8.43071025845374,-82.4617866678288,00:00 - 23:59,00:00 - 23:59
+ATM,8958,Super 99 - La Cabima,Panamá,"Alcalde Diaz, San Miguelito",3064700,9.10652573506011,-79.5360900442248,00:00 - 23:59,00:00 - 23:59
+ATM,8959,El Fuerte San Miguelito,Panamá,"Victoriano Lorenzo, Cruce de San Miguelito",3064700,9.02949455023721,-79.5065475263888,00:00 - 23:59,00:00 - 23:59
+ATM,8960,Super 99 - Río Abajo,Panamá,"Rio Abajo, calle",3064700,9.01306125873689,-79.5001668998453,00:00 - 23:59,00:00 - 23:59
+ATM,8961,Rey Santiago,Veraguas,"Boulevard Santiago, Vía Interamericana",3064700,8.10673714832718,-80.9683695745197,00:00 - 23:59,00:00 - 23:59
+ATM,8962,Jerusalem Mall Paso Canoas,Chiriquí,"Chiriquí, Distrito de Baru, Corregimiento Progreso",3064700,8.53470022660143,-82.8383988736497,00:00 - 23:59,00:00 - 23:59
+ATM,8964,Super 99 - Camino Real Bethania,Panamá,"Bethania, Camino Real",3064700,9.01152867668304,-79.5253701077747,00:00 - 23:59,00:00 - 23:59
+ATM,8965,ACP - Monte Esperanza Colón,Colón,"Colón, Monte Esperanza",3064700,9.338918,-79.898469,00:00 - 23:59,00:00 - 23:59
+ATM,8966,Cerv. Nal. San Cristobal,Panamá,"San Cristobal, Juan Diaz (al frente de Llano Bonito)",3064700,9.04406269356746,-79.4671523829828,00:00 - 23:59,00:00 - 23:59
+ATM,8967,Cerv. Nal. Las Sabanas,Panamá,"Las Sabanas, Cerveceria Nacional (Via Espana, diagonal a la UDI).",3064700,9.00453137906099,-79.5131617467948,00:00 - 23:59,00:00 - 23:59
+ATM,8969,Suc. Panama Pacifico,Panamá Oeste,"Panama Pacifico, Antigua Base Howard, Panama Pacifico, Edificio Soleo Planta Baja",3064700,8.91687168843673,-79.5904828748804,00:00 - 23:59,00:00 - 23:59
+ATM,8970,Machetazo Costa Sur,Panamá,"Urbanización Costa Sur, Plaza Costa Sur",3064700,9.03627840289918,-79.4187698591709,00:00 - 23:59,00:00 - 23:59
+ATM,8971,Mega Mall,Panamá,"Carr. Panamericana, después de la Est. Nuevo Tocumen",3064700,9.09884527298818,-79.3516600888681,00:00 - 23:59,00:00 - 23:59
+ATM,8972,Rey Vista Alegre,Panamá Oeste,Vista Alegre de Arraiján,3064700,8.92654039595519,-79.7110986844886,00:00 - 23:59,00:00 - 23:59
+ATM,8973,Suc. Centennial,Panamá,"Ancon, Plaza Centenial. Urb. Ave. Paseo Dorado, Vía Puente Centenario",3064700,9.02958638476775,-79.5306548222796,00:00 - 23:59,00:00 - 23:59
+ATM,8975,Super 99 - Vista Hermosa,Panamá,"Calle Principal Vista Hermosa, a lado de Elmec Cerca de la estación metro, Vía Fernández de Córdoba, Panamá",3064700,8.99890764647814,-79.5198804636676,00:00 - 23:59,00:00 - 23:59
+ATM,8977,Cerv. Nal. Costa Del Este,Panamá,"Costa del Este, Torre Sur, piso",3064700,9.01061603739598,-79.4758939104907,00:00 - 23:59,00:00 - 23:59
+ATM,8980,Super 99 - Balboa,Panamá,"Parque Lefevre, Rio Abajo, Balboa",3064700,9.02374629601612,-79.4868590802563,00:00 - 23:59,00:00 - 23:59
+ATM,8981,Xtra Arraiján #2,Panamá Oeste,"Arraijan Cabezera, al frente del Banco Hipotecario",3064700,8.95616585820761,-79.6526854785433,00:00 - 23:59,00:00 - 23:59
+ATM,8982,Super 99 - Sabanitas Colón,Colón,"Sabanitas en Colón, entrada hacia Portobelo",3064700,9.34908922244027,-79.8095463834751,00:00 - 23:59,00:00 - 23:59
+ATM,4890,Super Barú Boquete,Chiriquí,"Terminal de David, Calle Paseo Estudiante.",3064700,8.77629,-82.433098,00:00 - 23:59,00:00 - 23:59
+ATM,8827,COOLECHE Bugaba,Chiriquí,"Via Panamericana, Bugaba",3064700,8.516224,-82.626152,00:00 - 23:59,00:00 - 23:59
+ATM,4901,Rey Valle de Antón,Coclé,"Ave principal El Valle, diagonal al mercado de artesanias",3064700,8.60018222787916,-80.1201059118899,00:00 - 23:59,00:00 - 23:59
+ATM,4875,Farmacia Janeth -La Espiga Chorrera,Panamá Oeste,"Vía Panamericana, Chorrera, La Espiga",3064700,8.852235,-79.813041,00:00 - 23:59,00:00 - 23:59
+ATM,4899,Hotel Sortis (Casino),Panamá,Calle San Miguel con Ave. Abel Bravo. Hotel Sortis,3064700,8.987434,-79.520503,00:00 - 23:59,00:00 - 23:59
+ATM,4878,Suc. Hospital Nacional,Panamá,"Ave Justo Arosemena, entre calle38 y 39 local 2",3064700,8.972231,-79.533552,00:00 - 23:59,00:00 - 23:59
+ATM,4880,Suc. Casco Antiguo,Panamá,"Frente Parque Herrera, calle 9na San Felipe Edif Lewis",3064700,8.95164961021912,-79.5365645556283,00:00 - 23:59,00:00 - 23:59
+ATM,8968,Coop. Juan XXIII Soná,Veraguas,"Correguimiento Soná, Ave Principal",3064700,9.027403,-79.523153,00:00 - 23:59,00:00 - 23:59
+ATM,4895,Xtra Penonomé,Coclé,"Al lado de Plaza Los Naranjos, Local 11, frente al Hospital Aquilino Tejeira, Carretera Interamericana, Corregimiento de Penonomé.",3064700,8.51546676694016,-80.348913553968,00:00 - 23:59,00:00 - 23:59
+ATM,8868,Farmacia Arrocha Las Américas,Panamá,"Correg. Tocumen, Vía Panamericana, Barriada Tocumen, Plaza Las Americas",3064700,9.07903974721715,-79.3994081776863,00:00 - 23:59,00:00 - 23:59
+ATM,8871,Melo Pet's Rio Abajo,Panamá,"Correg. Río Abajo, Ave Vía España, calle 11 1/2 Río Abajo, Planta de Melo",3064700,9.015872,-79.497649,00:00 - 23:59,00:00 - 23:59
+ATM,8872,Super 99 Los Pueblos,Panamá,"Ave. Domingo Díaz, C.C. Los Pueblos",3064700,9.04902873251965,-79.4509899610229,00:00 - 23:59,00:00 - 23:59
+ATM,8893,Los Andes Mall,Panamá,"Transístmica, San Miguelito",3064700,9.051391,-79.508373,00:00 - 23:59,00:00 - 23:59
+ATM,8895,Super 99 Villa Zaita,Panamá,"Correg. Las Cumbre, Carretera Boyd Roosevelt con Vía Principal de Villa Zaita",3064700,9.0751733951762,-79.5235508052026,00:00 - 23:59,00:00 - 23:59
+ATM,8897,Rey Milla 8,Panamá,Milla 8,3064700,9.07054585088271,-79.5162162647267,00:00 - 23:59,00:00 - 23:59
+ATM,8903,Pio Pio Villa Zaita,Panamá,"Correg. Las Cumbre, Carretera Boyd Roosevelt con Vía Principal de Villa Zaita. C.C. Villa Zaita",3064700,9.07758349749756,-79.52541283636,00:00 - 23:59,00:00 - 23:59
+ATM,8907,Xtra Sabanitas,Colón,"Urb. San Mateo, calle principal, edif Xtra Apto / Local 1",3064700,9.35406727534881,-79.8033420033491,00:00 - 23:59,00:00 - 23:59
+ATM,8955,Panadería Cesarin Costa Verde,Panamá Oeste,"Centro Comercial Costa Verde, La Chorrera",3064700,8.89229466343699,-79.7502328874498,00:00 - 23:59,00:00 - 23:59
+ATM,8979,Super 99 Brisas del Golf Arraiján,Panamá Oeste,"Correg. Nvo Chorrillo, Urb Brisas del Golf Arraijan, Plaza",3064700,8.97394563136891,-79.7064140303352,00:00 - 23:59,00:00 - 23:59
+ATM,4870,Supermercado El Progreso Chorrera,Panamá Oeste,"Supermercado El Progreso, La Arenosa Chorrera",3064700,8.841006,-79.850564,00:00 - 23:59,00:00 - 23:59
+ATM,4871,Super 99 Río Hato,Coclé,"Coclé, Antón",3064700,8.37330288477064,-80.1547784340424,00:00 - 23:59,00:00 - 23:59
+ATM,4872,Machetazo Santiago,Veraguas,"Via Panamericana, C.C. Las Galerias. El Machetazo",3064700,8.10212790714147,-80.9661097792441,00:00 - 23:59,00:00 - 23:59
+ATM,4873,Plaza Edison Cafetería,Panamá,"Betania, Plaza Edisón",3064700,8.994252071,-79.53357052,00:00 - 23:59,00:00 - 23:59
+ATM,4874,Xtra David,Chiriquí,"Urbanización San Mateo, antiguo Brisas Davideñas, Vía Panamericana",3064700,8.42875711700879,-82.4442517745182,00:00 - 23:59,00:00 - 23:59
+ATM,4881,Suc. Casa Matriz Soho,Panamá,"Panamá, Bella Vista, Calle 50 entre calle 54 y 56 Este, Planta baja",3064700,8.9829436158991,-79.5196190170644,00:00 - 23:59,00:00 - 23:59
+ATM,4882,Suc. Casa Matriz Soho,Panamá,"Panamá, Bella Vista, Calle 50 entre calle 54 y 56 Este, Planta baja",3064700,8.9829436158991,-79.5196190170644,00:00 - 23:59,00:00 - 23:59
+ATM,4883,Suc. Los Pueblos,Panamá,"Juan Díaz, Urbanización Centro comercial Los Pueblos, Calle Central edificio , Apto. Local Planta Baja.",3064700,9.04967377586932,-79.4489795367867,00:00 - 23:59,00:00 - 23:59
+ATM,254,Mr Precio Cerro Batea,Panamá,"Av. Martin Luther King, Panamá",3064700,9.062559,-79.496786,00:00 - 23:59,00:00 - 23:59
+ATM,8953,Xtra Maxi Feria Chepo,Panamá,"diagonal a la Anam de Panamá Este, Chepo, Via Puerto Coquira, Panamá",3064700,9.163588,-79.090142,00:00 - 23:59,00:00 - 23:59
+ATM,4884,Suc. Paseo Arraijan,Panamá Oeste,"Carr. Panamericana, Burunga, Panamá, Plaza Paseo Arraijan",3064700,8.94681485665163,-79.6757598478451,00:00 - 23:59,00:00 - 23:59
+ATM,8978,Xtra Market - Bugaba,Chiriquí,"Frente a Cochez, Plaza Bugaba, Carr. Interamericana, Chiriquí, Panamá",3064700,8.512561,-82.620456,00:00 - 23:59,00:00 - 23:59
+ATM,4893,Mr. Precio Vista Mar,Panamá Oeste,"Vía Puerto Caimito, Plaza Vista Mar, frente al Hospital Nicolas Solano",3064700,8.866175,-79.764386,00:00 - 23:59,00:00 - 23:59
+ATM,4896,Super Barú San Cristobal,Chiriquí,"Ruta David-Querévalo, en medio de las calle Sy R Sur, fente al Supermercado La Amistad",3064700,8.415735,-82.442571,00:00 - 23:59,00:00 - 23:59
+ATM,4897,Agro Genesis - Finca Blanco,Chiriquí,"De Finca Blanco Hacia Proyecto Javillo 13-641, Provincia de Chiriquí, Panamá",3064700,8.384219,-82.875483,00:00 - 23:59,00:00 - 23:59
+ATM,4898,Super Barú Doleguita,Chiriquí,"Av. 3a Oeste, David Chiriquí",3064700,8.433896,-82.429309,00:00 - 23:59,00:00 - 23:59
+ATM,4894,Mr. Precio Santa Fe,Panamá,"Av. Jose Agustin Arango, Plaza Mas, Cabra",3064700,9.110979,-79.321898,00:00 - 23:59,00:00 - 23:59
+ATM,8857,Golden Mall - Paso Canoas,Chiriquí,"Chiriqui, Distrito de Baru, Corregimiento Progreso",3064700,8.53919914387786,-82.8394433704015,00:00 - 23:59,00:00 - 23:59
+ATM,4938,Xtra Market - Capira,Panamá Oeste,"Carr. Panamericana, Villa Carmen, Capira",3064700,8.801204,-79.8676374381504,00:00 - 23:59,00:00 - 23:59
+ATM,8887,Est. Villa Zaita,Panamá,Carr. Transistmica,3064700,9.079829,-79.527085,00:00 - 23:59,00:00 - 23:59
+ATM,8864,Est. Iglesia del Carmen,Panamá,"Vía España, Iglesia de Carmen",3064700,8.981995,-79.527473,00:00 - 23:59,00:00 - 23:59
+ATM,4939,Suc. Costa Verde,Panamá Oeste,"Plaza Paseo Costa Verde, Blvd. Costa Verde",3064700,8.895805,-79.752733,00:00 - 23:59,00:00 - 23:59
+ATM,8921,City Mall - David,Chiriquí,"Chiriquí Mall, Carretera Panamericana, 507, San Pablo Viejo, Panamá",3064700,8.432543,-82.4621772396665,00:00 - 23:59,00:00 - 23:59
+ATM,8829,Xtra - CEDI Parque Sur,Panamá,"Vía Tocumen, Parque Sur, frente a la galera de Bimbo",3064700,9.063257,-79.408934,00:00 - 23:59,00:00 - 23:59
+ATM,8845,Xtra - Oficinas Centrales,Panamá,"Panamá avenue, Av. José Agustín Arango, Panamá, Provincia de Panamá",3064700,9.047732,-79.439747,00:00 - 23:59,00:00 - 23:59
+ATM,8935,Xtra - Parada San Isidro,Panamá,"Carr. Transistmica, Calle San Isidro, San Miguelito, Panamá Province",3064700,9.065634,-79.514239,00:00 - 23:59,00:00 - 23:59
+ATM,8963,Xtra - El Trebol,Panamá,"Ave. José Domingo Arias, Pacora",3064700,9.113865,-79.336501,00:00 - 23:59,00:00 - 23:59
+ATM,8805,Xtra - Maxi Feria Mañanitas,Panamá,"Ave. Jose Agustín Arango, a lado de la Terminal de buses",3064700,9.081271,-79.400206,00:00 - 23:59,00:00 - 23:59
+ATM,8830,Xtra - Market Brisas del Golf,Panamá,"Ave. Manuel F. Zarate, frente a Riba Smith",3064700,9.068597,-79.46292,00:00 - 23:59,00:00 - 23:59
+ATM,8933,Xtra - Market Aguadulce,Coclé,"Carr. Panamericana, Plaza Sol y Mar",3064700,8.244808,-80.566743,00:00 - 23:59,00:00 - 23:59
+ATM,8936,Xtra - Maxi Feria Chorrillo,Panamá,"Ave. A, El Chorrillo, Plaza Los Colores del Chorrillo",3064700,8.951283,-79.54465,00:00 - 23:59,00:00 - 23:59
+ATM,8944,Xtra - Market Vía Israel,Panamá,"a un costado de Elmec, Edificio Plaza City Point, Vía Israel, Panamá, Provincia de Panamá",3064700,8.98751,-79.502436,00:00 - 23:59,00:00 - 23:59
+ATM,8810,Suc. Costa del Este (Isla),Panamá,"Ave. Centenario, Antiguo Banco General de Costa del Este, frente a Credicorp Bank.",3064700,9.015742,-79.472327,00:00 - 23:59,00:00 - 23:59
+ATM,8928,Farmacia Calderon Chepo,Panamá,"Correguimiento Chepo, Barrio Chepo, calle Coquira",3064700,9.16839935190335,-79.0911465844739,00:00 - 23:59,00:00 - 23:59
+ATM,250,Xtra Farma - San Fernando,Panamá,"Via España, Pueblo Nuevo",3064700,8.953082,-79.556391,00:00 - 23:59,00:00 - 23:59
+ATM,8808,Xtra Market - Paseo David,Chiriquí,"avenue, Av. Red Gray, Chiriquí, Panamá",3064700,8.40696083557854,-82.4291793440782,00:00 - 23:59,00:00 - 23:59
+ATM,8885,Xtra Feria - Coronado,Panamá Oeste,"Centro Comercial The Village, Carr. Interamericana, Las Lajas, Provincia de Panamá Oeste\r\n",3064700,8.54429729198945,-79.9147061700274,00:00 - 23:59,00:00 - 23:59
+ATM,8940,Xtra Feria - La Siesta,Panamá,"La Siesta, Panamá, Provincia de Panamá",3064700,9.07798384381941,-79.366673027662,00:00 - 23:59,00:00 - 23:59
+ATM,8930,Pio Pio - Bejuco,Panamá Oeste,"Vía Panamericana, Dist. Chame, Corregimiento de Bejuco, entrada Altos del María.",3064700,8.60356895238491,-79.8879174012113,00:00 - 23:59,00:00 - 23:59
+ATM,8919,Machetazo Ojo de Agua,Panamá,"Carr.Transísmtica, Ojo de Agua, a un costado del Super Xtra",3064700,9.05698933287308,-79.5081926047619,00:00 - 23:59,00:00 - 23:59
+ATM,8945,Supermercado La Huaca,Bocas del Toro,"Plaza Chanquinola, Bocas del Toro, Finca 11",3064700,9.465233,-82517247,00:00 - 23:59,00:00 - 23:59
+ATM,8803,Xtra - Maxi Feria Los Algarobos,Chiriquí,"Los Algarrobos, Ave Principal. Edif Super Xtra",3064700,8.512198,-82424123,00:00 - 23:59,00:00 - 23:59
+ATM,202,Super 99 Calidonia,Panamá,"Avenida Central, Calidonia, Panamá",3064700,8.966281,-79.540093,00:00 - 23:59,00:00 - 23:59
+ATM,8852,Towncenter - Costa del Este,Panamá,"food court, Town Center Costa del Este, Av. Paseo del mar",3064700,9.016258,-79.463884,00:00 - 23:59,00:00 - 23:59
+ATM,8883,Maxi Xtra Llano Largo,Panamá Oeste,Ave Principal la Herradura- llano largo. Frente a la escuela llano largo,3064700,8.834925,-79.804768,00:00 - 23:59,00:00 - 23:59
+ATM,4876,Rey Los Pueblos,Panamá,"Supermercado El Rey Los Pueblos, Plaza Viva",3064700,9.04949,-79.446668,00:00 - 23:59,00:00 - 23:59
+Sucursal,40,Multiplaza,Panamá,Centro Comercial Multiplaza Centro Bancario.,263-5855,8.98491,-79.511881,11:00 - 18:00,10:00 - 14:00
+Sucursal,1,Torre Obarrio,Panamá,Edificio ADR Avenida Samuel Lewis y Calle 58 Este.,263-5855,8.98693991432903,-79.5186749823404,08:00 - 15:30,09:00 - 12:00
+Sucursal,6,Multimax,Panamá,Centro Comercial Multimax Vía Ricardo J. Alfaro.,263-5855,9.020462,-79.531415,08:00 - 15:30,09:00 - 12:00
+Sucursal,8,Parque Lefevre,Panamá,Parque Lefevre Calle Primera Con Vía España.,263-5855,9.008329,-79.507001,08:00 - 15:30,09:00 - 12:00
+Sucursal,13,Betania-Transístmica,Panamá,Urb. La Florida Al Lado Del Banco Nacional.,263-5855,9.001616,-79.523304,08:00 - 15:30,09:00 - 12:00
+Sucursal,15,Plaza Edison,Panamá,Plaza Edison Planta Baja.,263-5855,8.994898,-79.533341,08:00 - 15:30,09:00 - 12:00
+Sucursal,23,Plaza Marbella,Panamá,Marbella. Calle 47 Y Aquilino De La Guardia.,263-5855,8.97764,-79.522794,08:00 - 15:30,09:00 - 12:00
+Sucursal,27,San Francisco,Panamá,Calle 50 Y Calle 77 Este San Francisco.,263-5855,8.993207,-79.501868,08:00 - 15:30,09:00 - 13:00
+Sucursal,28,Zona Libre,Colón,Calle 13 En Santa Isabel. Zona Libre De Colón. Plaza Cirebon Peak.,263-5855,9.354867,-79.896179,08:00 - 15:30,CERRADO
+Sucursal,32,Colón Cristóbal,Colón,Calle 11  Ave. Cristóbal. Barrio Sur Colón. Al Lado De Panama Ports Company.,263-5855,9.354767,-79.904446,08:00 - 15:30,09:00 - 12:00
+Sucursal,41,Punta Pacífica,Panamá,Edificio Torre De Las Américas.,263-5855,8.982859,-79.509673,08:00 - 15:30,09:00 - 12:00
+Sucursal,49,La Chorrera,Panamá Oeste,Ave. De Las Américas Frente Al Parque Bolívar.,263-5855,8.882517,-79.778506,08:00 - 15:30,09:00 - 12:00
+Sucursal,50,Las Tablas,Los Santos,Ave. Belisario Porras Y Calle 8 De Noviembre Frente Al Parque Belisario Porras.,263-5855,7.76606,-80.277396,08:00 - 15:30,09:00 - 12:00
+Sucursal,55,Volcán,Chiriquí,Calle Principal. Frente A Melo Y Cía.. Bugaba.,263-5855,8.774463,-82.638513,08:00 - 15:30,09:00 - 12:00
+Sucursal,75,Coronado,Panamá Oeste,Coronado Mall. Ave. Principal De La Calle Eisenman.,263-5855,8.542211,-79.913764,08:00 - 15:30,09:00 - 12:00
+Sucursal,81,Panamá Pacífico,Panamá,Soleo Building-Town Center.,263-5855,8.91669,-79.590387,08:00 - 15:30,09:00 - 12:00
+Sucursal,82,Centenial,Panamá,Plaza Centenial. Vía Puente Centenario.,263-5855,9.030252,-79.531157,08:00 - 15:30,09:00 - 12:00
+Sucursal,84,Casco Antiguo,Panamá,Casa Lewis. Plaza Herrera. Esquina De Calle Novena Con Ave. A.,263-5855,8.951639,-79.53656,08:00 - 15:30,09:00 - 12:00
+Sucursal,86,Hospital Nacional,Panamá,Ave. Justo Arosemena Y Calle 38 Bella Vista Detrás Hospital Nacional.,263-5855,8.972236,-79.533111,08:00 - 15:30,09:00 - 12:00
+Sucursal,87,Soho Mall,Panamá,Casa Matriz Calle 50. Entre Calle 54 Y 56. Torre Banistmo.,263-5855,8.982717,-79.519737,08:00 - 15:30,09:00 - 12:00
+Sucursal,89,Versalles,Panamá,Juan Díaz. Plaza Versalles. Locales 11 Y 12.,263-5855,9.042093,-79.418941,08:00 - 15:30,09:00 - 12:00
+Sucursal,91,Villa Zaita,Panamá,Villa Zaita Mall. Ernesto Cordoba Campos.,263-5855,9.074338,-79.523841,08:00 - 15:30,09:00 - 12:00
+Sucursal,45,Chitré,Herrera,Calle Manuel María Correa.,263-5855,7.96383,-80.428077,08:00 - 15:30,09:00 - 12:00
+Sucursal,46,Santiago,Veraguas,Ave. Central Entre Calle Octava Y Séptima.,263-5855,8.097044,-80.979384,08:00 - 15:30,09:00 - 12:00
+Sucursal,47,David Centro,Chiriquí,Frente Al Correo Nacional Entre Calle 3Era Y 4Ta De David.,263-5855,8.429223,-82.424558,08:00 - 15:30,09:00 - 12:00
+Sucursal,51,Penonomé,Coclé,Ave. Juan Demóstenes Arosemena.,263-5855,8.515814,-80.352606,08:00 - 15:30,09:00 - 12:00
+Sucursal,53,Aguadulce,Coclé,Ave. Rodolfo Chiari. Frente A La Iglesia San Juan Bautista.,263-5855,8.242416,-80.539915,08:00 - 15:30,09:00 - 12:00
+Sucursal,2,Dorado Mall,Panamá,Centro Comercial Dorado Mall.,263-5855,9.009897,-79.536672,08:30 - 16:00,09:00 - 13:00
+Sucursal,10,Los Pueblos,Panamá,Centro Comercial Los Pueblos. Calle Central Edificio Banistmo. Planta Baja.,263-5855,9.049595,-79.448958,08:30 - 16:00,09:00 - 13:00
+Sucursal,14,Brisas del Golf,Panamá,Plaza Super 99.,263-5855,9.069566,-79.452751,08:30 - 16:30,09:00 - 13:00
+Sucursal,20,Villa Lucre,Panamá,Centro Comercial Villa Lucre.,830-5007,9.038257,-79.482261,08:30 - 16:00,09:00 - 12:00
+Sucursal,38,Los Andes,Panamá,Centro Comercial Los Andes.,263-5855,9.048085,-79.506932,09:00 - 16:30,09:00 - 12:00
+Sucursal,74,Costa del Este,Panamá,"Costa Del Este, Vía Principal, Avenida Centenario",831-2650,9.015545,-79.472166,08:30 - 16:00,09:00 - 13:00
+Sucursal,98,Paseo Arraiján,Panamá Oeste,"Plaza Paseo Arraiján, Corregimiento Cerro Silvestre, Vía Panamericana, local A6.",263-5855,8.9474,-79.6754805,08:00 - 15:30,09:00 - 14:00
+Sucursal,17,Albrook Mall,Panamá,Centro Comercial Albrook Mall. Pasillo De La Fuente.,263-5855,8.977449,-79.551054,09:30 - 17:00,09:00 - 14:00
+Sucursal,48,Terronal,Chiriquí,Plaza Terronal Vía Interamericana.,263-5855,8.445689,-82.420406,09:00 - 16:30,09:00 - 13:30
+Sucursal,99,Costa Verde,Panamá Oeste,"Plaza Paseo Costa Verde, Blvd Costa Verde, Corregimiento de Barrio Colón, Local H",263-5856,8.895804,-79.752683,09:30 - 17:00,09:00 - 14:00
