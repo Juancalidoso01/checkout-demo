@@ -528,7 +528,7 @@
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
         intro:
-          'Comparativo en Panamá orientado a corresponsales no bancarios (no sucursales ni ATM de banco). ✓ / ✕ según la fila. Toca la cabecera para el detalle de puntos: Rapibac y Caja Amiga (PDF); Punto Pago (nota del modelo del caso); Western Union (CSV de referencia panama50.com).',
+          'Benchmark de la competencia en Panamá: la misma grilla para Punto Pago, Rapibac, Caja Amiga y Western Union, para ver en un vistazo quién cumple qué en corresponsalía y punto de servicio (no medimos sucursales ni ATM de banco). Cada fila es un criterio; ✓ o ✕ según corresponda. Tocá el logo de cada marca para abrir el respaldo de puntos (PDF, texto del caso o CSV de referencia).',
         notaPie:
           'Punto Pago representa el modelo de corresponsalía del caso (red abierta, no red de sucursales bancarias). Actualizar listado Western Union: python3 scripts/extract-western-union-panama50.py. Fuentes puntos: Rapibac y Caja Amiga (PDF); Western Union (panama50.com, terceros).',
         etiquetaVerPuntos: 'Ver puntos por provincia',
