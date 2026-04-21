@@ -408,7 +408,6 @@
               <div class="pp-mag-table-wrap pp-mag-table-wrap--bench" id="cn-bench-wrap">
                 <table class="pp-mag-table pp-mag-table--bench" id="cn-bench-tabla" aria-describedby="cn-bench-intro"></table>
               </div>
-              <p class="pp-mag-note pp-mag-note--bench" id="cn-bench-nota"></p>
             </div>
           </article>
         </div>
@@ -1230,7 +1229,6 @@
       if (bench) {
         set('cn-bench-h', bench.titulo || '');
         set('cn-bench-intro', bench.intro || '');
-        set('cn-bench-nota', bench.notaPie || '');
         var benchTab = document.getElementById('cn-bench-tabla');
         var comps = bench.competidores || [];
         var filasBench = bench.filas || [];

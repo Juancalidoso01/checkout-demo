@@ -209,18 +209,19 @@ body {
 
 /* Pág. 16 — benchmark competencia */
 .pp-mag-page--bench {
-  gap: 0.45rem;
+  gap: 0.35rem;
 }
 
 .pp-mag-page--bench .pp-mag-lead {
   font-size: 0.74rem;
   line-height: 1.42;
+  margin-bottom: 0.2rem;
 }
 
 .pp-mag-table-wrap--bench {
   flex: 1;
   min-height: 0;
-  max-height: min(70vh, 620px);
+  max-height: min(88vh, 820px);
   overflow: auto;
   border-radius: 10px;
   border: 1px solid var(--line);
@@ -327,13 +328,6 @@ body {
   color: var(--muted);
   font-weight: 600;
   letter-spacing: 0.02em;
-}
-
-.pp-mag-note--bench {
-  margin: 0;
-  font-size: 0.62rem;
-  line-height: 1.4;
-  color: var(--muted);
 }
 
 .pp-bench-brand--accion {
