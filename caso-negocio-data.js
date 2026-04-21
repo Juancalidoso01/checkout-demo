@@ -520,7 +520,7 @@
 
       /**
        * Benchmark (p. 16): columnas = competidor + logo. Celdas bool: true / false / null (null = pendiente, se muestra —).
-       * Texto: cadenas por columna; use \\n para segunda línea. Sustituye logos en assets/magazine/competitors/ si usas marca oficial.
+       * Texto: cadenas por columna; use \\n para segunda línea. Logos: assets/magazine/competitors/*-logo.* (raster, cabecera).
        * Puntos por provincia: `archivoPuntos` por competidor (URL o ruta bajo el repo). Si todos comparten el mismo archivo, usa solo `archivoPuntosDefecto`.
        * Formatos: .html embebible; .pdf con visor del navegador; Excel/Sheets/enlace genérico → solo botón «Abrir en pestaña nueva».
        * Totales en «Cantidad de puntos» siguen los archivos en assets/magazine/benchmark (PDF/CSV).
@@ -538,22 +538,22 @@
         competidores: [
           {
             nombre: 'Rapibac',
-            logo: 'assets/magazine/competitors/rapibac.svg',
+            logo: 'assets/magazine/competitors/rapibac-logo.jpg',
             archivoPuntos: 'assets/magazine/benchmark/rapibac-puntos.pdf',
           },
           {
             nombre: 'Caja Amiga',
-            logo: 'assets/magazine/competitors/caja-amiga.svg',
+            logo: 'assets/magazine/competitors/caja-amiga-logo.jpg',
             archivoPuntos: 'assets/magazine/benchmark/caja-amiga-puntos.pdf',
           },
           {
             nombre: 'Banistmo PTM',
-            logo: 'assets/magazine/competitors/banistmo-ptm.svg',
+            logo: 'assets/magazine/competitors/banistmo-logo.jpg',
             archivoPuntos: 'assets/magazine/benchmark/banistmo-puntos.csv',
           },
           {
             nombre: 'Western Union',
-            logo: 'assets/magazine/competitors/western-union.svg',
+            logo: 'assets/magazine/competitors/western-union-logo.webp',
             archivoPuntos: 'assets/magazine/benchmark/western-union-puntos.csv',
           },
         ],

@@ -1252,9 +1252,8 @@
                 img.src = c.logo;
                 img.alt = c.nombre || '';
                 img.className = 'pp-bench-brand__logo';
-                img.width = 112;
-                img.height = 36;
                 img.loading = 'lazy';
+                img.decoding = 'async';
                 host.appendChild(img);
               } else {
                 var nm = document.createElement('span');
