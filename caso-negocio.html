@@ -340,7 +340,7 @@
             </div>
           </article>
 
-          <article class="magazine-page" data-page="15" id="p15" aria-label="Solución problema economía riesgos demo">
+          <article class="magazine-page" data-page="15" id="p15" aria-label="Solución, problema, economía y ganancia">
             <div class="magazine-page__inner pp-mag-page pp-mag-page--cierre">
               <div class="pp-mag-head">
                 <span class="pp-mag-kicker">15</span>
@@ -373,27 +373,6 @@
                 </div>
                 <p class="pp-mag-lead pp-mag-lead--profit" id="cn-profit-intro"></p>
                 <ul class="pp-mag-profit-grid" id="cn-profit-grid"></ul>
-              </div>
-              <hr class="pp-mag-divider" />
-              <div class="pp-mag-subblock">
-                <p class="pp-mag-continua">Siguiente bloque</p>
-                <div class="pp-mag-head pp-mag-head--sub">
-                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-ries-h"></h2>
-                </div>
-              </div>
-              <ul class="pp-mag-list pp-mag-list--tight" id="cn-ries-list"></ul>
-              <hr class="pp-mag-divider" />
-              <div class="pp-mag-subblock">
-                <p class="pp-mag-continua">Siguiente bloque</p>
-                <div class="pp-mag-head pp-mag-head--sub">
-                  <h2 class="pp-mag-h2 pp-mag-h2--solo" id="cn-demo-h"></h2>
-                </div>
-              </div>
-              <p class="pp-mag-lead" id="cn-demo-intro"></p>
-              <div class="pp-mag-actions">
-                <a href="index.html"><i class="fas fa-map" aria-hidden="true"></i> Abrir mapa del proceso</a>
-                <a href="modules-map.html">Catálogo técnico</a>
-                <a id="cn-sheet-link" href="#" target="_blank" rel="noopener">Hoja de datos</a>
               </div>
             </div>
           </article>
@@ -587,9 +566,6 @@
           window.PPMagazineGoToPage(pNum);
         });
       }
-
-      var sl = document.getElementById('cn-sheet-link');
-      if (sl && D.fuenteHoja) sl.href = D.fuenteHoja;
 
       function fmtIntEs(n) {
         return Math.round(n).toLocaleString('es-PA');
@@ -1362,18 +1338,6 @@
       set('cn-sol-intro', t.solucion.intro);
       set('cn-eco-h', t.economia.titulo);
       set('cn-eco-intro', t.economia.intro);
-      set('cn-ries-h', t.riesgos.titulo);
-      var riesList = document.getElementById('cn-ries-list');
-      if (riesList && t.riesgos.bullets) {
-        riesList.innerHTML = '';
-        t.riesgos.bullets.forEach(function (x) {
-          var li = document.createElement('li');
-          li.textContent = x;
-          riesList.appendChild(li);
-        });
-      }
-      set('cn-demo-h', t.demo.titulo);
-      set('cn-demo-intro', t.demo.intro);
 
       (function initGananciaProfit() {
         var cfg = D.gananciaAnual;

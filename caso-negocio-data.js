@@ -48,7 +48,7 @@
       { pagina: 12, texto: 'Cronograma pipeline (2/2): Comercial a rebranding' },
       { pagina: 13, texto: 'Participación por segmento (gráfico)' },
       { pagina: 14, texto: 'Oferta de valor: comercio y cliente' },
-      { pagina: 15, texto: 'Solución, economía, ganancia y demo' },
+      { pagina: 15, texto: 'Solución, economía y ganancia' },
       { pagina: 16, texto: 'Benchmark de competencia' },
     ],
 
