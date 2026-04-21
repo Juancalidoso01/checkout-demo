@@ -2,6 +2,6 @@ Punto Pago — corresponsalía no bancaria (modelo del caso)
 
 Este benchmark compara redes de corresponsales y comercios, no sucursales ni cajeros de banco.
 
-Red de referencia del caso: 2 500 puntos (escenario en la página 06 del flipbook).
+Red actual del caso: 60 puntos de corresponsalía (no incluye sucursales ni ATM de banco).
 
 Detalle operativo y supuestos: ver escenarios TAM/SAM y oferta de valor en las páginas previas del mismo documento.

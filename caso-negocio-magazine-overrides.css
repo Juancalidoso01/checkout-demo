@@ -311,6 +311,38 @@ body {
   font-size: 0.54rem;
 }
 
+.pp-bench-td--nivel {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.pp-bench-tier {
+  display: inline-block;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.12rem 0.28rem;
+  border-radius: 6px;
+  line-height: 1.2;
+}
+
+.pp-bench-tier--alta {
+  color: #14532d;
+  background: rgba(22, 163, 74, 0.18);
+}
+
+.pp-bench-tier--media {
+  color: #9a3412;
+  background: rgba(234, 88, 12, 0.2);
+}
+
+.pp-bench-tier--baja {
+  color: #991b1b;
+  background: rgba(220, 38, 38, 0.16);
+}
+
 .pp-bench-ico {
   font-size: 0.85rem;
   line-height: 1;

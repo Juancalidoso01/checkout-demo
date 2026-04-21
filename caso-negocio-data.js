@@ -519,7 +519,7 @@
       },
 
       /**
-       * Benchmark (p. 16): competidores Rapibac, Caja Amiga, Punto Pago (modelo corresponsalía), Western Union. Celdas bool: ✓ verde / ✕.
+       * Benchmark (p. 16): competidores Rapibac, Caja Amiga, Punto Pago, Western Union. tipos: bool | texto | nivel (alta|media|baja → colores).
        * Texto: cadenas por columna; use \\n para segunda línea. Logos: assets/magazine/competitors/*-logo.* (raster, cabecera).
        * Puntos por provincia: `archivoPuntos` por competidor (URL o ruta bajo el repo). Si todos comparten el mismo archivo, usa solo `archivoPuntosDefecto`.
        * Formatos: .html embebible; .pdf con visor del navegador; Excel/Sheets/enlace genérico → solo botón «Abrir en pestaña nueva».
@@ -528,7 +528,7 @@
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
         intro:
-          'Benchmark de la competencia en Panamá: la misma grilla para Punto Pago, Rapibac, Caja Amiga y Western Union, para ver en un vistazo quién cumple qué en corresponsalía y punto de servicio (no medimos sucursales ni ATM de banco). Cada fila es un criterio; ✓ o ✕ según corresponda. Tocá el logo de cada marca para abrir el respaldo de puntos (PDF, texto del caso o CSV de referencia).',
+          'Benchmark de la competencia en Panamá: la misma grilla para Punto Pago, Rapibac, Caja Amiga y Western Union. Donde aplica: ✓ verde / ✕ rojo; en otras filas verás nivel Alta (verde), Media (naranja) o Baja (rojo). Tocá el logo para el respaldo de puntos (PDF, texto del caso o CSV).',
         etiquetaVerPuntos: 'Ver puntos por provincia',
         sinArchivoLeyenda: 'Archivo próximo',
         /** Misma ruta para todos los competidores si comparten un solo documento (p. ej. PDF con secciones). */
@@ -562,12 +562,16 @@
             celdas: [
               '360\nlistado PDF',
               '251\nPDF dic. 2021',
-              '2 500\nescenario p. 06 (corresponsales)',
+              '60\nred actual',
               '84\nref. panama50 (40 zonas)',
             ],
           },
-          { criterio: 'Terminal POS', tipo: 'bool', celdas: [true, true, true, true] },
-          { criterio: 'Operación con balance de cuentas / recaudo', tipo: 'bool', celdas: [true, true, true, true] },
+          { criterio: 'Terminal POS', tipo: 'bool', celdas: [true, true, false, false] },
+          {
+            criterio: 'Bancarización',
+            tipo: 'nivel',
+            celdas: ['alta', 'media', 'alta', 'media'],
+          },
           {
             criterio: 'Red no exclusiva de un solo banco (corresponsalía abierta)',
             tipo: 'bool',
@@ -575,13 +579,13 @@
           },
           {
             criterio: 'Oferta amplia (billetera, pagos y servicios)',
-            tipo: 'bool',
-            celdas: [true, true, true, true],
+            tipo: 'nivel',
+            celdas: ['alta', 'media', 'alta', 'media'],
           },
           {
-            criterio: 'Debida diligencia digital / tiempo de alta razonable',
-            tipo: 'bool',
-            celdas: [true, true, true, true],
+            criterio: 'Tiempos de vinculación',
+            tipo: 'nivel',
+            celdas: ['baja', 'baja', 'alta', 'baja'],
           },
         ],
       },

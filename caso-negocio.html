@@ -1296,7 +1296,7 @@
             tdL.className = 'pp-bench-td pp-bench-td--criterio';
             tdL.textContent = fila.criterio || '';
             tr.appendChild(tdL);
-            var tipo = fila.tipo === 'bool' ? 'bool' : 'texto';
+            var tipo = fila.tipo === 'bool' ? 'bool' : fila.tipo === 'nivel' ? 'nivel' : 'texto';
             (fila.celdas || []).forEach(function (cel) {
               var td = document.createElement('td');
               if (tipo === 'bool') {
@@ -1317,6 +1317,21 @@
                   pend.setAttribute('aria-label', 'Por confirmar');
                   pend.textContent = '—';
                   td.appendChild(pend);
+                }
+              } else if (tipo === 'nivel') {
+                td.className = 'pp-bench-td pp-bench-td--nivel';
+                var key = String(cel == null ? '' : cel)
+                  .toLowerCase()
+                  .trim();
+                if (key === 'alta' || key === 'media' || key === 'baja') {
+                  var lab = key.charAt(0).toUpperCase() + key.slice(1);
+                  var tier = document.createElement('span');
+                  tier.className = 'pp-bench-tier pp-bench-tier--' + key;
+                  tier.textContent = lab;
+                  tier.setAttribute('aria-label', 'Nivel ' + lab);
+                  td.appendChild(tier);
+                } else {
+                  td.textContent = '—';
                 }
               } else {
                 td.className = 'pp-bench-td pp-bench-td--texto';
