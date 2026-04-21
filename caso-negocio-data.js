@@ -523,6 +523,7 @@
        * Texto: cadenas por columna; use \\n para segunda línea. Sustituye logos en assets/magazine/competitors/ si usas marca oficial.
        * Puntos por provincia: `archivoPuntos` por competidor (URL o ruta bajo el repo). Si todos comparten el mismo archivo, usa solo `archivoPuntosDefecto`.
        * Formatos: .html embebible; .pdf con visor del navegador; Excel/Sheets/enlace genérico → solo botón «Abrir en pestaña nueva».
+       * Totales en «Cantidad de puntos» siguen los archivos en assets/magazine/benchmark (PDF/CSV).
        */
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
@@ -553,14 +554,19 @@
           {
             nombre: 'Western Union',
             logo: 'assets/magazine/competitors/western-union.svg',
-            archivoPuntos: 'https://panama50.com/sucursales-y-horarios-de-western-union-en-panama/',
+            archivoPuntos: 'assets/magazine/benchmark/western-union-puntos.csv',
           },
         ],
         filas: [
           {
             criterio: 'Cantidad de puntos (total)',
             tipo: 'texto',
-            celdas: ['—', '—', '371\n334 ATM + 37 suc.', '84\n40 zonas (ref.)'],
+            celdas: [
+              '360\nlistado PDF',
+              '251\nPDF dic. 2021',
+              '371\n334 ATM + 37 suc.',
+              '84\nref. panama50 (40 zonas)',
+            ],
           },
           { criterio: 'Terminal POS', tipo: 'bool', celdas: [null, null, null, null] },
           { criterio: 'Operación con balance de cuentas', tipo: 'bool', celdas: [null, null, null, null] },
