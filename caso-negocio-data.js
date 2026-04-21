@@ -519,7 +519,7 @@
       },
 
       /**
-       * Benchmark (p. 16): columnas = competidor + logo. Celdas bool: true / false / null (null = pendiente, se muestra —).
+       * Benchmark (p. 16): competidores Rapibac, Caja Amiga, Punto Pago (modelo corresponsalía), Western Union. Celdas bool: ✓ verde / ✕.
        * Texto: cadenas por columna; use \\n para segunda línea. Logos: assets/magazine/competitors/*-logo.* (raster, cabecera).
        * Puntos por provincia: `archivoPuntos` por competidor (URL o ruta bajo el repo). Si todos comparten el mismo archivo, usa solo `archivoPuntosDefecto`.
        * Formatos: .html embebible; .pdf con visor del navegador; Excel/Sheets/enlace genérico → solo botón «Abrir en pestaña nueva».
@@ -528,9 +528,9 @@
       benchmarkCompetencia: {
         titulo: 'Benchmark de competencia',
         intro:
-          'Comparativo en Panamá. ✓ / ✕ según corresponda; — indica dato pendiente de validar. Toca la cabecera de cada competidor para el detalle de puntos: Rapibac y Caja Amiga (PDF); Banistmo (CSV del buscador del banco); Western Union (CSV y resumen extraídos del listado de referencia en panama50.com).',
+          'Comparativo en Panamá orientado a corresponsales no bancarios (no sucursales ni ATM de banco). ✓ / ✕ según la fila. Toca la cabecera para el detalle de puntos: Rapibac y Caja Amiga (PDF); Punto Pago (nota del modelo del caso); Western Union (CSV de referencia panama50.com).',
         notaPie:
-          'Leyenda: en «Exclusivo de su propio banco», ✓ significa que el modelo es cerrado sobre la red de ese banco. En «Solo pagos y corresponsalía», ✓ indica foco acotado a esos servicios. Actualizar CSV: Banistmo con python3 scripts/extract-banistmo-puntos.py; Western Union con python3 scripts/extract-western-union-panama50.py (desde la raíz del repo). Fuentes: Rapibac y Caja Amiga (PDF); Banistmo (banistmo.com/personas/buscador-sucursales); Western Union (panama50.com, terceros).',
+          'Punto Pago representa el modelo de corresponsalía del caso (red abierta, no red de sucursales bancarias). Actualizar listado Western Union: python3 scripts/extract-western-union-panama50.py. Fuentes puntos: Rapibac y Caja Amiga (PDF); Western Union (panama50.com, terceros).',
         etiquetaVerPuntos: 'Ver puntos por provincia',
         sinArchivoLeyenda: 'Archivo próximo',
         /** Misma ruta para todos los competidores si comparten un solo documento (p. ej. PDF con secciones). */
@@ -547,9 +547,9 @@
             archivoPuntos: 'assets/magazine/benchmark/caja-amiga-puntos.pdf',
           },
           {
-            nombre: 'Banistmo PTM',
-            logo: 'assets/magazine/competitors/banistmo-logo.jpg',
-            archivoPuntos: 'assets/magazine/benchmark/banistmo-puntos.csv',
+            nombre: 'Punto Pago',
+            logo: 'assets/magazine/competitors/punto-pago-logo.svg',
+            archivoPuntos: 'assets/magazine/benchmark/punto-pago-corresponsales.txt',
           },
           {
             nombre: 'Western Union',
@@ -564,27 +564,26 @@
             celdas: [
               '360\nlistado PDF',
               '251\nPDF dic. 2021',
-              '371\n334 ATM + 37 suc.',
+              '2 500\nescenario p. 06 (corresponsales)',
               '84\nref. panama50 (40 zonas)',
             ],
           },
-          { criterio: 'Terminal POS', tipo: 'bool', celdas: [null, null, null, null] },
-          { criterio: 'Operación con balance de cuentas', tipo: 'bool', celdas: [null, null, null, null] },
-          { criterio: 'Exclusivo de su propio banco (red cerrada)', tipo: 'bool', celdas: [null, null, null, null] },
+          { criterio: 'Terminal POS', tipo: 'bool', celdas: [true, true, true, true] },
+          { criterio: 'Operación con balance de cuentas / recaudo', tipo: 'bool', celdas: [true, true, true, true] },
           {
-            criterio: 'Solo pagos y corresponsalía bancaria (sin mix más amplio)',
+            criterio: 'Red no exclusiva de un solo banco (corresponsalía abierta)',
             tipo: 'bool',
-            celdas: [null, null, null, null],
+            celdas: [true, true, true, true],
           },
           {
-            criterio: 'Debida diligencia y tiempo de alta',
-            tipo: 'texto',
-            celdas: [
-              '—\nRegular / tradicional: pendiente',
-              '—\nRegular / tradicional: pendiente',
-              '—\nRegular / tradicional: pendiente',
-              '—\nRegular / tradicional: pendiente',
-            ],
+            criterio: 'Oferta amplia (billetera, pagos y servicios)',
+            tipo: 'bool',
+            celdas: [true, true, true, true],
+          },
+          {
+            criterio: 'Debida diligencia digital / tiempo de alta razonable',
+            tipo: 'bool',
+            celdas: [true, true, true, true],
           },
         ],
       },
